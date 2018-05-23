@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>tangy-form demo</title>
+
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/redux/dist/redux.min.js"></script>
+
+    <script type="module">
+      import '@polymer/iron-demo-helpers/demo-pages-shared-styles';
+      import '@polymer/iron-demo-helpers/demo-snippet';
+    </script>
+
+    <script type="module" src="../tangy-form.js"></script>
+
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+      </style>
+    </custom-style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic tangy-form demo</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form has-summary linear-mode hide-closed-items id="field-demo" on-change="">
+            <tangy-form-item src="./text-inputs.html" id="text_inputs" title="Text Inputs" hide-back-button></tangy-form-item>
+            <tangy-form-item src="./checkboxes.html" id="checkboxes" title="Checkboxes"></tangy-form-item>
+            <tangy-form-item src="./radio-buttons.html" id="radio_buttons" title="Radiobuttons"></tangy-form-item>
+            <tangy-form-item src="./select-lists.html" id="select_lists" title="Select Lists"></tangy-form-item>
+            <tangy-form-item src="./location.html" id="location" title="Location"></tangy-form-item>
+            <tangy-form-item src="./gps.html" id="gps" title="GPS"></tangy-form-item>
+            <tangy-form-item src="./date-time.html" id="date_time" title="Date and Time"></tangy-form-item>
+            <tangy-form-item src="./timed-grid.html" id="timed_grids" title="Timed Grid"></tangy-form-item>
+            <tangy-form-item src="./timed-grid-feedback.html" id="timed_grids_feedback" title="Timed Grid Feedback"></tangy-form-item>
+            <tangy-form-item src="./complete.html" id="complete" title="Complete" hide-next-button></tangy-form-item>
+            <tangy-form-item src="./summary.html" summary id="summary" title="Summary"></tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
+</html>
