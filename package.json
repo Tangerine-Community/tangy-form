@@ -3,7 +3,7 @@
   "description": "A form element for lazy loaded multipage forms",
   "main": "tangy-form.js",
   "scripts": {
-    "debug": "./node_modules/.bin/polymer test -p"
+    "debug": "polymer test -p -l chrome"
   },
   "dependencies": {
     "@polymer/iron-icon": "^3.0.0-pre.18",
@@ -27,5 +27,23 @@
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "polymer-cli": "^1.7.2",
     "wct-browser-legacy": "^1.0.0"
-  }
+  },
+  "version": "1.0.1",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tangerine-Community/tangy-form.git"
+  },
+  "keywords": [
+    "polymer",
+    "web-component"
+  ],
+  "author": "R.J. Steinert",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tangerine-Community/tangy-form/issues"
+  },
+  "homepage": "https://github.com/Tangerine-Community/tangy-form#readme"
 }

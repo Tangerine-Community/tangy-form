@@ -101,14 +101,6 @@ export class TangyForm extends PolymerElement {
           width:100%;
           background-color: var(--primary-color);
           color: var(--accent-color);
-          height: 99px;
-          position: fixed;
-          top: 0px;
-          z-index:999;
-        }
-        #fake-top-bar {
-          background: var(--primary-color-dark);
-          padding: 8px 0px 0px 8px;
         }
         #bar-filler {
           height: 45px;
@@ -145,13 +137,7 @@ export class TangyForm extends PolymerElement {
 
       <div id="nav"></div>
       <template is="dom-if" if="{{complete}}">
-        <div id="bar-filler"></div>
         <div id="bar">
-          <div id="fake-top-bar">
-            <a id="home-button" href="../shell/index.html">
-                <img src="../logo.svg" width=35>
-            </a>
-          </div>
           <paper-tabs selected="[[tabIndex]]" scrollable>
             <template is="dom-if" if="{{hasSummary}}">
               <paper-tab id="summary-button" on-click="onClickSummaryTab">Summary</paper-tab>
