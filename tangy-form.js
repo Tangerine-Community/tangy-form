@@ -2,6 +2,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import './cat.js'
 import './tangy-form-item.js'
 import './tangy-common-styles.js'
+import './global-styles.js'
 import { tangyFormReducer } from './tangy-form-reducer.js'
 //window.process = { env: {NODE_ENV: 'production'}}
 //import { createStore, compose as origCompose, applyMiddleware, combineReducers } from 'redux';
