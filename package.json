@@ -28,7 +28,7 @@
     "polymer-cli": "^1.7.2",
     "wct-browser-legacy": "^1.0.0"
   },
-  "version": "1.0.1",
+  "version": "1.0.2",
   "directories": {
     "test": "test"
   },
