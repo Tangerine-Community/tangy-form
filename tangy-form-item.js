@@ -88,6 +88,12 @@ label.heading {
 #back iron-icon {
   margin: 0px 0px 0px 21px;
 }
+
+.card-actions paper-button {
+  font-size: .8em;
+  line-height: 1em;
+}
+
 </style>
 
 <paper-card id="card" class="shrunk">
