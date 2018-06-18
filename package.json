@@ -1,7 +1,7 @@
 {
   "name": "tangy-form",
   "description": "A form element for lazy loaded multipage forms",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "tangy-form.js",
   "scripts": {
     "debug": "polymer test -p -l chrome"
