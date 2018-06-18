@@ -13,6 +13,12 @@ $_documentContainer.setAttribute('style', 'display: none;');
 
 $_documentContainer.innerHTML = `<custom-style>
   <style is="custom-style">
+    * { 
+      font-size: 1.2em;
+      line-height: 1.2em;
+      /* Not sure why this does not have an affect when inside html style declaration */
+      --paper-input-container-shared-input-style_-_line-height: 1.2em;
+    }
     html {
       --document-background-color: #FAFAFA;
       --primary-color-dark: #212a3f;
@@ -22,7 +28,6 @@ $_documentContainer.innerHTML = `<custom-style>
       --accent-text-color: #FFF;
       --error-color: var(--paper-red-500);
       --disabled-color: #BBB;
-      font-size: 2em;
       /*
        * Hi. Test the application of colors variables with an override
        * by uncommenting the code below.
