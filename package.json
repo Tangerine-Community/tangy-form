@@ -4,7 +4,8 @@
   "version": "1.0.4",
   "main": "tangy-form.js",
   "scripts": {
-    "debug": "polymer test -p -l chrome"
+    "start": "polymer serve",
+    "test": "polymer test -p -l chrome"
   },
   "dependencies": {
     "@polymer/iron-icon": "^3.0.0-pre.18",
