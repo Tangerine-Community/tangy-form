@@ -468,7 +468,7 @@ class TangyLocation extends PolymerElement {
       },
       locationSrc: {
         type: String,
-        value: '../content/location-list.json',
+        value: './assets/location-list.json',
         observer: 'render'
       },
       showLevels: {
