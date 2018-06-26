@@ -39,12 +39,16 @@ class TangyGps extends PolymerElement {
       <template is="dom-if" if="{{_isAdvancedMode(currentLatitude, advancedMode)}}">
         Latitude [[currentLatitude]] <br>
         Longitude [[currentLongitude]] <br>
+        
       </template>
     <div>
     <template is="dom-if" if="[[currentLatitude]]">
       Accuracy: [[currentAccuracy]] Meters<br>
       Accuracy Level: [[accuracyLevel]]
     </template> 
+    <template is="dom-if" if="{{hasDelta}}">
+        <br> Distance from reference: [[currentDelta]] meters
+        </template>
     </div>
     <div>
     <template is="dom-if" if="[[!currentLatitude]]">
@@ -98,11 +102,24 @@ class TangyGps extends PolymerElement {
         type: Boolean,
         value: false,
         reflectToAttribute: true
+      },
+      referenceLatitude: {
+        type: Number,
+        value: undefined
+      },
+      referenceLongitude: {
+        type: Number,
+        value: undefined 
+      },
+      validMaxDelta: {
+        type: Number,
+        value: undefined
       }
     };
   }
 
   ready() {
+    this.hasDelta = false
     super.ready();
     this.active = true
     this.getGeolocationPosition()
@@ -166,11 +183,29 @@ class TangyGps extends PolymerElement {
       options);
   }
   saveCurrentPosition() {
-    this.value = {
-      latitude: this.currentLatitude,
-      longitude: this.currentLongitude,
-      accuracy: this.currentAccuracy
-    };
+
+    if (this.referenceLatitude === undefined && this.referenceLongitude === undefined) {
+      this.value = {
+        latitude: this.currentLatitude,
+        longitude: this.currentLongitude,
+        accuracy: this.currentAccuracy
+      }
+    } else {
+      this.value = {
+        latitude: this.currentLatitude,
+        longitude: this.currentLongitude,
+        accuracy: this.currentAccuracy,
+        delta: this._getDistanceFromLatLonInKm(
+          this.currentLatitude,
+          this.currentLongitude,
+          this.referenceLatitude,
+          this.referenceLongitude
+        )
+      }
+      this.currentDelta = Math.floor(this.value.delta * 1000)
+      this.hasDelta = true
+    }
+    console.log(this.value)
     this.dispatchEvent(new Event('change'));
     if (this.currentAccuracy < 50) {
       this.accuracyLevel = 'Good';
@@ -191,6 +226,24 @@ class TangyGps extends PolymerElement {
 
   _isAdvancedMode(currentLatitude, advancedMode) {
     return (currentLatitude && advancedMode);
+  }
+
+  _getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+    var R = 6371; // Radius of the earth in km
+    var dLat = this._deg2rad(lat2-lat1);  // deg2rad below
+    var dLon = this._deg2rad(lon2-lon1); 
+    var a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(this._deg2rad(lat1)) * Math.cos(this._deg2rad(lat2)) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2)
+      ; 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var d = R * c; // Distance in km
+    return d;
+  }
+  
+  _deg2rad(deg) {
+    return deg * (Math.PI/180)
   }
 }
 
