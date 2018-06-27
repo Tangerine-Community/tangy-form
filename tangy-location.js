@@ -665,7 +665,13 @@ class TangyLocation extends PolymerElement {
   }
 
   getSelectedLocation() {
-    if (!this.validate()) return false
+    let foundIncomplete = false
+    this.shadowRoot.querySelectorAll('select').forEach(el => {
+      if (!el.value) {
+        foundIncomplete = true
+      }
+    })
+    if (foundIncomplete) return false
     let selectedValues = [...this.value]
     let selectedLocation = this.locationList.locations[selectedValues.shift().value] 
     selectedValues.forEach(level => selectedLocation = selectedLocation.children[level.value])
