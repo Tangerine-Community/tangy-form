@@ -28,26 +28,28 @@ class TangyGps extends PolymerElement {
       top: 4px;
       right: 5px;
     }
+    :host([hide-coordinates]) #lat-long {
+      display:none;
+    }
+    .label {
+      font-weight: bold;
+    }
    .coordinates {
      margin: 5px 15px;
    }
   
   </style>
   <div class="coordinates">
-    <b>Current Position</b>
-    <div>
-      <template is="dom-if" if="{{_isAdvancedMode(currentLatitude, advancedMode)}}">
-        Latitude [[currentLatitude]] <br>
-        Longitude [[currentLongitude]] <br>
-        
-      </template>
+    <div id="lat-long">
+      <span class="label">Latitude:</span> [[currentLatitude]] <br>
+      <span class="label">Longitude:</span> [[currentLongitude]] <br>
     <div>
     <template is="dom-if" if="[[currentLatitude]]">
-      Accuracy: [[currentAccuracy]] Meters<br>
-      Accuracy Level: [[accuracyLevel]]
+      <span class="label">Accuracy:</span> [[currentAccuracy]] meters<br>
+      <span class="label">Accuracy Level:</span> [[accuracyLevel]]
     </template> 
     <template is="dom-if" if="{{hasDelta}}">
-        <br> Distance from reference: [[currentDelta]] meters
+        <br> <span class="label">Distance from reference:</span> [[currentDelta]] meters
         </template>
     </div>
     <div>
@@ -56,13 +58,7 @@ class TangyGps extends PolymerElement {
     </template> 
     </div>
     </div>
-    <div>
-      <h3>Tips</h3>
-      <p>Try standing next to a window</p>
-      <p>Try moving outside with a clear view of the sky</p>
-      <p>Try standing away from trees or buildings</p>
-    </div>
-    <br>
+    
     
     <slot></slot>
   </div> 
@@ -93,7 +89,7 @@ class TangyGps extends PolymerElement {
         observer: 'reflect',
         reflectToAttribute: true
       },
-      advancedMode: {
+      hideCoordinates: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
