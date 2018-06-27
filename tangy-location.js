@@ -450,11 +450,6 @@ class TangyLocation extends PolymerElement {
         // reflectToAttribute: true,
         observer: 'render'
       },
-      label: {
-        type: String,
-        value: 'Location',
-        observer: 'render'
-      },
       required: {
         type: Boolean,
         value: false,
@@ -529,9 +524,6 @@ class TangyLocation extends PolymerElement {
     // Render template and assign to the container.
     this.$.container.innerHTML = `
 
-    <label>
-    ${this.label}
-  </label>
   ${selections.map((selection, i) => `
     
     <div class="mdc-select">
