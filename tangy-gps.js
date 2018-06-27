@@ -105,10 +105,12 @@ class TangyGps extends PolymerElement {
       },
       referenceLatitude: {
         type: Number,
+        observer: 'saveCurrentPosition',
         value: undefined
       },
       referenceLongitude: {
         type: Number,
+        observer: 'saveCurrentPosition',
         value: undefined 
       },
       validMaxDelta: {

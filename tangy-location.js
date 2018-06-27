@@ -672,6 +672,14 @@ class TangyLocation extends PolymerElement {
     }
   }
 
+  getSelectedLocation() {
+    if (!this.validate()) return false
+    let selectedValues = [...this.value]
+    let selectedLocation = this.locationList.locations[selectedValues.shift().value] 
+    selectedValues.forEach(level => selectedLocation = selectedLocation.children[level.value])
+    return selectedLocation
+  }
+
 
 }
 

@@ -1,0 +1,12 @@
+<form on-change="
+
+  let selectedLocation = inputs.location.getSelectedLocation()
+  if (selectedLocation) {
+    inputs.gps.setAttribute('reference-latitude', selectedLocation.latitude)
+    inputs.gps.setAttribute('reference-longitude', selectedLocation.longitude)
+  }
+
+">
+  <tangy-location required label="Select your school" name="location" location-src="./location-list.json" show-levels="county,school"></tangy-location>
+  <tangy-gps name="gps" reference-latitude="44.4556252" reference-longitude="-73.2237864"></tangy-gps>
+</form>
