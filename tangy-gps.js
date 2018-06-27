@@ -31,9 +31,34 @@ class TangyGps extends PolymerElement {
     :host([hide-coordinates]) #lat-long {
       display:none;
     }
-    .label {
+   :host([in-geofence]) .geofence-message {
+     display: inline;
+     animation: fadein 2s;
+   }
+  :host([invalid]) .geofence-message {
+     display: inline;
+     animation: fadein 2s;
+     background-color: red;
+   }
+   .geofence-message-container {
+     text-align: center;
+     margin-top: 15px;
+   }
+   .geofence-message {
+     display: none;
+     margin: 5px; 0px 0px;
+     background: #28a745;
+     color: white;
+     padding: 5px;
+     border-radius: 5px;
+   }
+   @keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+   }
+   .label {
       font-weight: bold;
-    }
+   }
    .coordinates {
      margin: 5px 15px;
    }
@@ -55,7 +80,10 @@ class TangyGps extends PolymerElement {
     <div>
     <template is="dom-if" if="[[!currentLatitude]]">
         Searching...
-    </template> 
+    </template>
+    <div class="geofence-message-container"> 
+      <div class="geofence-message"> [[geofenceMessage]]</div>
+    </div>
     </div>
     </div>
     
@@ -108,6 +136,16 @@ class TangyGps extends PolymerElement {
         type: Number,
         observer: 'saveCurrentPosition',
         value: undefined 
+      },
+      invalid: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      inGeofence: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       },
       validMaxDelta: {
         type: Number,
@@ -200,8 +238,15 @@ class TangyGps extends PolymerElement {
           this.referenceLongitude
         )
       }
+
       this.currentDelta = Math.floor(this.value.delta * 1000)
       this.hasDelta = true
+      if (this.validMaxDelta) {
+        this.hasGeofence = true
+        this.inGeofence = (this.validMaxDelta > this.currentDelta) ? true : false
+        this.invalid = (this.validMaxDelta > this.currentDelta) ? false : true 
+        this.geofenceMessage = (this.inGeofence) ? '✔ location verified' : '✗ location not verified'
+      }
     }
     console.log(this.value)
     this.dispatchEvent(new Event('change'));
