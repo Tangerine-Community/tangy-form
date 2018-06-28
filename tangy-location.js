@@ -450,11 +450,6 @@ class TangyLocation extends PolymerElement {
         // reflectToAttribute: true,
         observer: 'render'
       },
-      label: {
-        type: String,
-        value: 'Location',
-        observer: 'render'
-      },
       required: {
         type: Boolean,
         value: false,
@@ -529,9 +524,6 @@ class TangyLocation extends PolymerElement {
     // Render template and assign to the container.
     this.$.container.innerHTML = `
 
-    <label>
-    ${this.label}
-  </label>
   ${selections.map((selection, i) => `
     
     <div class="mdc-select">
@@ -670,6 +662,20 @@ class TangyLocation extends PolymerElement {
       this.invalid = true
       return false
     }
+  }
+
+  getSelectedLocation() {
+    let foundIncomplete = false
+    this.shadowRoot.querySelectorAll('select').forEach(el => {
+      if (!el.value) {
+        foundIncomplete = true
+      }
+    })
+    if (foundIncomplete) return false
+    let selectedValues = [...this.value]
+    let selectedLocation = this.locationList.locations[selectedValues.shift().value] 
+    selectedValues.forEach(level => selectedLocation = selectedLocation.children[level.value])
+    return selectedLocation
   }
 
 
