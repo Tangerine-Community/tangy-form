@@ -341,8 +341,13 @@ label.heading {
       .querySelectorAll('[name]')
       .forEach(input => inputs.push(input.getProps()))
     this.inputs = inputs
+    if (window.devtools && window.devtools.open) {
+      console.table(this.inputs.map(input => { return {name: input.name, value: input.value} }))
+    }
     return true
   }
+
+
 
   validate() {
     let inputs = this.shadowRoot.querySelectorAll('[name]')
