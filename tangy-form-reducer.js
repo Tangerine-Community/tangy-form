@@ -26,6 +26,10 @@ const tangyFormReducer = function (state = initialState, action) {
       } else {
         indexOfLastItem = newState.items.length - 1
       }
+      if (!newState.form.complete) {
+        newState.form.linearMode = true
+        newState.form.hideClosedItems = true
+      }
       newState.items[indexOfLastItem].hideNextButton = true
       newState.items[indexOfLastItem].showCompleteButton = true
       if (!newState.form.complete && !newState.items.find(item => item.open)) newState.items[0].open = true
