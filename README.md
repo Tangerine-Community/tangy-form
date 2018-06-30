@@ -1,5 +1,7 @@
 # \<tangy-form\>
 
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/tangy-form)
+
 A form element for lazy loaded multipage forms.
 
 - Conforms to Material Design guidelines
