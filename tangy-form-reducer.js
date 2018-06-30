@@ -22,6 +22,7 @@ const tangyFormReducer = function (state = initialState, action) {
       let indexOfLastItem
       if (indexOfSummaryItem !== -1) {
         indexOfLastItem = indexOfSummaryItem - 1
+        newState.form.hasSummary = true
       } else {
         indexOfLastItem = newState.items.length - 1
       }
