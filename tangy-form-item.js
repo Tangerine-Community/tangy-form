@@ -59,6 +59,9 @@ paper-card {
 :host([open]) #open {
   display: none;
 }
+:host([locked]) #complete {
+  display: none;
+}
 :host(:not([open])) #close {
   display: none;
 }
@@ -112,7 +115,11 @@ label.heading {
     <template is="dom-if" if="{{open}}">
 
       <template is="dom-if" if="{{rightToLeft}}">
-
+        <template is="dom-if" if="{{showCompleteButton}}">
+          <paper-button id="complete" on-click="complete" style="float:left">
+            submit
+          <paper-button>
+        </template>
         <template is="dom-if" if="{{!hideNextButton}}">
           <paper-button id="back" on-click="next" >
             <iron-icon icon="arrow-back"></iron-icon>
@@ -123,11 +130,9 @@ label.heading {
             <iron-icon icon="arrow-forward"></iron-icon>
           <paper-button>
         </template>
-
       </template>
 
       <template is="dom-if" if="{{!rightToLeft}}">
-
         <template is="dom-if" if="{{!hideBackButton}}">
           <paper-button id="back" on-click="back" >
             <iron-icon icon="arrow-back"></iron-icon>
@@ -138,7 +143,11 @@ label.heading {
             <iron-icon icon="arrow-forward"></iron-icon>
           <paper-button>
         </template>
-
+        <template is="dom-if" if="{{showCompleteButton}}">
+          <paper-button id="complete" on-click="complete" style="float:right" >
+            submit
+          <paper-button>
+        </template>
       </template>
 
     </template>
@@ -196,6 +205,11 @@ label.heading {
         reflectToAttribute: true
       },
       hideNextButton: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      showCompleteButton: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
@@ -382,6 +396,13 @@ label.heading {
   back() {
     this.submit()
     this.dispatchEvent(new CustomEvent('ITEM_BACK'))
+  }
+
+  complete() {
+    if (this.validate()) {
+      this.submit()
+      this.dispatchEvent(new CustomEvent('FORM_RESPONSE_COMPLETE', {bubbles: true}))
+    }
   }
 
 }
