@@ -110,7 +110,12 @@ label.heading {
   <div class="card-actions">
     <template is="dom-if" if="{{!hideButtons}}">
       <paper-button id="open" on-click="onOpenButtonPress">Open</paper-button>
-      <paper-button id="close" on-click="onCloseButtonPress">Save</paper-button>
+      <template is="dom-if" if="{{!locked}}">
+        <paper-button id="close" on-click="onCloseButtonPress">Save</paper-button>
+      </template>
+      <template is="dom-if" if="{{locked}}">
+        <paper-button id="close" on-click="onCloseButtonPress">Close</paper-button>
+      </template>
     </template>
     <template is="dom-if" if="{{open}}">
 
@@ -304,7 +309,11 @@ label.heading {
   }
 
   onCloseButtonPress() {
-    if (this.validate()) {
+    if (this.locked) {
+      this.open = false
+      this.dispatchEvent(new CustomEvent('ITEM_CLOSED'))
+    }
+    else if (this.validate()) {
       this.submit()
       this.open = false
       this.dispatchEvent(new CustomEvent('ITEM_CLOSED'))
