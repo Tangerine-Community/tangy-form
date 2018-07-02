@@ -265,10 +265,10 @@ label.heading {
   }
 
   fireOnChange(event) {
-    this.fireHook('on-change', event.target)
+    this.fireHook('on-change', event)
   }
 
-  fireHook(hook, target) {
+  fireHook(hook, event) {
     // If locked, don't run any logic.
     if (this.locked) return
     let formEl = this.shadowRoot.querySelector('form')
@@ -339,8 +339,8 @@ label.heading {
     }
     let form = this.shadowRoot.querySelector('form')
     if (open === true && form && form.getAttribute('on-open')) {
-      this.fireHook('on-open', this)
-      this.fireHook('on-change', this)
+      this.fireHook('on-open')
+      this.fireHook('on-change')
     }
     this.reflect()
   }
