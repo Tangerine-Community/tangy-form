@@ -248,8 +248,6 @@ class TangyGps extends PolymerElement {
         this.geofenceMessage = (this.inGeofence) ? '✔ location verified' : '✗ location not verified'
       }
     }
-    console.log(this.value)
-    this.dispatchEvent(new Event('change'));
     if (this.currentAccuracy < 50) {
       this.accuracyLevel = 'Good';
     }
