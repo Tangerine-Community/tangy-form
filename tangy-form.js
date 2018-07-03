@@ -169,10 +169,6 @@ export class TangyForm extends PolymerElement {
 
   static get properties() {
     return {
-      id: {
-        type: String,
-        value: 'tangy-form'
-      },
       complete: {
         type: Boolean,
         value: false,
