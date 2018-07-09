@@ -327,15 +327,23 @@ label.heading {
     }
     // Open it, but only if empty because we might be stuck.
     if (open === true && this.$.content.innerHTML === '') {
-      let request = await fetch(this.src, { credentials: 'include' })
-      this.$.content.innerHTML = await request.text()
-      this.$.content
-        .querySelectorAll('[name]')
-        .forEach(input => {
-          input.addEventListener('change', this.fireOnChange.bind(this))
-          input.addEventListener('FORM_RESPONSE_COMPLETE', this.onFormResponseComplete.bind(this))
-        })
-      this.dispatchEvent(new CustomEvent('TANGY_FORM_ITEM_OPENED'))
+      let that = this
+      const request = new XMLHttpRequest();
+      request.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          that.$.content.innerHTML = this.responseText
+          that.$.content
+            .querySelectorAll('[name]')
+            .forEach(input => {
+              input.addEventListener('change', that.fireOnChange.bind(that))
+              that.addEventListener('FORM_RESPONSE_COMPLETE', that.onFormResponseComplete.bind(that))
+            })
+          that.dispatchEvent(new CustomEvent('TANGY_FORM_ITEM_OPENED'))
+        }
+      }
+      request.open('GET', this.src);
+      request.send();
+
     }
     let form = this.shadowRoot.querySelector('form')
     if (open === true && form && form.getAttribute('on-open')) {
