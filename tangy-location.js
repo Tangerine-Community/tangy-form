@@ -493,9 +493,17 @@ class TangyLocation extends PolymerElement {
     super.connectedCallback();
     // When we hear change events, it's coming from users interacting with select lists.
     this.shadowRoot.addEventListener('change', this.onSelectionChange.bind(this))
-    let request = await fetch(this.locationSrc)
-    this.locationList = await request.json()
-    this.render()
+    let that = this
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        that.locationList = JSON.parse(this.responseText)
+        that.render()
+      }
+    }
+    request.open('GET', this.locationSrc);
+    request.send();
+    
   }
 
   render() {
