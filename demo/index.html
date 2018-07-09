@@ -27,9 +27,17 @@
       <h3>Basic tangy-form demo</h3>
       <demo-snippet>
         <template>
-          <tangy-form has-summary linear-mode hide-closed-items id="field-demo" on-change="">
+          <tangy-form id="field-demo" 
+            on-change="
+              console.log('TangyForm.on-change was called.')
+            "
+            on-submit="
+              console.log('TangyForm.on-submit was called.')
+              console.log('You can use `event.preventDefault()` to stop the usual submit action of the form.')
+            "
+          >
             <tangy-form-item src="./gps-reference-by-location.html" id="gps-reference-by-location" title="GPS referencing Location"></tangy-form-item>
-            <tangy-form-item src="./text-inputs.html" id="text_inputs" title="Text Inputs" hide-back-button></tangy-form-item>
+            <tangy-form-item src="./text-inputs.html" id="text_inputs" title="Text Inputs"></tangy-form-item>
             <tangy-form-item src="./checkboxes.html" id="checkboxes" title="Checkboxes"></tangy-form-item>
             <tangy-form-item src="./radio-buttons.html" id="radio_buttons" title="Radiobuttons"></tangy-form-item>
             <tangy-form-item src="./select-lists.html" id="select_lists" title="Select Lists"></tangy-form-item>
@@ -38,7 +46,7 @@
             <tangy-form-item src="./date-time.html" id="date_time" title="Date and Time"></tangy-form-item>
             <tangy-form-item src="./timed-grid.html" id="timed_grids" title="Timed Grid"></tangy-form-item>
             <tangy-form-item src="./timed-grid-feedback.html" id="timed_grids_feedback" title="Timed Grid Feedback"></tangy-form-item>
-            <tangy-form-item src="./complete.html" id="complete" title="Complete" hide-next-button></tangy-form-item>
+            <tangy-form-item src="./complete.html" id="complete" title="Complete"></tangy-form-item>
             <tangy-form-item src="./summary.html" summary id="summary" title="Summary"></tangy-form-item>
           </tangy-form>
         </template>

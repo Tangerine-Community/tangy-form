@@ -169,10 +169,6 @@ export class TangyForm extends PolymerElement {
 
   static get properties() {
     return {
-      id: {
-        type: String,
-        value: 'tangy-form'
-      },
       complete: {
         type: Boolean,
         value: false,
@@ -214,9 +210,11 @@ export class TangyForm extends PolymerElement {
         type: Boolean,
         value: false,
         reflectToAttribute: true
+      },
+      onSubmit: {
+        type: String,
+        value: ''
       }
-
-
     }
   }
 
@@ -258,6 +256,13 @@ export class TangyForm extends PolymerElement {
       this.dispatchEvent(new CustomEvent('TANGY_FORM_UPDATE'))
     })
 
+    if (this.onSubmit) {
+      this.addEventListener('submit', (event) => {
+        let form = this
+        eval(this.onSubmit)
+      })
+    }
+
     // Flag for first render.
     this.hasNotYetFocused = true
 
@@ -272,6 +277,8 @@ export class TangyForm extends PolymerElement {
       type: 'ITEM_SAVE',
       item: event.target.getProps()
     })
+    const cancelled = !this.dispatchEvent(new CustomEvent('submit', {cancelable: true}))
+    if (cancelled) return
     this.store.dispatch({
       type: 'FORM_RESPONSE_COMPLETE'
     })

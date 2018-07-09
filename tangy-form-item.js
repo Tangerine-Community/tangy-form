@@ -59,6 +59,9 @@ paper-card {
 :host([open]) #open {
   display: none;
 }
+:host([locked]) #complete {
+  display: none;
+}
 :host(:not([open])) #close {
   display: none;
 }
@@ -107,12 +110,21 @@ label.heading {
   <div class="card-actions">
     <template is="dom-if" if="{{!hideButtons}}">
       <paper-button id="open" on-click="onOpenButtonPress">Open</paper-button>
-      <paper-button id="close" on-click="onCloseButtonPress">Save</paper-button>
+      <template is="dom-if" if="{{!locked}}">
+        <paper-button id="close" on-click="onCloseButtonPress">Save</paper-button>
+      </template>
+      <template is="dom-if" if="{{locked}}">
+        <paper-button id="close" on-click="onCloseButtonPress">Close</paper-button>
+      </template>
     </template>
     <template is="dom-if" if="{{open}}">
 
       <template is="dom-if" if="{{rightToLeft}}">
-
+        <template is="dom-if" if="{{showCompleteButton}}">
+          <paper-button id="complete" on-click="complete" style="float:left">
+            submit
+          <paper-button>
+        </template>
         <template is="dom-if" if="{{!hideNextButton}}">
           <paper-button id="back" on-click="next" >
             <iron-icon icon="arrow-back"></iron-icon>
@@ -123,11 +135,9 @@ label.heading {
             <iron-icon icon="arrow-forward"></iron-icon>
           <paper-button>
         </template>
-
       </template>
 
       <template is="dom-if" if="{{!rightToLeft}}">
-
         <template is="dom-if" if="{{!hideBackButton}}">
           <paper-button id="back" on-click="back" >
             <iron-icon icon="arrow-back"></iron-icon>
@@ -138,7 +148,11 @@ label.heading {
             <iron-icon icon="arrow-forward"></iron-icon>
           <paper-button>
         </template>
-
+        <template is="dom-if" if="{{showCompleteButton}}">
+          <paper-button id="complete" on-click="complete" style="float:right" >
+            submit
+          <paper-button>
+        </template>
       </template>
 
     </template>
@@ -200,6 +214,11 @@ label.heading {
         value: false,
         reflectToAttribute: true
       },
+      showCompleteButton: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
       inputs: {
         type: Array,
         observer: 'reflect',
@@ -246,10 +265,10 @@ label.heading {
   }
 
   fireOnChange(event) {
-    this.fireHook('on-change', event.target)
+    this.fireHook('on-change', event)
   }
 
-  fireHook(hook, target) {
+  fireHook(hook, event) {
     // If locked, don't run any logic.
     if (this.locked) return
     let formEl = this.shadowRoot.querySelector('form')
@@ -290,7 +309,11 @@ label.heading {
   }
 
   onCloseButtonPress() {
-    if (this.validate()) {
+    if (this.locked) {
+      this.open = false
+      this.dispatchEvent(new CustomEvent('ITEM_CLOSED'))
+    }
+    else if (this.validate()) {
       this.submit()
       this.open = false
       this.dispatchEvent(new CustomEvent('ITEM_CLOSED'))
@@ -316,8 +339,8 @@ label.heading {
     }
     let form = this.shadowRoot.querySelector('form')
     if (open === true && form && form.getAttribute('on-open')) {
-      this.fireHook('on-open', this)
-      this.fireHook('on-change', this)
+      this.fireHook('on-open')
+      this.fireHook('on-change')
     }
     this.reflect()
   }
@@ -382,6 +405,13 @@ label.heading {
   back() {
     this.submit()
     this.dispatchEvent(new CustomEvent('ITEM_BACK'))
+  }
+
+  complete() {
+    if (this.validate()) {
+      this.submit()
+      this.dispatchEvent(new CustomEvent('FORM_RESPONSE_COMPLETE', {bubbles: true}))
+    }
   }
 
 }
