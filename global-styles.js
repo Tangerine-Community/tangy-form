@@ -13,12 +13,6 @@ $_documentContainer.setAttribute('style', 'display: none;');
 
 $_documentContainer.innerHTML = `<custom-style>
   <style is="custom-style">
-    * { 
-      font-size: 1.2em;
-      line-height: 1.2em;
-      /* Not sure why this does not have an affect when inside html style declaration */
-      --paper-input-container-shared-input-style_-_line-height: 1.2em;
-    }
     html {
       --document-background-color: #FAFAFA;
       --primary-color-dark: #212a3f;
@@ -43,8 +37,6 @@ $_documentContainer.innerHTML = `<custom-style>
     h1, h2, h3, h4, h5 {
       @apply --paper-font-common-base;
       color: var(--primary-text-color);
-      font-weight: 400;
-      font-size: 2em;
       margin: 25px 0px 5px 15px;
     }
   </style>
