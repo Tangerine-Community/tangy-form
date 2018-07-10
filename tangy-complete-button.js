@@ -85,9 +85,7 @@ class TangyCompleteButton extends PolymerElement {
   }
 
   completePressed() {
-    this.dispatchEvent(new CustomEvent('FORM_RESPONSE_COMPLETE', {bubbles: true}))
-    if (this.goHome) window.location.href = '../shell/index.html'
-
+    if (this.goHome) window.location.href = './index.html'
     if (this.disabled) return
     if (this.value == '') {
       this.value = 'on'

@@ -338,6 +338,12 @@ label.heading {
             .forEach(input => {
               input.addEventListener('change', that.fireOnChange.bind(that))
             })
+          let tangyCompleteButtonEl = that.$.content
+            .querySelector('tangy-complete-button')
+          if (tangyCompleteButtonEl) {
+            that.showCompleteButton = false 
+            tangyCompleteButtonEl.addEventListener('click', that.clickedComplete.bind(that))
+          }
           that.reflect()
           that.dispatchEvent(new CustomEvent('TANGY_FORM_ITEM_OPENED'))
         }
