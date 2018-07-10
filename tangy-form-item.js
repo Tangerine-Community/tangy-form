@@ -290,6 +290,7 @@ label.heading {
     let items = {}
     state.items.forEach(item => items[item.name] = item)
     let inputEls = this.shadowRoot.querySelectorAll('[name]')
+    let tangyFormStore = this.store
     // Declare namespaces for helper functions for the eval context in form.on-change.
     // We have to do this because bundlers modify the names of things that are imported
     // but do not update the evaled code because it knows not of it.
