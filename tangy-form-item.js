@@ -121,7 +121,7 @@ label.heading {
 
       <template is="dom-if" if="{{rightToLeft}}">
         <template is="dom-if" if="{{showCompleteButton}}">
-          <paper-button id="complete" on-click="complete" style="float:left">
+          <paper-button id="complete" on-click="clickedComplete" style="float:left">
             submit
           <paper-button>
         </template>
@@ -149,7 +149,7 @@ label.heading {
           <paper-button>
         </template>
         <template is="dom-if" if="{{showCompleteButton}}">
-          <paper-button id="complete" on-click="complete" style="float:right" >
+          <paper-button id="complete" on-click="clickedComplete" style="float:right" >
             submit
           <paper-button>
         </template>
@@ -336,8 +336,8 @@ label.heading {
             .querySelectorAll('[name]')
             .forEach(input => {
               input.addEventListener('change', that.fireOnChange.bind(that))
-              that.addEventListener('FORM_RESPONSE_COMPLETE', that.onFormResponseComplete.bind(that))
             })
+          that.reflect()
           that.dispatchEvent(new CustomEvent('TANGY_FORM_ITEM_OPENED'))
         }
       }
@@ -356,12 +356,6 @@ label.heading {
   onDisabledChange(newState, oldState) {
     if (newState === true && oldState === false) {
       this.dispatch({ type: ITEM_DISABLED, itemId: this.id })
-    }
-  }
-
-  onFormResponseComplete() {
-    if (this.submit()) {
-      this.dispatchEvent(new CustomEvent('FORM_RESPONSE_COMPLETE'))
     }
   }
 
@@ -415,7 +409,7 @@ label.heading {
     this.dispatchEvent(new CustomEvent('ITEM_BACK'))
   }
 
-  complete() {
+  clickedComplete() {
     if (this.validate()) {
       this.submit()
       this.dispatchEvent(new CustomEvent('FORM_RESPONSE_COMPLETE', {bubbles: true}))
