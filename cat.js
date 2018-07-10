@@ -83,6 +83,7 @@ HTMLElement.prototype.getProps = function () {
       props[propName] = this[propName]
     }
   }
+  if (this.hasAttribute('id')) props['id'] = this.getAttribute('id')
   return Object.assign({}, props, { tagName: this.tagName })
 }
 
