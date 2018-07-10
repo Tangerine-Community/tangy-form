@@ -218,14 +218,27 @@ export class TangyForm extends PolymerElement {
     }
   }
 
-  ready() {
-    super.ready()
+  set response(value) {
+    this.responseHasBeenSet = true
+    this.store.dispatch({ type: 'FORM_OPEN', response: value })
+  }
 
+  get response() {
+    return (this.responseHasBeenSet) ? this.store.getState() : null 
+  }
+
+  constructor() {
+    super()
+    this.responseHasBeenSet = false
     // Set up the store.
     this.store = Redux.createStore(
-      tangyFormReducer
+      tangyFormReducer,
+      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
     )
+  }
 
+  ready() {
+    super.ready()
     // Set up and initial response, bind item events, and put initial response in the store.
     let initialResponse = new TangyFormResponseModel() 
     initialResponse.form = this.getProps()
@@ -247,12 +260,12 @@ export class TangyForm extends PolymerElement {
     // Subscribe to the store to reflect changes.
     this.unsubscribe = this.store.subscribe(this.throttledReflect.bind(this))
 
-    // Populate new form response.
-    this.store.dispatch({ type: 'FORM_OPEN', response: initialResponse })
+    if (!this.responseHasBeenSet) {
+      this.response = initialResponse
+    }
 
     // Dispatch events out when state changes.
     this.store.subscribe(state => {
-      this.response = state
       this.dispatchEvent(new CustomEvent('TANGY_FORM_UPDATE'))
     })
 
