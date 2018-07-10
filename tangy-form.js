@@ -4,6 +4,7 @@ import './tangy-form-item.js'
 import './tangy-common-styles.js'
 import './global-styles.js'
 import { tangyFormReducer } from './tangy-form-reducer.js'
+// Redux not currently importing correctly. Make it a global.
 //window.process = { env: {NODE_ENV: 'production'}}
 //import { createStore, compose as origCompose, applyMiddleware, combineReducers } from 'redux';
 
