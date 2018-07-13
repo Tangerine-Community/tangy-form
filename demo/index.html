@@ -36,8 +36,59 @@
               console.log('You can use `event.preventDefault()` to stop the usual submit action of the form.')
             "
           >
-            <tangy-form-item src="./gps-reference-by-location.html" id="gps-reference-by-location" title="GPS referencing Location"></tangy-form-item>
-            <tangy-form-item src="./text-inputs.html" id="text_inputs" title="Text Inputs"></tangy-form-item>
+            <tangy-form-item id="gps-reference-by-location" title="GPS referencing Location">
+              <form on-change="
+                let selectedLocation = inputs.location.getSelectedLocation()
+                if (selectedLocation) {
+                  inputs.gps.setAttribute('reference-latitude', selectedLocation.latitude)
+                  inputs.gps.setAttribute('reference-longitude', selectedLocation.longitude)
+                }
+              ">
+                <tangy-location required label="Select your school" name="location" location-src="./location-list.json" show-levels="county,school"></tangy-location>
+                <tangy-gps name="gps" valid-max-delta=30></tangy-gps>
+              </form>
+            </tangy-form-item>
+            <tangy-form-item id="text_inputs" title="Text Inputs">
+              <form
+                on-open="
+                  console.log('on-open called')
+                "
+                on-change="
+                  console.log('on-change called')
+                "
+              >
+                <tangy-input 
+                  name="text_input_1" 
+                  label="This is an input for text."
+                  type="text">
+                </tangy-input>
+                <tangy-input 
+                  name="text_input_2" 
+                  label="This is an input for text that is required."
+                  type="text"
+                  error-message="This is required." 
+                  required>
+                </tangy-input>
+                <tangy-input 
+                  name="text_input_3" 
+                  label="This text input is disabled."
+                  type="text"
+                  disabled>
+                </tangy-input>
+                <tangy-input 
+                  name="text_input_4" 
+                  label="This text input requires a valid email address."
+                  error-message="A valid email address is required." 
+                  type="email" >
+                </tangy-input>
+                <tangy-input 
+                  name="text_input_5" 
+                  label="This is a text input that only uses `allowed-pattern` to prevent users from entering input other than numbers 1 - 7. See http://www.html5pattern.com/ for more examples of patterns."
+                  type="text" 
+                  allowed-pattern="[1-7]">
+                </tangy-input>
+              </form>
+            </tangy-form-item>
             <tangy-form-item src="./checkboxes.html" id="checkboxes" title="Checkboxes"></tangy-form-item>
             <tangy-form-item src="./radio-buttons.html" id="radio_buttons" title="Radiobuttons"></tangy-form-item>
             <tangy-form-item src="./select-lists.html" id="select_lists" title="Select Lists"></tangy-form-item>
