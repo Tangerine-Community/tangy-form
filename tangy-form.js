@@ -148,7 +148,7 @@ export class TangyForm extends PolymerElement {
           </paper-tabs>
         </div>
       </template>
-      <div id="items"></div> 
+      <div id="items"><slot></slot></div> 
 
         `;
   }
@@ -243,10 +243,8 @@ export class TangyForm extends PolymerElement {
     // Set up and initial response, bind item events, and put initial response in the store.
     let initialResponse = new TangyFormResponseModel() 
     initialResponse.form = this.getProps()
-    // Pass the items to the shadow root.
-    this.$.items.innerHTML = this.innerHTML
     // Pass events of items to the reducer.
-    this.shadowRoot.querySelectorAll('tangy-form-item').forEach((item) => {
+    this.querySelectorAll('tangy-form-item').forEach((item) => {
       // Pass in the store so on-change and on-open logic can access it.
       item.store = this.store
       if (this.linearMode) item.noButtons = true
@@ -363,7 +361,7 @@ export class TangyForm extends PolymerElement {
     }
 
     // Set state in tangy-form-item elements.
-    let items = [].slice.call(this.shadowRoot.querySelectorAll('tangy-form-item'))
+    let items = [].slice.call(this.querySelectorAll('tangy-form-item'))
     items.forEach((item) => {
       let index = state.items.findIndex((itemState) => item.id == itemState.id)
       if (index !== -1) item.setProps(state.items[index])
