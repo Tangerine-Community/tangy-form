@@ -281,7 +281,7 @@ export class TangyForm extends PolymerElement {
   }
 
   disconnectedCallback() {
-    this.unsubscribe()
+    if (this.unsubscribe) this.unsubscribe()
   }
 
   onFormResponseComplete(event) {
