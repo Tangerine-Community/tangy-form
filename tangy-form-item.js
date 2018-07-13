@@ -168,8 +168,9 @@ label.heading {
 
   constructor() {
     super()
-    this._innerHTML = this.innerHTML
-    this.innerHTML = ''
+    if (this.querySelector('template')) {
+      this.template = this.querySelector('template').innerHTML
+    }
   }
 
   static get properties() {
@@ -329,8 +330,8 @@ label.heading {
       this.$.content.innerHTML = ''
     }
     // Open it, but only if empty because we might be stuck.
-    if (open === true && this.$.content.innerHTML === '' && this._innerHTML) {
-      this.openWithContent(this._innerHTML)
+    if (open === true && this.$.content.innerHTML === '' && this.template) {
+      this.openWithContent(this.template)
     }
     else if (open === true && this.$.content.innerHTML === '') {
       let that = this
@@ -361,7 +362,7 @@ label.heading {
     }
     this.reflect()
     let form = this.shadowRoot.querySelector('form')
-    if (open === true && form && form.getAttribute('on-open')) {
+    if (this.open === true && form && form.getAttribute('on-open')) {
       this.fireHook('on-open')
       this.fireHook('on-change')
     }
