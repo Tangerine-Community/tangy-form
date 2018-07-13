@@ -168,6 +168,8 @@ label.heading {
 
   constructor() {
     super()
+    this._innerHTML = this.innerHTML
+    this.innerHTML = ''
   }
 
   static get properties() {
@@ -321,43 +323,50 @@ label.heading {
     }
   }
 
-  async onOpenChange(open) {
+  onOpenChange(open) {
     // Close it.
     if (open === false) {
       this.$.content.innerHTML = ''
     }
     // Open it, but only if empty because we might be stuck.
-    if (open === true && this.$.content.innerHTML === '') {
+    if (open === true && this.$.content.innerHTML === '' && this._innerHTML) {
+      this.openWithContent(this._innerHTML)
+    }
+    else if (open === true && this.$.content.innerHTML === '') {
       let that = this
       const request = new XMLHttpRequest();
       request.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          that.$.content.innerHTML = this.responseText
-          that.$.content
-            .querySelectorAll('[name]')
-            .forEach(input => {
-              input.addEventListener('change', that.fireOnChange.bind(that))
-            })
-          let tangyCompleteButtonEl = that.$.content
-            .querySelector('tangy-complete-button')
-          if (tangyCompleteButtonEl) {
-            that.showCompleteButton = false 
-            tangyCompleteButtonEl.addEventListener('click', that.clickedComplete.bind(that))
-          }
-          that.reflect()
-          that.dispatchEvent(new CustomEvent('TANGY_FORM_ITEM_OPENED'))
+          that.openWithContent(this.responseText)
         }
       }
       request.open('GET', this.src);
       request.send();
-
     }
+    
+  }
+
+  openWithContent(contentHTML) {
+    this.$.content.innerHTML = contentHTML
+    this.$.content
+      .querySelectorAll('[name]')
+      .forEach(input => {
+        input.addEventListener('change', this.fireOnChange.bind(this))
+      })
+    let tangyCompleteButtonEl = this.$.content
+      .querySelector('tangy-complete-button')
+    if (tangyCompleteButtonEl) {
+      this.showCompleteButton = false 
+      tangyCompleteButtonEl.addEventListener('click', this.clickedComplete.bind(this))
+    }
+    this.reflect()
     let form = this.shadowRoot.querySelector('form')
     if (open === true && form && form.getAttribute('on-open')) {
       this.fireHook('on-open')
       this.fireHook('on-change')
     }
     this.reflect()
+    this.dispatchEvent(new CustomEvent('TANGY_FORM_ITEM_OPENED'))
   }
 
   onDisabledChange(newState, oldState) {
@@ -378,8 +387,6 @@ label.heading {
     }
     return true
   }
-
-
 
   validate() {
     let inputs = this.shadowRoot.querySelectorAll('[name]')
