@@ -14,25 +14,33 @@
   </head>
   <body>
 
-    <test-fixture id="BasicTestFixture">
+    <test-fixture id="HelloWorldFixture">
       <template>
-        <tangy-form has-summary linear-mode hide-closed-items id="field-demo" on-change="">
-            <tangy-form-item src="./text-inputs.html" id="text_inputs" title="Text Inputs" hide-back-button></tangy-form-item>
-            <tangy-form-item src="./checkboxes.html" id="checkboxes" title="Checkboxes"></tangy-form-item>
-            <tangy-form-item src="./radio-buttons.html" id="radio_buttons" title="Radiobuttons"></tangy-form-item>
-            <tangy-form-item src="./select-lists.html" id="select_lists" title="Select Lists"></tangy-form-item>
-            <tangy-form-item src="./location.html" id="location" title="Location"></tangy-form-item>
-            <tangy-form-item src="./gps.html" id="gps" title="GPS"></tangy-form-item>
-            <tangy-form-item src="./date-time.html" id="date_time" title="Date and Time"></tangy-form-item>
-            <tangy-form-item src="./timed-grid.html" id="timed_grids" title="Timed Grid"></tangy-form-item>
-            <tangy-form-item src="./timed-grid-feedback.html" id="timed_grids_feedback" title="Timed Grid Feedback"></tangy-form-item>
-            <tangy-form-item src="./complete.html" id="complete" title="Complete" hide-next-button></tangy-form-item>
-            <tangy-form-item src="./summary.html" summary id="summary" title="Summary"></tangy-form-item>
-          </tangy-form>
+        <tangy-form id="field-demo" title="Field Demo" on-change="">
+          <tangy-form-item id="item-1">
+            <template>
+              Hello world.
+            </template>
+          </tangy-form-item>
+        </tangy-form>
       </template>
     </test-fixture>
 
-    <test-fixture id="ChangedPropertyTestFixture">
+    <test-fixture id="OnOpenTestFixture">
+      <template>
+        <tangy-form id="field-demo" title="Field Demo" on-change="">
+          <tangy-form-item id="item-1">
+            <template>
+              <form on-open="inputs.input1.value = 'Hello world.'">
+                <tangy-input label='modify me on open' name='input1'></tangy-input>
+              </form>
+            </template>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="DynamicTestFixture">
       <template>
         <tangy-form has-summary linear-mode hide-closed-items id="field-demo" on-change="">
             <tangy-form-item src="./text-inputs.html" id="text_inputs" title="Text Inputs" hide-back-button></tangy-form-item>
@@ -53,28 +61,19 @@
     <script type="module">
       suite('tangy-form', () => {
 
-        test('instantiating the element works without errors', () => {
-          const element = fixture('BasicTestFixture');
-          assert.equal(true, true);
+        test('Hello world works without errors', () => {
+          const element = fixture('HelloWorldFixture');
+          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
         });
-        /*
-        test('instantiating the element with default properties works', () => {
-          const element = fixture('BasicTestFixture');
-          assert.equal(element.prop1, 'tangy-form');
-          const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello tangy-form!');
+
+        test('tangy-form-item.form.on-open should run', () => {
+          const element = fixture('OnOpenTestFixture');
+          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('[name=input1]').value, 'Hello world.');
         });
-        test('setting a property on the element works', () => {
-          // Create a test fixture
-          const element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.prop1, 'new-prop1');
-          const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          debugger
-          assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
+
+        test('instantiating DynamicTestFixture should work without errors', () => {
+          const element = fixture('DynamicTestFixture');
         });
-        */
 
       });
     </script>
