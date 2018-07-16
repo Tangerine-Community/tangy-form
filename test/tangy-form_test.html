@@ -40,6 +40,33 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="GetValueTestFixture">
+      <template>
+        <tangy-form id="field-demo" title="Field Demo" on-change="">
+          <tangy-form-item id="item-1">
+            <template>
+              <form on-change="
+                inputs.bar.value = getValue('foo')
+                ">
+                <tangy-input label='foo' name='foo'></tangy-input>
+                <tangy-input label='bar' name='bar'></tangy-input>
+              </form>
+            </template>
+          </tangy-form-item>
+          <tangy-form-item id="item-2">
+            <template>
+              <form on-open="
+                inputs.baz.value = getValue('foo')
+                ">
+                <tangy-input label='zed' name='zed'></tangy-input>
+                <tangy-input label='baz' name='baz'></tangy-input>
+              </form>
+            </template>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <test-fixture id="DynamicTestFixture">
       <template>
         <tangy-form has-summary linear-mode hide-closed-items id="field-demo" on-change="">
@@ -69,6 +96,15 @@
         test('tangy-form-item.form.on-open should run', () => {
           const element = fixture('OnOpenTestFixture');
           assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('[name=input1]').value, 'Hello world.');
+        });
+
+        test('tangy-form-item.form.getValue and inputs[inputName] should work in on-change on the current item and on-open on the next item ', () => {
+          const element = fixture('GetValueTestFixture');
+          element.querySelector('#item-1').shadowRoot.querySelector('[name=foo]').value = 'Hello world.'
+          element.querySelector('#item-1').shadowRoot.querySelector('[name=foo]').dispatchEvent(new CustomEvent('change'))
+          assert.equal(element.querySelector('#item-1').shadowRoot.querySelector('[name=bar]').value, 'Hello world.');
+          element.querySelector('#item-1').next()
+          assert.equal(element.querySelector('#item-2').shadowRoot.querySelector('[name=baz]').value, 'Hello world.');
         });
 
         test('instantiating DynamicTestFixture should work without errors', () => {
