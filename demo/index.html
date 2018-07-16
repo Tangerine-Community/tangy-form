@@ -27,41 +27,34 @@
       <h3>Basic tangy-form demo</h3>
       <demo-snippet>
         <template>
-          <tangy-form id="field-demo" 
-            on-change="
-              console.log('TangyForm.on-change was called.')
-            "
-            on-submit="
-              console.log('TangyForm.on-submit was called.')
-              console.log('You can use `event.preventDefault()` to stop the usual submit action of the form.')
-            "
-          >
-            <tangy-form-item id="text_inputs" title="Text Inputs">
+          <tangy-form id="my-form">
+            <tangy-form-item id="item1">
               <template>
-                <form
-                  on-open="
-                    console.log('on-open called')
-                  "
-                  on-change="
-                    console.log('on-change called')
-                  "
-                >
-                  <tangy-input 
-                    name="person_name" 
-                    label="What is your name?"
-                    type="text"
-                    required
-                  >
-                  </tangy-input>
+                <form>
+                  <tangy-input name="input1" label="What is your first name?"></tangy-input>
                 </form>
               </template>
             </tangy-form-item>
-            <tangy-form-item id="complete" title="Complete">
+            <tangy-form-item id="item2">
               <template>
-                Thank you for taking our survey.
+                <form>
+                  <tangy-input name="input2" label="What is your last name?"></tangy-input>
+                </form>
               </template>
             </tangy-form-item>
           </tangy-form>
+
+          <script>
+            document.querySelector('#my-form').addEventListener('submit', event => {
+              // By default, the form response is locked and the user can browse it. Use event.preventDefault() 
+              // to do something else.
+              event.preventDefault()
+              // 3 ways to inspect the user's response to the form. Ordered by level of detail.
+              console.log(event.target.response)
+              console.log(event.target.inputs)
+              console.log(event.target.values)
+            })
+          </script>
         </template>
       </demo-snippet>
     </div>

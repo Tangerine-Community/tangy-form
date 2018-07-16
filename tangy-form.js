@@ -228,6 +228,14 @@ export class TangyForm extends PolymerElement {
     return (this.responseHasBeenSet) ? this.store.getState() : null 
   }
 
+  get inputs() {
+    return this.response.items.reduce((acc, item) => [...acc, ...item.inputs], [])
+  }
+
+  get values() {
+    return this.inputs.reduce((acc, input) => Object.assign({}, acc, {[input.name]: input.value}), {})
+  }
+
   constructor() {
     super()
     this.responseHasBeenSet = false
@@ -450,11 +458,6 @@ export class TangyForm extends PolymerElement {
     this.store.dispatch({ type: 'ITEM_NEXT', itemId: item.id })
   }
 
-  getValue(name) {
-    let state = this.store.getState()
-    let input = state.inputs.find((input) => input.name == name)
-    if (input) return input.value
-  }
 
 }
 
