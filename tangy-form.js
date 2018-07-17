@@ -248,6 +248,14 @@ export class TangyForm extends PolymerElement {
 
   ready() {
     super.ready()
+    // Work around for issue involving elements not immediately belonging to their class.
+    // This ensures that tangy-form-item elements belong to TangyFormItem Class. 
+    // - https://github.com/Polymer/polymer/issues/5290
+    // - https://github.com/Tangerine-Community/Tangerine/issues/967
+    setTimeout(this.reallyReady.bind(this), 1)
+  }
+
+  reallyReady() {
     // Set up and initial response, bind item events, and put initial response in the store.
     let initialResponse = new TangyFormResponseModel() 
     initialResponse.form = this.getProps()
@@ -285,7 +293,6 @@ export class TangyForm extends PolymerElement {
 
     // Flag for first render.
     this.hasNotYetFocused = true
-
   }
 
   disconnectedCallback() {
