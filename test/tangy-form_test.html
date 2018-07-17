@@ -115,7 +115,7 @@
 
     <script type="module">
       suite('tangy-form', () => {
-        
+
         test('Hello world works without errors', () => {
           const element = fixture('HelloWorldFixture');
           element.newResponse()
@@ -239,8 +239,8 @@
         test('when resuming a response, should start on the first item not disabled', () => {
           const element = fixture('SimpleTestFixture');
           // Disable item 1 and 3 are disabled in this response being resumed, leaving item-2 the first item not disabled.
-          // Note that before you assign the response, that is your opportunity to set an item to disabled.
-          element.response = {
+          // Note that before you assign the response, this is your opportunity to set an item to disabled.
+          let response = {
             "_id": "df7fcdaf-aa01-4ad9-8602-15cb529d3a30",
             "collection": "TangyFormResponse",
             "form": {
@@ -270,7 +270,7 @@
                 "inputs": [],
                 "open": false,
                 "incomplete": true,
-                "disabled": true,
+                "disabled": false,
                 "hidden": true,
                 "locked": false,
                 "tagName": "TANGY-FORM-ITEM"
@@ -306,7 +306,7 @@
                 "inputs": [],
                 "open": false,
                 "incomplete": true,
-                "disabled": true,
+                "disabled": false,
                 "hidden": true,
                 "locked": false,
                 "tagName": "TANGY-FORM-ITEM"
@@ -321,6 +321,16 @@
             "startUnixtime": 1531865618651,
             "uploadDatetime": ""
           }
+          let itemsToDisable = ['item-1', 'item-3']
+          response.items = response.items.map(item => {
+            if (itemsToDisable.indexOf(item.id) !== -1) {
+              return Object.assign({}, item, {disabled: true})
+            }
+            else {
+              return item
+            }
+          })
+          element.response = response
           assert.equal(element.querySelector('[open=""]').id, 'item-2')
           assert.equal(element.querySelectorAll('[open=""]').length, 1)
         })
