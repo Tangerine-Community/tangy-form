@@ -1,4 +1,5 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
 import './cat.js'
 import './tangy-form-item.js'
 import './tangy-common-styles.js'
@@ -38,6 +39,94 @@ import { TangyFormResponseModel } from './tangy-form-response-model.js';
  */
 
 export class TangyForm extends PolymerElement {
+
+  /*
+   * Public API
+   */
+
+  // For creating a new response. Call it directly to force a new response when working programatically otherwise
+  // this will get called later if no response has been assigned by the time afterNextRender is called.
+  newResponse() {
+    let initialResponse = new TangyFormResponseModel() 
+    initialResponse.form = this.getProps()
+    this.querySelectorAll('tangy-form-item').forEach((item) => {
+      initialResponse.items.push(item.getProps())
+    })
+    this.response = initialResponse
+  }
+
+  // Set a form response to this property to resume a form response.
+  set response(value) {
+    this._responseHasBeenSet = true
+    this.store.dispatch({ type: 'FORM_OPEN', response: value })
+  }
+
+  // Get the current form response.
+  get response() {
+    return (this._responseHasBeenSet) ? this.store.getState() : null 
+  }
+
+  // Get an array of all inputs accross items.
+  get inputs() {
+    return this.response.items.reduce((acc, item) => [...acc, ...item.inputs], [])
+  }
+
+  // Get an object where object properties are input names and object property values are corresponding input values.
+  get values() {
+    return this.inputs.reduce((acc, input) => Object.assign({}, acc, {[input.name]: input.value}), {})
+  }
+
+  // Get the value of a single input by name.
+  getValue(name) {
+    let state = this.store.getState()
+    let inputs = []
+    state.items.forEach(item => inputs = [...inputs, ...item.inputs])
+    //return (inputs[name]) ? inputs[name].value : undefined
+    let foundInput = inputs.find(input => (input.name === name) ? input.value : false)
+    if (foundInput && typeof foundInput.value === 'object') {
+      let values = []
+      foundInput.value.forEach(subInput => {
+        if (subInput.value) {
+          values.push(subInput.name)
+        }
+      })
+      return values
+    } else if (foundInput && foundInput.hasOwnProperty('value')) {
+      return foundInput.value
+    } else {
+      return ''
+    }
+  }
+
+  // Go to next item. Note, if validation fails, you will not go to the next item.
+  next() {
+    // Note that next needs to be called on the item level so that it can determine if it is valid and can actually close.
+    this.querySelector('tangy-form-item[open=""]').next()
+  }
+
+  // Go to previous item. Note, if validation fails, you will not go to the previous item.
+  back() {
+    // Note that back needs to be called on the item level so that it can determine if it is valid and can actually close.
+    this.querySelector('tangy-form-item[open=""]').back()
+  }
+
+  // Disable an item so it is skipped.
+  itemDisable(itemId) { 
+    let state = this.store.getState()
+    let item = state.items.find(item => itemId === item.id)
+    if (item && !item.disabled) this.store.dispatch({ type: 'ITEM_DISABLE', itemId: itemId })
+  }
+
+  // Enable an item so it is not skipped.
+  itemEnable(itemId) {
+    let state = this.store.getState()
+    let item = state.items.find(item => itemId === item.id)
+    if (item && item.disabled) this.store.dispatch({ type: 'ITEM_ENABLE', itemId: itemId })
+  }
+
+  /*
+   * Private.
+   */
 
   static get template() {
     return html`
@@ -219,26 +308,9 @@ export class TangyForm extends PolymerElement {
     }
   }
 
-  set response(value) {
-    this.responseHasBeenSet = true
-    this.store.dispatch({ type: 'FORM_OPEN', response: value })
-  }
-
-  get response() {
-    return (this.responseHasBeenSet) ? this.store.getState() : null 
-  }
-
-  get inputs() {
-    return this.response.items.reduce((acc, item) => [...acc, ...item.inputs], [])
-  }
-
-  get values() {
-    return this.inputs.reduce((acc, input) => Object.assign({}, acc, {[input.name]: input.value}), {})
-  }
-
   constructor() {
     super()
-    this.responseHasBeenSet = false
+    this._responseHasBeenSet = false
     // Set up the store.
     this.store = Redux.createStore(
       tangyFormReducer,
@@ -248,17 +320,7 @@ export class TangyForm extends PolymerElement {
 
   ready() {
     super.ready()
-    // Work around for issue involving elements not immediately belonging to their class.
-    // This ensures that tangy-form-item elements belong to TangyFormItem Class. 
-    // - https://github.com/Polymer/polymer/issues/5290
-    // - https://github.com/Tangerine-Community/Tangerine/issues/967
-    setTimeout(this.reallyReady.bind(this), 1)
-  }
-
-  reallyReady() {
-    // Set up and initial response, bind item events, and put initial response in the store.
-    let initialResponse = new TangyFormResponseModel() 
-    initialResponse.form = this.getProps()
+  
     // Pass events of items to the reducer.
     this.querySelectorAll('tangy-form-item').forEach((item) => {
       // Pass in the store so on-change and on-open logic can access it.
@@ -269,15 +331,11 @@ export class TangyForm extends PolymerElement {
       item.addEventListener('ITEM_CLOSED', this.onItemClosed.bind(this))
       item.addEventListener('ITEM_OPENED', this.onItemOpened.bind(this))
       item.addEventListener('FORM_RESPONSE_COMPLETE', this.onFormResponseComplete.bind(this))
-      initialResponse.items.push(item.getProps())
     })
 
     // Subscribe to the store to reflect changes.
     this.unsubscribe = this.store.subscribe(this.throttledReflect.bind(this))
 
-    if (!this.responseHasBeenSet) {
-      this.response = initialResponse
-    }
 
     // Dispatch events out when state changes.
     this.store.subscribe(state => {
@@ -293,6 +351,13 @@ export class TangyForm extends PolymerElement {
 
     // Flag for first render.
     this.hasNotYetFocused = true
+
+    afterNextRender(this, function() {
+      if (this._responseHasBeenSet === false) {
+        this.newResponse()
+      }
+    })
+    
   }
 
   disconnectedCallback() {
@@ -415,39 +480,9 @@ export class TangyForm extends PolymerElement {
     // Declare namespaces for helper functions for the eval context in form.on-change.
     // We have to do this because bundlers modify the names of things that are imported
     // but do not update the evaled code because it knows not of it.
-    let getValue = (name) => {
-      let state = this.store.getState()
-      let inputs = []
-      state.items.forEach(item => inputs = [...inputs, ...item.inputs])
-      //return (inputs[name]) ? inputs[name].value : undefined
-      let foundInput = inputs.find(input => (input.name === name) ? input.value : false)
-      if (foundInput && typeof foundInput.value === 'object') {
-        let values = []
-        foundInput.value.forEach(subInput => {
-          if (subInput.value) {
-            values.push(subInput.name)
-          }
-        })
-        return values
-      } else if (foundInput && foundInput.hasOwnProperty('value')) {
-        return foundInput.value
-      } else {
-        return ''
-      }
-
-    }
-
-    // on-change hook.
-    const itemDisable = (itemId) => { 
-        let state = this.store.getState()
-        let item = state.items.find(item => itemId === item.id)
-        if (item && !item.disabled) this.store.dispatch({ type: 'ITEM_DISABLE', itemId: itemId })
-    }
-    const itemEnable = (itemId) => {
-        let state = this.store.getState()
-        let item = state.items.find(item => itemId === item.id)
-        if (item && item.disabled) this.store.dispatch({ type: 'ITEM_ENABLE', itemId: itemId })
-    }
+    let getValue = this.getValue    // on-change hook.
+    const itemDisable = this.itemDisable 
+    const itemEnable = this.itemEnable 
     eval(this.getAttribute('on-change'))
   }
 
