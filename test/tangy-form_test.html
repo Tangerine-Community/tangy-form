@@ -26,13 +26,41 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="SimpleTestFixture">
+      <template>
+        <tangy-form id="test" title="test">
+          <tangy-form-item id="item-1">
+            <template>
+              <form>
+                <tangy-input label='test1' name='input1'></tangy-input>
+              </form>
+            </template>
+          </tangy-form-item>
+          <tangy-form-item id="item-2">
+            <template>
+              <form>
+                <tangy-input label='test2' name='input2'></tangy-input>
+              </form>
+            </template>
+          </tangy-form-item>
+          <tangy-form-item id="item-3">
+            <template>
+              <form>
+                <tangy-input label='test3' name='input3'></tangy-input>
+              </form>
+            </template>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <test-fixture id="OnOpenTestFixture">
       <template>
         <tangy-form id="field-demo" title="Field Demo" on-change="">
           <tangy-form-item id="item-1">
             <template>
               <form on-open="inputs.input1.value = 'Hello world.'">
-                <tangy-input label='modify me on open' name='input1'></tangy-input>
+                <tangy-input label='test' name='input1'></tangy-input>
               </form>
             </template>
           </tangy-form-item>
@@ -87,19 +115,110 @@
 
     <script type="module">
       suite('tangy-form', () => {
-
+        
         test('Hello world works without errors', () => {
           const element = fixture('HelloWorldFixture');
+          element.newResponse()
           assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
+        });
+
+        test('can resume response', () => {
+          const element = fixture('SimpleTestFixture');
+          element.response = {
+            "_id": "4acc5190-1618-451f-96e2-12e1c7dec376",
+            "collection": "TangyFormResponse",
+            "form": {
+              "complete": false,
+              "linearMode": true,
+              "hideClosedItems": true,
+              "hideCompleteFab": false,
+              "tabIndex": 0,
+              "showResponse": false,
+              "showSummary": false,
+              "hasSummary": false,
+              "onSubmit": "",
+              "id": "test",
+              "tagName": "TANGY-FORM"
+            },
+            "items": [
+              {
+                "id": "item-1",
+                "src": "tangy-form-item",
+                "title": "",
+                "summary": false,
+                "hideButtons": true,
+                "hideBackButton": true,
+                "rightToLeft": false,
+                "hideNextButton": false,
+                "showCompleteButton": false,
+                "inputs": [
+                  {
+                    "name": "input1",
+                    "private": false,
+                    "label": "test1",
+                    "type": "",
+                    "errorMessage": "",
+                    "required": false,
+                    "disabled": false,
+                    "hidden": false,
+                    "invalid": false,
+                    "incomplete": true,
+                    "value": "foo",
+                    "allowedPattern": "",
+                    "tagName": "TANGY-INPUT"
+                  }
+                ],
+                "open": false,
+                "incomplete": false,
+                "disabled": false,
+                "hidden": true,
+                "locked": false,
+                "tagName": "TANGY-FORM-ITEM"
+              },
+              {
+                "id": "item-2",
+                "src": "tangy-form-item",
+                "title": "",
+                "summary": false,
+                "hideButtons": true,
+                "hideBackButton": false,
+                "rightToLeft": false,
+                "hideNextButton": true,
+                "showCompleteButton": true,
+                "inputs": [],
+                "open": true,
+                "incomplete": true,
+                "disabled": false,
+                "hidden": false,
+                "locked": false,
+                "tagName": "TANGY-FORM-ITEM"
+              }
+            ],
+            "inputs": [],
+            "complete": false,
+            "focusIndex": 1,
+            "nextFocusIndex": -1,
+            "previousFocusIndex": 0,
+            "startDatetime": "7/17/2018, 5:17:31 PM",
+            "startUnixtime": 1531862251438,
+            "uploadDatetime": "",
+            "previousItemId": "item-1",
+            "progress": 0
+          }
+          // Go back and item and see if input1 has been assigned the resumed value of "foo".
+          element.back()
+          assert.equal(element.querySelector('tangy-form-item#item-1').shadowRoot.querySelector('[name=input1]').value, 'foo')
         });
 
         test('tangy-form-item.form.on-open should run', () => {
           const element = fixture('OnOpenTestFixture');
+          element.newResponse()
           assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('[name=input1]').value, 'Hello world.');
         });
 
         test('tangy-form-item.form.getValue and inputs[inputName] should work in on-change on the current item and on-open on the next item ', () => {
           const element = fixture('GetValueTestFixture');
+          element.newResponse()
           element.querySelector('#item-1').shadowRoot.querySelector('[name=foo]').value = 'Hello world.'
           element.querySelector('#item-1').shadowRoot.querySelector('[name=foo]').dispatchEvent(new CustomEvent('change'))
           assert.equal(element.querySelector('#item-1').shadowRoot.querySelector('[name=bar]').value, 'Hello world.');
@@ -107,11 +226,111 @@
           assert.equal(element.querySelector('#item-2').shadowRoot.querySelector('[name=baz]').value, 'Hello world.');
         });
 
+        test('when starting new response, should start on the first item not disabled', () => {
+          const element = fixture('SimpleTestFixture');
+          // Disable item 1 and 3, leaving item-2 the first item not disabled.
+          element.querySelector('#item-1').disabled = true
+          element.querySelector('#item-3').disabled = true
+          element.newResponse()
+          assert.equal(element.querySelector('[open=""]').id, 'item-2')
+          assert.equal(element.querySelectorAll('[open=""]').length, 1)
+        })
+
+        test('when resuming a response, should start on the first item not disabled', () => {
+          const element = fixture('SimpleTestFixture');
+          // Disable item 1 and 3 are disabled in this response being resumed, leaving item-2 the first item not disabled.
+          // Note that before you assign the response, that is your opportunity to set an item to disabled.
+          element.response = {
+            "_id": "df7fcdaf-aa01-4ad9-8602-15cb529d3a30",
+            "collection": "TangyFormResponse",
+            "form": {
+              "complete": false,
+              "linearMode": true,
+              "hideClosedItems": true,
+              "hideCompleteFab": false,
+              "tabIndex": 0,
+              "showResponse": false,
+              "showSummary": false,
+              "hasSummary": false,
+              "onSubmit": "",
+              "id": "test",
+              "tagName": "TANGY-FORM"
+            },
+            "items": [
+              {
+                "id": "item-1",
+                "src": "tangy-form-item",
+                "title": "",
+                "summary": false,
+                "hideButtons": true,
+                "hideBackButton": false,
+                "rightToLeft": false,
+                "hideNextButton": false,
+                "showCompleteButton": false,
+                "inputs": [],
+                "open": false,
+                "incomplete": true,
+                "disabled": true,
+                "hidden": true,
+                "locked": false,
+                "tagName": "TANGY-FORM-ITEM"
+              },
+              {
+                "id": "item-2",
+                "src": "tangy-form-item",
+                "title": "",
+                "summary": false,
+                "hideButtons": true,
+                "hideBackButton": true,
+                "rightToLeft": false,
+                "hideNextButton": false,
+                "showCompleteButton": false,
+                "inputs": [],
+                "open": false,
+                "incomplete": true,
+                "disabled": false,
+                "hidden": false,
+                "locked": false,
+                "tagName": "TANGY-FORM-ITEM"
+              },
+              {
+                "id": "item-3",
+                "src": "tangy-form-item",
+                "title": "",
+                "summary": false,
+                "hideButtons": true,
+                "hideBackButton": false,
+                "rightToLeft": false,
+                "hideNextButton": true,
+                "showCompleteButton": true,
+                "inputs": [],
+                "open": false,
+                "incomplete": true,
+                "disabled": true,
+                "hidden": true,
+                "locked": false,
+                "tagName": "TANGY-FORM-ITEM"
+              }
+            ],
+            "inputs": [],
+            "complete": false,
+            "focusIndex": 0,
+            "nextFocusIndex": 1,
+            "previousFocusIndex": -1,
+            "startDatetime": "7/17/2018, 6:13:38 PM",
+            "startUnixtime": 1531865618651,
+            "uploadDatetime": ""
+          }
+          assert.equal(element.querySelector('[open=""]').id, 'item-2')
+          assert.equal(element.querySelectorAll('[open=""]').length, 1)
+        })
+
         test('instantiating DynamicTestFixture should work without errors', () => {
           const element = fixture('DynamicTestFixture');
         });
 
       });
+
     </script>
 
   </body>
