@@ -333,6 +333,7 @@
           element.response = response
           assert.equal(element.querySelector('[open=""]').id, 'item-2')
           assert.equal(element.querySelectorAll('[open=""]').length, 1)
+          assert.equal(element.querySelector('#item-2').hasAttribute('show-complete-button'), true)
         })
 
         test('instantiating DynamicTestFixture should work without errors', () => {
