@@ -267,6 +267,9 @@ function calculateTargets(state) {
     newState.previousItemId = undefined
   }
 
+  let indexOfLastItem = newState.items.length - ([...newState.items].reverse().findIndex(item => !item.summary && !item.disabled) + 1)
+  newState.items = newState.items.map((item, i) => Object.assign({}, item, { showCompleteButton: (indexOfLastItem === i) ? true : false}))
+
   return newState
 }
 
