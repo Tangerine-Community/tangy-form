@@ -8,7 +8,19 @@ A form element for lazy loaded multipage forms.
 - Loads of handy input elements such as `<tangy-gps>`.
 - Easy to write logic for the form for hiding / showing and disabling / enabled inputs.
 
+
+<!--
 ```
+<custom-element-demo>
+  <template>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="./tangy-form.js"></script>
+    <next-code-block></next-code-block>
+  </template>
+</custom-element-demo>
+```
+-->
+```html
 <tangy-form id="my-form">
   <tangy-form-item id="item1">
     <template>
