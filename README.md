@@ -1,6 +1,6 @@
 # \<tangy-form\>
 
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/tangy-form)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/tangy-form) [![Greenkeeper badge](https://badges.greenkeeper.io/Tangerine-Community/tangy-form.svg)](https://greenkeeper.io/) [![Build Status](https://travis-ci.org/Tangerine-Community/tangy-form.svg?branch=master)](https://travis-ci.org/Tangerine-Community/tangy-form)
 
 A form element for lazy loaded multipage forms.
 

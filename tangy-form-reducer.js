@@ -13,26 +13,25 @@ const tangyFormReducer = function (state = initialState, action) {
   var currentIndex
   var newState
   var tmp = {}
+  var firstNotDisabled = 0
   switch(action.type) {
 
     case 'FORM_OPEN':
       newState = Object.assign({}, action.response) 
-      newState.items[0].hideBackButton = true
+      firstNotDisabled = newState.items.findIndex(item => item.disabled === false)
+      newState.items[firstNotDisabled].hideBackButton = true
       const indexOfSummaryItem = newState.items.findIndex(item => item.summary === true)
-      let indexOfLastItem
       if (indexOfSummaryItem !== -1) {
-        indexOfLastItem = indexOfSummaryItem - 1
         newState.form.hasSummary = true
-      } else {
-        indexOfLastItem = newState.items.length - 1
-      }
+      } 
       if (!newState.form.complete) {
         newState.form.linearMode = true
         newState.form.hideClosedItems = true
       }
+      let indexOfLastItem = newState.items.length - ([...newState.items].reverse().findIndex(item => !item.summary && !item.disabled) + 1)
       newState.items[indexOfLastItem].hideNextButton = true
       newState.items[indexOfLastItem].showCompleteButton = true
-      if (!newState.form.complete && !newState.items.find(item => item.open)) newState.items[0].open = true
+      if (!newState.form.complete && !newState.items.find(item => item.open)) newState.items[firstNotDisabled].open = true
       if (newState.form.hideClosedItems === true) newState.items.forEach(item => item.hidden = !item.open)
       if (newState.form.linearMode === true) newState.items.forEach(item => item.hideButtons = true)
       return newState
@@ -267,6 +266,9 @@ function calculateTargets(state) {
   } else {
     newState.previousItemId = undefined
   }
+
+  let indexOfLastItem = newState.items.length - ([...newState.items].reverse().findIndex(item => !item.summary && !item.disabled) + 1)
+  newState.items = newState.items.map((item, i) => Object.assign({}, item, { showCompleteButton: (indexOfLastItem === i) ? true : false}))
 
   return newState
 }
