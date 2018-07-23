@@ -16,7 +16,7 @@ export class TangyInput extends PolymerElement {
   constructor() {
     super()
     this.t = {
-      helpText: 'Enter your response to above question here'
+      helpText: t('Enter your response to above question here')
     }
     this.useThis = (this.getAttribute('type') === 'email' ||
       this.getAttribute('type') === 'number' ||

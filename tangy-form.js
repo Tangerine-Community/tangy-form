@@ -231,9 +231,9 @@ export class TangyForm extends PolymerElement {
         <div id="bar">
           <paper-tabs selected="[[tabIndex]]" scrollable>
             <template is="dom-if" if="{{hasSummary}}">
-              <paper-tab id="summary-button" on-click="onClickSummaryTab">Summary</paper-tab>
+              <paper-tab id="summary-button" on-click="onClickSummaryTab">[[t.summary]]</paper-tab>
             </template>
-            <paper-tab id="response-button" on-click="onClickResponseTab">Response</paper-tab>
+            <paper-tab id="response-button" on-click="onClickResponseTab">[[t.response]]</paper-tab>
           </paper-tabs>
         </div>
       </template>
@@ -310,6 +310,10 @@ export class TangyForm extends PolymerElement {
 
   constructor() {
     super()
+    this.t = {
+      summary: 'summary',
+      response: 'response'
+    }
     this._responseHasBeenSet = false
     // Set up the store.
     this.store = Redux.createStore(
