@@ -13,87 +13,99 @@ import './tangy-element-styles.js'
  * @demo demo/index.html
  */
 class TangyGps extends PolymerElement {
-  static get template() {
-    return html`
-    <style include="tangy-common-styles"></style>
-    <style include="tangy-element-styles"></style>
-    <style>
-    :host {
-      display: block;
-    }
-    :host([required]:not([disabled])) label::before  { 
-      content: "*"; 
-      color: red; 
-      position: absolute;
-      top: 4px;
-      right: 5px;
-    }
-    :host([hide-coordinates]) #lat-long {
-      display:none;
-    }
-   :host([in-geofence]) .geofence-message {
-     display: inline;
-     animation: fadein 2s;
-   }
-  :host([invalid]) .geofence-message {
-     display: inline;
-     animation: fadein 2s;
-     background-color: red;
-   }
-   .geofence-message-container {
-     text-align: center;
-     margin-top: 15px;
-   }
-   .geofence-message {
-     display: none;
-     margin: 5px; 0px 0px;
-     background: #28a745;
-     color: white;
-     padding: 5px;
-     border-radius: 5px;
-   }
-   @keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-   }
-   .label {
-      font-weight: bold;
-   }
-   .coordinates {
-     margin: 5px 15px;
-   }
-  
-  </style>
-  <div class="coordinates">
-    <div id="lat-long">
-      <span class="label">Latitude:</span> [[currentLatitude]] <br>
-      <span class="label">Longitude:</span> [[currentLongitude]] <br>
-    <div>
-    <template is="dom-if" if="[[currentLatitude]]">
-      <span class="label">Accuracy:</span> [[currentAccuracy]] meters<br>
-      <span class="label">Accuracy Level:</span> [[accuracyLevel]]
-    </template> 
-    <template is="dom-if" if="{{hasDelta}}">
-        <br> <span class="label">Distance from reference:</span> [[currentDelta]] meters
-        </template>
-    </div>
-    <div>
-    <template is="dom-if" if="[[!currentLatitude]]">
-        Searching...
-    </template>
-    <div class="geofence-message-container"> 
-      <div class="geofence-message"> [[geofenceMessage]]</div>
-    </div>
-    </div>
-    </div>
-    
-    
-    <slot></slot>
-  </div> 
-`;
-  }
 
   static get is() { return 'tangy-gps'; }
+
+  constructor() {
+    super()
+    this.t = {
+      'searching': t('Searching'),
+      'latitude': t('Latitude'),
+      'longitude': t('Longitude'),
+      'accuracy': t('Accuracy'),
+      'accuracyLevel': t('Accuracy Level'),
+      'distanceFromReference': t('Distance from reference')
+    }
+  }
+
+  static get template() {
+    return html`
+      <style include="tangy-common-styles"></style>
+      <style include="tangy-element-styles"></style>
+      <style>
+        :host {
+          display: block;
+        }
+        :host([required]:not([disabled])) label::before  { 
+          content: "*"; 
+          color: red; 
+          position: absolute;
+          top: 4px;
+          right: 5px;
+        }
+        :host([hide-coordinates]) #lat-long {
+          display:none;
+        }
+      :host([in-geofence]) .geofence-message {
+        display: inline;
+        animation: fadein 2s;
+      }
+      :host([invalid]) .geofence-message {
+        display: inline;
+        animation: fadein 2s;
+        background-color: red;
+      }
+      .geofence-message-container {
+        text-align: center;
+        margin-top: 15px;
+      }
+      .geofence-message {
+        display: none;
+        margin: 5px; 0px 0px;
+        background: #28a745;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+      }
+      @keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+      }
+      .label {
+          font-weight: bold;
+      }
+      .coordinates {
+        margin: 5px 15px;
+      }
+    </style>
+    <div class="coordinates">
+      <div id="lat-long">
+        <span class="label">[[t.latitude]]:</span> [[currentLatitude]] <br>
+        <span class="label">[[t.longitude]]:</span> [[currentLongitude]] <br>
+      <div>
+      <template is="dom-if" if="[[currentLatitude]]">
+        <span class="label">[[t.accuracy]]:</span> [[currentAccuracy]] meters<br>
+        <span class="label">[[t.accuracyLevel]]:</span> [[accuracyLevel]]
+      </template> 
+      <template is="dom-if" if="{{hasDelta}}">
+          <br> <span class="label">[[t.disanceFromReference]]:</span> [[currentDelta]] meters
+          </template>
+      </div>
+      <div>
+      <template is="dom-if" if="[[!currentLatitude]]">
+          [[t.searching]]...
+      </template>
+      <div class="geofence-message-container"> 
+        <div class="geofence-message"> [[geofenceMessage]]</div>
+      </div>
+      </div>
+      </div>
+      
+      
+      <slot></slot>
+    </div> 
+  `;
+  }
 
   static get properties() {
     return {

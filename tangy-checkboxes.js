@@ -12,37 +12,45 @@ import './tangy-common-styles.js'
  * @demo demo/index.html
  */
 class TangyCheckboxes extends PolymerElement {
-  static get template() {
-    return html`
-    <style include="tangy-common-styles"></style>
-    <style include="tangy-element-styles"></style>
-    <style>
-
-      :host {
-        @apply --tangy-font-common-base;
-      }
-      
-      tangy-checkbox {
-        margin-top: 15px;
-        margin-right: 25px;
-      }
-      span {
-        font-size: .75em;
-        display: block;
-      }
-      
-      
-    </style>
-    <div class="container">
-      <label for="group">[[label]]</label>
-      <span class="secondary_color">Select one or more</span>
-      <div id="checkboxes">
-      </div>
-    </div>
-`;
-  }
 
   static get is() { return 'tangy-checkboxes'; }
+
+  constructor() {
+    super()
+    this.t = {
+      'selectOneOrMore': t('Select one or more')
+    }
+  }
+
+  static get template() {
+    return html`
+      <style include="tangy-common-styles"></style>
+      <style include="tangy-element-styles"></style>
+      <style>
+
+        :host {
+          @apply --tangy-font-common-base;
+        }
+        
+        tangy-checkbox {
+          margin-top: 15px;
+          margin-right: 25px;
+        }
+        span {
+          font-size: .75em;
+          display: block;
+        }
+        
+        
+      </style>
+      <div class="container">
+        <label for="group">[[label]]</label>
+        <span class="secondary_color">[[t.selectOneOrMore]]</span>
+        <div id="checkboxes">
+        </div>
+      </div>
+    `;
+  }
 
   static get properties() {
     return {

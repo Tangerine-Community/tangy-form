@@ -12,6 +12,14 @@ import './tangy-common-styles.js'
  * @demo demo/index.html
  */
 class TangyLocation extends PolymerElement {
+
+  static get is() { return 'tangy-location'; }
+
+  constructor() {
+    super()
+    this.localList = undefined
+  }
+
   static get template() {
     return html`
       <style include="tangy-common-styles"></style>
@@ -437,7 +445,6 @@ class TangyLocation extends PolymerElement {
 `;
   }
 
-  static get is() { return 'tangy-location'; }
   static get properties() {
     return {
       name: {
@@ -482,11 +489,6 @@ class TangyLocation extends PolymerElement {
         observer: 'render'
       }
     };
-  }
-
-  constructor() {
-    super()
-    this.localList = undefined
   }
 
   async connectedCallback() {
@@ -540,7 +542,7 @@ class TangyLocation extends PolymerElement {
       ${(options[selection.level].length === 0) ? 'hidden' : ''}
       ${(this.disabled) ? 'disabled' : ''}
     > 
-      <option value="" default selected ${(options[selection.level].length === 0) ? 'hidden' : ''} disabled='disabled'>Pick a ${selection.level} </option>
+      <option value="" default selected ${(options[selection.level].length === 0) ? 'hidden' : ''} disabled='disabled'>${t('Pick a')} ${selection.level} </option>
       
       ${options[selection.level].map((option, i) => `
         <option 

@@ -11,6 +11,13 @@ import './tangy-common-styles.js'
  */
 export class TangyAcasi extends PolymerElement {
 
+  constructor() {
+    super()
+    this.t = {
+      'replay': 'replay'
+    }
+  }
+
 
   static get template() {
     return html`
@@ -41,7 +48,7 @@ export class TangyAcasi extends PolymerElement {
 
     <div class="container">
       <label for="group">[[label]]</label>
-      <paper-button id="replay" raised class="indigo" on-click="replay">replay</paper-button>
+      <paper-button id="replay" raised class="indigo" on-click="replay">[[t.replay]]</paper-button>
       <paper-radio-group name="group" id="paper-radio-group">
       </paper-radio-group>
     </div>

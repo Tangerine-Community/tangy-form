@@ -14,156 +14,6 @@ import { TangyFormItemHelpers } from './tangy-form-item-callback-helpers.js'
 
 export class TangyFormItem extends PolymerElement {
 
-  static get template() {
-    return html`
-  <style include="tangy-common-styles"></style>
-  <style>
-:host {
-  margin: 15px;
-}
-/*
- * Card
- */
-paper-card {
-  -webkit-transition: .4s;
-  -moz-transition: .4s;
-  -ms-transition: .4s;
-  -o-transition: .4s;
-  display: block;
-  max-width: 325px;
-  margin: /*30px*/ auto;
-}
-:host([open]) paper-card {
-  -webkit-transition: .4s;
-  -moz-transition: .4s;
-  -ms-transition: .4s;
-  -o-transition: .4s;
-  display: block;
-  max-width: 920px;
-}
-:host([disabled]) paper-card {
-  --paper-card-background-color: gray !important;
-  --paper-card-header-color: #CCC;
-}
-:host([hidden]) {
-  display: none;
-}
-
-/*
- * Action Buttons
- */
-.card-actions {
-  height: 45px;
-  margin-bottom: 100px;
-}
-:host([open]) #open {
-  display: none;
-}
-:host([locked]) #complete {
-  display: none;
-}
-:host(:not([open])) #close {
-  display: none;
-}
-:host([disabled]) #open {
-  display: none;
-}
-label.heading {
-  font-size: 21px !important;
-  margin-bottom: 20px;
-  display: block;
-  color: var(--primary-color);
-  font-weight: 700;
-}
-
-#next {
-  float: right;
-  width: 84px;
-}
-#next iron-icon {
-  margin: 0px 0px 0px 21px;
-}
-
-#back {
-  float: left;
-  width: 84px;
-}
-#back iron-icon {
-  margin: 0px 0px 0px 21px;
-}
-
-.card-actions paper-button {
-  font-size: .8em;
-  line-height: 1em;
-}
-
-</style>
-
-<paper-card id="card" class="shrunk">
-
-  <div class="card-content">
-  <label class="heading">[[title]]</label>
-    <div id="content"></div>
-    <slot></slot>
-  </div>
-
-  <div class="card-actions">
-    <template is="dom-if" if="{{!hideButtons}}">
-      <paper-button id="open" on-click="onOpenButtonPress">Open</paper-button>
-      <template is="dom-if" if="{{!locked}}">
-        <paper-button id="close" on-click="onCloseButtonPress">Save</paper-button>
-      </template>
-      <template is="dom-if" if="{{locked}}">
-        <paper-button id="close" on-click="onCloseButtonPress">Close</paper-button>
-      </template>
-    </template>
-    <template is="dom-if" if="{{open}}">
-
-      <template is="dom-if" if="{{rightToLeft}}">
-        <template is="dom-if" if="{{showCompleteButton}}">
-          <paper-button id="complete" on-click="clickedComplete" style="float:left">
-            submit
-          <paper-button>
-        </template>
-        <template is="dom-if" if="{{!hideNextButton}}">
-          <paper-button id="back" on-click="next" >
-            <iron-icon icon="arrow-back"></iron-icon>
-          <paper-button>
-        </template>
-        <template is="dom-if" if="{{!hideBackButton}}">
-          <paper-button id="next" on-click="back" >
-            <iron-icon icon="arrow-forward"></iron-icon>
-          <paper-button>
-        </template>
-      </template>
-
-      <template is="dom-if" if="{{!rightToLeft}}">
-        <template is="dom-if" if="{{!hideBackButton}}">
-          <paper-button id="back" on-click="back" >
-            <iron-icon icon="arrow-back"></iron-icon>
-          <paper-button>
-        </template>
-        <template is="dom-if" if="{{!hideNextButton}}">
-          <paper-button id="next" on-click="next" >
-            <iron-icon icon="arrow-forward"></iron-icon>
-          <paper-button>
-        </template>
-        <template is="dom-if" if="{{showCompleteButton}}">
-          <paper-button id="complete" on-click="clickedComplete" style="float:right" >
-            submit
-          <paper-button>
-        </template>
-      </template>
-
-    </template>
-    <template is="dom-if" if="{{!incomplete}}">
-      <iron-icon style="color: var(--primary-color); float: right; margin-top: 10px" icon="icons:check-circle"></iron-icon>
-    </template>
-  </div>
-
-  </paper-card>`
-  }
-
   static get is() { return 'tangy-form-item'; }
 
   constructor() {
@@ -171,7 +21,158 @@ label.heading {
     if (this.querySelector('template')) {
       this.template = this.querySelector('template').innerHTML
     }
+    this.t = {
+      open: t('open'),
+      close: t('close'),
+      save: t('save'),
+      submit: t('submit')
+    }
+
   }
+
+  static get template() {
+    return html`
+      <style include="tangy-common-styles"></style>
+      <style>
+        :host {
+          margin: 15px;
+        }
+        /*
+        * Card
+        */
+        paper-card {
+          -webkit-transition: .4s;
+          -moz-transition: .4s;
+          -ms-transition: .4s;
+          -o-transition: .4s;
+          display: block;
+          max-width: 325px;
+          margin: /*30px*/ auto;
+        }
+        :host([open]) paper-card {
+          -webkit-transition: .4s;
+          -moz-transition: .4s;
+          -ms-transition: .4s;
+          -o-transition: .4s;
+          display: block;
+          max-width: 920px;
+        }
+        :host([disabled]) paper-card {
+          --paper-card-background-color: gray !important;
+          --paper-card-header-color: #CCC;
+        }
+        :host([hidden]) {
+          display: none;
+        }
+
+        /*
+        * Action Buttons
+        */
+        .card-actions {
+          height: 45px;
+          margin-bottom: 100px;
+        }
+        :host([open]) #open {
+          display: none;
+        }
+        :host([locked]) #complete {
+          display: none;
+        }
+        :host(:not([open])) #close {
+          display: none;
+        }
+        :host([disabled]) #open {
+          display: none;
+        }
+        label.heading {
+          font-size: 21px !important;
+          margin-bottom: 20px;
+          display: block;
+          color: var(--primary-color);
+          font-weight: 700;
+        }
+
+        #next {
+          float: right;
+          width: 84px;
+        }
+        #next iron-icon {
+          margin: 0px 0px 0px 21px;
+        }
+
+        #back {
+          float: left;
+          width: 84px;
+        }
+        #back iron-icon {
+          margin: 0px 0px 0px 21px;
+        }
+
+        .card-actions paper-button {
+          font-size: .8em;
+          line-height: 1em;
+        }
+      </style>
+      <paper-card id="card" class="shrunk">
+        <div class="card-content">
+        <label class="heading">[[title]]</label>
+          <div id="content"></div>
+          <slot></slot>
+        </div>
+        <div class="card-actions">
+          <template is="dom-if" if="{{!hideButtons}}">
+            <paper-button id="open" on-click="onOpenButtonPress">[[t.open]]</paper-button>
+            <template is="dom-if" if="{{!locked}}">
+              <paper-button id="close" on-click="onCloseButtonPress">[[t.save]]</paper-button>
+            </template>
+            <template is="dom-if" if="{{locked}}">
+              <paper-button id="close" on-click="onCloseButtonPress">[[t.close]]</paper-button>
+            </template>
+          </template>
+          <template is="dom-if" if="{{open}}">
+            <template is="dom-if" if="{{rightToLeft}}">
+              <template is="dom-if" if="{{showCompleteButton}}">
+                <paper-button id="complete" on-click="clickedComplete" style="float:left">
+                  [[t.submit]]
+                <paper-button>
+              </template>
+              <template is="dom-if" if="{{!hideNextButton}}">
+                <paper-button id="back" on-click="next" >
+                  <iron-icon icon="arrow-back"></iron-icon>
+                <paper-button>
+              </template>
+              <template is="dom-if" if="{{!hideBackButton}}">
+                <paper-button id="next" on-click="back" >
+                  <iron-icon icon="arrow-forward"></iron-icon>
+                <paper-button>
+              </template>
+            </template>
+            <template is="dom-if" if="{{!rightToLeft}}">
+              <template is="dom-if" if="{{!hideBackButton}}">
+                <paper-button id="back" on-click="back" >
+                  <iron-icon icon="arrow-back"></iron-icon>
+                <paper-button>
+              </template>
+              <template is="dom-if" if="{{!hideNextButton}}">
+                <paper-button id="next" on-click="next" >
+                  <iron-icon icon="arrow-forward"></iron-icon>
+                <paper-button>
+              </template>
+              <template is="dom-if" if="{{showCompleteButton}}">
+                <paper-button id="complete" on-click="clickedComplete" style="float:right" >
+                  [[t.submit]]
+                <paper-button>
+              </template>
+            </template>
+          </template>
+          <template is="dom-if" if="{{!incomplete}}">
+            <iron-icon style="color: var(--primary-color); float: right; margin-top: 10px" icon="icons:check-circle"></iron-icon>
+          </template>
+        </div>
+      </paper-card>
+    `
+  }
+
 
   static get properties() {
     return {

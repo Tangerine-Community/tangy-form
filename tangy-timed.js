@@ -25,6 +25,16 @@ const TANGY_TIMED_COMPLETE = 'TANGY_TIMED_COMPLETE'
 const TANGY_TIMED_MODE_DISABLED = 'TANGY_TIMED_MODE_DISABLED'
 
 class TangyTimed extends PolymerElement {
+  constructor() {
+    super()
+    this.t = {
+      mark: t('MARK'),
+      lastAttempted: t('LAST ATTEMPTED'),
+      start: t('START'),
+      stop: t('STOP'),
+      reset: t('RESET')
+    }
+  }
   static get template() {
     return html`
     <style include="tangy-common-styles"></style>
@@ -146,13 +156,13 @@ class TangyTimed extends PolymerElement {
               <paper-button id="markButton" mini on-click="onMarkClick">
                 <iron-icon icon="editor:mode-edit"></iron-icon> 
                 <template is="dom-if" if="{{showLabels}}">
-                  [[markLabel]] 
+                  [[t.mark]] 
                 </template>
               </paper-button>
               <paper-button id="lastAttemptedButton" mini on-click="onLastAttemptedClick">
                 <iron-icon icon="av:playlist-add-check"></iron-icon> 
                 <template is="dom-if" if="{{showLabels}}">
-                  [[lastAttemptedLabel]]
+                  [[t.lastAttempted]]
                 </template>
               </paper-button>
             </div>
@@ -161,19 +171,19 @@ class TangyTimed extends PolymerElement {
               <paper-button id="startButton" on-click="onStartClick">
                 <iron-icon icon="av:play-arrow"></iron-icon>
                 <template is="dom-if" if="{{showLabels}}">
-                  [[startLabel]]
+                  [[t.start]]
                 </template>
               </paper-button>
               <paper-button id="stopButton" on-click="onStopClick">
                 <iron-icon icon="av:stop"></iron-icon>
                 <template is="dom-if" if="{{showLabels}}">
-                  [[stopLabel]]
+                  [[t.stop]]
                 </template>
               </paper-button>
               <paper-button id="resetButton" on-click="onResetClick">
                 <iron-icon icon="av:replay"></iron-icon>
                 <template is="dom-if" if="{{showLabels}}">
-                  [[resetLabel]]
+                  [[t.reset]]
                 </template>
               </paper-button>
             </div>
@@ -272,11 +282,6 @@ class TangyTimed extends PolymerElement {
       this.render()
       this.reflect()
     }, 400)
-    this.markLabel = t('MARK')
-    this.lastAttemptedLabel = t('LAST ATTEMPTED')
-    this.startLabel = t('START')
-    this.stopLabel = t('STOP')
-    this.resetLabel = t('RESET')
   }
 
 

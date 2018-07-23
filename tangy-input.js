@@ -15,6 +15,9 @@ export class TangyInput extends PolymerElement {
 
   constructor() {
     super()
+    this.t = {
+      helpText: 'Enter your response to above question here'
+    }
     this.useThis = (this.getAttribute('type') === 'email' ||
       this.getAttribute('type') === 'number' ||
       this.getAttribute('type') === 'date' ||
@@ -41,7 +44,7 @@ export class TangyInput extends PolymerElement {
       <label>[[label]]</label>
       <paper-textarea 
         id="input" 
-        label="Enter your response to above question here" 
+        label="[[t.helpText]]" 
         type="[[type]]" 
         error-message="[[errorMessage]]" 
         value="[[value]]" 
@@ -52,7 +55,7 @@ export class TangyInput extends PolymerElement {
       </paper-textarea>
       <paper-input 
         id="input" 
-        label="Enter your response to above question here" 
+        label="[[t.helpText]]" 
         type="[[type]]" 
         error-message="[[errorMessage]]" 
         value="[[value]]" 

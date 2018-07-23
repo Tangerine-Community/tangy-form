@@ -11,28 +11,37 @@ import './tangy-common-styles.js'
  * @demo demo/index.html
  */
 class TangyRadioButtons extends PolymerElement {
-  static get template() {
-    return html`
-    <style include="tangy-element-styles"></style>
-    <style include="tangy-common-styles"></style>
-
-    <style>
-      span {
-        font-size: .75em;
-        display: block;
-      }
-    </style>
-
-
-    <div class="container">
-      <label for="group">[[label]]</label>
-      <span class="secondary_color">Select only One</span>
-      <div id="container"></div>
-    </div>
-`;
-  }
 
   static get is() { return 'tangy-radio-buttons'; }
+
+  constructor() {
+    super()
+    this.value = []
+    this.t = {
+      'selectOnlyOne': t('Select only one')
+    }
+  }
+
+  static get template() {
+    return html`
+      <style include="tangy-element-styles"></style>
+      <style include="tangy-common-styles"></style>
+
+      <style>
+        span {
+          font-size: .75em;
+          display: block;
+        }
+      </style>
+
+
+      <div class="container">
+        <label for="group">[[label]]</label>
+        <span class="secondary_color">[[t.selectOnlyOne]]</span>
+        <div id="container"></div>
+      </div>
+    `;
+  }
 
   static get properties() {
     return {
@@ -85,11 +94,6 @@ class TangyRadioButtons extends PolymerElement {
         reflectToAttribute: true
       }
     }
-  }
-
-  constructor() {
-    super()
-    this.value = []
   }
 
   connectedCallback() {
