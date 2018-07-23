@@ -1,13 +1,11 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
+
 import './cat.js'
 import './tangy-form-item.js'
 import './tangy-common-styles.js'
 import './global-styles.js'
 import { tangyFormReducer } from './tangy-form-reducer.js'
-// Redux not currently importing correctly. Make it a global.
-//window.process = { env: {NODE_ENV: 'production'}}
-//import { createStore, compose as origCompose, applyMiddleware, combineReducers } from 'redux';
 
 //   <!-- Tangy Custom Inputs Elements -->
 import './tangy-input.js'
