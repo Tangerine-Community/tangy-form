@@ -326,7 +326,9 @@ export class TangyForm extends PolymerElement {
     super.ready()
   
     // Pass events of items to the reducer.
+    this.hasLazyItems = false
     this.querySelectorAll('tangy-form-item').forEach((item) => {
+      if (item.getAttribute('src')) this.hasLazyItems = true
       // Pass in the store so on-change and on-open logic can access it.
       item.store = this.store
       if (this.linearMode) item.noButtons = true
@@ -338,7 +340,13 @@ export class TangyForm extends PolymerElement {
     })
 
     // Subscribe to the store to reflect changes.
-    this.unsubscribe = this.store.subscribe(this.throttledReflect.bind(this))
+    if (this.hasLazyItems) {
+      // Because items open asynchronously, we may need to throttle render to prevent two renders happening at the same time.
+      this.unsubscribe = this.store.subscribe(this.throttledReflect.bind(this))
+    } else {
+      // We're synchronous. Much simpler!
+      this.unsubscribe = this.store.subscribe(this.reflect.bind(this))
+    }
 
 
     // Dispatch events out when state changes.
@@ -452,9 +460,7 @@ export class TangyForm extends PolymerElement {
 
     // Find item to scroll to.
     if (state.focusIndex !== this.previousState.focusIndex) {
-      setTimeout(() => {
-        if (items[state.focusIndex]) items[state.focusIndex].scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }, 200)
+      if (items[state.focusIndex]) items[state.focusIndex].scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
 
     // Dispatch ALL_ITEMS_CLOSED if all items are now closed.
@@ -467,30 +473,15 @@ export class TangyForm extends PolymerElement {
     // Stash as previous state.
     this.previousState = Object.assign({}, state)
 
-    if (!this.complete) this.fireOnChange()
+    if (!this.complete) this.fireHook('on-change')
 
-  }
-
-  fireOnChange() {
-    // Register tangy redux hook.
-    if (!this.hasAttribute('on-change')) return
-    let state = this.store.getState()
-    let inputs = {}
-    state.inputs.forEach(input => inputs[input.name] = input)
-    let items = {}
-    state.items.forEach(item => items[item.name] = item)
-    // Declare namespaces for helper functions for the eval context in form.on-change.
-    // We have to do this because bundlers modify the names of things that are imported
-    // but do not update the evaled code because it knows not of it.
-    let getValue = this.getValue    // on-change hook.
-    const itemDisable = this.itemDisable 
-    const itemEnable = this.itemEnable 
-    eval(this.getAttribute('on-change'))
   }
 
   fireHook(hook, event) {
-    // If locked, don't run any logic.
+    // If locked, bail.
     if (this.locked) return
+    // If no hook, bail.
+    if (!this.getAttribute(hook)) return
     // Prepare some helper variables.
     let state = this.store.getState()
     // Inputs.
@@ -504,11 +495,10 @@ export class TangyForm extends PolymerElement {
     state.items.forEach(item => items[item.name] = item)
     let inputEls = this.shadowRoot.querySelectorAll('[name]')
     let tangyFormStore = this.store
-    // Declare namespaces for helper functions for the eval context in form.on-change.
-    // We have to do this because bundlers modify the names of things that are imported
-    // but do not update the evaled code because it knows not of it.
+    let itemEnable = name => this.itemEnable(name)
+    let itemDisable = name => this.itemDisable(name)
     let helpers = new TangyFormItemHelpers(this)
-    let getValue = (name) => helpers.getValue(name)
+    let getValue = (name) => this.getValue(name)
     let inputHide = (name) => helpers.inputHide(name)
     let inputShow = (name) => helpers.inputShow(name)
     let inputDisable = (name) => helpers.inputDisable(name)

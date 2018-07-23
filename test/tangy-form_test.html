@@ -94,6 +94,39 @@
         </tangy-form>
       </template>
     </test-fixture>
+    <test-fixture id="SkipItemTestFixture">
+      <template>
+        <tangy-form id="my-form" on-change="
+          if (getValue('input1') === 'on') {
+            itemDisable('item2')
+          } else {
+            itemEnable('item2')
+          }
+        ">
+          <tangy-form-item id="item1">
+            <template>
+              <form>
+                <tangy-checkbox name="input1">Would you like to skip item 2?</tangy-checkbox>
+              </form>
+            </template>
+          </tangy-form-item>
+          <tangy-form-item id="item2">
+            <template>
+              <form>
+                <tangy-input name="input2" label="What is your middle name?"></tangy-input>
+              </form>
+            </template>
+          </tangy-form-item>
+          <tangy-form-item id="item3">
+            <template>
+              <form>
+                <tangy-input name="input2" label="What is your last name?"></tangy-input>
+              </form>
+            </template>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
 
     <test-fixture id="DynamicTestFixture">
       <template>
@@ -120,6 +153,17 @@
           const element = fixture('HelloWorldFixture');
           element.newResponse()
           assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
+        });
+
+        test('should skip item2', () => {
+          const element = fixture('SkipItemTestFixture');
+          element.newResponse()
+          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').value = 'on'
+          // Force dom-if to not defer render so buttons are shown.
+          element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item1').shadowRoot.querySelector('#next').click()
+          assert.equal(element.querySelector('#item2').disabled, true)
+          assert.equal(element.response.focusIndex, 2)
         });
 
         test('can resume response', () => {
