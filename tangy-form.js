@@ -26,6 +26,7 @@ import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-tabs/paper-tab.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import { TangyFormResponseModel } from './tangy-form-response-model.js';
+import { TangyFormItemHelpers } from './tangy-form-item-callback-helpers.js'
 
 
 /**
@@ -57,6 +58,7 @@ export class TangyForm extends PolymerElement {
   set response(value) {
     this._responseHasBeenSet = true
     this.store.dispatch({ type: 'FORM_OPEN', response: value })
+    this.fireHook('on-open')
   }
 
   // Get the current form response.
@@ -343,12 +345,9 @@ export class TangyForm extends PolymerElement {
     if (this.onSubmit) {
       this.addEventListener('submit', (event) => {
         let form = this
-        eval(this.onSubmit)
+        this.fireHook('on-submit')
       })
     }
-
-    // Flag for first render.
-    this.hasNotYetFocused = true
 
     afterNextRender(this, function() {
       if (this._responseHasBeenSet === false) {
@@ -385,6 +384,7 @@ export class TangyForm extends PolymerElement {
       item: event.target.getProps()
     })
     this.focusOnNextItem()
+    this.fireHook('on-change')
   }
 
   onItemBack(event) {
@@ -393,6 +393,7 @@ export class TangyForm extends PolymerElement {
       item: event.target.getProps()
     })
     this.focusOnPreviousItem()
+    this.fireHook('on-change')
   }
 
   onItemOpened(event) {
@@ -481,6 +482,35 @@ export class TangyForm extends PolymerElement {
     const itemDisable = this.itemDisable 
     const itemEnable = this.itemEnable 
     eval(this.getAttribute('on-change'))
+  }
+
+  fireHook(hook, event) {
+    // If locked, don't run any logic.
+    if (this.locked) return
+    // Prepare some helper variables.
+    let state = this.store.getState()
+    // Inputs.
+    let inputsArray = []
+    state.items.forEach(item => inputsArray = [...inputsArray, ...item.inputs])
+    let inputsKeyedByName = {}
+    inputsArray.forEach(input => inputsKeyedByName[input.name] = input)
+    let inputs = inputsKeyedByName
+    // Items.
+    let items = {}
+    state.items.forEach(item => items[item.name] = item)
+    let inputEls = this.shadowRoot.querySelectorAll('[name]')
+    let tangyFormStore = this.store
+    // Declare namespaces for helper functions for the eval context in form.on-change.
+    // We have to do this because bundlers modify the names of things that are imported
+    // but do not update the evaled code because it knows not of it.
+    let helpers = new TangyFormItemHelpers(this)
+    let getValue = (name) => helpers.getValue(name)
+    let inputHide = (name) => helpers.inputHide(name)
+    let inputShow = (name) => helpers.inputShow(name)
+    let inputDisable = (name) => helpers.inputDisable(name)
+    let inputEnable = (name) => helpers.inputEnable(name)
+    let itemsPerMinute = (input) => helpers.itemsPerMinute(input)
+    eval(this.getAttribute(hook))
   }
 
   focusOnPreviousItem(event) {
