@@ -448,8 +448,7 @@ export class TangyForm extends PolymerElement {
     })
 
     // Find item to scroll to.
-    if (state.focusIndex !== this.previousState.focusIndex || (this.linearMode && this.hasNotYetFocused && (state.form && !state.form.complete))) {
-      this.hasNotYetFocused = false
+    if (state.focusIndex !== this.previousState.focusIndex) {
       setTimeout(() => {
         if (items[state.focusIndex]) items[state.focusIndex].scrollIntoView({ behavior: 'smooth', block: 'start' })
       }, 200)
