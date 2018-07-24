@@ -57,11 +57,11 @@
     <test-fixture id="OnOpenTestFixture">
       <template>
         <tangy-form id="field-demo" title="Field Demo" on-change="">
-          <tangy-form-item id="item-1">
+          <tangy-form-item id="item-1" on-open="
+            inputs.input1.value = 'Hello world.'
+          ">
             <template>
-              <form on-open="inputs.input1.value = 'Hello world.'">
-                <tangy-input label='test' name='input1'></tangy-input>
-              </form>
+              <tangy-input label='test' name='input1'></tangy-input>
             </template>
           </tangy-form-item>
         </tangy-form>
@@ -71,24 +71,20 @@
     <test-fixture id="GetValueTestFixture">
       <template>
         <tangy-form id="field-demo" title="Field Demo" on-change="">
-          <tangy-form-item id="item-1">
-            <template>
-              <form on-change="
+          <tangy-form-item id="item-1" on-change="
                 inputs.bar.value = getValue('foo')
                 ">
-                <tangy-input label='foo' name='foo'></tangy-input>
-                <tangy-input label='bar' name='bar'></tangy-input>
-              </form>
+            <template>
+              <tangy-input label='foo' name='foo'></tangy-input>
+              <tangy-input label='bar' name='bar'></tangy-input>
             </template>
           </tangy-form-item>
-          <tangy-form-item id="item-2">
+          <tangy-form-item id="item-2" on-open="
+              inputs.baz.value = getValue('foo')
+            ">
             <template>
-              <form on-open="
-                inputs.baz.value = getValue('foo')
-                ">
-                <tangy-input label='zed' name='zed'></tangy-input>
-                <tangy-input label='baz' name='baz'></tangy-input>
-              </form>
+              <tangy-input label='zed' name='zed'></tangy-input>
+              <tangy-input label='baz' name='baz'></tangy-input>
             </template>
           </tangy-form-item>
         </tangy-form>
@@ -254,7 +250,7 @@
           assert.equal(element.querySelector('tangy-form-item#item-1').shadowRoot.querySelector('[name=input1]').value, 'foo')
         });
 
-        test('tangy-form-item.form.on-open should run', () => {
+        test('tangy-form-item.on-open should run', () => {
           const element = fixture('OnOpenTestFixture');
           element.newResponse()
           assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('[name=input1]').value, 'Hello world.');
@@ -379,10 +375,6 @@
           assert.equal(element.querySelectorAll('[open=""]').length, 1)
           assert.equal(element.querySelector('#item-2').hasAttribute('show-complete-button'), true)
         })
-
-        test('instantiating DynamicTestFixture should work without errors', () => {
-          const element = fixture('DynamicTestFixture');
-        });
 
       });
 
