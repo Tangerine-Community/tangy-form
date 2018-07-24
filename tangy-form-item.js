@@ -20,7 +20,10 @@ export class TangyFormItem extends PolymerElement {
     super()
     if (this.querySelector('template')) {
       this.template = this.querySelector('template').innerHTML
+    } else {
+      this.template = this.innerHTML
     }
+    this.innerHTML = ''
     this.t = {
       open: t('open'),
       close: t('close'),
@@ -183,11 +186,6 @@ export class TangyFormItem extends PolymerElement {
         value: 'tangy-form-item',
         reflectToAttribute: true
       },
-      src: {
-        type: String,
-        value: 'tangy-form-item',
-        reflectToAttribute: true
-      },
       title: {
         type: String,
         value: '',
@@ -275,9 +273,8 @@ export class TangyFormItem extends PolymerElement {
   fireHook(hook, event) {
     // If locked, don't run any logic.
     if (this.locked) return
-    let formEl = this.shadowRoot.querySelector('form')
     // Bail if no matching attribute given the hook called.
-    if (!formEl.hasAttribute(hook)) return
+    if (!this.hasAttribute(hook))  return
     // Prepare some helper variables.
     let state = this.store.getState()
     // Inputs.
@@ -305,7 +302,7 @@ export class TangyFormItem extends PolymerElement {
     let inputDisable = (name) => helpers.inputDisable(name)
     let inputEnable = (name) => helpers.inputEnable(name)
     let itemsPerMinute = (input) => helpers.itemsPerMinute(input)
-    eval(formEl.getAttribute(hook))
+    eval(this.getAttribute(hook))
   }
 
   onOpenButtonPress() {
@@ -331,19 +328,8 @@ export class TangyFormItem extends PolymerElement {
       this.$.content.innerHTML = ''
     }
     // Open it, but only if empty because we might be stuck.
-    if (open === true && this.$.content.innerHTML === '' && this.template) {
+    if (open === true && this.$.content.innerHTML === '') {
       this.openWithContent(this.template)
-    }
-    else if (open === true && this.$.content.innerHTML === '') {
-      let that = this
-      const request = new XMLHttpRequest();
-      request.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          that.openWithContent(this.responseText)
-        }
-      }
-      request.open('GET', this.src);
-      request.send();
     }
     
   }
@@ -362,8 +348,7 @@ export class TangyFormItem extends PolymerElement {
       tangyCompleteButtonEl.addEventListener('click', this.clickedComplete.bind(this))
     }
     this.reflect()
-    let form = this.shadowRoot.querySelector('form')
-    if (this.open === true && form && form.getAttribute('on-open')) {
+    if (this.open === true && this.getAttribute('on-open')) {
       this.fireHook('on-open')
       this.fireHook('on-change')
     }
