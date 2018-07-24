@@ -8,6 +8,8 @@ A form element for lazy loaded multipage forms.
 - Loads of handy input elements such as `<tangy-gps>`.
 - Easy to write logic for the form for hiding / showing and disabling / enabled inputs.
 
+![screenshot](screenshot.png)
+
 
 <!--
 ```
