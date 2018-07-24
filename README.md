@@ -15,7 +15,6 @@ A form element for lazy loaded multipage forms.
 ```
 <custom-element-demo>
   <template>
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="./tangy-form.js"></script>
     <next-code-block></next-code-block>
   </template>
