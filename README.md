@@ -2,15 +2,17 @@
 
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/tangy-form) [![Greenkeeper badge](https://badges.greenkeeper.io/Tangerine-Community/tangy-form.svg)](https://greenkeeper.io/) [![Build Status](https://travis-ci.org/Tangerine-Community/tangy-form.svg?branch=master)](https://travis-ci.org/Tangerine-Community/tangy-form)
 
-A form element for lazy loaded multipage forms.
+An element for multipage forms.
 
-- Conforms to Material Design guidelines
+- Conforms to Material Design guidelines.
 - Loads of handy input elements such as `<tangy-gps>`.
 - Easy to write logic for the form for hiding / showing and disabling / enabled inputs.
 
+Play with the [demo on glitch](https://tangy-form-demo.glitch.me/).
+
 ![screenshot](screenshot.png)
 
-Play with the [demo on glitch](https://tangy-form-demo.glitch.me/).
+
 <!--
 ```
 <custom-element-demo>
@@ -45,11 +47,47 @@ Play with the [demo on glitch](https://tangy-form-demo.glitch.me/).
 ```
 
 
-## Install in your project
+## Installation
 `<tangy-form>` is a Custom Element built with Polymer and can be used in frameworks such as Angular, React, and Vue. Check compatibility with your project's framework on [Custom Elements Everywhere](https://custom-elements-everywhere.com/).  If you are ready to go, run `npm install --save tangy-form` to add it to your project. Depending on your build system/framework, there may be different steps to take to get Web Components loading.
 
-- [Web Components in React](https://reactjs.org/docs/web-components.html)
-- [Using Web Components in Angular](https://www.c-sharpcorner.com/article/creating-reusable-web-component-and-using-it-with-angular/)
+### Install in a Polymer v3 project
+```
+npm install --save tangy-form
+```
+Because React is not playing nicely with bundlers, you need to include it as a global dependency in [a script tag](https://redux.js.org/#installation) as you will see in the `demo/index.html`.
+
+Then from any of your elements, import tangy-form.
+```
+import 'tangy-form/tangy-form.js'
+```
+
+### Install in an Angular v4+ project
+Run on the command line...
+```
+npm install --save tangy-form redux @webcomponents/webcomponentsjs
+```
+
+Then add to your `./polyfills.ts` file...
+```
+import * as Redux from 'redux';
+(window as any).Redux = Redux;
+import '@webcomponents/webcomponentsjs/webcomponents-sd-ce.js';
+import 'tangy-form/tangy-form.js'
+```
+
+Lastly, any module where you are going to use a Web Component you need to let Angular know it can be flexible with the names of components by import `CUSTOM_ELEMENTS_SCHEMA`. Note that just enabling on the app module level is not enough for children modules to also use flexible schema. You need to do the same for those children modules as well.
+
+```
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+...
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+...
+
+```
 
 ## Run the demo
 Requires node.js and npm installed.
