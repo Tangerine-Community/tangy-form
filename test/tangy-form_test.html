@@ -147,7 +147,6 @@
       </template>
     </test-fixture>
 
-
     <test-fixture id="DeprecatedOnOpenTestFixture">
       <template>
         <tangy-form id="field-demo" title="Field Demo">
@@ -172,6 +171,18 @@
 
     <script type="module">
       suite('tangy-form', () => {
+
+        test('hello world without errors', () => {
+          const element = fixture('HelloWorldFixture');
+          element.newResponse()
+          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
+        });
+
+        test('hello world from template without errors', () => {
+          const element = fixture('HelloWorldFromTemplateFixture');
+          element.newResponse()
+          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
+        });
 
         test('Deprecated: tangy-form-item.form.getValue and inputs[inputName] should work in on-change on the current item and on-open on the next item ', () => {
           const element = fixture('DeprecatedOnOpenTestFixture');
@@ -208,18 +219,6 @@
           element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').value = ''
           element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').dispatchEvent(new Event('change'))
           assert.equal(element.querySelector('#item1').shadowRoot.querySelector('[name=input2]').disabled, false)
-        });
-
-        test('hello world without errors', () => {
-          const element = fixture('HelloWorldFixture');
-          element.newResponse()
-          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
-        });
-
-        test('hello world from template without errors', () => {
-          const element = fixture('HelloWorldFromTemplateFixture');
-          element.newResponse()
-          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
         });
 
         test('should skip item', () => {
