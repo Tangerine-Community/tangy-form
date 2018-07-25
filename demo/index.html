@@ -51,51 +51,73 @@
         </template>
       </demo-snippet>
 
+      <h3>Inline skip logic with tangy-if</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="my-form">
+            <tangy-form id="my-form">
+              <tangy-form-item id="item1">
+                <tangy-checkbox name="input1">
+                  Would you like to skip then next input?
+                </tangy-checkbox>
+                <tangy-input 
+                  name="input2"
+                  tangy-if="notChecked('input1')"
+                  label="This input will hide when input1 is checked."
+                >
+              </tangy-input>
+              </tangy-form-item>
+            </tangy-form>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+      <h3>Inline skip logic with tangy-if: defining the action to disable</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="my-form">
+            <tangy-form-item id="item1">
+              <tangy-checkbox name="input1">Would you like to skip then next input?</tangy-checkbox>
+              <tangy-input 
+                name="input2"
+                tangy-if="inputs.input1.value !== 'on'"
+                tangy-action="editable"
+                label="This input will disable when input1 is checked."
+              ></tangy-input>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+
       <h3>Kitchen sink tangy-form demo</h3>
       <demo-snippet>
         <template>
-          <tangy-form id="kitchen-sink" title="Fruit Survey" on-open="console.log('on-open')" on-change="console.log('on-change')">
+          <tangy-form id="kitchen-sink" title="Fruit Survey">
             <tangy-form-item id="item1" title="Fruit Survey">
-              <template>
-                <form>
-                  <tangy-input name="first_name" label="What is your first name?"></tangy-input>
-                  <tangy-input name="last_name" label="What is your last name?"></tangy-input>
-                  <tangy-radio-buttons name="fruit_selection" label="What is your favorite fruit?">
-                    <option name="orange">Orange</option>
-                    <option name="banana">Banana</option>
-                    <option name="tangerine">Tangerine</option>
-                  </tangy-radio-buttons>
-                  <tangy-select name="fruit_selection_2" label="What is your second favorite fruit?">
-                    <option name="orange">Orange</option>
-                    <option name="banana">Banana</option>
-                    <option name="tangerine">Tangerine</option>
-                  </tangy-select>
-                  <tangy-checkboxes name="fruit_time" label="What time do you take fruit?">
-                    <option name="morning">Morning</option>
-                    <option name="afternoon">Afternoon</option>
-                    <option name="evening">Evening</option>
-                  </tangy-checkboxes>
-                  Where do you eat fruit?
-                  <tangy-location name="location" location-src="./location-list.json" show-levels="county,school"></tangy-location>
-                  <tangy-gps name="gps"></tangy-gps>
-                  Have the assessee read aloud the following fruits and mark the items they pronounce incorrectly.
-                  <tangy-timed show-labels required columns="3" duration=20 name="pronounse_fruits">
-                    <option value="orange">Orange</option>
-                    <option value="banana">Banana</option>
-                    <option value="tangerine">Tangerine</option>
-                    <option value="kiwi">Kiwi</option>
-                    <option value="coconut">Coconut</option>
-                    <option value="strawberry">Strawberry</option>
-                  </tangy-timed>
-                </form>
-              </template>
+              <tangy-input name="first_name" label="What is your first name?"></tangy-input>
+              <tangy-input name="last_name" label="What is your last name?"></tangy-input>
+              <tangy-radio-buttons name="fruit_selection" label="What is your favorite fruit?">
+                <option name="orange">Orange</option>
+                <option name="banana">Banana</option>
+                <option name="tangerine">Tangerine</option>
+              </tangy-radio-buttons>
+              <tangy-select name="fruit_selection_2" label="What is your second favorite fruit?">
+                <option name="orange">Orange</option>
+                <option name="banana">Banana</option>
+                <option name="tangerine">Tangerine</option>
+              </tangy-select>
+              <tangy-checkboxes name="fruit_time" label="What time do you take fruit?">
+                <option name="morning">Morning</option>
+                <option name="afternoon">Afternoon</option>
+                <option name="evening">Evening</option>
+              </tangy-checkboxes>
+              Where do you eat fruit?
+              <tangy-location name="location" location-src="./location-list.json" show-levels="county,school"></tangy-location>
+              <tangy-gps name="gps"></tangy-gps>
             </tangy-form-item>
             <tangy-form-item id="summary" title="Summary" summary>
-              <template>
-                <form>
-                  Thank you for taking our survey.
-                </form>
-              </template>
+              <form>
+                Thank you for taking our survey.
+              </form>
             </tangy-form-item>
           </tangy-form>
         </template>

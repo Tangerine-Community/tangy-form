@@ -2,7 +2,7 @@ export class TangyFormItemHelpers {
 
   constructor(element) {
     this.element = element
-    this.inputs = this.element.shadowRoot.querySelectorAll(`[name]`)
+    this.inputs = [].slice.call(this.element.shadowRoot.querySelectorAll(`[name]`))
     if (typeof this.inputs !== 'object') {
       this.inputs = []
     }
@@ -48,6 +48,15 @@ export class TangyFormItemHelpers {
     }
     return value
   }
+
+  isChecked(name) {
+    return (this.inputs.find(input => name === input.name).value === 'on') ? true : false
+  }
+
+  notChecked(name) {
+    return !(this.inputs.find(input => name === input.name).value === 'on') ? true : false
+  }
+
 
   inputShow(name) {
     this.inputs.forEach(inputEl => {
