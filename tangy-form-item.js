@@ -120,7 +120,6 @@ export class TangyFormItem extends PolymerElement {
         <div class="card-content">
         <label class="heading">[[title]]</label>
           <div id="content"></div>
-          <slot></slot>
         </div>
         <div class="card-actions">
           <template is="dom-if" if="{{!hideButtons}}">
