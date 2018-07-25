@@ -16,8 +16,8 @@ export class TangyFormItem extends PolymerElement {
 
   static get is() { return 'tangy-form-item'; }
 
-  constructor() {
-    super()
+  connectedCallback() {
+    super.connectedCallback()
     if (this.querySelector('template')) {
       this.template = this.querySelector('template').innerHTML
     } else {
