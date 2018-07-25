@@ -10,7 +10,7 @@ A form element for lazy loaded multipage forms.
 
 ![screenshot](screenshot.png)
 
-
+Play with the [demo on glitch](https://tangy-form-demo.glitch.me/).
 <!--
 ```
 <custom-element-demo>
