@@ -266,15 +266,9 @@ export class TangyFormItem extends PolymerElement {
     })
   }
 
-  fireOnChange(event) {
-    this.fireHook('on-change', event)
-  }
-
   fireHook(hook, event) {
     // If locked, don't run any logic.
     if (this.locked) return
-    // Bail if no matching attribute given the hook called.
-    if (!this.hasAttribute(hook))  return
     // Prepare some helper variables.
     let state = this.store.getState()
     // Inputs.
@@ -301,8 +295,39 @@ export class TangyFormItem extends PolymerElement {
     let inputShow = (name) => helpers.inputShow(name)
     let inputDisable = (name) => helpers.inputDisable(name)
     let inputEnable = (name) => helpers.inputEnable(name)
+    let isChecked = (name) => helpers.isChecked(name)
+    let notChecked = (name) => helpers.notChecked(name)
     let itemsPerMinute = (input) => helpers.itemsPerMinute(input)
+    let inputActionFactories = {
+      visible: {
+        truthy: name => inputShow(name),
+        falsey: name => inputHide(name)
+      },
+      editable: {
+        truthy: name => inputEnable(name),
+        falsey: name => inputDisable(name)
+      }
+    }
+    this.shadowRoot.querySelectorAll('[name]').forEach(input => {
+      if (input.hasAttribute('tangy-if') && input.hasAttribute('tangy-action')) {
+        if (eval(input.getAttribute('tangy-if'))) {
+          inputActionFactories[input.getAttribute('tangy-action')].truthy(input.name)
+        } else {
+          inputActionFactories[input.getAttribute('tangy-action')].falsey(input.name)
+        }
+      } else if (input.hasAttribute('tangy-if') && !input.hasAttribute('tangy-action')) {
+        if (eval(input.getAttribute('tangy-if'))) {
+          inputActionFactories['visible'].truthy(input.name)
+        } else {
+          inputActionFactories['visible'].falsey(input.name)
+        }
+      }
+    })
     eval(this.getAttribute(hook))
+    // Backwards compatibility for deprecated use of having hooks on a child form element.
+    if (this.shadowRoot.querySelector('form') && this.shadowRoot.querySelector('form').hasAttribute(hook)) {
+      eval(this.shadowRoot.querySelector('form').getAttribute(hook))
+    }
   }
 
   onOpenButtonPress() {
@@ -339,7 +364,7 @@ export class TangyFormItem extends PolymerElement {
     this.$.content
       .querySelectorAll('[name]')
       .forEach(input => {
-        input.addEventListener('change', this.fireOnChange.bind(this))
+        input.addEventListener('change', _ => this.fireHook('on-change', _))
       })
     let tangyCompleteButtonEl = this.$.content
       .querySelector('tangy-complete-button')
@@ -348,7 +373,7 @@ export class TangyFormItem extends PolymerElement {
       tangyCompleteButtonEl.addEventListener('click', this.clickedComplete.bind(this))
     }
     this.reflect()
-    if (this.open === true && this.getAttribute('on-open')) {
+    if (this.open === true) {
       this.fireHook('on-open')
       this.fireHook('on-change')
     }
