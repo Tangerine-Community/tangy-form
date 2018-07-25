@@ -51,44 +51,7 @@
         </template>
       </demo-snippet>
 
-      <h3>Inline skip logic with tangy-if</h3>
-      <demo-snippet>
-        <template>
-          <tangy-form id="my-form">
-            <tangy-form id="my-form">
-              <tangy-form-item id="item1">
-                <tangy-checkbox name="input1">
-                  Would you like to skip then next input?
-                </tangy-checkbox>
-                <tangy-input 
-                  name="input2"
-                  tangy-if="notChecked('input1')"
-                  label="This input will hide when input1 is checked."
-                >
-              </tangy-input>
-              </tangy-form-item>
-            </tangy-form>
-          </tangy-form>
-        </template>
-      </demo-snippet>
-      <h3>Inline skip logic with tangy-if: defining the action to disable</h3>
-      <demo-snippet>
-        <template>
-          <tangy-form id="my-form">
-            <tangy-form-item id="item1">
-              <tangy-checkbox name="input1">Would you like to skip then next input?</tangy-checkbox>
-              <tangy-input 
-                name="input2"
-                tangy-if="inputs.input1.value !== 'on'"
-                tangy-action="editable"
-                label="This input will disable when input1 is checked."
-              ></tangy-input>
-            </tangy-form-item>
-          </tangy-form>
-        </template>
-      </demo-snippet>
-
-      <h3>Kitchen sink tangy-form demo</h3>
+      <h3>tangy-form's tangy-* elements demo</h3>
       <demo-snippet>
         <template>
           <tangy-form id="kitchen-sink" title="Fruit Survey">
@@ -118,6 +81,78 @@
               <form>
                 Thank you for taking our survey.
               </form>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+
+      <h3>Inline skip logic with tangy-if</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="my-form">
+            <tangy-form id="my-form">
+              <tangy-form-item id="item1">
+                <tangy-checkbox name="input1">
+                  Would you like to skip then next input?
+                </tangy-checkbox>
+                <tangy-input 
+                  name="input2"
+                  tangy-if="notChecked('input1')"
+                  label="This input will hide when input1 is checked."
+                >
+              </tangy-input>
+              </tangy-form-item>
+            </tangy-form>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+
+      <h3>Inline skip logic with tangy-if while defining the action</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="my-form">
+            <tangy-form-item id="item1">
+              <tangy-checkbox name="input1">Would you like to skip then next input?</tangy-checkbox>
+              <tangy-input 
+                name="input2"
+                tangy-if="inputs.input1.value !== 'on'"
+                tangy-action="editable"
+                label="This input will disable when input1 is checked."
+              ></tangy-input>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+
+      <h3>Advanced input visibility logic with on-open and on-change</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="my-form">
+            <tangy-form-item id="item1"
+              on-open="
+                if (isChecked('checkbox2')) inputHide('input2')
+              "
+              on-change="
+                if (isChecked('checkbox1')) inputHide('input1')
+                if (notChecked('checkbox1')) inputShow('input1')
+                if (isChecked('checkbox2')) inputHide('input2')
+                if (notChecked('checkbox2')) inputShow('input2')
+              "
+              >
+              <tangy-checkbox name="checkbox1">Would you like to skip then next input?</tangy-checkbox>
+              <tangy-input 
+                name="input1"
+                tangy-if="inputs.input1.value !== 'on'"
+                tangy-action="editable"
+                label="This input will disable when checkbox1 is checked."
+              ></tangy-input>
+              <tangy-checkbox name="checkbox2">Would you like to skip then next input?</tangy-checkbox>
+              <tangy-input 
+                name="input2"
+                tangy-if="inputs.input1.value !== 'on'"
+                tangy-action="editable"
+                label="This input will disable when checkbox2 is checked."
+              ></tangy-input>
             </tangy-form-item>
           </tangy-form>
         </template>
