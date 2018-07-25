@@ -24,18 +24,10 @@ A form element for lazy loaded multipage forms.
 ```html
 <tangy-form id="my-form">
   <tangy-form-item id="item1">
-    <template>
-      <form>
-        <tangy-input name="input1" label="What is your first name?"></tangy-input>
-      </form>
-    </template>
+    <tangy-input name="input1" label="What is your first name?"></tangy-input>
   </tangy-form-item>
   <tangy-form-item id="item2">
-    <template>
-      <form>
-        <tangy-input name="input2" label="What is your last name?"></tangy-input>
-      </form>
-    </template>
+    <tangy-input name="input2" label="What is your last name?"></tangy-input>
   </tangy-form-item>
 </tangy-form>
 
@@ -71,3 +63,6 @@ npm install -g polymer-cli
 polymer serve
 ```
 Then open http://localhost:8080
+
+## Tests 
+To run tests, use `polymer test` command or just `npm run test` to just run tests in Chrome. If you want to develop tests, open http://localhost:8080/test/tangy-form_test.html
