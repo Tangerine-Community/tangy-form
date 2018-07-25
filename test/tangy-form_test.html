@@ -54,20 +54,6 @@
       </template>
     </test-fixture>
 
-    <test-fixture id="OnOpenTestFixture">
-      <template>
-        <tangy-form id="field-demo" title="Field Demo" on-change="">
-          <tangy-form-item id="item-1" on-open="
-            inputs.input1.value = 'Hello world.'
-          ">
-            <template>
-              <tangy-input label='test' name='input1'></tangy-input>
-            </template>
-          </tangy-form-item>
-        </tangy-form>
-      </template>
-    </test-fixture>
-
     <test-fixture id="GetValueTestFixture">
       <template>
         <tangy-form id="field-demo" title="Field Demo" on-change="">
@@ -90,6 +76,7 @@
         </tangy-form>
       </template>
     </test-fixture>
+
     <test-fixture id="SkipItemTestFixture">
       <template>
         <tangy-form id="my-form" on-change="
@@ -124,16 +111,120 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyIfFixture1">
+      <template>
+        <tangy-form id="my-form">
+          <tangy-form-item id="item1">
+            <tangy-checkbox name="input1">Would you like to skip then next input?</tangy-checkbox>
+            <tangy-input 
+              name="input2"
+              tangy-if="notChecked('input1')"
+              label="This input will hide when input1 is checked."
+            ></tangy-input>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="TangyIfFixture2">
+      <template>
+        <tangy-form id="my-form">
+          <tangy-form-item id="item1">
+            <tangy-checkbox name="input1">Would you like to skip then next input?</tangy-checkbox>
+            <tangy-input 
+              name="input2"
+              tangy-if="inputs.input1.value !== 'on'"
+              tangy-action="editable"
+              label="This input will disable when input1 is checked."
+            ></tangy-input>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="OnOpenTestFixture">
+      <template>
+        <tangy-form id="field-demo" title="Field Demo">
+          <tangy-form-item id="item-1" on-open="
+                  inputs.input1.value = 'foo'
+                "
+            >
+            <tangy-input label='test' name='input1'></tangy-input>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+
+    <test-fixture id="DeprecatedOnOpenTestFixture">
+      <template>
+        <tangy-form id="field-demo" title="Field Demo">
+          <tangy-form-item id="item-1">
+            <template>
+              <form 
+                on-open="
+                  inputs.input1.value = 'foo'
+                "
+                on-change="
+                  inputs.input2.value = 'bar'
+                "
+                >
+                <tangy-input label='test' name='input1'></tangy-input>
+                <tangy-input label='test' name='input2'></tangy-input>
+              </form>
+            </template>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <script type="module">
       suite('tangy-form', () => {
 
-        test('Hello world works without errors', () => {
+        test('Deprecated: tangy-form-item.form.getValue and inputs[inputName] should work in on-change on the current item and on-open on the next item ', () => {
+          const element = fixture('DeprecatedOnOpenTestFixture');
+          element.newResponse()
+          assert.equal(element.querySelector('#item-1').shadowRoot.querySelector('[name=input1]').value, 'foo');
+          element.querySelector('#item-1').shadowRoot.querySelector('[name=input1]').dispatchEvent(new Event('change'))
+          assert.equal(element.querySelector('#item-1').shadowRoot.querySelector('[name=input2]').value, 'bar');
+        });
+
+        test('tangy-form-item.on-open should run', () => {
+          const element = fixture('OnOpenTestFixture');
+          element.newResponse()
+          assert.equal(element.querySelector('#item-1').shadowRoot.querySelector('[name=input1]').value, 'foo');
+        });
+
+        test('should hide and show input according to tangy-if and tangy-action attributes', () => {
+          const element = fixture('TangyIfFixture1');
+          element.newResponse()
+          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').value = 'on'
+          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').dispatchEvent(new Event('change'))
+          assert.equal(element.querySelector('#item1').shadowRoot.querySelector('[name=input2]').hidden, true)
+          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').value = ''
+          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').dispatchEvent(new Event('change'))
+          assert.equal(element.querySelector('#item1').shadowRoot.querySelector('[name=input2]').hidden, false)
+
+        });
+
+        test('should enable and disable input according to tangy-if and tangy-action attributes', () => {
+          const element = fixture('TangyIfFixture2');
+          element.newResponse()
+          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').value = 'on'
+          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').dispatchEvent(new Event('change'))
+          assert.equal(element.querySelector('#item1').shadowRoot.querySelector('[name=input2]').disabled, true)
+          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').value = ''
+          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').dispatchEvent(new Event('change'))
+          assert.equal(element.querySelector('#item1').shadowRoot.querySelector('[name=input2]').disabled, false)
+        });
+
+        test('hello world without errors', () => {
           const element = fixture('HelloWorldFixture');
           element.newResponse()
           assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
         });
 
-        test('should skip item2', () => {
+        test('should skip item', () => {
           const element = fixture('SkipItemTestFixture');
           element.newResponse()
           element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').value = 'on'
@@ -232,13 +323,7 @@
           assert.equal(element.querySelector('tangy-form-item#item-1').shadowRoot.querySelector('[name=input1]').value, 'foo')
         });
 
-        test('tangy-form-item.on-open should run', () => {
-          const element = fixture('OnOpenTestFixture');
-          element.newResponse()
-          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('[name=input1]').value, 'Hello world.');
-        });
-
-        test('tangy-form-item.form.getValue and inputs[inputName] should work in on-change on the current item and on-open on the next item ', () => {
+        test('tangy-form-item.open-open hook should getValue() from previous item ', () => {
           const element = fixture('GetValueTestFixture');
           element.newResponse()
           element.querySelector('#item-1').shadowRoot.querySelector('[name=foo]').value = 'Hello world.'
@@ -248,7 +333,8 @@
           assert.equal(element.querySelector('#item-2').shadowRoot.querySelector('[name=baz]').value, 'Hello world.');
         });
 
-        test('when starting new response, should start on the first item not disabled', () => {
+
+        test('new response should start on the first item not disabled', () => {
           const element = fixture('SimpleTestFixture');
           // Disable item 1 and 3, leaving item-2 the first item not disabled.
           element.querySelector('#item-1').disabled = true
@@ -258,7 +344,7 @@
           assert.equal(element.querySelectorAll('[open=""]').length, 1)
         })
 
-        test('when resuming a response, should start on the first item not disabled', () => {
+        test('resumed response should start on the first item not disabled', () => {
           const element = fixture('SimpleTestFixture');
           // Disable item 1 and 3 are disabled in this response being resumed, leaving item-2 the first item not disabled.
           // Note that before you assign the response, this is your opportunity to set an item to disabled.
