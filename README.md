@@ -51,8 +51,6 @@ A form element for lazy loaded multipage forms.
 - [Web Components in React](https://reactjs.org/docs/web-components.html)
 - [Using Web Components in Angular](https://www.c-sharpcorner.com/article/creating-reusable-web-component-and-using-it-with-angular/)
 
-Note that if you are using this element inside of another Polymer Element, you'll need to add the `preserve-content` attribute to your `tangy-form-item`'s template tags because of this [this issue](https://github.com/Polymer/polymer/issues/2335).
-
 ## Run the demo
 Requires node.js and npm installed.
 ```
@@ -65,4 +63,4 @@ polymer serve
 Then open http://localhost:8080
 
 ## Tests 
-To run tests, use `polymer test` command or just `npm run test` to just run tests in Chrome. If you want to develop tests, open http://localhost:8080/test/tangy-form_test.html
+One of the best places to learn about what Tangy Form is capable of is to take a look at the tests in `test/tangy-form_test.html`. To run tests, use `polymer test` command or just `npm run test` to just run tests in Chrome. If you want to develop tests, open http://localhost:8080/test/tangy-form_test.html

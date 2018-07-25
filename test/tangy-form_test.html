@@ -18,7 +18,23 @@
       <template>
         <tangy-form id="field-demo" title="Field Demo" on-change="">
           <tangy-form-item id="item-1">
-            <template>
+            Hello world.
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="HelloWorldFromTemplateFixture">
+      <template>
+        <!-- 
+          Note the use of preserve-content attribute in template tag below.
+          If using tangy-form in a Polymer App or Element, this is their 
+          workaround for some browser bugs mentioned in the following issue.
+          - https://github.com/Polymer/polymer/issues/2335
+        -->
+        <tangy-form id="field-demo" title="Field Demo" on-change="">
+          <tangy-form-item id="item-1">
+            <template preserve-content>
               Hello world.
             </template>
           </tangy-form-item>
@@ -30,18 +46,10 @@
       <template>
         <tangy-form id="test" title="test">
           <tangy-form-item id="item-1">
-            <template>
-              <form>
-                <tangy-input label='test1' name='input1'></tangy-input>
-              </form>
-            </template>
+            <tangy-input label='test1' name='input1'></tangy-input>
           </tangy-form-item>
           <tangy-form-item id="item-2">
-            <template>
-              <form>
-                <tangy-input label='test2' name='input2'></tangy-input>
-              </form>
-            </template>
+            <tangy-input label='test2' name='input2'></tangy-input>
           </tangy-form-item>
           <tangy-form-item id="item-3">
             <template>
@@ -60,18 +68,14 @@
           <tangy-form-item id="item-1" on-change="
                 inputs.bar.value = getValue('foo')
                 ">
-            <template>
-              <tangy-input label='foo' name='foo'></tangy-input>
-              <tangy-input label='bar' name='bar'></tangy-input>
-            </template>
+            <tangy-input label='foo' name='foo'></tangy-input>
+            <tangy-input label='bar' name='bar'></tangy-input>
           </tangy-form-item>
           <tangy-form-item id="item-2" on-open="
               inputs.baz.value = getValue('foo')
             ">
-            <template>
-              <tangy-input label='zed' name='zed'></tangy-input>
-              <tangy-input label='baz' name='baz'></tangy-input>
-            </template>
+            <tangy-input label='zed' name='zed'></tangy-input>
+            <tangy-input label='baz' name='baz'></tangy-input>
           </tangy-form-item>
         </tangy-form>
       </template>
@@ -87,25 +91,13 @@
           }
         ">
           <tangy-form-item id="item1">
-            <template>
-              <form>
-                <tangy-checkbox name="input1">Would you like to skip item 2?</tangy-checkbox>
-              </form>
-            </template>
+            <tangy-checkbox name="input1">Would you like to skip item 2?</tangy-checkbox>
           </tangy-form-item>
           <tangy-form-item id="item2">
-            <template>
-              <form>
-                <tangy-input name="input2" label="What is your middle name?"></tangy-input>
-              </form>
-            </template>
+            <tangy-input name="input2" label="What is your middle name?"></tangy-input>
           </tangy-form-item>
           <tangy-form-item id="item3">
-            <template>
-              <form>
-                <tangy-input name="input2" label="What is your last name?"></tangy-input>
-              </form>
-            </template>
+            <tangy-input name="input2" label="What is your last name?"></tangy-input>
           </tangy-form-item>
         </tangy-form>
       </template>
@@ -224,6 +216,12 @@
           assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
         });
 
+        test('hello world from template without errors', () => {
+          const element = fixture('HelloWorldFromTemplateFixture');
+          element.newResponse()
+          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
+        });
+
         test('should skip item', () => {
           const element = fixture('SkipItemTestFixture');
           element.newResponse()
@@ -332,7 +330,6 @@
           element.querySelector('#item-1').next()
           assert.equal(element.querySelector('#item-2').shadowRoot.querySelector('[name=baz]').value, 'Hello world.');
         });
-
 
         test('new response should start on the first item not disabled', () => {
           const element = fixture('SimpleTestFixture');
