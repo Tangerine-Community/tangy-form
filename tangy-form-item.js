@@ -40,6 +40,9 @@ export class TangyFormItem extends PolymerElement {
         :host {
           margin: 15px;
         }
+        :host([disabled]) {
+          display: none;
+        }
         /*
         * Card
         */

@@ -221,7 +221,7 @@
           assert.equal(element.querySelector('#item1').shadowRoot.querySelector('[name=input2]').disabled, false)
         });
 
-        test('should skip item', () => {
+        test('should skip item and be hidden after form complete', () => {
           const element = fixture('SkipItemTestFixture');
           element.newResponse()
           element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').value = 'on'
@@ -230,6 +230,10 @@
           element.querySelector('#item1').shadowRoot.querySelector('#next').click()
           assert.equal(element.querySelector('#item2').disabled, true)
           assert.equal(element.response.focusIndex, 2)
+          element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item3').shadowRoot.querySelector('#complete').click()
+          // Trick for checking if item is visible https://stackoverflow.com/a/21696585/10139471
+          assert.equal(element.querySelector('#item2').offsetParent, null)
         });
 
         test('can resume response', () => {
