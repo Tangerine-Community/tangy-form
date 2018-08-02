@@ -379,11 +379,13 @@ export class TangyForm extends PolymerElement {
       type: 'ITEM_SAVE',
       item: event.target.getProps()
     })
-    const cancelled = !this.dispatchEvent(new CustomEvent('submit', {cancelable: true}))
-    if (cancelled) return
+    const cancelledSubmit = !this.dispatchEvent(new CustomEvent('submit', {cancelable: true}))
+    if (cancelledSubmit) return
     this.store.dispatch({
       type: 'FORM_RESPONSE_COMPLETE'
     })
+    const cancelledComplete = !this.dispatchEvent(new CustomEvent('tangy-form-complete', {cancelable: true}))
+    if (cancelledComplete) return
     if (this.hasSummary) {
       this.store.dispatch({ type: "SHOW_SUMMARY" })
     } else {
