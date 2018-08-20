@@ -498,9 +498,11 @@ class TangyLocation extends PolymerElement {
     let that = this
     const request = new XMLHttpRequest();
     request.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
+      try {
         that.locationList = JSON.parse(this.responseText)
         that.render()
+      } catch(e) {
+        // Do nothing. Some stages will not have valid JSON returned.
       }
     }
     request.open('GET', this.locationSrc);
