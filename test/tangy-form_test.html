@@ -13,7 +13,11 @@
     <script type="module" src="../tangy-form.js"></script>
   </head>
   <body>
-
+    <test-fixture id="ContainerFixture">
+      <template>
+        <div></div>
+      </template>
+    </test-fixture>
     <test-fixture id="HelloWorldFixture">
       <template>
         <tangy-form id="field-demo" title="Field Demo" on-change="">
@@ -170,6 +174,7 @@
     </test-fixture>
 
     <script type="module">
+      import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       suite('tangy-form', () => {
 
         test('hello world without errors', () => {
@@ -332,6 +337,24 @@
           assert.equal(element.querySelector('#item-1').shadowRoot.querySelector('[name=bar]').value, 'Hello world.');
           element.querySelector('#item-1').next()
           assert.equal(element.querySelector('#item-2').shadowRoot.querySelector('[name=baz]').value, 'Hello world.');
+        });
+
+        test('tangy-input.max and tangy-input.max should validate value', (done) => {
+          const containerEl = fixture('ContainerFixture');
+          containerEl.innerHTML = `
+            <tangy-input name="foo" label="foo" type="number" min="30" max="50"></tangy-input>
+            `
+          const inputEl = containerEl.querySelector('tangy-input')
+          inputEl.setAttribute('value', '44')
+          // Wait a tick for the underlying paper-input to catch up for validation purposes.
+          Polymer.Base.async(function() {
+            assert.equal(inputEl.validate(), true)
+            inputEl.setAttribute('value', '55')
+            Polymer.Base.async(function() {
+              assert.equal(inputEl.validate(), false)
+              done()
+            })
+          })
         });
 
         test('new response should start on the first item not disabled', () => {

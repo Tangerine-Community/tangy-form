@@ -49,6 +49,8 @@ export class TangyInput extends PolymerElement {
         error-message="[[errorMessage]]" 
         value="[[value]]" 
         allowed-pattern="[[allowedPattern]]">
+        min=[[min]]
+        max=[[max]]
         <template is="dom-if" if="required">
           <div slot="suffix"></div>
         </template>
@@ -60,6 +62,8 @@ export class TangyInput extends PolymerElement {
         error-message="[[errorMessage]]" 
         value="[[value]]" 
         allowed-pattern="[[allowedPattern]]">
+        min=[[min]]
+        max=[[max]]
         <template is="dom-if" if="required">
           <div slot="suffix"></div>
         </template>
@@ -129,6 +133,16 @@ export class TangyInput extends PolymerElement {
         type: String,
         value: '',
         reflectToAttribute: true
+      },
+      min: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      max: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
       }
     }
   }
@@ -151,6 +165,13 @@ export class TangyInput extends PolymerElement {
         bubbles: true
       }))
     })
+    // The template binded min and max are not having an effect on the paper-input paper-textarea perhaps because
+    // those values are only based on the initial value which is going to be null perhaps. Setting directly on the
+    // paper element seems to do the trick.
+    if (this.min || this.max) {
+      this.shadowRoot.querySelector(this.useThis).min = this.min
+      this.shadowRoot.querySelector(this.useThis).max = this.max
+    }
   }
 
   onRequiredChange(value) {
