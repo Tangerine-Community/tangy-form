@@ -15,9 +15,9 @@ $_documentContainer.innerHTML = `<custom-style>
   <style is="custom-style">
     html {
       --document-background-color: #FAFAFA;
-      --primary-color-dark: #212a3f;
+      --primary-color-dark: #3c5b8d;
       --primary-text-color: var(--light-theme-text-color);
-      --primary-color: var(--paper-blue-900);
+      --primary-color: #3c5b8d;
       --accent-color: #f26f10;
       --accent-text-color: #FFF;
       --error-color: var(--paper-red-500);

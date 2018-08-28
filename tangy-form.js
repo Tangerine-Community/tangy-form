@@ -221,6 +221,10 @@ export class TangyForm extends PolymerElement {
       paper-fab.keyboard-focus {
         background-color: #1976d2;
       }
+      paper-tab[aria-selected=true] {
+        background: #f26f10;
+        color: #FFF
+      }
       </style>
 
       <div id="nav"></div>
