@@ -33,19 +33,25 @@ class TangyGps extends PolymerElement {
       <style include="tangy-common-styles"></style>
       <style include="tangy-element-styles"></style>
       <style>
-        :host {
-          display: block;
-        }
-        :host([required]:not([disabled])) label::before  { 
-          content: "*"; 
-          color: red; 
-          position: absolute;
-          top: 4px;
-          right: 5px;
-        }
-        :host([hide-coordinates]) #lat-long {
-          display:none;
-        }
+      :host {
+        display: block;
+      }
+      :host([required]:not([disabled])) label::before  { 
+        content: "*"; 
+        color: red; 
+        position: absolute;
+        top: 4px;
+        right: 5px;
+      }
+      :host([hide-coordinates]) #lat-long {
+        display:none;
+      }
+      :host([hide-accuracy-level]) #accuracy-level {
+        display:none;
+      }
+      :host([hide-accuracy-distance]) #accuracy-distance {
+        display:none;
+      }
       :host([in-geofence]) .geofence-message {
         display: inline;
         animation: fadein 2s;
@@ -78,32 +84,39 @@ class TangyGps extends PolymerElement {
         margin: 5px 15px;
       }
     </style>
+
     <div class="coordinates">
+
       <div id="lat-long">
         <span class="label">[[t.latitude]]:</span> [[currentLatitude]] <br>
         <span class="label">[[t.longitude]]:</span> [[currentLongitude]] <br>
-      <div>
-      <template is="dom-if" if="[[currentLatitude]]">
-        <span class="label">[[t.accuracy]]:</span> [[currentAccuracy]] meters<br>
-        <span class="label">[[t.accuracyLevel]]:</span> [[accuracyLevel]]
-      </template> 
-      <template is="dom-if" if="{{hasDelta}}">
-          <br> <span class="label">[[t.disanceFromReference]]:</span> [[currentDelta]] meters
-          </template>
       </div>
-      <div>
+
+      <template is="dom-if" if="[[currentLatitude]]">
+        <div id="accuracy-distance">
+          <span class="label">[[t.accuracy]]:</span> [[currentAccuracy]] meters<br>
+        </div>
+        <div id="accuracy-level">
+          <span class="label">[[t.accuracyLevel]]:</span> [[accuracyLevel]]
+        </div>
+      </template> 
+
+      <template is="dom-if" if="{{hasDelta}}">
+        <br> 
+        <span class="label">[[t.disanceFromReference]]:</span> [[currentDelta]] meters
+      </template>
+
+    </div>
+
+    <div>
       <template is="dom-if" if="[[!currentLatitude]]">
           [[t.searching]]...
       </template>
       <div class="geofence-message-container"> 
         <div class="geofence-message"> [[geofenceMessage]]</div>
       </div>
-      </div>
-      </div>
-      
-      
-      <slot></slot>
-    </div> 
+    </div>
+
   `;
   }
 
@@ -127,6 +140,16 @@ class TangyGps extends PolymerElement {
         type: Boolean,
         value: false,
         observer: 'reflect',
+        reflectToAttribute: true
+      },
+      hideAccuracyDistance: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      hideAccuracyLevel: {
+        type: Boolean,
+        value: false,
         reflectToAttribute: true
       },
       hideCoordinates: {
