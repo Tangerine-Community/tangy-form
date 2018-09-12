@@ -108,6 +108,25 @@
         </template>
       </demo-snippet>
 
+      <h3>Inline skip logic with tangy-if 2</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="my-form-2" title="My Form 2">
+            <tangy-form-item id="item1">
+              <tangy-radio-buttons name="input1" label="Option 1 will reveal another input">
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+              </tangy-radio-buttons>
+              <tangy-input 
+                name="input2"
+                tangy-if="getValue('input1') === 'option1'"
+                label="This input will hide when input1 is checked."
+              >
+              </tangy-input>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
       <h3>Inline skip logic with tangy-if while defining the action</h3>
       <demo-snippet>
         <template>
@@ -154,6 +173,17 @@
                 tangy-action="editable"
                 label="This input will disable when checkbox2 is checked."
               ></tangy-input>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+
+      <h3>tangy-form with tangy-input using min and max attributes</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="my-form-72" title="My Form">
+            <tangy-form-item id="item1">
+              <tangy-input name="foo" min="0" max="100" label="foo" type="number"></tangy-input>
             </tangy-form-item>
           </tangy-form>
         </template>
