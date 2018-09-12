@@ -1,3 +1,6 @@
+## v2.4.1
+- Fixed attributes for hiding things when using tangy-gps.
+
 ## v2.4.0
 - Default primary color has been updated to match that of Tangerine Client.
 - Tabs when selected are highlighted with secondary color to match behavior of Tangerine Client.
