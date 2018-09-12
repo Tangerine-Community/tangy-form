@@ -75,7 +75,10 @@
               </tangy-checkboxes>
               Where do you eat fruit?
               <tangy-location name="location" location-src="./location-list.json" show-levels="county,school"></tangy-location>
-              <tangy-gps name="gps"></tangy-gps>
+              tangy-gps with hide-coordinates and hide-accuracy-distance:
+              <tangy-gps name="gps" hide-coordinates hide-accuracy-distance></tangy-gps>
+              tangy-gps without hide-coordinates:
+              <tangy-gps name="gps2"></tangy-gps>
             </tangy-form-item>
             <tangy-form-item id="summary" title="Summary" summary>
               <form>
