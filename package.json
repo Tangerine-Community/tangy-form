@@ -18,7 +18,7 @@
     "@polymer/paper-input": "^3.0.0-pre.18",
     "@polymer/paper-item": "^3.0.0-pre.18",
     "@polymer/paper-progress": "^3.0.0-pre.18",
-    "@polymer/paper-radio-group": "^3.0.0-pre.18",
+    "@polymer/paper-radio-group": "^3.0.0",
     "@polymer/paper-tabs": "^3.0.0-pre.18",
     "@polymer/polymer": "^3.0.0",
     "devtools-detect": "^2.2.0",
