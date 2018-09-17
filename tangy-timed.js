@@ -41,6 +41,7 @@ class TangyTimed extends PolymerElement {
     <style>
       :host {
         display: block;
+        font-size: 1.5em;
       }
       
       :host #icon {
