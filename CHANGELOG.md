@@ -1,3 +1,7 @@
+
+## v2.4.2
+- tangy-timed font sizes were too small. Increased to 1.5em.
+
 ## v2.4.1
 - Fixed attributes for hiding things when using tangy-gps.
 
