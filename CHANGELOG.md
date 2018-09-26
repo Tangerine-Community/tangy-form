@@ -1,3 +1,5 @@
+## v2.5.0
+- tangy-timed controls now with smarter positioning for situations where it may be edited or multiple tangy-timed on one page.
 
 ## v2.4.2
 - tangy-timed font sizes were too small. Increased to 1.5em.
