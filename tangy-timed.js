@@ -289,10 +289,10 @@ class TangyTimed extends PolymerElement {
       } else {
         this.shadowRoot.querySelector('#bar').style.position = 'absolute'
       }
-      if (this.offsetWidth > 485) {
+      if (this.offsetWidth > 645) {
         this.shadowRoot.querySelector('#info').style.paddingTop = '70px'
       } else {
-        this.shadowRoot.querySelector('#info').style.paddingTop = '125px'
+        this.shadowRoot.querySelector('#info').style.paddingTop = '150px'
       }
     }, 1000)
   }
