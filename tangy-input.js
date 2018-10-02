@@ -33,7 +33,7 @@ export class TangyInput extends PolymerElement {
     <style include="tangy-element-styles"></style>
     <style>
       paper-input, paper-textarea {
-        --paper-input-container-shared-input-style_-_font-size: 2em;
+        --paper-input-container-shared-input-style_-_font-size: 1em;
         --paper-font-subhead_-_font-size: 1em;
         --paper-font-subhead_-_line-height: 1em;
       }
