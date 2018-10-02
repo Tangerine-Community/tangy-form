@@ -1,3 +1,6 @@
+## v2.6.0
+- Reduced whitespace to make forms more compact.
+
 ## v2.5.0
 - tangy-timed controls now with smarter positioning for situations where it may be edited or multiple tangy-timed on one page.
 
