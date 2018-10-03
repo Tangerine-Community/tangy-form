@@ -1,3 +1,6 @@
+## v2.6.1
+- Adjust position of `*` on required elements.
+
 ## v2.6.0
 - Reduced whitespace to make forms more compact.
 
