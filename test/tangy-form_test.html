@@ -172,10 +172,153 @@
         </tangy-form>
       </template>
     </test-fixture>
+    
+    <test-fixture id="TangyCardsFixture">
+      <template>
+        <tangy-cards initial-count="3" name="person">
+					<tangy-input name="first_name" label="First name"></tangy-input>
+					<tangy-input name="last_name" label="Last name"></tangy-input>
+        </tangy-cards>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="TangyCardFixture">
+      <template>
+        <tangy-card initial-count="3" name="person">
+					<tangy-input name="first_name" label="First name"></tangy-input>
+					<tangy-input name="last_name" label="Last name"></tangy-input>
+        </tangy-card>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="TangyCardsFullFixture">
+      <template>
+        <tangy-form id="tangy-cards-demo" title="My Form">
+          <tangy-form-item id="item1" title="People">
+            <tangy-cards initial-count="3" name="person">
+              <tangy-input name="first_name" label="First name"></tangy-input>
+              <tangy-input name="last_name" label="Last name"></tangy-input>
+            </tangy-cards>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
 
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       suite('tangy-form', () => {
+				test('tangy-card has initial value', () => {
+          const element = fixture('TangyCardFixture');
+					assert.equal(element.value.length, 2)
+				})
+				test('tangy-card has value after user input', () => {
+          const element = fixture('TangyCardFixture');
+					element.shadowRoot.querySelector('[name]').value = 'foo'
+					assert.equal(element.value[0].value, 'foo')
+				})
+
+				test('tangy-card resumes when value when set', () => {
+					const element = fixture('TangyCardFixture');
+					element.value = [
+						{
+							"name": "first_name",
+							"private": false,
+							"label": "First name",
+							"type": "",
+							"errorMessage": "",
+							"required": false,
+							"disabled": false,
+							"hidden": false,
+							"invalid": false,
+							"incomplete": true,
+							"value": "foo",
+							"allowedPattern": "",
+							"min": "",
+							"max": "",
+							"tagName": "TANGY-INPUT"
+						},
+						{
+							"name": "last_name",
+							"private": false,
+							"label": "Last name",
+							"type": "",
+							"errorMessage": "",
+							"required": false,
+							"disabled": false,
+							"hidden": false,
+							"invalid": false,
+							"incomplete": true,
+							"value": "",
+							"allowedPattern": "",
+							"min": "",
+							"max": "",
+							"tagName": "TANGY-INPUT"
+						}
+					] 
+					assert.equal(element.value[0].value, 'foo')
+
+				})
+
+        test('tangy-cards start with 3 cards', () => {
+          const element = fixture('TangyCardsFixture');
+          assert.equal(element.$.cards.querySelectorAll('tangy-card').length, 3)
+        });
+
+        test('tangy-cards creates another card', () => {
+          const element = fixture('TangyCardsFixture');
+          element.shadowRoot.querySelector('.add-another').click()
+          assert.equal(element.$.cards.querySelectorAll('tangy-card').length, 4)
+        });
+
+        test('tangy-cards removes a card', () => {
+          const element = fixture('TangyCardsFixture');
+					element.shadowRoot.querySelector('tangy-card').shadowRoot.querySelector('#remove').click()
+          assert.equal(element.$.cards.querySelectorAll('tangy-card').length, 2)
+          assert.equal(element.value.length, 2)
+        });
+
+        test('tangy-cards resumes with 2', () => {
+          const element = fixture('TangyCardsFixture');
+					element.value = [
+						{
+							"name": "755223b8-34ff-49b7-8de8-084809499939",
+							"value": []
+						},
+						{
+							"name": "6a4f2bc7-2854-455c-a65a-4ecbc23417ae",
+							"value": []
+						}
+					]
+          assert.equal(element.$.cards.querySelectorAll('tangy-card').length, 2)
+        });
+
+				test('tangy-cards has different value after user input', () => {
+          const element = fixture('TangyCardsFixture');
+					element.value = [
+						{
+							"name": "755223b8-34ff-49b7-8de8-084809499939",
+							"value": []
+						},
+						{
+							"name": "6a4f2bc7-2854-455c-a65a-4ecbc23417ae",
+							"value": []
+						}
+					]
+					element.$.cards.querySelector('tangy-card').$.content.querySelector('[name=first_name]').value = 'foo'
+          assert.equal(element.value[0].value[0].value, 'foo')
+        });
+				
+/*
+        test('tangy-cards work in a form', () => {
+          const element = fixture('TangyCardsFullFixture');
+          //const element = fixture('HelloWorldFixture');
+          element.newResponse()
+          debugger
+					assert.equal(element.value.length, 2)
+				})
+*/
+
 
         test('hello world without errors', () => {
           const element = fixture('HelloWorldFixture');
