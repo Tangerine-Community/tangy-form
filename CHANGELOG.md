@@ -1,3 +1,6 @@
+## v2.7.0
+- Add tangy-cards element for arbitrary number of input groups.
+
 ## v2.6.1
 - Adjust position of `*` on required elements.
 
