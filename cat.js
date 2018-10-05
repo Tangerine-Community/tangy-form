@@ -71,6 +71,12 @@ HTMLElement.prototype.setAttributes = function (attributes = {}) {
 
 // @TODO See one liner that TimvdLippe suggested https://github.com/Polymer/polymer/issues/4918#issuecomment-355835087
 HTMLElement.prototype.getProps = function () {
+  if (this.constructor.hasOwnProperty('_props') && Array.isArray(this.constructor._props)) {
+    let props = this.constructor._props.reduce((props, propName) => {
+      return Object.assign({}, props, { [propName]: this[propName]})
+    }, {})
+    return props
+  }
   let propertyInfo = this.constructor.properties
   // If no property info, then go off what attributes we do have.
   if (!propertyInfo) {

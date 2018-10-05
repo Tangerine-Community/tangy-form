@@ -3,6 +3,8 @@ import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
 
 import './cat.js'
 import './tangy-form-item.js'
+import './tangy-cards.js'
+import './tangy-card.js'
 import './tangy-common-styles.js'
 import './global-styles.js'
 import { tangyFormReducer } from './tangy-form-reducer.js'

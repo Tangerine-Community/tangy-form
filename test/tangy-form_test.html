@@ -172,10 +172,169 @@
         </tangy-form>
       </template>
     </test-fixture>
+    
+    <test-fixture id="TangyCardsFixture">
+      <template>
+        <tangy-cards initial-count="3" name="person">
+					<tangy-input name="first_name" label="First name"></tangy-input>
+					<tangy-input name="last_name" label="Last name"></tangy-input>
+        </tangy-cards>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="TangyCardFixture">
+      <template>
+        <tangy-card initial-count="3" name="person">
+					<tangy-input name="first_name" label="First name"></tangy-input>
+					<tangy-input name="last_name" label="Last name"></tangy-input>
+        </tangy-card>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="TangyCardsFullFixture">
+      <template>
+        <tangy-form id="tangy-cards-demo" title="My Form">
+          <tangy-form-item id="item1" title="People">
+            <tangy-cards initial-count="3" name="person">
+              <tangy-input name="first_name" label="First name"></tangy-input>
+              <tangy-input name="last_name" label="Last name"></tangy-input>
+            </tangy-cards>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
 
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       suite('tangy-form', () => {
+				test('tangy-card has initial value', () => {
+          const element = fixture('TangyCardFixture');
+					assert.equal(element.value.length, 2)
+				})
+				test('tangy-card has value after user input', () => {
+          const element = fixture('TangyCardFixture');
+					element.shadowRoot.querySelector('[name]').value = 'foo'
+					assert.equal(element.value[0].value, 'foo')
+				})
+
+				test('tangy-card resumes when value when set', () => {
+					const element = fixture('TangyCardFixture');
+					element.value = [
+						{
+							"name": "first_name",
+							"private": false,
+							"label": "First name",
+							"type": "",
+							"errorMessage": "",
+							"required": false,
+							"disabled": false,
+							"hidden": false,
+							"invalid": false,
+							"incomplete": true,
+							"value": "foo",
+							"allowedPattern": "",
+							"min": "",
+							"max": "",
+							"tagName": "TANGY-INPUT"
+						},
+						{
+							"name": "last_name",
+							"private": false,
+							"label": "Last name",
+							"type": "",
+							"errorMessage": "",
+							"required": false,
+							"disabled": false,
+							"hidden": false,
+							"invalid": false,
+							"incomplete": true,
+							"value": "",
+							"allowedPattern": "",
+							"min": "",
+							"max": "",
+							"tagName": "TANGY-INPUT"
+						}
+					] 
+					assert.equal(element.value[0].value, 'foo')
+
+				})
+
+        test('tangy-cards start with 3 cards', () => {
+          const element = fixture('TangyCardsFixture');
+          assert.equal(element.shadowRoot.querySelectorAll('tangy-card').length, 3)
+        });
+
+        test('tangy-cards creates another card', () => {
+          const element = fixture('TangyCardsFixture');
+          element.shadowRoot.querySelector('.add-another').click()
+          assert.equal(element.shadowRoot.querySelectorAll('tangy-card').length, 4)
+        });
+
+        test('tangy-cards removes a card', () => {
+          const element = fixture('TangyCardsFixture');
+					element.shadowRoot.querySelector('tangy-card').shadowRoot.querySelector('#remove').click()
+          assert.equal(element.shadowRoot.querySelectorAll('tangy-card').length, 2)
+          assert.equal(element.value.length, 2)
+        });
+
+        test('tangy-cards resumes with 2', () => {
+          const element = fixture('TangyCardsFixture');
+					element.value = [
+						{
+							"name": "755223b8-34ff-49b7-8de8-084809499939",
+							"value": []
+						},
+						{
+							"name": "6a4f2bc7-2854-455c-a65a-4ecbc23417ae",
+							"value": []
+						}
+					]
+          assert.equal(element.shadowRoot.querySelectorAll('tangy-card').length, 2)
+        });
+
+				test('tangy-cards has different value after user input', () => {
+          const element = fixture('TangyCardsFixture');
+					element.value = [
+						{
+							"name": "755223b8-34ff-49b7-8de8-084809499939",
+							"value": []
+						},
+						{
+							"name": "6a4f2bc7-2854-455c-a65a-4ecbc23417ae",
+							"value": []
+						}
+					]
+					element.shadowRoot.querySelector('tangy-card').$.content.querySelector('[name=first_name]').value = 'foo'
+          assert.equal(element.value[0].value[0].value, 'foo')
+        });
+
+        test('tangy-cards should disable', () => {
+          // @TODO
+        })
+
+        test('tangy-cards should validate', () => {
+          // @TODO
+        })
+
+        test('tangy-cards has value in a form', () => {
+          const element = fixture('TangyCardsFullFixture');
+          //const element = fixture('HelloWorldFixture');
+          element.newResponse()
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-cards').shadowRoot.querySelector('tangy-card').shadowRoot.querySelector('[name]').value = 'foo'
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('#complete').click()
+          assert.equal((element.response.items[0].inputs[0].value[0].value[0].value === 'foo'), true)
+				})
+	
+        test('tangy-cards resumes in a form', () => {
+          const element = fixture('TangyCardsFullFixture');
+          //const element = fixture('HelloWorldFixture');
+          element.response = window.stub.responseWithTangyCards
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('#open').click()
+          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-cards').shadowRoot.querySelector('tangy-card').shadowRoot.querySelector('[name]').value, 'foo')
+				})
 
         test('hello world without errors', () => {
           const element = fixture('HelloWorldFixture');
@@ -468,6 +627,10 @@
         })
 
       });
+
+      window.stub = {
+       responseWithTangyCards: {"_id":"94897a00-ea84-46ba-b046-21505dd1a1e9","collection":"TangyFormResponse","form":{"title":"My Form","complete":true,"linearMode":false,"hideClosedItems":false,"hideCompleteFab":false,"tabIndex":1,"showResponse":true,"showSummary":false,"hasSummary":false,"onSubmit":"","id":"tangy-cards-demo","tagName":"TANGY-FORM"},"items":[{"id":"item1","title":"People","summary":false,"hideButtons":false,"hideBackButton":true,"rightToLeft":false,"hideNextButton":true,"showCompleteButton":true,"inputs":[{"name":"person","value":[{"name":"c911e052-bea0-4ee9-b3b0-e93023a025c0","value":[{"name":"first_name","private":false,"label":"First name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"foo","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"name":"last_name","private":false,"label":"Last name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"}],"label":"","disabled":false,"invalid":false,"incomplete":true,"hidden":false},{"name":"9d27d598-a811-4e80-b04d-d18523303c12","value":[{"name":"first_name","private":false,"label":"First name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"name":"last_name","private":false,"label":"Last name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"}],"label":"","disabled":false,"invalid":false,"incomplete":true,"hidden":false},{"name":"fd1a64c6-f52a-4480-9a2d-c4792ca2bb39","value":[{"name":"first_name","private":false,"label":"First name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"name":"last_name","private":false,"label":"Last name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"}],"label":"","disabled":false,"invalid":false,"incomplete":true,"hidden":false}],"label":"","disabled":true,"invalid":false,"incomplete":true,"hidden":false}],"open":false,"incomplete":false,"disabled":false,"hidden":false,"locked":true,"tagName":"TANGY-FORM-ITEM"}],"inputs":[],"complete":true,"focusIndex":0,"nextFocusIndex":1,"previousFocusIndex":-1,"startDatetime":"10/5/2018, 12:45:43 PM","startUnixtime":1538757943292,"uploadDatetime":""}
+     }
 
     </script>
 
