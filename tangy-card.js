@@ -16,9 +16,22 @@ export class TangyCard extends PolymerElement {
     return html`
     <style include="tangy-common-styles"></style>
     <style include="tangy-element-styles"></style>
+    <style>
+    :host {
+      position: relative;
+    }
+    paper-card { width: 100%; }
+    paper-fab {
+      position: absolute;
+      top: -15px;
+      right: -15px;
+      --paper-fab-background: var(--accent-color);
+      --paper-fab-keyboard-focus-background: var(--accent-color);
+    }
+    </style>
     <paper-card id="content">
     </paper-card>
-    <span id="remove" on-click="remove">[x] remove</span>
+    <paper-fab mini icon="close" id="remove" on-click="remove"></paper-fab>
     `
   }
 

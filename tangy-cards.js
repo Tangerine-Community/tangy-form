@@ -111,7 +111,8 @@ export class TangyCards extends PolymerElement {
       <style include="tangy-element-styles"></style>
       <div id="cards">
       </div>
-      <span class="add-another" on-click="addCard">+ Add another</span>
+      <paper-button style="margin-left: 15px; background: var(--accent-color); color: var(--accent-text-color);" raised class="add-another"><iron-icon icon="add-circle"></iron-icon>ADD ANOTHER</paper-button>
+
     `
     this.shadowRoot.querySelector('.add-another').addEventListener('click', _ => this.addCard()) 
 		for (let cardProps of value) {
