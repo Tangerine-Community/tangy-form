@@ -19,18 +19,13 @@ function uuid() {
  * @demo demo/index.html
  */
 export class TangyCards extends PolymerElement {
-  static get template () {
-    return html`
-    <style include="tangy-common-styles"></style>
-    <style include="tangy-element-styles"></style>
-    <div id="cards">
-    </div>
-    <span class="add-another" on-click="addCard">+ Add another</span>
-    `
-  }
 
   static get is () {
     return 'tangy-cards'
+  }
+
+  static get _props() {
+   return ['name','value','label','disabled','invalid','incomplete','hidden']
   }
 
   static get properties () {
@@ -58,13 +53,11 @@ export class TangyCards extends PolymerElement {
       disabled: {
         type: Boolean,
         value: false,
-        observer: 'onDisabledChange',
         reflectToAttribute: true
       },
       invalid: {
         type: Boolean,
         value: false,
-        observer: 'onInvalidChange',
         reflectToAttribute: true
       },
       incomplete: {
@@ -81,6 +74,11 @@ export class TangyCards extends PolymerElement {
     }
   }
 
+  static get template () {
+    return html`
+    `
+  }
+
   connectedCallback () {
     super.connectedCallback()
     this._template = this.innerHTML
@@ -89,7 +87,6 @@ export class TangyCards extends PolymerElement {
 			this.value = JSON.parse(this.getAtribute('value'))
 	  } else {
 		  for (let i = 0; i < this.initialCount; i++) {
-			  console.log('add card')
 				this.addCard()
       }
 		}
@@ -101,14 +98,22 @@ export class TangyCards extends PolymerElement {
   }
 
   get value() {
-		if (this._value && this._value.length > 0) {
-			this._value = [...this.$.cards.querySelectorAll('tangy-card')].map(tangyCardEl => tangyCardEl.getProps())
+		if (this._value && this._value.length > 0 && this.shadowRoot) {
+			this._value = [...this.shadowRoot.querySelector('#cards').querySelectorAll('tangy-card')].map(tangyCardEl => tangyCardEl.getProps())
 		}
     return this._value ? this._value : []
   }
 
 	render(value) {
-		this.$.cards.innerHTML = ''
+    if (!this.shadowRoot) return
+		this.shadowRoot.innerHTML = `    
+      <style include="tangy-common-styles"></style>
+      <style include="tangy-element-styles"></style>
+      <div id="cards">
+      </div>
+      <span class="add-another" on-click="addCard">+ Add another</span>
+    `
+    this.shadowRoot.querySelector('.add-another').addEventListener('click', _ => this.addCard()) 
 		for (let cardProps of value) {
 			const cardEl = document.createElement('tangy-card')
       // @TODO The order of the next three lines of code matter too much. If any different, it will break. 
@@ -144,6 +149,7 @@ export class TangyCards extends PolymerElement {
       return true
     }
     */
+    return true
   }
 }
 window.customElements.define(TangyCards.is, TangyCards)

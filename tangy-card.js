@@ -45,13 +45,11 @@ export class TangyCard extends PolymerElement {
       disabled: {
         type: Boolean,
         value: false,
-        observer: 'onDisabledChange',
         reflectToAttribute: true
       },
       invalid: {
         type: Boolean,
         value: false,
-        observer: 'onInvalidChange',
         reflectToAttribute: true
       },
       incomplete: {
@@ -76,8 +74,10 @@ export class TangyCard extends PolymerElement {
   }
 
   get value() {
-    this._value = [...this.$.content.querySelectorAll('[name]')].map(inputEl => inputEl.getProps())
-		return this._value
+		if (this.shadowRoot && this.$.content.querySelectorAll('[name]').length > 0) {
+      this._value = [...this.$.content.querySelectorAll('[name]')].map(inputEl => inputEl.getProps())
+    }
+    return this._value ? this._value : []
   }
 
   set value(value) {
