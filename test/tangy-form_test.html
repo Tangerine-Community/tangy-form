@@ -308,7 +308,15 @@
 					element.shadowRoot.querySelector('tangy-card').$.content.querySelector('[name=first_name]').value = 'foo'
           assert.equal(element.value[0].value[0].value, 'foo')
         });
-	
+
+        test('tangy-cards should disable', () => {
+          // @TODO
+        })
+
+        test('tangy-cards should validate', () => {
+          // @TODO
+        })
+
         test('tangy-cards has value in a form', () => {
           const element = fixture('TangyCardsFullFixture');
           //const element = fixture('HelloWorldFixture');
