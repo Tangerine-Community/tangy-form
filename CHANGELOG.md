@@ -1,3 +1,8 @@
+## v2.8.0
+- New APIs: TangyFormResponseModel.inputs, TangyFormResponseModel.inputsByName, Loc.filterById, TangyLocation.filterBy
+- You can now `<tangy-location filter-by="school1,school4"></tangy-location>` to limit what is available for selection.
+- You can now `<tangy-location filter-by-global></tangy-location>` to limit what is available for selection when `window.tangyLocations` is defined.
+
 ## v2.7.0
 - Add tangy-cards element for arbitrary number of input groups.
 
