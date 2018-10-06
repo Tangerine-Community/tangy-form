@@ -221,6 +221,16 @@
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import { Loc } from '../loc.js'
       import stub from './stub.js' 
+      import { TangyFormResponseModel } from '../tangy-form-response-model.js'
+
+      suite('TangyFormResponseModel', () => {
+        test('should have inputs', () => {
+          let formResponse = new TangyFormResponseModel(stub.tangyCardFormResponse)
+          const inputsObject = formResponse.inputs
+          assert.equal(Object.keys(inputsObject).length, 3)
+        })
+      })
+
 
       suite('loc', () => {
         test('should flatten', () => {
