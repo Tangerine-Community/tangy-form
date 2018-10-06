@@ -226,8 +226,8 @@
       suite('TangyFormResponseModel', () => {
         test('should have inputs', () => {
           let formResponse = new TangyFormResponseModel(stub.tangyCardFormResponse)
-          const inputsObject = formResponse.inputs
-          assert.equal(Object.keys(inputsObject).length, 3)
+          assert.equal(formResponse.inputs.length, 6)
+          assert.equal(Object.keys(formResponse.inputsByName).length, 3)
         })
       })
 

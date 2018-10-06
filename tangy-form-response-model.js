@@ -22,7 +22,7 @@ export class TangyFormResponseModel {
 
   get inputs() {
     // Reduce to an array.
-    const inputsArray = this.items.reduce((inputsArray, item) => {
+    return this.items.reduce((inputsArray, item) => {
       item.inputs.forEach(input => {
         if (input.tagName === 'TANGY-CARDS') {
           input.value.forEach(card => card.value.forEach(input => inputsArray.push(input)))
@@ -32,8 +32,10 @@ export class TangyFormResponseModel {
       })
       return inputsArray
     }, [])
+  }
+  get inputsByName() {
     // Reduce to an object keyed on input.name. If multiple inputs with the same name, put them in an array.
-    return inputsArray.reduce((inputsObject, input) => {
+    return this.inputs.reduce((inputsObject, input) => {
       if (inputsObject.hasOwnProperty(input.name)) {
         if (Array.isArray(inputsObject[input.name])) {
           inputsObject[input.name] = inputsObject[input.name].push(input)
