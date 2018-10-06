@@ -516,6 +516,7 @@ class TangyLocation extends PolymerElement {
 
   async connectedCallback() {
     super.connectedCallback();
+    if (this.filterByGlobal) this.filterBy = window.tangyLocationFilterBy
     // When we hear change events, it's coming from users interacting with select lists.
     this.shadowRoot.addEventListener('change', this.onSelectionChange.bind(this))
     let that = this

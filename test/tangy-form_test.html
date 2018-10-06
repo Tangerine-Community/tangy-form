@@ -210,6 +210,13 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyLocationFilterByGlobalFixture">
+      <template>
+        <tangy-location name="location" show-levels="county,school" filter-by-global location-src="./location-list.json"></tangy-location>
+      </template>
+    </test-fixture>
+
+
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import { Loc } from '../loc.js'
@@ -241,8 +248,15 @@
             done()
           }, {once: true})
         })
-        test('should populate select list locations found in window.UserProfile', (done) => {
-          done()
+        test('should populate filterBy from window.tangyLocationFilterBy', (done) => {
+          window.tangyLocationFilterBy = 'school1,school4'
+          const element = fixture('TangyLocationFilterByGlobalFixture');
+          element.addEventListener('location-list-loaded', () => {
+            element.shadowRoot.querySelector('select').value = 'county2'
+            element.shadowRoot.querySelector('select').dispatchEvent(new Event('change', {bubbles: true}))
+            assert.equal(element.shadowRoot.querySelectorAll('select')[1].querySelectorAll('option').length, 2)
+            done()
+          }, {once: true})
         })
       })
 
