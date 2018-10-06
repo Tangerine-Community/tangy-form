@@ -1,7 +1,62 @@
 
 import 'underscore/underscore.js'
+//import transformer from './transformer.js'
+
 
 export class Loc {
+
+  static flatten(locationList) {
+    let locations = []
+    function dig(node) {
+      if (!node.children) return
+      let children = []
+      for (let id in node.children) {
+        children.push(node.children[id])
+      }
+      while (children && children.length > 0) {
+        let freshNode = children.pop()
+        locations.push(Object.assign({}, freshNode, {parent: node.id, children: {}}))
+        dig(freshNode)
+      }
+    }
+    dig({children: locationList.locations, id: 'root'})
+    return Object.assign({}, locationList, { locations })
+  }
+
+  static unflatten(locationList) {
+    const root = {
+      id: 'root',
+      children: {}
+    }
+    function magnet(node) {
+      node.children = locationList.locations 
+        .filter(location => location.parent === node.id) 
+        .reduce((childrenObject, location) => Object.assign(childrenObject, { [location.id]: location }), {})
+      for (let id in node.children) {
+        magnet(node.children[id])
+      }
+    }
+    magnet(root)
+    return Object.assign({}, locationList, { locations: root.children })
+  }
+
+  static filterById(locationList, filterByIds) {
+    const locations = this.flatten(locationList).locations
+    const allCrumbs = filterByIds
+      .map(id => {
+        let breadcrumbs = [id]
+        let parent = locations.find(location => id === location.id).parent
+        breadcrumbs.push(parent.slice())
+        while (parent !== 'root') {
+          parent = locations.find(location => parent === location.id).parent
+          breadcrumbs.push(parent.slice())
+        }
+        return breadcrumbs.reverse()
+      })
+      .reduce((allCrumbs, path) => [...new Set([...allCrumbs, ...path])], [])
+    const filteredLocations = locations.filter(location => allCrumbs.indexOf(location.id) !== -1)
+    return this.unflatten(Object.assign({}, locationList, {locations: filteredLocations}))
+  }
 
   static query (levels, criteria, locationList, qCallback, context) {
     var currentLevelIndex, i, j, len, level, levelIDs, levelMap, locationLevels, locations, resp, targetLevelIndex;
