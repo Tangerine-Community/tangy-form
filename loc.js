@@ -1,7 +1,5 @@
 
 import 'underscore/underscore.js'
-//import transformer from './transformer.js'
-
 
 export class Loc {
 
