@@ -74,7 +74,7 @@ HTMLElement.prototype.getProps = function () {
   if (this.constructor.hasOwnProperty('_props') && Array.isArray(this.constructor._props)) {
     let props = this.constructor._props.reduce((props, propName) => {
       return Object.assign({}, props, { [propName]: this[propName]})
-    }, {})
+    }, {tagName: this.tagName})
     return props
   }
   let propertyInfo = this.constructor.properties
