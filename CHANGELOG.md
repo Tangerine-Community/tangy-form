@@ -1,3 +1,8 @@
+# CHANGELOG
+
+## v2.8.1
+- Loc.filterById now includes decendents by default
+
 ## v2.8.0
 - New APIs: TangyFormResponseModel.inputs, TangyFormResponseModel.inputsByName, Loc.filterById, TangyLocation.filterBy
 - You can now `<tangy-location filter-by="school1,school4"></tangy-location>` to limit what is available for selection.
