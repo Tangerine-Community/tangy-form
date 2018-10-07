@@ -38,8 +38,9 @@ export class Loc {
     return Object.assign({}, locationList, { locations: root.children })
   }
 
-  static filterById(locationList, filterByIds) {
+  static filterById(locationList, filterByIds, includeDecendents=true) {
     const locations = this.flatten(locationList).locations
+    // Find full paths to IDs then combine and deduplicate.
     const allCrumbs = filterByIds
       .map(id => {
         let breadcrumbs = [id]
@@ -52,8 +53,37 @@ export class Loc {
         return breadcrumbs.reverse()
       })
       .reduce((allCrumbs, path) => [...new Set([...allCrumbs, ...path])], [])
-    const filteredLocations = locations.filter(location => allCrumbs.indexOf(location.id) !== -1)
+    // Get locations based on all the crumbs we just found.
+    let filteredLocations = locations.filter(location => allCrumbs.indexOf(location.id) !== -1)
+    if (includeDecendents) {
+      // find leaves, AKA nodes with no children.
+      const leaves = filteredLocations.reduce((leaves, location) => {
+        // If the location is a parent, then continue, otherwise add to leaves.
+        if (filteredLocations.filter(filteredLocation => filteredLocation.parent === location.id).length > 0) {
+          return leaves 
+        } else {
+          return [...leaves, location]
+        }
+      }, [])
+      // Get decendents of the leaves and then push them into filteredLocations.
+      for (let leaf of leaves) {
+        this.findDecendents(locations, leaf.id).forEach(location => filteredLocations.push(location))
+      }
+    } 
     return this.unflatten(Object.assign({}, locationList, {locations: filteredLocations}))
+  }
+
+  static findDecendents(flatLocations, locationId) {
+    let decendents = []
+    function dig(locationId) {
+      let found = flatLocations.filter((location) => location.parent === locationId)
+      found.forEach(location => {
+        decendents.push(location)
+        dig(location.id)
+      })
+    }
+    dig(locationId)
+    return decendents
   }
 
   static query (levels, criteria, locationList, qCallback, context) {

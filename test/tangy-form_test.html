@@ -246,6 +246,16 @@
           assert.equal(locationList.locations.county2.children.school4.id, 'school4')
           assert.equal(locationList.locations.county2.children.hasOwnProperty('school3'), false)
         })
+        test('should filter without decendents', () => {
+          let locationList = Loc.filterById(stub.locationList, ['county1'], false)
+          assert.equal(locationList.locations.hasOwnProperty('county2'), false)
+          assert.equal(locationList.locations.county1.children.hasOwnProperty('school1'), false)
+        })
+        test('should filter with decendents', () => {
+          let locationList = Loc.filterById(stub.locationList, ['county1'])
+          assert.equal(locationList.locations.hasOwnProperty('county2'), false)
+          assert.equal(locationList.locations.county1.children.hasOwnProperty('school1'), true)
+        })
       })
 
       suite('tangy-location', () => {
