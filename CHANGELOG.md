@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v2.9.0
+- Added `<tangy-input-groups>` as an alternative to `<tangy-cards>`. We will deprecate tangy cards.
+
 ## v2.8.1
 - Loc.filterById now includes decendents by default
 
