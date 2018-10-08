@@ -263,7 +263,7 @@ export class TangyFormItem extends PolymerElement {
   // Apply state in the store to the DOM.
   reflect() {
     this.inputs.forEach((inputState) => {
-      let inputEl = this.shadowRoot.querySelector(`[name=${inputState.name}]`)
+      let inputEl = this.shadowRoot.querySelector(`[name="${inputState.name}"]`)
       if (inputEl) inputEl.setProps(inputState)
     })
   }
@@ -415,7 +415,7 @@ export class TangyFormItem extends PolymerElement {
     })
     if (invalidInputNames.length !== 0) {
       this.shadowRoot
-        .querySelector(`[name=${invalidInputNames[0]}]`)
+        .querySelector(`[name="${invalidInputNames[0]}"]`)
         .scrollIntoView({ behavior: 'smooth', block: 'start' })
       this.incomplete = true
       return false
