@@ -262,10 +262,22 @@ export class TangyFormItem extends PolymerElement {
 
   // Apply state in the store to the DOM.
   reflect() {
-    this.inputs.forEach((inputState) => {
-      let inputEl = this.shadowRoot.querySelector(`[name="${inputState.name}"]`)
-      if (inputEl) inputEl.setProps(inputState)
-    })
+    // Reflect to tangy-input-groups first because they may need to template out some additional inputs.
+    this.inputs
+      .filter(input => input.tagName === 'TANGY-INPUT-GROUPS')
+      .forEach((inputState) => {
+        let inputEl = this.shadowRoot.querySelector(`[name="${inputState.name}"]`)
+        if (inputEl) {
+          inputEl.setProps(inputState)
+          inputEl.value = inputState.value
+        }
+      })
+    this.inputs
+      .filter(input => input.tagName !== 'TANGY-INPUT-GROUPS')
+      .forEach((inputState) => {
+        let inputEl = this.shadowRoot.querySelector(`[name="${inputState.name}"]`)
+        if (inputEl) inputEl.setProps(inputState)
+      })
   }
 
   fireHook(hook, event) {
