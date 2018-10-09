@@ -2,32 +2,38 @@
 import 'underscore/underscore.js'
 
 export class Loc {
-
-  static flatten(locationList) {
+  /*
+   * @returns FlatLocationList {locations: [ LocationNodeWithParentRef, ... ], locationsLevels: [ ... ]}
+   */
+  static flatten(locationList = { locations: {}, locationsLevels: []}) {
     let locations = []
-    function dig(node) {
+    let levels = [ ...locationList.locationsLevels ]
+    function dig(node, levelIndex=0) {
       if (!node.children) return
+      const level = levels[levelIndex]
       let children = []
       for (let id in node.children) {
-        children.push(node.children[id])
+        children.push(Object.assign({}, node.children[id], { level }))
       }
       while (children && children.length > 0) {
         let freshNode = children.pop()
         locations.push(Object.assign({}, freshNode, {parent: node.id, children: {}}))
-        dig(freshNode)
+        dig(freshNode, levelIndex+1)
       }
     }
-    dig({children: locationList.locations, id: 'root'})
+    dig({children: locationList.locations, id: 'root'}, 0)
     return Object.assign({}, locationList, { locations })
   }
-
-  static unflatten(locationList) {
+  /*
+   * @returns LocationList {locations: { ... }, locationsLevels: [ ... ]}
+   */
+  static unflatten(flatLocationList = { locations: [], locationsLevels: []}) {
     const root = {
       id: 'root',
       children: {}
     }
     function magnet(node) {
-      node.children = locationList.locations 
+      node.children = flatLocationList.locations 
         .filter(location => location.parent === node.id) 
         .reduce((childrenObject, location) => Object.assign(childrenObject, { [location.id]: location }), {})
       for (let id in node.children) {
@@ -35,10 +41,15 @@ export class Loc {
       }
     }
     magnet(root)
-    return Object.assign({}, locationList, { locations: root.children })
+    return Object.assign({}, flatLocationList, { locations: root.children })
   }
 
-  static filterById(locationList, filterByIds, includeDecendents=true) {
+  /*
+   * Takes a location list and a list of IDs to filter by. It finds the paths those IDs and then filters out any locations not on that path.
+   * Lastly if includeDescendents paramets is true, it also attaches all decendents of the IDs specified in filterByIds.
+   * 
+   */
+  static filterById(locationList = {locations: {}, locationsLevels: []}, filterByIds = [], includeDecendents=true) {
     const locations = this.flatten(locationList).locations
     // Find full paths to IDs then combine and deduplicate.
     const allCrumbs = filterByIds

@@ -305,6 +305,8 @@
         test('should flatten', () => {
           let flattenedLocationList = Loc.flatten(stub.locationList)
           assert.equal(flattenedLocationList.locations.length, 6)
+          assert.equal(flattenedLocationList.locations.find(location => location.id === 'school1').level, 'school')
+          assert.equal(flattenedLocationList.locations.find(location => location.id === 'county2').level, 'county')
         })
         test('should unflatten', () => {
           let locationList = Loc.unflatten(stub.flatLocationList)
