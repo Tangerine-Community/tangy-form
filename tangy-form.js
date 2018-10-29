@@ -23,6 +23,7 @@ import './tangy-gps.js'
 import './tangy-complete-button.js'
 import './tangy-overlay.js'
 import './tangy-acasi.js';
+import './tangy-eftouch.js';
 
 //   <!-- Dependencies -->
 import '@polymer/paper-fab/paper-fab.js';

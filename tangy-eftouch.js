@@ -192,7 +192,7 @@ export class TangyEftouch extends PolymerElement {
       this.touchSources = this.getAttribute('touchsrc').split(",")
       // preload the sound only if we have one sound
       if (this.touchSources.length == 1) {
-        this.touchSound = new Audio(this.touchSrc);
+        this.touchSound = new Audio(this.touchSources[0]);
         this.touchSound.load();
       }
     }
