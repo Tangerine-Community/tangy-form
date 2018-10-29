@@ -76,9 +76,9 @@ class TangyTimed extends PolymerElement {
       }
 
       #bar {
-        position: fixed;
+        position: absolute;
         right: 50px;
-        top: 7px;
+        top: 0px;
         z-index: 1000000;
       }
       #stopWatch {
@@ -144,7 +144,7 @@ class TangyTimed extends PolymerElement {
       }
 
       #info {
-        margin-top: 70px;
+        padding-top: 70px;
       }
     </style>
 
@@ -283,6 +283,18 @@ class TangyTimed extends PolymerElement {
       this.render()
       this.reflect()
     }, 400)
+    setInterval(_ => {
+      if (this.getBoundingClientRect().y < 0 && this.getBoundingClientRect().y + this.getBoundingClientRect().height > 0) {
+        this.shadowRoot.querySelector('#bar').style.position = 'fixed'
+      } else {
+        this.shadowRoot.querySelector('#bar').style.position = 'absolute'
+      }
+      if (this.offsetWidth > 645) {
+        this.shadowRoot.querySelector('#info').style.paddingTop = '70px'
+      } else {
+        this.shadowRoot.querySelector('#info').style.paddingTop = '150px'
+      }
+    }, 1000)
   }
 
 

@@ -487,12 +487,36 @@ class TangyLocation extends PolymerElement {
         type: Boolean,
         value: false,
         observer: 'render'
+      },
+      filterBy: {
+        type: String,
+        value: '',
+        observer: 'render'
+      },
+      filterByGlobal: {
+        type: Boolean,
+        value: false,
+        observer: 'render'
       }
     };
   }
 
+  get locationList() {
+    if (this._locationList && this.filterBy && this.filterBy.length > 0) {
+      return Loc.filterById(this._locationList, this.filterBy.split(','))
+    } else {
+      //return this._locationList ? this._locationList : {locationLevels: [], locations: {}}
+      return this._locationList ? this._locationList : undefined 
+    }
+  }
+
+  set locationList(locationList) {
+    this._locationList = locationList
+  }
+
   async connectedCallback() {
     super.connectedCallback();
+    if (this.filterByGlobal) this.filterBy = window.tangyLocationFilterBy
     // When we hear change events, it's coming from users interacting with select lists.
     this.shadowRoot.addEventListener('change', this.onSelectionChange.bind(this))
     let that = this
@@ -501,6 +525,7 @@ class TangyLocation extends PolymerElement {
       try {
         that.locationList = JSON.parse(this.responseText)
         that.render()
+        that.dispatchEvent(new CustomEvent('location-list-loaded'))
       } catch(e) {
         // Do nothing. Some stages will not have valid JSON returned.
       }

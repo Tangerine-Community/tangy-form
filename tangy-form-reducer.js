@@ -73,8 +73,7 @@ const tangyFormReducer = function (state = initialState, action) {
           }
           return Object.assign({}, item, props)
          return item
-        }),
-        inputs: state.inputs.map(input => Object.assign({}, input, {disabled: true}))
+        })
       })
 
     case 'SHOW_RESPONSE':

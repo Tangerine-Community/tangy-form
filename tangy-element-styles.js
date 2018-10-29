@@ -17,8 +17,8 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         display: block;
         position: relative;
         border: solid white 5px;
-        padding: 10px;
-        margin: 10px 0 45px 0px;
+        padding: 0px;
+        margin: 10px;
       }
 
       :host(:not([hidden])) {
@@ -57,9 +57,9 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         content: "*"; 
         color: var(--accent-color); 
         position: absolute;
-        top: 14px;
-        left: -5px;
-        font-size: 21px;
+        top: 8px;
+        left: -20px;
+        font-size: 2em;
       }
 
       :host([disabled]) label {
