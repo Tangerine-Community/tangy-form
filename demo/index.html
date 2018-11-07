@@ -211,6 +211,124 @@
         </template>
       </demo-snippet>
 
+      <h3>tangy-form with dynamically-populated checkboxes</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="curriculums" title="My Form">
+            <tangy-form-item id="class-registration" title="صف دراسي" hide-back-button hide-next-button on-open="
+    async function loadCurricula(that) {
+     let url = 'forms.json'
+     let response = await fetch(url);
+     let data = await response.json();
+     let tcsEl = that.$.content.querySelector('tangy-checkboxes[name=\'curriculum\']')
+     let cbDiv = tcsEl.$.checkboxes;
+     cbDiv.innerHTML = ''
+     data.forEach(function(el) {
+     	if (el.id !=='class-registration' && el.id !=='student-registration' && el.id !=='example') {
+    		let checkbox = document.createElement('tangy-checkbox')
+            checkbox.name = el.id
+            checkbox.innerHTML = el.title
+            cbDiv.appendChild(checkbox)
+     	}
+     })
+    let newValue = []
+    cbDiv.querySelectorAll('tangy-checkbox')
+      .forEach((el) => {
+        el.addEventListener('change', tcsEl.onCheckboxClick.bind(tcsEl))
+        newValue.push(el.getProps())
+      })
+    if (!that.value || (typeof that.value === 'object' && that.value.length < newValue.length)) {
+      that.value = newValue
+    }
+     }
+     let that = this;
+     loadCurricula(that);
+
+    ">
+              <template>
+                <tangy-input
+                        name="school_name"
+                        label="School name"
+                        type="text"
+                        error-message="This is required."
+                        required>
+                </tangy-input>
+
+                <tangy-input
+                        name="school_year"
+                        label="School year"
+                        type="text"
+                        error-message="This is required."
+                        required>
+                </tangy-input>
+
+                <tangy-input
+                        name="grade"
+                        label="Grade"
+                        type="text"
+                        error-message="This is required."
+                        required>
+                </tangy-input>
+
+                <tangy-checkboxes name="curriculum" label="Curriculum">
+                </tangy-checkboxes>
+              </template>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+
+      <!--<h3>Tangy ACASI</h3>-->
+      <!--<demo-snippet>-->
+        <!--<template>-->
+          <!--<tangy-acasi-->
+                  <!--introsrc="assets/sounds/1.mp3"-->
+                  <!--transitionsrc="assets/sounds/swish.mp3"-->
+                  <!--touchsrc="assets/sounds/pop.mp3"-->
+                  <!--name="sofar"-->
+                  <!--images="assets/images/never.png,assets/images/once.png,assets/images/few.png,assets/images/many.png"-->
+                  <!--label=""-->
+                  <!--incomplete=""-->
+                  <!--on-change="">-->
+          <!--</tangy-acasi>-->
+        <!--</template>-->
+      <!--</demo-snippet>-->
+
+      <h3>Tangy Eftouch</h3>
+      <demo-snippet>
+        <template>
+          <tangy-eftouch
+                  introsrc="assets/sounds/1.mp3"
+                  transitionsrc="assets/sounds/swish.mp3"
+                  touchsrc="assets/sounds/pop.mp3"
+                  name="sofar"
+                  label=""
+                  incomplete=""
+                  on-change="">
+            <tangy-eftouch-slide
+                    introsrc="assets/sounds/1.mp3"
+                    transitionsrc="assets/sounds/swish.mp3"
+                    touchsrc="assets/sounds/pop.mp3"
+                    name="q1"
+                    label="Touch the turtle"
+                    columns="3"
+                    incomplete=""
+                    on-change="">
+              <tangy-eftouch-item width="100%" align="right" src="" value=""></tangy-eftouch-item>
+              <tangy-eftouch-item width="100%" align="right" src="assets/images/cat.png" value="cat"></tangy-eftouch-item>
+              <tangy-eftouch-item width="100%" align="right" src="assets/images/dog.png" value="dog"></tangy-eftouch-item>
+
+              <tangy-eftouch-item width="100%" align="center" src="assets/images/pig.png" value="pig"></tangy-eftouch-item>
+              <tangy-eftouch-item width="100%" align="center" src="assets/images/turtle.png" value="turtle"></tangy-eftouch-item>
+              <tangy-eftouch-item width="100%" align="center" src="assets/images/cow.png" value="cow"></tangy-eftouch-item>
+
+              <tangy-eftouch-item width="100%" align="right" src="" value=""></tangy-eftouch-item>
+              <tangy-eftouch-item width="100%" align="right" src="assets/images/fish.png" value="fish"></tangy-eftouch-item>
+              <tangy-eftouch-item width="100%" align="right" src="assets/images/bird.png" value="bird"></tangy-eftouch-item>
+            </tangy-eftouch-slide>
+          </tangy-eftouch>
+        </template>
+      </demo-snippet>
 
     </div>
   </body>

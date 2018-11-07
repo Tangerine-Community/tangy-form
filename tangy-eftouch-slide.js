@@ -1,65 +1,29 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-checkbox/paper-checkbox.js'
 import './tangy-common-styles.js'
+import './tangy-element-styles.js'
+import './tangy-eftouch-item.js'
+
 
 /**
- * `tangy-acasi`
+ * `tangy-eftouch-slide`
  *
  *
  * @customElement
  * @polymer
  * @demo demo/index.html
  */
-export class TangyAcasi extends PolymerElement {
+export class TangyEftouchSlide extends PolymerElement {
 
-  constructor() {
-    super()
-    this.t = {
-      'replay': 'replay'
-    }
+  static get is () {
+    return 'tangy-eftouch-slide'
   }
 
-
-  static get template() {
-    return html`
-    <style include="tangy-common-styles"></style>
-    <style include="tangy-element-styles"></style>
-
-    <style>
-      paper-radio-button {
-        margin-right: 25px;
-        --paper-radio-button-size: 2em;
-      }
-      .eftouch-selected {
-        border: 10px solid #af0;
-        border-radius: 10px;
-      }
-      paper-button.indigo {
-        background-color: var(--paper-indigo-500);
-        color: white;
-        --paper-button-raised-keyboard-focus: {
-          background-color: var(--paper-pink-a200) !important;
-          color: white !important;
-        };
-      }
-      paper-button.indigo:hover {
-        background-color: var(--paper-indigo-400);
-      }
-    </style>
-
-    <div class="container">
-      <label for="group">[[label]]</label>
-      <paper-button id="replay" raised class="indigo" on-click="replay">[[t.replay]]</paper-button>
-      <paper-radio-group name="group" id="paper-radio-group">
-      </paper-radio-group>
-    </div>
-    `
+  static get _props() {
+   return ['name','introSrc','transitionSrc','touchSrc','touchSources','images','onChange','value','required','disabled','label','hidden','invalid','incomplete','columns']
   }
 
-  static get is() {
-    return 'tangy-acasi'
-  }
-
-  static get properties() {
+  static get properties () {
     return {
       name: {
         type: String,
@@ -125,41 +89,108 @@ export class TangyAcasi extends PolymerElement {
         type: Boolean,
         value: true,
         reflectToAttribute: true
+      },
+      columns: {
+        type: String,
+        value: ''
       }
     };
   }
 
+  static get template () {
+    return html`<style include="tangy-common-styles"></style>
+    <style include="tangy-element-styles"></style>
 
-  // Element class can define custom element reactions
-  // @TODO: Duplicating ready?
-  connectedCallback() {
-    super.connectedCallback();
-    this.isReady = false
+    <style>
+      paper-radio-button {
+        margin-right: 25px;
+        --paper-radio-button-size: 2em;
+      }
+      .eftouch-selected {
+        border: 10px solid #af0;
+        border-radius: 10px;
+      }
+      paper-button.indigo {
+        background-color: var(--paper-indigo-500);
+        color: white;
+        --paper-button-raised-keyboard-focus: {
+          background-color: var(--paper-pink-a200) !important;
+          color: white !important;
+        };
+      }
+      paper-button.indigo:hover {
+        background-color: var(--paper-indigo-400);
+      }
+      .av-image {
+          max-height: 100%;
+          max-width: 100%;
+      }
+      .av-cell {
+          margin: 0;
+          display: inline-block;
+          overflow: hidden;
+      }
+      #paper-radio-group {
+      display:flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      }
+    </style>
+
+    <div class="container">
+      <label for="group">[[label]]</label>
+      <!--<paper-button id="replay" raised class="indigo" on-click="replay">[[t.replay]]</paper-button>-->
+      <paper-radio-group name="group" id="paper-radio-group">
+      </paper-radio-group>
+    </div>
+        <!--<div id="slides"><slot></slot></div> -->
+
+    `
+  }
+
+  connectedCallback () {
+    super.connectedCallback()
+    this.t = {
+      'replay': 'replay'
+    }
+    // this.isReady = false
     this.renderOptions()
   }
 
   renderOptions() {
     let paperRadioGroupEl = this.shadowRoot.querySelector('paper-radio-group')
-    paperRadioGroupEl.addEventListener('change', this.onPaperRadioGroupChange.bind(this), false)
-
-    // Populate paper-radio-button elements by using image data
+    // let paperRadioGroupEl = this.shadowRoot.querySelector('tangy-eftouch-item')
+    // this.shadowRoot.querySelectorAll('tangy-eftouch-slide').forEach(el => {
+    //   console.log("yes")
+    // });
+    // Populate paper-radio-button elements by using image data in tangy-eftouch-item
     // The radio-button value is taken from the imageArray src value.
     // Also create the image.
-    let images = this.getAttribute('images')
-    let imageArray = images.split(",")
-    for (let src of imageArray) {
-      let button = document.createElement('paper-radio-button')
-      let srcArray = src.split('/')
-      let filename = srcArray[srcArray.length - 1]
-      let name = filename.replace('.png', '')
-      button.name = name
-      if (this.disabled) button.setAttribute('disabled', true)
-      let imageEl = document.createElement('img')
-      imageEl.src = src
-      imageEl.className = "acasi-image";
-      button.innerHTML = imageEl.outerHTML
-      paperRadioGroupEl.appendChild(button)
-    }
+    this.querySelectorAll('tangy-eftouch-item').forEach(el => {
+      let src = el.src
+      let value = el.value
+      if (src === '') {
+        let button = document.createElement('paper-radio-button')
+        // button.setAttribute('disabled', true)
+        paperRadioGroupEl.appendChild(button)
+      } else {
+        let button = document.createElement('paper-radio-button')
+        button.name = value
+        if (this.disabled) button.setAttribute('disabled', true)
+        // button.setAttribute('style', '50px')
+        let imageEl = document.createElement('img')
+        imageEl.src = src
+        imageEl.id = 'image' + value
+        imageEl.className = "acasi-image";
+        paperRadioGroupEl.appendChild(button)
+        // let imageSel = this.resizeImage(imageEl.id);
+        button.innerHTML = imageEl.outerHTML
+      }
+    });
+    // paperRadioGroupEl.addEventListener('change', this.onPaperRadioGroupChange.bind(this), false)
+
+
     paperRadioGroupEl.selected = this.value
     if (this.required) paperRadioGroupEl.required = true
     this.isReady = true
@@ -168,6 +199,7 @@ export class TangyAcasi extends PolymerElement {
     this.imgElements = Array.prototype.slice.call(this.shadowRoot.querySelectorAll('img'));
     for (let i = 0, len = this.imgElements.length; i < len; i++) {
       let ele = this.imgElements[i];
+      this.resizeImage(ele);
       if (typeof this.touchSources !== 'undefined' && this.touchSources.length > 1) {
         let touchSrc = this.touchSources[i]
         ele.dataTouchSrc = touchSrc
@@ -175,6 +207,33 @@ export class TangyAcasi extends PolymerElement {
         ele.dataTouchSrc = this.touchSrc
       }
     }
+  }
+
+  resizeImage(el) {
+    // let imageSel = document.querySelector('#' + imageId)
+    // let ratio = imageSel.parent().width() / imageSel.parent().height()
+
+    // let ratio = el.parentNode.offsetWidth / el.parentNode.offsetHeight
+    // // let pratio = imageSel.parent().parent().width() / imageSel.parent().parent().height()
+    // let pratio = el.parentNode.parentNode.offsetWidth / el.parentNode.parentNode.offsetHeight
+    // // let css = {width: '100%', height: 'auto'}
+    // if (ratio < pratio) {
+    //   el.parentNode.style.width = 'auto'
+    //   el.parentNode.style.height = '100%'
+    // } else {
+    //   el.parentNode.style.width = '100%'
+    //   el.parentNode.style.height = 'auto'
+    // }
+      // css = {width: 'auto', height: '100%'}
+    // el.parentNode.css(css)
+    // return imageSel;
+
+    let columns = 3;
+    if (typeof this.columns !== 'undefined') {
+      columns = this.columns
+    }
+    el.width = (el.parentNode.parentNode.offsetWidth - 130)/this.columns;
+    // el.width = '100';
   }
 
   ready() {
@@ -186,7 +245,16 @@ export class TangyAcasi extends PolymerElement {
     } else {
       this.transitionSound = new Audio(transition_sound_url);
     }
-    this.transitionSound.play();
+    var promise = this.transitionSound.play();
+    if (promise !== undefined) {
+      promise.then(_ => {
+        // Autoplay started!
+      }).catch(error => {
+        // Autoplay was prevented.
+        // Show a "Play" button so that user can start playback.
+        console.log("play rejected.")
+      });
+    }
 
     if (this.getAttribute('touchsrc')) {
       this.touchSources = this.getAttribute('touchsrc').split(",")
@@ -283,6 +351,5 @@ export class TangyAcasi extends PolymerElement {
     console.log('Replay')
     this.transitionSound.play();
   }
-
 }
-window.customElements.define(TangyAcasi.is, TangyAcasi)
+window.customElements.define(TangyEftouchSlide.is, TangyEftouchSlide)
