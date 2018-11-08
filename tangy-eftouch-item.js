@@ -29,15 +29,15 @@ export class TangyEftouchItem extends PolymerElement {
       },
       introSrc: {
         type: String,
-        value: '../content/assets/sounds/1.mp3'
+        value: 'assets/sounds/1.mp3'
       },
       transitionSrc: {
         type: String,
-        value: '../content/assets/sounds/swish.mp3'
+        value: 'assets/sounds/swish.mp3'
       },
       touchSrc: {
         type: String,
-        value: '../content/assets/sounds/pop.mp3'
+        value: 'assets/sounds/pop.mp3'
       },
       touchSources: {
         type: Array

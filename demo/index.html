@@ -39,7 +39,7 @@
 
           <script>
             document.querySelector('#my-form').addEventListener('submit', event => {
-              // By default, the form response is locked and the user can browse it. Use event.preventDefault() 
+              // By default, the form response is locked and the user can browse it. Use event.preventDefault()
               // to do something else.
               event.preventDefault()
               // 3 ways to inspect the user's response to the form. Ordered by level of detail.
@@ -97,7 +97,7 @@
               <tangy-checkbox name="input1">
                 Would you like to skip then next input?
               </tangy-checkbox>
-              <tangy-input 
+              <tangy-input
                 name="input2"
                 tangy-if="notChecked('input1')"
                 label="This input will hide when input1 is checked."
@@ -117,7 +117,7 @@
                 <option value="option1">Option 1</option>
                 <option value="option2">Option 2</option>
               </tangy-radio-buttons>
-              <tangy-input 
+              <tangy-input
                 name="input2"
                 tangy-if="getValue('input1') === 'option1'"
                 label="This input will hide when input1 is checked."
@@ -133,7 +133,7 @@
           <tangy-form id="my-form-3" title="My Form 3">
             <tangy-form-item id="item1">
               <tangy-checkbox name="input1">Would you like to skip then next input?</tangy-checkbox>
-              <tangy-input 
+              <tangy-input
                 name="input2"
                 tangy-if="inputs.input1.value !== 'on'"
                 tangy-action="editable"
@@ -160,14 +160,14 @@
               "
               >
               <tangy-checkbox name="checkbox1">Would you like to skip then next input?</tangy-checkbox>
-              <tangy-input 
+              <tangy-input
                 name="input1"
                 tangy-if="inputs.input1.value !== 'on'"
                 tangy-action="editable"
                 label="This input will disable when checkbox1 is checked."
               ></tangy-input>
               <tangy-checkbox name="checkbox2">Would you like to skip then next input?</tangy-checkbox>
-              <tangy-input 
+              <tangy-input
                 name="input2"
                 tangy-if="inputs.input1.value !== 'on'"
                 tangy-action="editable"
@@ -297,36 +297,41 @@
       <h3>Tangy Eftouch</h3>
       <demo-snippet>
         <template>
-          <tangy-eftouch
-                  introsrc="assets/sounds/1.mp3"
-                  transitionsrc="assets/sounds/swish.mp3"
-                  touchsrc="assets/sounds/pop.mp3"
-                  name="sofar"
-                  label=""
-                  incomplete=""
-                  on-change="">
-            <tangy-eftouch-slide
-                    introsrc="assets/sounds/1.mp3"
-                    transitionsrc="assets/sounds/swish.mp3"
-                    touchsrc="assets/sounds/pop.mp3"
-                    name="q1"
-                    label="Touch the turtle"
-                    columns="3"
-                    incomplete=""
-                    on-change="">
-              <tangy-eftouch-item width="100%" align="right" src="" value=""></tangy-eftouch-item>
-              <tangy-eftouch-item width="100%" align="right" src="assets/images/cat.png" value="cat"></tangy-eftouch-item>
-              <tangy-eftouch-item width="100%" align="right" src="assets/images/dog.png" value="dog"></tangy-eftouch-item>
+          <tangy-form id="my-form" title="My Form">
+            <tangy-form-item id="item1">
+              <tangy-eftouch
+                      introsrc="assets/sounds/1.mp3"
+                      transitionsrc="assets/sounds/swish.mp3"
+                      touchsrc="assets/sounds/pop.mp3"
+                      name="sofar"
+                      label=""
+                      incomplete=""
+                      on-change="">
+                <tangy-eftouch-slide
+                        introsrc="assets/sounds/1.mp3"
+                        transitionsrc="assets/sounds/swish.mp3"
+                        touchsrc="assets/sounds/pop.mp3"
+                        name="q1"
+                        label="Touch the turtle"
+                        columns="3"
+                        incomplete=""
+                        on-change="">
+                  <tangy-eftouch-item width="100%" align="right" src="" value=""></tangy-eftouch-item>
+                  <tangy-eftouch-item width="100%" align="right" src="assets/images/cat.png" value="cat"></tangy-eftouch-item>
+                  <tangy-eftouch-item width="100%" align="right" src="assets/images/dog.png" value="dog"></tangy-eftouch-item>
 
-              <tangy-eftouch-item width="100%" align="center" src="assets/images/pig.png" value="pig"></tangy-eftouch-item>
-              <tangy-eftouch-item width="100%" align="center" src="assets/images/turtle.png" value="turtle"></tangy-eftouch-item>
-              <tangy-eftouch-item width="100%" align="center" src="assets/images/cow.png" value="cow"></tangy-eftouch-item>
+                  <tangy-eftouch-item width="100%" align="center" src="assets/images/pig.png" value="pig"></tangy-eftouch-item>
+                  <tangy-eftouch-item width="100%" align="center" src="assets/images/turtle.png" value="turtle"></tangy-eftouch-item>
+                  <tangy-eftouch-item width="100%" align="center" src="assets/images/cow.png" value="cow"></tangy-eftouch-item>
 
-              <tangy-eftouch-item width="100%" align="right" src="" value=""></tangy-eftouch-item>
-              <tangy-eftouch-item width="100%" align="right" src="assets/images/fish.png" value="fish"></tangy-eftouch-item>
-              <tangy-eftouch-item width="100%" align="right" src="assets/images/bird.png" value="bird"></tangy-eftouch-item>
-            </tangy-eftouch-slide>
-          </tangy-eftouch>
+                  <tangy-eftouch-item width="100%" align="right" src="" value=""></tangy-eftouch-item>
+                  <tangy-eftouch-item width="100%" align="right" src="assets/images/fish.png" value="fish"></tangy-eftouch-item>
+                  <tangy-eftouch-item width="100%" align="right" src="assets/images/bird.png" value="bird"></tangy-eftouch-item>
+                </tangy-eftouch-slide>
+              </tangy-eftouch>
+            </tangy-form-item>
+          </tangy-form>
+
         </template>
       </demo-snippet>
 

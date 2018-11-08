@@ -20,7 +20,7 @@ export class TangyEftouchSlide extends PolymerElement {
   }
 
   static get _props() {
-   return ['name','introSrc','transitionSrc','touchSrc','touchSources','images','onChange','value','required','disabled','label','hidden','invalid','incomplete','columns']
+   return ['name','introSrc','transitionSrc','touchSrc','touchSources','onChange','value','required','disabled','label','hidden','invalid','incomplete','columns']
   }
 
   static get properties () {
@@ -31,22 +31,18 @@ export class TangyEftouchSlide extends PolymerElement {
       },
       introSrc: {
         type: String,
-        value: '../content/assets/sounds/1.mp3'
+        value: 'assets/sounds/1.mp3'
       },
       transitionSrc: {
         type: String,
-        value: '../content/assets/sounds/swish.mp3'
+        value: 'assets/sounds/swish.mp3'
       },
       touchSrc: {
         type: String,
-        value: '../content/assets/sounds/pop.mp3'
+        value: 'assets/sounds/pop.mp3'
       },
       touchSources: {
         type: Array
-      },
-      images: {
-        type: String,
-        value: '../content/assets/images/never.png,../content/assets/images/once.png,../content/assets/images/few.png,../content/assets/images/many.png'
       },
       onChange: {
         type: String,
@@ -144,8 +140,6 @@ export class TangyEftouchSlide extends PolymerElement {
       <paper-radio-group name="group" id="paper-radio-group">
       </paper-radio-group>
     </div>
-        <!--<div id="slides"><slot></slot></div> -->
-
     `
   }
 
@@ -169,7 +163,9 @@ export class TangyEftouchSlide extends PolymerElement {
     // Also create the image.
     this.querySelectorAll('tangy-eftouch-item').forEach(el => {
       let src = el.src
+      // let src = el.getAttribute('src')
       let value = el.value
+      // let value = el.getAttribute('value')
       if (src === '') {
         let button = document.createElement('paper-radio-button')
         // button.setAttribute('disabled', true)
@@ -184,8 +180,9 @@ export class TangyEftouchSlide extends PolymerElement {
         imageEl.id = 'image' + value
         imageEl.className = "acasi-image";
         paperRadioGroupEl.appendChild(button)
-        // let imageSel = this.resizeImage(imageEl.id);
         button.innerHTML = imageEl.outerHTML
+
+        // console.log("button!")
       }
     });
     // paperRadioGroupEl.addEventListener('change', this.onPaperRadioGroupChange.bind(this), false)
@@ -238,7 +235,7 @@ export class TangyEftouchSlide extends PolymerElement {
 
   ready() {
     super.ready();
-    const transition_sound_url = '../content/assets/sounds/swish.mp3'
+    const transition_sound_url = 'assets/sounds/swish.mp3'
 
     if (this.getAttribute('introSrc')) {
       this.transitionSound = new Audio(this.getAttribute('introSrc'));
