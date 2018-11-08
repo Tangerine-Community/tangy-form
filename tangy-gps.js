@@ -280,7 +280,7 @@ class TangyGps extends PolymerElement {
         this.hasGeofence = true
         this.inGeofence = (this.validMaxDelta > this.currentDelta) ? true : false
         this.invalid = (this.validMaxDelta > this.currentDelta) ? false : true 
-        this.geofenceMessage = (this.inGeofence) ? '✔ location verified' : '✗ location not verified'
+        this.geofenceMessage = (this.inGeofence) ? `✔ ${t('location verified')}` : t(`✗ ${t('location not verified')}`)
       }
     }
     if (this.currentAccuracy < 50) {
