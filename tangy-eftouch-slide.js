@@ -163,9 +163,13 @@ export class TangyEftouchSlide extends PolymerElement {
     // Also create the image.
     this.querySelectorAll('tangy-eftouch-item').forEach(el => {
       let src = el.src
-      // let src = el.getAttribute('src')
+      if (typeof src === 'undefined') {
+        src = el.getAttribute('src')
+      }
       let value = el.value
-      // let value = el.getAttribute('value')
+      if (typeof value === 'undefined') {
+        value = el.getAttribute('value')
+      }
       if (src === '') {
         let button = document.createElement('paper-radio-button')
         // button.setAttribute('disabled', true)
@@ -207,23 +211,6 @@ export class TangyEftouchSlide extends PolymerElement {
   }
 
   resizeImage(el) {
-    // let imageSel = document.querySelector('#' + imageId)
-    // let ratio = imageSel.parent().width() / imageSel.parent().height()
-
-    // let ratio = el.parentNode.offsetWidth / el.parentNode.offsetHeight
-    // // let pratio = imageSel.parent().parent().width() / imageSel.parent().parent().height()
-    // let pratio = el.parentNode.parentNode.offsetWidth / el.parentNode.parentNode.offsetHeight
-    // // let css = {width: '100%', height: 'auto'}
-    // if (ratio < pratio) {
-    //   el.parentNode.style.width = 'auto'
-    //   el.parentNode.style.height = '100%'
-    // } else {
-    //   el.parentNode.style.width = '100%'
-    //   el.parentNode.style.height = 'auto'
-    // }
-      // css = {width: 'auto', height: '100%'}
-    // el.parentNode.css(css)
-    // return imageSel;
 
     let columns = 3;
     if (typeof this.columns !== 'undefined') {
