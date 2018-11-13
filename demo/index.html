@@ -298,37 +298,50 @@
       <demo-snippet>
         <template>
           <tangy-form id="my-form" title="My Form">
+            <tangy-form-item id="intro">
+              In the next slide, select the Turtle.
+            </tangy-form-item>
             <tangy-form-item id="item1">
-              <tangy-eftouch
-                      introsrc="assets/sounds/1.mp3"
-                      transitionsrc="assets/sounds/swish.mp3"
-                      touchsrc="assets/sounds/pop.mp3"
-                      name="sofar"
-                      label=""
-                      incomplete=""
-                      on-change="">
-                <tangy-eftouch-slide
+              <template>
+                <tangy-eftouch
                         introsrc="assets/sounds/1.mp3"
                         transitionsrc="assets/sounds/swish.mp3"
                         touchsrc="assets/sounds/pop.mp3"
-                        name="q1"
-                        label="Touch the turtle"
-                        columns="3"
+                        name="sofar"
+                        label=""
                         incomplete=""
                         on-change="">
-                  <tangy-eftouch-item width="100%" align="right" src="" value=""></tangy-eftouch-item>
-                  <tangy-eftouch-item width="100%" align="right" src="assets/images/cat.png" value="cat"></tangy-eftouch-item>
-                  <tangy-eftouch-item width="100%" align="right" src="assets/images/dog.png" value="dog"></tangy-eftouch-item>
+                  <tangy-eftouch-slide
+                          introsrc="assets/sounds/1.mp3"
+                          transitionsrc="assets/sounds/swish.mp3"
+                          touchsrc="assets/sounds/pop.mp3"
+                          name="q1"
+                          label="Touch the turtle"
+                          columns="3"
+                          incomplete=""
+                          timestamp = ""
+                          on-change="">
+                    <tangy-eftouch-item width="100%" align="right" src="" value=""></tangy-eftouch-item>
+                    <tangy-eftouch-item width="100%" align="right" src="assets/images/cat.png"
+                                        value="cat"></tangy-eftouch-item>
+                    <tangy-eftouch-item width="100%" align="right" src="assets/images/dog.png"
+                                        value="dog"></tangy-eftouch-item>
 
-                  <tangy-eftouch-item width="100%" align="center" src="assets/images/pig.png" value="pig"></tangy-eftouch-item>
-                  <tangy-eftouch-item width="100%" align="center" src="assets/images/turtle.png" value="turtle"></tangy-eftouch-item>
-                  <tangy-eftouch-item width="100%" align="center" src="assets/images/cow.png" value="cow"></tangy-eftouch-item>
+                    <tangy-eftouch-item width="100%" align="center" src="assets/images/pig.png"
+                                        value="pig"></tangy-eftouch-item>
+                    <tangy-eftouch-item width="100%" align="center" src="assets/images/turtle.png"
+                                        value="turtle"></tangy-eftouch-item>
+                    <tangy-eftouch-item width="100%" align="center" src="assets/images/cow.png"
+                                        value="cow"></tangy-eftouch-item>
 
-                  <tangy-eftouch-item width="100%" align="right" src="" value=""></tangy-eftouch-item>
-                  <tangy-eftouch-item width="100%" align="right" src="assets/images/fish.png" value="fish"></tangy-eftouch-item>
-                  <tangy-eftouch-item width="100%" align="right" src="assets/images/bird.png" value="bird"></tangy-eftouch-item>
-                </tangy-eftouch-slide>
-              </tangy-eftouch>
+                    <tangy-eftouch-item width="100%" align="right" src="" value=""></tangy-eftouch-item>
+                    <tangy-eftouch-item width="100%" align="right" src="assets/images/fish.png"
+                                        value="fish"></tangy-eftouch-item>
+                    <tangy-eftouch-item width="100%" align="right" src="assets/images/bird.png"
+                                        value="bird"></tangy-eftouch-item>
+                  </tangy-eftouch-slide>
+                </tangy-eftouch>
+              </template>
             </tangy-form-item>
           </tangy-form>
 
