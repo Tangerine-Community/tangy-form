@@ -216,7 +216,9 @@ export class TangyEftouchSlide extends PolymerElement {
     if (typeof this.columns !== 'undefined') {
       columns = this.columns
     }
-    el.width = (el.parentNode.parentNode.offsetWidth - 130)/this.columns;
+    el.style.width = `${Math.floor(100*(1/this.columns))}%`
+    el.parentNode.style.width = `${Math.floor(100*(1/this.columns))}%`
+    el.style.float = 'left'
     // el.width = '100';
   }
 
