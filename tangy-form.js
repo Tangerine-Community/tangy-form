@@ -14,6 +14,7 @@ import { tangyFormReducer } from './tangy-form-reducer.js'
 //   <!-- Tangy Custom Inputs Elements -->
 import './tangy-input.js'
 import './tangy-timed.js'
+import './tangy-photo-capture.js'
 import './tangy-checkbox.js'
 import './tangy-checkboxes.js'
 import './tangy-radio-buttons.js'
