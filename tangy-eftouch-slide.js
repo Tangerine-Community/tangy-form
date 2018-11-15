@@ -94,12 +94,12 @@ export class TangyEftouchSlide extends PolymerElement {
   }
 
   static get template () {
-    return html`<style include="tangy-common-styles"></style>
+    return html`
+    <style include="tangy-common-styles"></style>
     <style include="tangy-element-styles"></style>
 
     <style>
       paper-radio-button {
-        margin-right: 25px;
         --paper-radio-button-size: 2em;
       }
       .eftouch-selected {
@@ -118,19 +118,19 @@ export class TangyEftouchSlide extends PolymerElement {
         background-color: var(--paper-indigo-400);
       }
       .av-image {
-          max-height: 100%;
-          max-width: 100%;
+        max-height: 100%;
+        max-width: 100%;
       }
       .av-cell {
-          margin: 0;
-          display: inline-block;
-          overflow: hidden;
+        margin: 0;
+        display: inline-block;
+        overflow: hidden;
       }
       #paper-radio-group {
-      display:flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: flex-end;
+        display:flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
       }
     </style>
 
@@ -211,7 +211,6 @@ export class TangyEftouchSlide extends PolymerElement {
   }
 
   resizeImage(el) {
-
     let columns = 3;
     if (typeof this.columns !== 'undefined') {
       columns = this.columns
@@ -219,7 +218,6 @@ export class TangyEftouchSlide extends PolymerElement {
     el.style.width = `${Math.floor(100*(1/this.columns))}%`
     el.parentNode.style.width = `${Math.floor(100*(1/this.columns))}%`
     el.style.float = 'left'
-    // el.width = '100';
   }
 
   ready() {
