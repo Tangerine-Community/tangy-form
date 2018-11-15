@@ -143,81 +143,22 @@ export class TangyEftouchSlide extends PolymerElement {
     `
   }
 
+  constructor() {
+    super()
+    this.value = {
+      startTime: null,
+      tapTime: null,
+      selection: null
+    }
+  }
+
   connectedCallback () {
     super.connectedCallback()
     this.t = {
       'replay': 'replay'
     }
-    // this.isReady = false
+    this.value = Object.assign({}, this.value, { startTime: new Date().getTime()})
     this.renderOptions()
-  }
-
-  renderOptions() {
-    let paperRadioGroupEl = this.shadowRoot.querySelector('paper-radio-group')
-    // let paperRadioGroupEl = this.shadowRoot.querySelector('tangy-eftouch-item')
-    // this.shadowRoot.querySelectorAll('tangy-eftouch-slide').forEach(el => {
-    //   console.log("yes")
-    // });
-    // Populate paper-radio-button elements by using image data in tangy-eftouch-item
-    // The radio-button value is taken from the imageArray src value.
-    // Also create the image.
-    this.querySelectorAll('tangy-eftouch-item').forEach(el => {
-      let src = el.src
-      if (typeof src === 'undefined') {
-        src = el.getAttribute('src')
-      }
-      let value = el.value
-      if (typeof value === 'undefined') {
-        value = el.getAttribute('value')
-      }
-      if (src === '') {
-        let button = document.createElement('paper-radio-button')
-        // button.setAttribute('disabled', true)
-        paperRadioGroupEl.appendChild(button)
-      } else {
-        let button = document.createElement('paper-radio-button')
-        button.name = value
-        if (this.disabled) button.setAttribute('disabled', true)
-        // button.setAttribute('style', '50px')
-        let imageEl = document.createElement('img')
-        imageEl.src = src
-        imageEl.id = 'image' + value
-        imageEl.className = "acasi-image";
-        paperRadioGroupEl.appendChild(button)
-        button.innerHTML = imageEl.outerHTML
-
-        // console.log("button!")
-      }
-    });
-    // paperRadioGroupEl.addEventListener('change', this.onPaperRadioGroupChange.bind(this), false)
-
-
-    paperRadioGroupEl.selected = this.value
-    if (this.required) paperRadioGroupEl.required = true
-    this.isReady = true
-
-    // Find all our img elements and populate the dataTouchSrc for each image.
-    this.imgElements = Array.prototype.slice.call(this.shadowRoot.querySelectorAll('img'));
-    for (let i = 0, len = this.imgElements.length; i < len; i++) {
-      let ele = this.imgElements[i];
-      this.resizeImage(ele);
-      if (typeof this.touchSources !== 'undefined' && this.touchSources.length > 1) {
-        let touchSrc = this.touchSources[i]
-        ele.dataTouchSrc = touchSrc
-      } else {
-        ele.dataTouchSrc = this.touchSrc
-      }
-    }
-  }
-
-  resizeImage(el) {
-    let columns = 3;
-    if (typeof this.columns !== 'undefined') {
-      columns = this.columns
-    }
-    el.style.width = `${Math.floor(100*(1/this.columns))}%`
-    el.parentNode.style.width = `${Math.floor(100*(1/this.columns))}%`
-    el.style.float = 'left'
   }
 
   ready() {
@@ -252,6 +193,74 @@ export class TangyEftouchSlide extends PolymerElement {
     // @TODO: Need to listen to slot for ready.
     setTimeout(() => this._prepareForm(), 200)
   }
+
+  renderOptions() {
+    let paperRadioGroupEl = this.shadowRoot.querySelector('paper-radio-group')
+    // let paperRadioGroupEl = this.shadowRoot.querySelector('tangy-eftouch-item')
+    // this.shadowRoot.querySelectorAll('tangy-eftouch-slide').forEach(el => {
+    //   console.log("yes")
+    // });
+    // Populate paper-radio-button elements by using image data in tangy-eftouch-item
+    // The radio-button value is taken from the imageArray src value.
+    // Also create the image.
+    this.querySelectorAll('tangy-eftouch-item').forEach(el => {
+      let src = el.src
+      if (typeof src === 'undefined') {
+        src = el.getAttribute('src')
+      }
+      let value = el.value
+      if (typeof value === 'undefined') {
+        value = el.getAttribute('value')
+      }
+      if (src === '') {
+        let button = document.createElement('paper-radio-button')
+        // button.setAttribute('disabled', true)
+        paperRadioGroupEl.appendChild(button)
+      } else {
+        let button = document.createElement('paper-radio-button')
+        button.name = value
+        button.setAttribute('name', value)
+        if (this.disabled) button.setAttribute('disabled', true)
+        // button.setAttribute('style', '50px')
+        let imageEl = document.createElement('img')
+        imageEl.src = src
+        imageEl.id = 'image' + value
+        imageEl.className = "acasi-image";
+        paperRadioGroupEl.appendChild(button)
+        button.innerHTML = imageEl.outerHTML
+
+        // console.log("button!")
+      }
+    });
+    paperRadioGroupEl.addEventListener('change', this.onPaperRadioGroupChange.bind(this), false)
+    paperRadioGroupEl.selected = this.value
+    if (this.required) paperRadioGroupEl.required = true
+    this.isReady = true
+
+    // Find all our img elements and populate the dataTouchSrc for each image.
+    this.imgElements = Array.prototype.slice.call(this.shadowRoot.querySelectorAll('img'));
+    for (let i = 0, len = this.imgElements.length; i < len; i++) {
+      let ele = this.imgElements[i];
+      this.resizeImage(ele);
+      if (typeof this.touchSources !== 'undefined' && this.touchSources.length > 1) {
+        let touchSrc = this.touchSources[i]
+        ele.dataTouchSrc = touchSrc
+      } else {
+        ele.dataTouchSrc = this.touchSrc
+      }
+    }
+  }
+
+  resizeImage(el) {
+    let columns = 3;
+    if (typeof this.columns !== 'undefined') {
+      columns = this.columns
+    }
+    el.style.width = `${Math.floor(100*(1/this.columns))}%`
+    el.parentNode.style.width = `${Math.floor(100*(1/this.columns))}%`
+    el.style.float = 'left'
+  }
+
 
   _prepareForm() {
 
@@ -300,6 +309,10 @@ export class TangyEftouchSlide extends PolymerElement {
   }
 
   onPaperRadioGroupChange(event) {
+    this.value = Object.assign({}, this.value, { 
+      tapTime: new Date().getTime(),
+      selection: event.target.name
+    })
     // Stop propagation of paper-radio-button change event so we can set the value of this element first.
     // Otherwise tangy-form-item will find the wrong value for this element.
     event.stopPropagation()
@@ -309,7 +322,7 @@ export class TangyEftouchSlide extends PolymerElement {
     this.dispatchEvent(new CustomEvent('INPUT_VALUE_CHANGE', {
       detail: {
         inputName: this.name,
-        inputValue: event.target.name,
+        inputValue: input.value,
         inputInvalid: false,
         inputIncomplete: false
       },
@@ -319,7 +332,7 @@ export class TangyEftouchSlide extends PolymerElement {
 
   onValueChange(value) {
     if (!this.isReady) return
-    this.$['paper-radio-group'].selected = value
+    this.$['paper-radio-group'].selected = value.selected
   }
 
   onDisabledChange(value) {
