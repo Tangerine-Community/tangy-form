@@ -211,6 +211,25 @@
         </template>
       </demo-snippet>
 
+      <h3>Tangy Geo Fence</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form>
+            <tangy-form-item on-change="
+              let selectedLocation = inputs.location.getSelectedLocation()
+              if (selectedLocation) {
+                inputs.gps.setAttribute('reference-latitude', selectedLocation.latitude)
+                inputs.gps.setAttribute('reference-longitude', selectedLocation.longitude)
+              }
+            ">
+            <h2>Which beach are you currently located?</h2>
+            <img src="map.png" style="width: 100%">
+            <tangy-location location-src="beach-locations.json" required name="location" show-levels="beach"></tangy-location>
+            <tangy-gps name="gps" valid-max-delta=30></tangy-gps>
+          </form>
+        </template>
+      </demo-snippet>
+
       <h3>tangy-form with dynamically-populated checkboxes</h3>
       <demo-snippet>
         <template>
