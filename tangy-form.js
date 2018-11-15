@@ -3,8 +3,6 @@ import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
 
 import './cat.js'
 import './tangy-form-item.js'
-import './tangy-cards.js'
-import './tangy-card.js'
 import './tangy-input-groups.js'
 import './tangy-input-group.js'
 import './tangy-common-styles.js'
