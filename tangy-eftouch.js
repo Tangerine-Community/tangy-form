@@ -2,6 +2,10 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import './tangy-common-styles.js'
 import './tangy-eftouch-slide.js';
 
+const initialState = {
+  currentSlide: 0
+}
+
 /**
  * `tangy-acasi`
  *
@@ -30,6 +34,11 @@ export class TangyEftouch extends PolymerElement {
       name: {
         type: String,
         value: ''
+      },
+      currentSlide: {
+        type: Number,
+        value: 0,
+        reflectToAttribute: true
       },
       onChange: {
         type: String,
@@ -84,15 +93,38 @@ export class TangyEftouch extends PolymerElement {
 
   connectedCallback () {
     super.connectedCallback()
+    this.store = Redux.createStore(this.reducer)
+    this.store.subscribe(() => this.render())
+    const foo = [...this.querySelectorAll('tangy-eftouch-slide')].forEach((el, i) => {
+      el.addEventListener('tangy-eftouch-slide-selection', () => this.store.dispatch({type: 'NEXT_SLIDE'}))
+    })
+    this.store.dispatch({type: 'INIT'})
+
   }
 
   render(value) {
+    const state = this.store.getState()
+    const foo = [...this.querySelectorAll('tangy-eftouch-slide')].forEach((el, i) => {
+        el.hidden = i !== state.currentSlide ? true : false
+    })
+    /*
     if (!this.shadowRoot) return
     this.shadowRoot.innerHTML = `
         <style include="tangy-common-styles"></style>
-      <style include="tangy-element-styles"></style>
-`
+        <style include="tangy-element-styles"></style>
+    `
+    */
+  }
 
+  reducer(state = initialState, action) {
+    switch(action.type) {
+      case 'INIT':
+        return Object.assign({}, state)
+      case 'NEXT_SLIDE':
+        return Object.assign({}, state, { currentSlide: state.currentSlide + 1 })
+      default:
+        return state
+    }
 
   }
 

@@ -29,6 +29,11 @@ export class TangyEftouchSlide extends PolymerElement {
         type: String,
         value: ''
       },
+      // Delay to show animation after selection.
+      noDelay: {
+        type: Boolean,
+        value: false
+      },
       introSrc: {
         type: String,
         value: 'assets/sounds/1.mp3'
@@ -96,7 +101,6 @@ export class TangyEftouchSlide extends PolymerElement {
   static get template () {
     return html`
     <style include="tangy-common-styles"></style>
-    <style include="tangy-element-styles"></style>
 
     <style>
       paper-radio-button {
@@ -300,6 +304,11 @@ export class TangyEftouchSlide extends PolymerElement {
       } else {
         // already preloaded
         this.touchSound.play();
+      }
+      if (this.noDelay) { 
+        this.dispatchEvent(new Event('change'))
+      } else {
+        setTimeout(() => this.dispatchEvent(new Event('change')), 500)
       }
     }
     this.imgElements.forEach(element => {
