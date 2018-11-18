@@ -290,7 +290,7 @@
           const element = fixture('TangyRadioButtonsFixture');
           assert.equal(element.shadowRoot.querySelectorAll('tangy-radio-button').length, 6)
         })
-        test('should have three columns', (done) => {
+        test('should have three columns', () => {
           const element = fixture('TangyRadioButtonsWithColumnsFixture');
           assert.equal(element.offsetHeight > 50, true)
         })
