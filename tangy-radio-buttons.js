@@ -32,6 +32,16 @@ class TangyRadioButtons extends PolymerElement {
           font-size: .75em;
           display: block;
         }
+        :host([columns]) tangy-radio-button {
+          padding: 0px;
+          margin: 15px 0px 0px;
+          border: 0px;
+        }
+        :host([no-margin]) tangy-radio-button {
+          padding: 0px;
+          margin: 0px 0px !important;
+          border: 0px;
+        }
       </style>
 
 
@@ -91,7 +101,19 @@ class TangyRadioButtons extends PolymerElement {
         type: Boolean,
         value: true,
         observer: 'reflect',
+        reflecttoattribute: true
+      },
+      columns: {
+        type: Number,
+        value: 0,
+        observer: 'render',
         reflectToAttribute: true
+      },
+      noMargin: {
+        type: Boolean,
+        value: false,
+        observer: 'reflect',
+        reflecttoattribute: true
       }
     }
   }
@@ -119,6 +141,10 @@ class TangyRadioButtons extends PolymerElement {
       let el = document.createElement('tangy-radio-button')
       el.name = option.value
       el.innerHTML = option.innerHTML
+      if (this.columns > 0) {
+        el.style.width = `${Math.floor(100*(1/this.columns))}%`
+        el.style.float = 'left'
+      }
       this.$.container.appendChild(el)
     }
 

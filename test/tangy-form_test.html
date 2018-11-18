@@ -240,11 +240,48 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyRadioButtonsFixture">
+      <template>
+        <tangy-radio-buttons name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange">Orange</option>
+          <option name="banana">Banana</option>
+          <option name="tangerine">Tangerine</option>
+          <option name="cantalope">Cantalope</option>
+          <option name="cherry">Cherry</option>
+          <option name="kiwi">Kiwi</option>
+        </tangy-radio-buttons>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="TangyRadioButtonsWithColumnsFixture">
+      <template>
+        <tangy-radio-buttons no-margin columns="3" name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange">Orange</option>
+          <option name="banana">Banana</option>
+          <option name="tangerine">Tangerine</option>
+          <option name="cantalope">Cantalope</option>
+          <option name="cherry">Cherry</option>
+          <option name="kiwi">Kiwi</option>
+        </tangy-radio-buttons>
+      </template>
+    </test-fixture>
+
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import { Loc } from '../loc.js'
       import stub from './stub.js' 
       import { TangyFormResponseModel } from '../tangy-form-response-model.js'
+
+      suite('tangy-radio-buttons', () => {
+        test('should have six options', () => {
+          const element = fixture('TangyRadioButtonsFixture');
+          assert.equal(element.shadowRoot.querySelectorAll('tangy-radio-button').length, 6)
+        })
+        test('should have three columns', (done) => {
+          const element = fixture('TangyRadioButtonsWithColumnsFixture');
+          assert.equal(element.offsetHeight > 50, true)
+        })
+      })
 
       suite('tangy-input-groups', () => {
         test('tangy-input-groups start with 3 groups', () => {
