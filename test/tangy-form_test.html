@@ -240,6 +240,19 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyFormItemFixture">
+      <template>
+        <tangy-form id="form1">
+          <tangy-form-item id="item1">
+            <tangy-input name="foo"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item2">
+            Item 2.
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <test-fixture id="TangyRadioButtonsFixture">
       <template>
         <tangy-radio-buttons name="fruit_selection" label="What is your favorite fruit?">
@@ -280,6 +293,15 @@
         test('should have three columns', (done) => {
           const element = fixture('TangyRadioButtonsWithColumnsFixture');
           assert.equal(element.offsetHeight > 50, true)
+        })
+      })
+
+      suite('tangy-form-item', () => {
+        test('should go to next item on input "next" event', (done) => { 
+          const element = fixture('TangyFormItemFixture');
+          element.newResponse()
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-input').dispatchEvent(new CustomEvent('next'))
+          assert.equal(element.querySelectorAll('tangy-form-item')[1].open, true)
         })
       })
 

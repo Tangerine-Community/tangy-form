@@ -379,6 +379,7 @@ export class TangyFormItem extends PolymerElement {
       .querySelectorAll('[name]')
       .forEach(input => {
         input.addEventListener('change', _ => this.fireHook('on-change', _))
+        input.addEventListener('next', _ => this.next())
       })
     let tangyCompleteButtonEl = this.$.content
       .querySelector('tangy-complete-button')
