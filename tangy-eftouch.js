@@ -29,6 +29,26 @@ export class TangyEftouch extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      transitionMessage: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      transitionSound: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      transitionDelay: {
+        type: Number,
+        value: 0,
+        reflectToAttribute: true
+      },
+      inputSound: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       warningTime: {
         type: Number,
         value: 0,
@@ -104,6 +124,20 @@ export class TangyEftouch extends PolymerElement {
     if (!this.shadowRoot) return
     this.shadowRoot.innerHTML = `
       <style>
+        #transition {
+          padding: 15px;
+        }
+        :host(:not([transition-triggered])) #transition {
+          opacity: 0;
+        }
+        :host([transition-triggered]) #transition {
+          opacity: 1;
+          transition: opacity .5s ease-in-out;
+          -webkit-transition: opacity .5s ease-in-out;
+          -moz-transition: opacity .5s ease-in-out;
+          -ms-transition: opacity .5s ease-in-out;
+          -o-transition: opacity .5s ease-in-out;
+        }
         #warning {
           padding: 15px;
         }
@@ -119,6 +153,11 @@ export class TangyEftouch extends PolymerElement {
           -o-transition: opacity .5s ease-in-out;
         }
       </style>
+      ${this.transitionMessage ? `
+        <div id="transition">
+          ${this.transitionMessage}
+        </div>
+      ` : ''}
       ${this.warningMessage ? `
         <div id="warning">
           ${this.warningMessage}
@@ -134,14 +173,24 @@ export class TangyEftouch extends PolymerElement {
   }
 
   onRadioChange(radioButtons) {
+    if (this.inputSound) new Audio(this.inputSound).play()
     this.value = Object.assign({}, this.value, {
       selection: radioButtons.value.find(button => button.value === 'on') ? radioButtons.value.find(button => button.value === 'on').name : '',
       selectionTime: new Date().getTime()
     })
     this.dispatchEvent(new Event('change'))
-    if (this.autoProgress) {
-      this.dispatchEvent(new CustomEvent('next'))
+    if (this.autoProgress && this.transitionDelay > 0) {
+      this.setAttribute('transition-triggered', true)
+      setTimeout(() => this.transition(), this.transitionDelay)
+    } else if (this.autoProgress && this.transitionDelay === 0) {
+      this.setAttribute('transition-triggered', true)
+      this.transition()
     }
+  }
+
+  transition() {
+    if (this.transitionSound) new Audio(this.transitionSound).play()
+    this.dispatchEvent(new CustomEvent('next'))
   }
 
 }

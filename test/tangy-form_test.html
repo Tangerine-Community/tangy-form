@@ -337,11 +337,20 @@
       </template>
     </test-fixture>
 
-    <test-fixture id="EFTouchSoundFixture">
+    <test-fixture id="EFTouchTransitionFixture">
       <template>
-        <tangy-eftouch input-sound="sounds/pop.mp3" on-display-sound="sounds/intro.mp3" columns="3" name="fruit_selection" label="What is your favorite fruit?">
-          <option name="orange" correct src="assets/images/cat.png"></option>
-          <option name="banana" correct src="assets/images/cat.png"></option>
+        <tangy-eftouch 
+          input-sound="assets/sounds/pop.mp3" 
+          transition-sound="assets/sounds/swish.mp3"
+          transition-delay=100 
+          transition-message="You are being transerred to the next item."
+          auto-progress
+          columns="3"
+          name="fruit_selection"
+          label="What is your favorite fruit?"
+          >
+          <option name="orange" src="assets/images/cat.png"></option>
+          <option name="banana" src="assets/images/cat.png"></option>
           <option name="tangerine" src="assets/images/cat.png"></option>
           <option name="cantalope" src="assets/images/cat.png"></option>
           <option name="cherry" src="assets/images/cat.png"></option>
@@ -423,12 +432,23 @@
           const element = fixture('EFTouchWarningFixture')
           setTimeout(() => {
             assert.equal(element.hasAttribute('warning-triggered'), true)
+            done()
           }, 100)
         });
 
-        test('should play "display sound" and "input sound"', () => { 
-          const element = fixture('EFTouchSoundFixture')
-          // @TODO Make sure that transition sound and introduction sound are the same thing.
+        test('should transition with delay, message, and sound', (done) => { 
+          const element = fixture('EFTouchTransitionFixture')
+          let eventDidFire = false
+          element.addEventListener('next', () => {
+            eventDidFire = true
+          })
+          element.shadowRoot.querySelector('tangy-radio-buttons').shadowRoot.querySelector('tangy-radio-button').shadowRoot.querySelector('paper-radio-button').click()
+          setTimeout(() => {
+            assert.equal(eventDidFire, true)
+            done()
+          }, 101)
+          assert.equal(eventDidFire, false)
+          assert.equal(element.hasAttribute('transition-triggered'), true)
         });
 
         // @TODO?
