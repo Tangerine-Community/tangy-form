@@ -13,12 +13,7 @@ import './tangy-element-styles.js'
      */
 export class TangyRadioButton extends PolymerElement {
   static get template () {
-    return html`
-    <style include="tangy-common-styles"></style>
-    <style include="tangy-element-styles"></style>
-
-      <paper-radio-button id="radioButton">[[label]]</paper-radio-button>
-    `
+    return html``
   }
 
   static get is () {
@@ -27,6 +22,11 @@ export class TangyRadioButton extends PolymerElement {
 
   static get properties () {
     return {
+      hideButton: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
       name: {
         type: String,
         value: '',
@@ -39,19 +39,19 @@ export class TangyRadioButton extends PolymerElement {
       required: {
         type: Boolean,
         value: false,
-        observer: 'onRequiredChange',
+        observer: 'render',
         reflectToAttribute: true
       },
       disabled: {
         type: Boolean,
         value: false,
-        observer: 'onDisabledChange',
+        observer: 'render',
         reflectToAttribute: true
       },
       invalid: {
         type: Boolean,
         value: false,
-        observer: 'onInvalidChange',
+        observer: 'render',
         reflectToAttribute: true
       },
       incomplete: {
@@ -62,12 +62,13 @@ export class TangyRadioButton extends PolymerElement {
       hidden: {
         type: Boolean,
         value: false,
+        observer: 'render',
         reflectToAttribute: true
       },
       value: {
         type: String,
         value: '',
-        observer: 'onValueChange',
+        observer: 'render',
         reflectToAttribute: true
       }
 
@@ -76,54 +77,41 @@ export class TangyRadioButton extends PolymerElement {
 
   connectedCallback () {
     super.connectedCallback()
-    if (this.value) this.$.radioButton.checked = true
-    if (this.label == '' && this.innerHTML !== '') {
-      this.label = this.innerHTML
-    }
-    this.$.radioButton.addEventListener('change', (e) => {
+    this.render()
+  }
+
+  render() {
+    this.shadowRoot.innerHTML = `    
+      <style include="tangy-common-styles"></style>
+      <style include="tangy-element-styles"></style>
+      <paper-radio-button
+        ${this.required ? 'required' : ''}
+        ${this.invalid ? 'invalid' : ''}
+        ${this.disabled ? 'disabled' : ''}
+        ${this.hidden ? 'hidden' : ''}
+        ${this.value ? 'checked' : ''}
+        >
+        ${this.label ? this.label : this.innerHTML}
+      </paper-radio-button>
+    `
+    if (this.hideButton) this.shadowRoot.querySelector('paper-radio-button').shadowRoot.querySelector('#radioContainer').style.display = 'none'
+    this.shadowRoot.querySelector('paper-radio-button').addEventListener('change', (e) => {
       e.stopPropagation()
       let incomplete = (!e.target.checked)
       this.value = e.target.checked ? 'on' : ''
-      this.dispatchEvent(new Event('change', { bubbles: true }))
+      this.dispatchEvent(new CustomEvent('change', { bubbles: true }))
+      // @TODO Deprecated API. Remove ready?
       this.dispatchEvent(new CustomEvent('INPUT_VALUE_CHANGE', {
         bubbles: true,
         detail: {
           inputName: this.name,
           inputValue: !!(e.target.checked),
           inputIncomplete: incomplete,
-          inputInvalid: !this.$.radioButton.validate()
+          inputInvalid: !this.shadowRoot.querySelector('paper-radio-button').validate()
         }
       }))
     })
   }
 
-  onRequiredChange (value) {
-    if (value === false) {
-      this.$.radioButton.removeAttribute('required')
-    } else {
-      this.$.radioButton.setAttribute('required', true)
-    }
-  }
-
-  onInvalidChange (value) {
-    if (value === false) {
-      this.$.radioButton.removeAttribute('invalid')
-    } else {
-      this.$.radioButton.setAttribute('invalid', true)
-    }
-  }
-
-  onDisabledChange (value) {
-    if (value === false) {
-      this.$.radioButton.removeAttribute('disabled')
-    } else {
-      this.$.radioButton.setAttribute('disabled', true)
-    }
-  }
-
-  onValueChange (value) {
-    if (value) this.$.radioButton.setAttribute('checked', true)
-    if (!value) this.$.radioButton.removeAttribute('checked')
-  }
 }
 window.customElements.define(TangyRadioButton.is, TangyRadioButton)

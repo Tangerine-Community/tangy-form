@@ -253,6 +253,12 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyRadioButtonHideButtonFixture">
+      <template>
+        <tangy-radio-button name="foo" hide-button>Foo</tangy-radio-button>
+      </template>
+    </test-fixture>
+
     <test-fixture id="TangyRadioButtonsFixture">
       <template>
         <tangy-radio-buttons name="fruit_selection" label="What is your favorite fruit?">
@@ -279,40 +285,195 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyRadioButtonsHideButtonsFixture">
+      <template>
+        <tangy-radio-buttons name="fruit_selection" label="What is your favorite fruit?" hide-buttons>
+          <option name="orange">Orange</option>
+          <option name="banana">Banana</option>
+          <option name="tangerine">Tangerine</option>
+          <option name="cantalope">Cantalope</option>
+          <option name="cherry">Cherry</option>
+          <option name="kiwi">Kiwi</option>
+        </tangy-radio-buttons>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchFixture">
+      <template>
+        <tangy-eftouch columns="3" name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange">Orange</option>
+          <option name="banana">Banana</option>
+          <option name="tangerine">Tangerine</option>
+          <option name="cantalope">Cantalope</option>
+          <option name="cherry">Cherry</option>
+          <option name="kiwi">Kiwi</option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchAutoProgressFixture">
+      <template>
+        <tangy-eftouch auto-progress columns="3" name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange">Orange</option>
+          <option name="banana">Banana</option>
+          <option name="tangerine">Tangerine</option>
+          <option name="cantalope">Cantalope</option>
+          <option name="cherry">Cherry</option>
+          <option name="kiwi">Kiwi</option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchImagesFixture">
+      <template>
+        <tangy-eftouch auto-progress columns="3" name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange" src="assets/images/cat.png"></option>
+          <option name="banana" src="assets/images/cat.png"></option>
+          <option name="tangerine" src="assets/images/cat.png"></option>
+          <option name="cantalope" src="assets/images/cat.png"></option>
+          <option name="cherry" src="assets/images/cat.png"></option>
+          <option name="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchSoundFixture">
+      <template>
+        <tangy-eftouch input-sound="sounds/pop.mp3" on-display-sound="sounds/intro.mp3" columns="3" name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange" correct src="assets/images/cat.png"></option>
+          <option name="banana" correct src="assets/images/cat.png"></option>
+          <option name="tangerine" src="assets/images/cat.png"></option>
+          <option name="cantalope" src="assets/images/cat.png"></option>
+          <option name="cherry" src="assets/images/cat.png"></option>
+          <option name="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+
+    <test-fixture id="EFTouchCorrectFixture">
+      <template>
+        <tangy-eftouch incorrect-message="You chose the wrong option. Try again." columns="3" name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange" correct src="assets/images/cat.png"></option>
+          <option name="banana" correct src="assets/images/cat.png"></option>
+          <option name="tangerine" src="assets/images/cat.png"></option>
+          <option name="cantalope" src="assets/images/cat.png"></option>
+          <option name="cherry" src="assets/images/cat.png"></option>
+          <option name="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+
+
+    <test-fixture id="TangyRadioButtonFixture">
+      <template>
+        <tangy-radio-button name="foo">foo</tangy-radio-button>
+      </template>
+    </test-fixture>
+
+
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import { Loc } from '../loc.js'
       import stub from './stub.js' 
       import { TangyFormResponseModel } from '../tangy-form-response-model.js'
 
+      suite('tangy-radio-button', () => {
+        test('should hide button', () => { 
+          const element = fixture('TangyRadioButtonHideButtonFixture');
+          element.style.display = 'inline-block'
+          assert.equal(element.offsetWidth < 50, true)
+        })
+        test('should change', () => { 
+          const element = fixture('TangyRadioButtonFixture');
+          let eventDidFire = false
+          element.addEventListener('change', _ => {
+            eventDidFire = true
+          })
+          // Note how we need to reach all the way into tangy-radio-button to click it in order for the change event to fire.
+          element.shadowRoot.querySelector('paper-radio-button').click()
+          assert.equal(element.value, 'on')
+          assert.equal(eventDidFire, true)
+        })
+      })
+
+      suite('tangy-eftouch', () => {
+
+        test('should have value after selection', () => { 
+          const element = fixture('EFTouchFixture');
+          element.shadowRoot.querySelector('tangy-radio-buttons').shadowRoot.querySelector('tangy-radio-button').shadowRoot.querySelector('paper-radio-button').click()
+          // @TODO Should be 'orange'. There is a bug deeper down causing radio button labels to be names.
+          assert.equal(element.value.selection, 'Orange')
+          assert.equal(element.value.selectionTime !== 0, true)
+        })
+
+        test('should auto-progress after selection', () => {
+          const element = fixture('EFTouchAutoProgressFixture');
+          let eventDidFire = false
+          element.addEventListener('next', _ => {
+            eventDidFire = true
+          })
+          element.shadowRoot.querySelector('tangy-radio-buttons').shadowRoot.querySelector('tangy-radio-button').shadowRoot.querySelector('paper-radio-button').click()
+          assert.equal(eventDidFire, true)
+        });
+
+        test('should show images for options', () => { 
+          const element = fixture('EFTouchImagesFixture')
+          assert(element.shadowRoot.querySelectorAll('img').length, 6)
+        })
+
+        test('should give warning message after hitting warning time', () => { });
+
+        test('should play "display sound" and "input sound"', () => { 
+          const element = fixture('EFTouchSoundFixture')
+          // @TODO Make sure that transition sound and introduction sound are the same thing.
+        });
+
+        // @TODO?
+        test('should instruct to provide correction and show incorrect options highlighted in green', () => { 
+          // A single correctable setting implies that you always show the incorrect options after selecting an incorrect option.
+          const element = fixture('EFTouchCorrectFixture');
+        })
+        test('should instruct to provide correction and not show correct or incorrect options', () => { })
+        test('should not allow correction', () => { })
+        test('should proceed after correction', () => { })
+        test('should lock down selection after time limit reached', () => { });
+        test('should proceed to next after limit reached', () => { });
+        test('should hide controls', () => { });
+        test('should have a transition delay', () => { });
+        test('should give transition message with delay', () => { });
+        test('should be fullscreen', () => { });
+
+      })
+
       suite('tangy-radio-buttons', () => {
+
         test('should have six options', () => {
           const element = fixture('TangyRadioButtonsFixture');
           assert.equal(element.shadowRoot.querySelectorAll('tangy-radio-button').length, 6)
         })
+
         test('should have three columns', () => {
           const element = fixture('TangyRadioButtonsWithColumnsFixture');
           assert.equal(element.offsetHeight > 50, true)
         })
+
       })
 
       suite('tangy-form-item', () => {
-        test('should go to next item on input "next" event', (done) => { 
+
+        test('should go to next item on input "next" event', () => { 
           const element = fixture('TangyFormItemFixture');
           element.newResponse()
           element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-input').dispatchEvent(new CustomEvent('next'))
           assert.equal(element.querySelectorAll('tangy-form-item')[1].open, true)
         })
-      })
 
-      suite('tangy-eftouch', () => {
-        test('should proceed after selection', () => { });
-        test('should instruct to provide correction', () => { })
-        test('should proceed after correction', () => { })
-        test('should have points after selection', () => { });
-        test('should run out of time', () => { });
-        test('should give warning', () => { });
-        test('should give transition message with delay', () => { });
+        test('should be fullscreen', () => {
+          // @TODO?
+        })
+
       })
 
       suite('tangy-input-groups', () => {
@@ -421,135 +582,6 @@
       })
 
       suite('tangy-form', () => {
-
-        test('tangy-card has initial value', () => {
-          const element = fixture('TangyCardFixture');
-          assert.equal(element.value.length, 2)
-        })
-
-        test('tangy-card has value after user input', () => {
-          const element = fixture('TangyCardFixture');
-          element.shadowRoot.querySelector('[name]').value = 'foo'
-          assert.equal(element.value[0].value, 'foo')
-        })
-
-        test('tangy-card resumes when value when set', () => {
-          const element = fixture('TangyCardFixture');
-          element.value = [
-            {
-              "name": "first_name",
-              "private": false,
-              "label": "First name",
-              "type": "",
-              "errorMessage": "",
-              "required": false,
-              "disabled": false,
-              "hidden": false,
-              "invalid": false,
-              "incomplete": true,
-              "value": "foo",
-              "allowedPattern": "",
-              "min": "",
-              "max": "",
-              "tagName": "TANGY-INPUT"
-            },
-            {
-              "name": "last_name",
-              "private": false,
-              "label": "Last name",
-              "type": "",
-              "errorMessage": "",
-              "required": false,
-              "disabled": false,
-              "hidden": false,
-              "invalid": false,
-              "incomplete": true,
-              "value": "",
-              "allowedPattern": "",
-              "min": "",
-              "max": "",
-              "tagName": "TANGY-INPUT"
-            }
-          ] 
-          assert.equal(element.value[0].value, 'foo')
-
-        })
-
-        test('tangy-cards start with 3 cards', () => {
-          const element = fixture('TangyCardsFixture');
-          assert.equal(element.shadowRoot.querySelectorAll('tangy-card').length, 3)
-        });
-
-        test('tangy-cards creates another card', () => {
-          const element = fixture('TangyCardsFixture');
-          element.shadowRoot.querySelector('.add-another').click()
-          assert.equal(element.shadowRoot.querySelectorAll('tangy-card').length, 4)
-        });
-
-        test('tangy-cards removes a card', () => {
-          const element = fixture('TangyCardsFixture');
-          element.shadowRoot.querySelector('tangy-card').shadowRoot.querySelector('#remove').click()
-          assert.equal(element.shadowRoot.querySelectorAll('tangy-card').length, 2)
-          assert.equal(element.value.length, 2)
-        });
-
-        test('tangy-cards resumes with 2', () => {
-          const element = fixture('TangyCardsFixture');
-          element.value = [
-            {
-              "name": "755223b8-34ff-49b7-8de8-084809499939",
-              "value": []
-            },
-            {
-              "name": "6a4f2bc7-2854-455c-a65a-4ecbc23417ae",
-              "value": []
-            }
-          ]
-          assert.equal(element.shadowRoot.querySelectorAll('tangy-card').length, 2)
-        });
-
-        test('tangy-cards has different value after user input', () => {
-          const element = fixture('TangyCardsFixture');
-          element.value = [
-            {
-              "name": "755223b8-34ff-49b7-8de8-084809499939",
-              "value": []
-            },
-            {
-              "name": "6a4f2bc7-2854-455c-a65a-4ecbc23417ae",
-              "value": []
-            }
-          ]
-          element.shadowRoot.querySelector('tangy-card').$.content.querySelector('[name=first_name]').value = 'foo'
-          assert.equal(element.value[0].value[0].value, 'foo')
-        });
-
-        test('tangy-cards should disable', () => {
-          // @TODO
-        })
-
-        test('tangy-cards should validate', () => {
-          // @TODO
-        })
-
-        test('tangy-cards has value in a form', () => {
-          const element = fixture('TangyCardsFullFixture');
-          //const element = fixture('HelloWorldFixture');
-          element.newResponse()
-          element.querySelector('tangy-form-item').shadowRoot.querySelector('dom-if').render()
-          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-cards').shadowRoot.querySelector('tangy-card').shadowRoot.querySelector('[name]').value = 'foo'
-          element.querySelector('tangy-form-item').shadowRoot.querySelector('#complete').click()
-          assert.equal((element.response.items[0].inputs[0].value[0].value[0].value === 'foo'), true)
-        })
-  
-        test('tangy-cards resumes in a form', () => {
-          const element = fixture('TangyCardsFullFixture');
-          //const element = fixture('HelloWorldFixture');
-          element.response = window.stub.responseWithTangyCards
-          element.querySelector('tangy-form-item').shadowRoot.querySelector('dom-if').render()
-          element.querySelector('tangy-form-item').shadowRoot.querySelector('#open').click()
-          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-cards').shadowRoot.querySelector('tangy-card').shadowRoot.querySelector('[name]').value, 'foo')
-        })
 
         test('hello world without errors', () => {
           const element = fixture('HelloWorldFixture');

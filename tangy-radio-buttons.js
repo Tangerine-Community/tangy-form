@@ -55,6 +55,11 @@ class TangyRadioButtons extends PolymerElement {
 
   static get properties() {
     return {
+      hideButtons: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
       name: {
         type: String,
         value: '',
@@ -139,6 +144,7 @@ class TangyRadioButtons extends PolymerElement {
     let options = this.querySelectorAll('option')
     for (let option of options) {
       let el = document.createElement('tangy-radio-button')
+      el.hideButton = this.hideButtons ? true : false
       el.name = option.value
       el.innerHTML = option.innerHTML
       if (this.columns > 0) {
