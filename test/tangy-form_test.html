@@ -350,6 +350,20 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="EFTouchWarningFixture">
+      <template>
+        <tangy-eftouch warning-time=100 warning-message="You are running out of time!" columns="3" name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange" src="assets/images/cat.png"></option>
+          <option name="banana" src="assets/images/cat.png"></option>
+          <option name="tangerine" src="assets/images/cat.png"></option>
+          <option name="cantalope" src="assets/images/cat.png"></option>
+          <option name="cherry" src="assets/images/cat.png"></option>
+          <option name="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+
 
     <test-fixture id="EFTouchCorrectFixture">
       <template>
@@ -379,24 +393,6 @@
       import stub from './stub.js' 
       import { TangyFormResponseModel } from '../tangy-form-response-model.js'
 
-      suite('tangy-radio-button', () => {
-        test('should hide button', () => { 
-          const element = fixture('TangyRadioButtonHideButtonFixture');
-          element.style.display = 'inline-block'
-          assert.equal(element.offsetWidth < 50, true)
-        })
-        test('should change', () => { 
-          const element = fixture('TangyRadioButtonFixture');
-          let eventDidFire = false
-          element.addEventListener('change', _ => {
-            eventDidFire = true
-          })
-          // Note how we need to reach all the way into tangy-radio-button to click it in order for the change event to fire.
-          element.shadowRoot.querySelector('paper-radio-button').click()
-          assert.equal(element.value, 'on')
-          assert.equal(eventDidFire, true)
-        })
-      })
 
       suite('tangy-eftouch', () => {
 
@@ -423,7 +419,12 @@
           assert(element.shadowRoot.querySelectorAll('img').length, 6)
         })
 
-        test('should give warning message after hitting warning time', () => { });
+        test('should give warning message after hitting warning time', (done) => { 
+          const element = fixture('EFTouchWarningFixture')
+          setTimeout(() => {
+            assert.equal(element.hasAttribute('warning-triggered'), true)
+          }, 100)
+        });
 
         test('should play "display sound" and "input sound"', () => { 
           const element = fixture('EFTouchSoundFixture')
@@ -447,33 +448,46 @@
 
       })
 
-      suite('tangy-radio-buttons', () => {
+      suite('tangy-radio-button', () => {
+        test('should hide button', () => { 
+          const element = fixture('TangyRadioButtonHideButtonFixture');
+          element.style.display = 'inline-block'
+          assert.equal(element.offsetWidth < 50, true)
+        })
+        test('should change', () => { 
+          const element = fixture('TangyRadioButtonFixture');
+          let eventDidFire = false
+          element.addEventListener('change', _ => {
+            eventDidFire = true
+          })
+          // Note how we need to reach all the way into tangy-radio-button to click it in order for the change event to fire.
+          element.shadowRoot.querySelector('paper-radio-button').click()
+          assert.equal(element.value, 'on')
+          assert.equal(eventDidFire, true)
+        })
+      })
 
+      suite('tangy-radio-buttons', () => {
         test('should have six options', () => {
           const element = fixture('TangyRadioButtonsFixture');
           assert.equal(element.shadowRoot.querySelectorAll('tangy-radio-button').length, 6)
         })
-
         test('should have three columns', () => {
           const element = fixture('TangyRadioButtonsWithColumnsFixture');
           assert.equal(element.offsetHeight > 50, true)
         })
-
       })
 
       suite('tangy-form-item', () => {
-
         test('should go to next item on input "next" event', () => { 
           const element = fixture('TangyFormItemFixture');
           element.newResponse()
           element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-input').dispatchEvent(new CustomEvent('next'))
           assert.equal(element.querySelectorAll('tangy-form-item')[1].open, true)
         })
-
         test('should be fullscreen', () => {
           // @TODO?
         })
-
       })
 
       suite('tangy-input-groups', () => {

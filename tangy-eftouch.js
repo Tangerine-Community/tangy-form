@@ -29,6 +29,16 @@ export class TangyEftouch extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      warningTime: {
+        type: Number,
+        value: 0,
+        reflectToAttribute: true
+      },
+      warningMessage: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       name: {
         type: String,
         value: ''
@@ -82,12 +92,38 @@ export class TangyEftouch extends PolymerElement {
   connectedCallback () {
     super.connectedCallback()
     this.render()
+    if (this.warningMessage) {
+      setTimeout(() => {
+        this.setAttribute('warning-triggered', true)
+      }, this.warningTime)
+    }
   }
 
   render(value) {
     const options = [...this.querySelectorAll('option')]
     if (!this.shadowRoot) return
     this.shadowRoot.innerHTML = `
+      <style>
+        #warning {
+          padding: 15px;
+        }
+        :host(:not([warning-triggered])) #warning {
+          opacity: 0;
+        }
+        :host([warning-triggered]) #warning {
+          opacity: 1;
+          transition: opacity .5s ease-in-out;
+          -webkit-transition: opacity .5s ease-in-out;
+          -moz-transition: opacity .5s ease-in-out;
+          -ms-transition: opacity .5s ease-in-out;
+          -o-transition: opacity .5s ease-in-out;
+        }
+      </style>
+      ${this.warningMessage ? `
+        <div id="warning">
+          ${this.warningMessage}
+        </div>
+      ` : ''}
       <tangy-radio-buttons columns="${this.columns}" hide-buttons>
         ${options.map(option => `
           <option value="${option.value}">${option.getAttribute('src') ? `<img style="width:100%" src="${option.getAttribute('src')}">` : option.innerHTML}</option>
