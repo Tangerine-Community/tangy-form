@@ -42,6 +42,12 @@ class TangyRadioButtons extends PolymerElement {
           margin: 0px 0px !important;
           border: 0px;
         }
+        :host([columns="0"]) tangy-radio-button {
+          display: block;
+        }
+        .row {
+          display: inline-block;
+        }
       </style>
 
 
@@ -142,6 +148,9 @@ class TangyRadioButtons extends PolymerElement {
     this.$.container.innerHTML = ''
     // Populate options as tangy-radio-button elements
     let options = this.querySelectorAll('option')
+    let columnNumber = 1
+    let row = document.createElement('div')
+    row.classList.add('row')
     for (let option of options) {
       let el = document.createElement('tangy-radio-button')
       el.hideButton = this.hideButtons ? true : false
@@ -150,8 +159,18 @@ class TangyRadioButtons extends PolymerElement {
       if (this.columns > 0) {
         el.style.width = `${Math.floor(100*(1/this.columns))}%`
         el.style.float = 'left'
+        if (columnNumber%this.columns === 0) {
+          row.appendChild(el)
+          this.$.container.appendChild(row)
+          row = document.createElement('div')
+          row.classList.add('row')
+        } else {
+          row.appendChild(el)
+        }
+        columnNumber++
+      } else {
+        this.$.container.appendChild(el)
       }
-      this.$.container.appendChild(el)
     }
 
     let newValue = []
