@@ -124,6 +124,9 @@ export class TangyEftouch extends PolymerElement {
     if (!this.shadowRoot) return
     this.shadowRoot.innerHTML = `
       <style>
+        :host {
+          display: inline-block;
+        }
         #transition {
           padding: 15px;
         }
