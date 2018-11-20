@@ -35,7 +35,12 @@ class TangyRadioButtons extends PolymerElement {
         :host([columns]) tangy-radio-button {
           padding: 0px;
           margin: 15px 0px 0px;
-          border: 0px;
+        }
+        :host([hide-buttons]) tangy-radio-button {
+          border: 5px solid white;
+        }
+        :host([hide-buttons]) tangy-radio-button[value="on"] {
+          border: 5px solid green;
         }
         :host([no-margin]) tangy-radio-button {
           padding: 0px;
