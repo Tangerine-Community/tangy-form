@@ -166,7 +166,7 @@ export class TangyEftouch extends PolymerElement {
           ${this.warningMessage}
         </div>
       ` : ''}
-      <tangy-radio-buttons columns="${this.columns}" hide-buttons>
+      <tangy-radio-buttons columns="${this.columns}" hide-buttons hide-help-text>
         ${options.map(option => `
           <option value="${option.value}">${option.getAttribute('src') ? `<img style="width:100%" src="${option.getAttribute('src')}">` : option.innerHTML}</option>
         `)}

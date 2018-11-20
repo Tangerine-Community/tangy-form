@@ -53,7 +53,9 @@ class TangyRadioButtons extends PolymerElement {
 
       <div class="container">
         <label for="group">[[label]]</label>
-        <span class="secondary_color">[[t.selectOnlyOne]]</span>
+        <template is="dom-if" if="{{!hideHelpText}}">
+          <span  class="secondary_color">[[t.selectOnlyOne]]</span>
+        </template>
         <div id="container"></div>
       </div>
     `;
@@ -62,6 +64,11 @@ class TangyRadioButtons extends PolymerElement {
   static get properties() {
     return {
       hideButtons: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      hideHelpText: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
