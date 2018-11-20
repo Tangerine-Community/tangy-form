@@ -50,7 +50,7 @@ class TangyRadioButtons extends PolymerElement {
         :host([columns="0"]) tangy-radio-button {
           display: block;
         }
-        .row {
+        :host(:not([columns="0"])) tangy-radio-button {
           display: inline-block;
         }
       </style>
@@ -160,28 +160,28 @@ class TangyRadioButtons extends PolymerElement {
     this.$.container.innerHTML = ''
     // Populate options as tangy-radio-button elements
     let options = this.querySelectorAll('option')
-    let columnNumber = 1
-    let row = document.createElement('div')
-    row.classList.add('row')
+    let i = 0
+    let table = document.createElement('table')
+    let tr = document.createElement('tr')
     for (let option of options) {
-      let el = document.createElement('tangy-radio-button')
-      el.hideButton = this.hideButtons ? true : false
-      el.name = option.value
-      el.innerHTML = option.innerHTML
+      let button = document.createElement('tangy-radio-button')
+      button.hideButton = this.hideButtons ? true : false
+      button.name = option.value
+      button.innerHTML = option.innerHTML
       if (this.columns > 0) {
-        el.style.width = `${Math.floor(100*(1/this.columns))}%`
-        el.style.float = 'left'
-        if (columnNumber%this.columns === 0) {
-          row.appendChild(el)
-          this.$.container.appendChild(row)
-          row = document.createElement('div')
-          row.classList.add('row')
+        let td = document.createElement('td')
+        td.appendChild(button)
+        if ((i+1)%this.columns === 0) {
+          tr.appendChild(td)
+          table.appendChild(tr)
+          tr = document.createElement('tr')
         } else {
-          row.appendChild(el)
+          tr.appendChild(td)
         }
-        columnNumber++
+        if (i+1 === options.length) this.$.container.appendChild(table)
+        i++
       } else {
-        this.$.container.appendChild(el)
+        this.$.container.appendChild(button)
       }
     }
 
