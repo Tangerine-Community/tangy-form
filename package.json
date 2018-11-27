@@ -1,7 +1,7 @@
 {
   "name": "tangy-form",
   "description": "A form element for lazy loaded multipage forms",
-  "version": "2.9.2",
+  "version": "2.9.3",
   "main": "tangy-form.js",
   "scripts": {
     "start": "polymer serve",
