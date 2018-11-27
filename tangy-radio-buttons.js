@@ -28,6 +28,9 @@ class TangyRadioButtons extends PolymerElement {
       <style include="tangy-common-styles"></style>
 
       <style>
+        table {
+          table-layout: fixed;
+        }
         span {
           font-size: .75em;
           display: block;
@@ -170,6 +173,7 @@ class TangyRadioButtons extends PolymerElement {
       button.innerHTML = option.innerHTML
       if (this.columns > 0) {
         let td = document.createElement('td')
+        td.style.width = `${Math.floor(100*(1/this.columns))}%`
         td.appendChild(button)
         if ((i+1)%this.columns === 0) {
           tr.appendChild(td)
