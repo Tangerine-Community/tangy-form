@@ -10,6 +10,7 @@ import './global-styles.js'
 import { tangyFormReducer } from './tangy-form-reducer.js'
 
 //   <!-- Tangy Custom Inputs Elements -->
+import './tangy-box.js'
 import './tangy-input.js'
 import './tangy-timed.js'
 import './tangy-checkbox.js'
