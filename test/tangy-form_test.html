@@ -410,6 +410,7 @@
           element.shadowRoot.querySelector('tangy-radio-buttons').shadowRoot.querySelector('tangy-radio-button').shadowRoot.querySelector('paper-radio-button').click()
           // @TODO Should be 'orange'. There is a bug deeper down causing radio button labels to be names.
           assert.equal(element.value.selection, 'Orange')
+          assert.equal(element.value.startTime !== 0, true)
           assert.equal(element.value.selectionTime !== 0, true)
         })
 
@@ -563,7 +564,6 @@
           assert.equal(Object.keys(formResponse.inputsByName).length, 3)
         })
       })
-
 
       suite('loc', () => {
         test('should flatten', () => {
