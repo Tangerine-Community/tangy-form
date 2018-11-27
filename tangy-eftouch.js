@@ -112,6 +112,9 @@ export class TangyEftouch extends PolymerElement {
   connectedCallback () {
     super.connectedCallback()
     this.render()
+    if (this.value.startTime === 0) {
+      this.value.startTime = new Date().getTime()
+    }
     if (this.warningMessage) {
       setTimeout(() => {
         this.setAttribute('warning-triggered', true)
