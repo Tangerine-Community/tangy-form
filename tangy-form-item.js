@@ -70,10 +70,30 @@ export class TangyFormItem extends PolymerElement {
         :host([hidden]) {
           display: none;
         }
+        :host([fullscreen]) paper-card {
+          width: 100%;
+          max-width: 100% !important;
+          height: 100vh;
+        }
 
         /*
         * Action Buttons
         */
+        :host([fullscreen]) paper-card  {
+          padding-top: 53px;
+        }
+        :host([fullscreen]) .card-actions {
+          position: fixed;
+          top: 16px;
+          width: 100%;
+          right: 0px;
+          padding: 0px;
+          margin: 0px;
+        }
+        :host([fullscreen]) paper-button {
+          background: white;
+          color: grey;
+        }
         .card-actions {
           height: 45px;
           margin-bottom: 100px;
@@ -194,6 +214,11 @@ export class TangyFormItem extends PolymerElement {
         reflectToAttribute: true
       },
       summary: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      fullscreen: {
         type: Boolean,
         value: false,
         reflectToAttribute: true

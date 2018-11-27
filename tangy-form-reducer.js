@@ -34,6 +34,7 @@ const tangyFormReducer = function (state = initialState, action) {
       if (!newState.form.complete && !newState.items.find(item => item.open)) newState.items[firstNotDisabled].open = true
       if (newState.form.hideClosedItems === true) newState.items.forEach(item => item.hidden = !item.open)
       if (newState.form.linearMode === true) newState.items.forEach(item => item.hideButtons = true)
+      if (newState.form.fullscreen === true) newState.items.forEach(item => item.fullscreen = true)
       return newState
 
     case 'FORM_RESPONSE_COMPLETE':

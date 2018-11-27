@@ -264,6 +264,10 @@ export class TangyForm extends PolymerElement {
 
   static get properties() {
     return {
+      fullscreen: {
+        type: Boolean,
+        value: false
+      },
       title: {
         type: String,
         value: ''
@@ -333,7 +337,19 @@ export class TangyForm extends PolymerElement {
 
   ready() {
     super.ready()
-  
+    if (this.fullscreen) {
+      this.addEventListener('click', () => {
+        if(this.requestFullscreen) {
+          this.requestFullscreen();
+        } else if(this.mozRequestFullScreen) {
+          this.mozRequestFullScreen();
+        } else if(this.webkitRequestFullscreen) {
+          this.webkitRequestFullscreen();
+        } else if(this.msRequestFullscreen) {
+          this.msRequestFullscreen();
+        }
+      })
+    }
     // Pass events of items to the reducer.
     this.hasLazyItems = false
     this.querySelectorAll('tangy-form-item').forEach((item) => {
