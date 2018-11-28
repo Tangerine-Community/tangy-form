@@ -24,11 +24,17 @@
   </head>
   <body>
     <div class="vertical-section-container centered">
-          <tangy-form id="tangy-eftouch-demo" title="Tangy EFTouch Demo">
+          <tangy-form id="tangy-eftouch-demo" title="Tangy EFTouch Demo" fullscreen>
+            <tangy-form-item id="item0">
+              <template>
+                The assessment is about to begin. Click the right arrow to begin.
+              </template>
+            </tangy-form-item>
             <tangy-form-item id="item1">
               <template>
                 1 / 11 <br>
                 When I say the name of each animal, please touch it on your screen.
+                <br>
                 <tangy-eftouch 
                   disabled
                   columns="3"
@@ -52,6 +58,7 @@
               <template>
                 2 / 11 <br>
                 Touch the cat.
+                <br>
                 <tangy-eftouch 
                   input-sound="assets/sounds/pop.mp3" 
                   columns="3"
@@ -77,6 +84,7 @@
               <template>
                 3 / 11 <br>
                 Touch the dog.
+                <br>
                 <tangy-eftouch 
                   input-sound="assets/sounds/pop.mp3" 
                   columns="3"
@@ -102,6 +110,7 @@
               <template>
                 4 / 11 <br>
                 Touch the tortoise.
+                <br>
                 <tangy-eftouch 
                   input-sound="assets/sounds/pop.mp3" 
                   columns="3"
@@ -127,6 +136,7 @@
               <template>
                 5 / 11 <br>
                 Touch the cow.
+                <br>
                 <tangy-eftouch 
                   input-sound="assets/sounds/pop.mp3" 
                   columns="3"
@@ -153,6 +163,7 @@
               <template>
                 6 / 11 <br>
                 Touch the fish.
+                <br>
                 <tangy-eftouch 
                   input-sound="assets/sounds/pop.mp3" 
                   columns="3"
@@ -179,6 +190,7 @@
               <template>
                 7 / 11 <br>
                 Touch the bird.
+                <br>
                 <tangy-eftouch 
                   input-sound="assets/sounds/pop.mp3" 
                   columns="3"
@@ -205,6 +217,7 @@
               <template>
                 8 / 11 <br>
                 Touch the pig.
+                <br>
                 <tangy-eftouch 
                   input-sound="assets/sounds/pop.mp3" 
                   columns="3"
@@ -231,6 +244,7 @@
               <template>
                 9 / 11 <br>
                 In this game I want you to press the green button as fast as you can every time you see an animal but not when it is a pig.
+                <br>
                 <tangy-eftouch 
                   input-sound="assets/sounds/pop.mp3" 
                   columns="3"
@@ -258,7 +272,8 @@
                 <template>
                   10 / 11 <br>
                   Here is a cat. Should you touch the green button? [have the child click the green button]
-                  <tangy-eftouch 
+                  <br>
+                <tangy-eftouch 
                     input-sound="assets/sounds/pop.mp3" 
                     columns="3"
                     transition-delay=1000000 
@@ -286,7 +301,8 @@
                 <template>
                   11 / 11 <br>
                   Here is a pig. Should you touch the green button? 
-                  <tangy-eftouch 
+                  <br>
+                <tangy-eftouch 
                     input-sound="assets/sounds/pop.mp3" 
                     warning-time=2000
                     warning-message="No, because it's a pig."
@@ -314,7 +330,8 @@
                   1 / 6 <br>
                   Here's a dog. Should you touch the green button? <br>
                   [Give child 2 seconds to respond. Correct as needed. Be sure child clicked the button.]
-                  <tangy-eftouch 
+                  <br>
+                <tangy-eftouch 
                     input-sound="assets/sounds/pop.mp3" 
                     columns="3"
                     warning-time="2000"
@@ -342,7 +359,8 @@
                   2 / 6 <br>
                   Here's a tortoise. Should you touch the green button? <br>
                   [Give child 2 seconds to respond. Correct as needed. Be sure child clicked the button.]
-                  <tangy-eftouch 
+                  <br>
+                <tangy-eftouch 
                     input-sound="assets/sounds/pop.mp3" 
                     columns="3"
                     warning-time="2000"
@@ -370,7 +388,8 @@
                   3 / 6 <br>
                   Here's a cow. Should you touch the green button? <br>
                   [Give child 2 seconds to respond. Correct as needed. Be sure child clicked the button.]
-                  <tangy-eftouch 
+                  <br>
+                <tangy-eftouch 
                     input-sound="assets/sounds/pop.mp3" 
                     columns="3"
                     warning-time="2000"
@@ -398,7 +417,8 @@
                   4 / 6 <br>
                   Here's a fish. Should you touch the green button? <br>
                   [Give child 2 seconds to respond. Correct as needed. Be sure child clicked the button.]
-                  <tangy-eftouch 
+                  <br>
+                <tangy-eftouch 
                     input-sound="assets/sounds/pop.mp3" 
                     columns="3"
                     warning-time="2000"
@@ -426,7 +446,8 @@
                   5 / 6 <br>
                   Here's a bird. Should you touch the green button? <br>
                   [Give child 2 seconds to respond. Correct as needed. Be sure child clicked the button.]
-                  <tangy-eftouch 
+                  <br>
+                <tangy-eftouch 
                     input-sound="assets/sounds/pop.mp3" 
                     columns="3"
                     warning-time="2000"
@@ -459,7 +480,8 @@
                   Here's a pig. Should you touch the green button? <br>
                   [Give child 2 seconds to respond. Correct as needed. Be sure child clicked the button.]
                   <tangy-box name="success_message" hidden>Good job not touching the pig.</tangy-box>
-                  <tangy-eftouch 
+                  <br>
+                <tangy-eftouch 
                     input-sound="assets/sounds/pop.mp3" 
                     columns="3"
                     name="test_5"

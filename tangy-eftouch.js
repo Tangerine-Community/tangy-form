@@ -129,9 +129,13 @@ export class TangyEftouch extends PolymerElement {
       <style>
         :host {
           display: inline-block;
+          width: 100%
+        }
+        tangy-radio-buttons {
+          margin: 0 auto;
         }
         #transition {
-          padding: 15px;
+          padding: 0px;
         }
         :host(:not([transition-triggered])) #transition {
           opacity: 0;
@@ -145,7 +149,7 @@ export class TangyEftouch extends PolymerElement {
           -o-transition: opacity .5s ease-in-out;
         }
         #warning {
-          padding: 15px;
+          padding: 0px;
         }
         :host(:not([warning-triggered])) #warning {
           opacity: 0;
@@ -169,7 +173,7 @@ export class TangyEftouch extends PolymerElement {
           ${this.warningMessage}
         </div>
       ` : ''}
-      <tangy-radio-buttons columns="${this.columns}" hide-buttons hide-help-text>
+      <tangy-radio-buttons fullscreen columns="${this.columns}" hide-buttons hide-help-text>
         ${options.map(option => `
           <option value="${option.value}">${option.getAttribute('src') ? `<img style="width:100%" src="${option.getAttribute('src')}">` : option.innerHTML}</option>
         `)}
