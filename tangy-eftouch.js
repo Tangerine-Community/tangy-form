@@ -120,6 +120,7 @@ export class TangyEftouch extends PolymerElement {
         this.setAttribute('warning-triggered', true)
       }, this.warningTime)
     }
+    this.fitIt()
   }
 
   render(value) {
@@ -130,6 +131,12 @@ export class TangyEftouch extends PolymerElement {
         :host {
           display: inline-block;
           width: 100%
+        }
+        :host tangy-radio-buttons {
+          opacity: 0;
+        }
+        :host([fullscreen-size-complete]) tangy-radio-buttons {
+          opacity: 1 !important;
         }
         tangy-radio-buttons {
           margin: 0 auto;
@@ -180,6 +187,7 @@ export class TangyEftouch extends PolymerElement {
       </tangy-radio-buttons>
     `
     this.shadowRoot.querySelector('tangy-radio-buttons').addEventListener('change', _ => this.onRadioChange(_.target))
+    this.radioButtonsEl = this.shadowRoot.querySelector('tangy-radio-buttons')
   }
 
   onRadioChange(radioButtons) {
@@ -203,5 +211,28 @@ export class TangyEftouch extends PolymerElement {
     this.dispatchEvent(new CustomEvent('next'))
   }
 
+
+  fitIt() {
+
+    this.fitItInterval = setInterval(() => {
+      // Protect against not having a shadow yet.
+      if (!this.radioButtonsEl) return
+      // Protect against when the element has not yet grown up.
+      if (this.radioButtonsEl.offsetHeight / this.radioButtonsEl.offsetWidth === NaN) return 
+      // Protect from doing this over and over.
+      if (this.hasAttribute('fullscreen-size-complete')) return
+      const topMargin = 100
+      const targetHeight = window.visualViewport.height - topMargin
+      const actualHeight = this.radioButtonsEl.offsetHeight
+      let targetWidth = Math.floor(this.radioButtonsEl.offsetHeight / this.radioButtonsEl.offsetWidth * targetHeight)
+      this.radioButtonsEl.style.width = `${targetWidth}px`
+      this.setAttribute('fullscreen-size-complete', '')
+    }, 100)
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback()
+    if (this.fitItInterval) clearInterval(this.fitItInterval)
+  }
 }
 window.customElements.define(TangyEftouch.is, TangyEftouch)

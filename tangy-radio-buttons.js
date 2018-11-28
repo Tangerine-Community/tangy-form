@@ -35,12 +35,6 @@ class TangyRadioButtons extends PolymerElement {
           font-size: .75em;
           display: block;
         }
-        :host([fullscreen]) {
-          opacity: 0;
-        }
-        :host([fullscreen-size-complete]) {
-          opacity: 1 !important;
-        }
         :host([columns]) tangy-radio-button {
           padding: 0px;
           margin: 15px 0px 0px;
@@ -141,10 +135,6 @@ class TangyRadioButtons extends PolymerElement {
         observer: 'render',
         reflectToAttribute: true
       },
-      fullscreen: {
-        type: Boolean,
-        value: false
-      },
       noMargin: {
         type: Boolean,
         value: false,
@@ -158,9 +148,6 @@ class TangyRadioButtons extends PolymerElement {
     super.connectedCallback()
     this.render()
     this.reflect()
-    if (this.fullscreen) {
-      this.fitIt()
-    }
   }
 
   reflect() {
@@ -170,22 +157,6 @@ class TangyRadioButtons extends PolymerElement {
       el.disabled = this.disabled
       el.hidden = this.hidden
     })
-  }
-
-  fitIt() {
-    this.fitItInterval = setInterval(() => {
-      let targetHeight = window.visualViewport.height - 180
-      let actualHeight = this.offsetHeight+10
-      if (targetHeight-10 < actualHeight || targetHeight+10 > actualHeight) {
-        this.style.width = `${targetHeight}px`
-      }
-      this.setAttribute('fullscreen-size-complete', '')
-    },1)
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback()
-    if (this.fitItInterval) clearInterval(this.fitItInterval)
   }
 
   render() {
