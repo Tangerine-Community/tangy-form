@@ -338,17 +338,7 @@ export class TangyForm extends PolymerElement {
   ready() {
     super.ready()
     if (this.fullscreen) {
-      this.addEventListener('click', () => {
-        if(this.requestFullscreen) {
-          this.requestFullscreen();
-        } else if(this.mozRequestFullScreen) {
-          this.mozRequestFullScreen();
-        } else if(this.webkitRequestFullscreen) {
-          this.webkitRequestFullscreen();
-        } else if(this.msRequestFullscreen) {
-          this.msRequestFullscreen();
-        }
-      })
+      this.addEventListener('click', this.enableFullscreen, true)
     }
     // Pass events of items to the reducer.
     this.hasLazyItems = false
@@ -500,6 +490,7 @@ export class TangyForm extends PolymerElement {
     if (this.previousState.form.fullscreen && !state.form.fullscreen) {
       if(document.webkitExitFullscreen) document.webkitExitFullscreen()
       if(document.exitFullscreen) document.exitFullscreen()
+      this.removeEventListener('click', this.enableFullscreen, true)
     }
 
     // Stash as previous state.
@@ -553,6 +544,17 @@ export class TangyForm extends PolymerElement {
     this.store.dispatch({ type: 'ITEM_NEXT', itemId: item.id })
   }
 
+  enableFullscreen() {
+    if(this.requestFullscreen) {
+      this.requestFullscreen();
+    } else if(this.mozRequestFullScreen) {
+      this.mozRequestFullScreen();
+    } else if(this.webkitRequestFullscreen) {
+      this.webkitRequestFullscreen();
+    } else if(this.msRequestFullscreen) {
+      this.msRequestFullscreen();
+    }
+  }
 
 }
 
