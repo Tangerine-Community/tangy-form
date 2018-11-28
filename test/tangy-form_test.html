@@ -372,7 +372,18 @@
       </template>
     </test-fixture>
 
-
+    <test-fixture id="EFTouchTimeLimitFixture">
+      <template>
+        <tangy-eftouch time-limit=100 columns="3" name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange" src="assets/images/cat.png"></option>
+          <option name="banana" src="assets/images/cat.png"></option>
+          <option name="tangerine" src="assets/images/cat.png"></option>
+          <option name="cantalope" src="assets/images/cat.png"></option>
+          <option name="cherry" src="assets/images/cat.png"></option>
+          <option name="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
 
     <test-fixture id="EFTouchCorrectFixture">
       <template>
@@ -452,29 +463,39 @@
           assert.equal(element.hasAttribute('transition-triggered'), true)
         });
 
-        // @TODO Prioritized.
+        test('should transition at time limit', (done) => { 
+          const element = fixture('EFTouchTimeLimitFixture')
+          let eventDidFire = false
+          element.addEventListener('next', () => {
+            eventDidFire = true
+          })
+          setTimeout(() => {
+            assert.equal(eventDidFire, true)
+            done()
+          }, 101)
+          assert.equal(eventDidFire, false)
+        });
+
+        test('should have value of correctness', () => { });
+        test('should not allow proceeding without correct selection when required (auto progress and manual)', () => { })
+        test('should show transition message but not auto progress', () => { })
+        test('should not allow correction (important in training, not demonstrating)', () => { })
+        test('should not allow proceeding without selection when required (auto progress and manual)', () => { })
+        test('should proceed after correction', () => { })
+        test('should not show warning message if a selection is made', () => { })
+        test('when incorrect option selected, should instruct to provide correction and highlight correct option and not proceed until corrected', () => { })
+        test('should instruct to provide correction and not show correct or incorrect options', () => { })
+        test('should be able to skip given correctness of prior entry in a set of items', () => { })
+        test('can group questions to be able to calculate % correct in a group', () => {})
+        test('should leave fullscreen after 5 times pressing x button', () => { });
+        test('should resume', () => { })
+        test('should disable', () => { })
         test('should be fullscreen', () => {
           // 3 layers
           // 1. <tangy-form fullscreen> using the fullscreen api to get rid of OS chrome.
           // 2. <tangy-form-item fullscreen> to take up that space available and show simpler controls.
           // 3. <tangy-eftouch> needs to position itself in available space.
          });
-        test('should transition at limit', () => { });
-        test('should have value of correctness', () => { });
-
-        test('should show transition message but not auto progress', () => { })
-        test('should disable', () => { })
-        test('should resume', () => { })
-        test('should not allow proceeding without selection when required (auto progress and manual)', () => { })
-        test('should not allow proceeding without correct selection when required (auto progress and manual)', () => { })
-        test('should not allow correction (important in training, not demonstrating)', () => { })
-        test('should proceed after correction', () => { })
-        test('should not show warning message if a selection is made', () => { })
-        test('when incorrect option selected, should instruct to provide correction and highlight correct option and not proceed until corrected', () => { })
-        test('should instruct to provide correction and not show correct or incorrect options', () => { })
-        test('should leave fullscreen after 5 times pressing x button', () => { });
-        test('should be able to skip given correctness of prior entry in a set of items', () => { })
-        test('can group questions to be able to calculate % correct in a group')
 
       })
 

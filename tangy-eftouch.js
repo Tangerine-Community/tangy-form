@@ -49,6 +49,11 @@ export class TangyEftouch extends PolymerElement {
         value: '',
         reflectToAttribute: true
       },
+      timeLimit: {
+        type: Number,
+        value: 0,
+        reflectToAttribute: true
+      },
       warningTime: {
         type: Number,
         value: 0,
@@ -116,11 +121,23 @@ export class TangyEftouch extends PolymerElement {
       this.value.startTime = new Date().getTime()
     }
     if (this.warningMessage) {
-      setTimeout(() => {
+      this.warningTimeout = setTimeout(() => {
         this.setAttribute('warning-triggered', true)
       }, this.warningTime)
     }
+    if (this.timeLimit) {
+      this.timeLimitTimeout = setTimeout(() => {
+        this.transition()
+      }, this.timeLimit)
+    }
     this.fitIt()
+  }
+
+  disconnectedCallback () {
+    super.disconnectedCallback()
+    if (this.fitItInterval) clearInterval(this.fitItInterval)
+    if (this.warningTimeout) clearTimeout(this.warningTimeout)
+    if (this.timeLimitTimeout) clearTimeout(this.timeLimitTimeout)
   }
 
   render(value) {
@@ -211,9 +228,7 @@ export class TangyEftouch extends PolymerElement {
     this.dispatchEvent(new CustomEvent('next'))
   }
 
-
   fitIt() {
-
     this.fitItInterval = setInterval(() => {
       // Protect against not having a shadow yet.
       if (!this.radioButtonsEl) return
@@ -230,9 +245,5 @@ export class TangyEftouch extends PolymerElement {
     }, 100)
   }
 
-  disconnectedCallback() {
-    super.disconnectedCallback()
-    if (this.fitItInterval) clearInterval(this.fitItInterval)
-  }
 }
 window.customElements.define(TangyEftouch.is, TangyEftouch)
