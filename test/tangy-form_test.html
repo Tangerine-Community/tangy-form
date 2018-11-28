@@ -476,26 +476,24 @@
           assert.equal(eventDidFire, false)
         });
 
-        test('should have value of correctness', () => { });
-        test('should not allow proceeding without correct selection when required (auto progress and manual)', () => { })
-        test('should show transition message but not auto progress', () => { })
-        test('should not allow correction (important in training, not demonstrating)', () => { })
-        test('should not allow proceeding without selection when required (auto progress and manual)', () => { })
-        test('should proceed after correction', () => { })
-        test('should not show warning message if a selection is made', () => { })
-        test('when incorrect option selected, should instruct to provide correction and highlight correct option and not proceed until corrected', () => { })
-        test('should instruct to provide correction and not show correct or incorrect options', () => { })
-        test('should be able to skip given correctness of prior entry in a set of items', () => { })
-        test('can group questions to be able to calculate % correct in a group', () => {})
-        test('should leave fullscreen after 5 times pressing x button', () => { });
-        test('should resume', () => { })
-        test('should disable', () => { })
-        test('should be fullscreen', () => {
-          // 3 layers
-          // 1. <tangy-form fullscreen> using the fullscreen api to get rid of OS chrome.
-          // 2. <tangy-form-item fullscreen> to take up that space available and show simpler controls.
-          // 3. <tangy-eftouch> needs to position itself in available space.
-         });
+        test('should position itself in available space', () => {
+          // TODO: Write this test.
+        });
+
+        test('should have value of correctness');
+        test('should not allow proceeding without correct selection when required (auto progress and manual)')
+        test('should show transition message but not auto progress')
+        test('should not allow correction (important in training, not demonstrating)')
+        test('should not allow proceeding without selection when required (auto progress and manual)')
+        test('should proceed after correction')
+        test('should not show warning message if a selection is made')
+        test('when incorrect option selected, should instruct to provide correction and highlight correct option and not proceed until corrected')
+        test('should instruct to provide correction and not show correct or incorrect options')
+        test('should be able to skip given correctness of prior entry in a set of items')
+        test('can group questions to be able to calculate % correct in a group')
+        test('should leave fullscreen after 5 times pressing x button');
+        test('should resume')
+        test('should disable')
 
       })
 
@@ -936,7 +934,8 @@
           assert.equal(element.querySelectorAll('[open=""]').length, 1)
           assert.equal(element.querySelector('#item-2').hasAttribute('show-complete-button'), true)
         })
-
+        test('should be fullscreen') 
+        test('should disable fullscreen after submit')
       });
 
       window.stub = {
