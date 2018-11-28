@@ -497,6 +497,11 @@ export class TangyForm extends PolymerElement {
       this.dispatchEvent(new CustomEvent('ALL_ITEMS_CLOSED'))
     }
 
+    if (this.previousState.form.fullscreen && !state.form.fullscreen) {
+      if(document.webkitExitFullscreen) document.webkitExitFullscreen()
+      if(document.exitFullscreen) document.exitFullscreen()
+    }
+
     // Stash as previous state.
     this.previousState = Object.assign({}, state)
 

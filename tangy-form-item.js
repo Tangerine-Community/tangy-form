@@ -85,6 +85,7 @@ export class TangyFormItem extends PolymerElement {
         }
         :host([fullscreen]) paper-card  {
           padding-top: 53px;
+          overflow: scroll;
         }
         :host([fullscreen]) .card-actions {
           position: fixed;
@@ -97,6 +98,15 @@ export class TangyFormItem extends PolymerElement {
         :host([fullscreen]) paper-button {
           background: white;
           color: grey;
+        }
+        :host([fullscreen]) paper-button#complete {
+          float: right;
+          margin: 15px;
+          background: green;
+          color: white; 
+        }
+        :host([fullscreen]) paper-button#complete paper-button {
+          display: none;
         }
         :host([fullscreen]) label.heading {
           display: none;
