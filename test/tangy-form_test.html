@@ -213,6 +213,7 @@
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import { Loc } from '../loc.js'
       import stub from './stub.js' 
+      import stubLocationList from './stub-location-list.js' 
       import { TangyFormResponseModel } from '../tangy-form-response-model.js'
 
       suite('tangy-input-groups', () => {
@@ -295,6 +296,10 @@
           let locationList = Loc.filterById(stub.locationList, ['county1'])
           assert.equal(locationList.locations.hasOwnProperty('county2'), false)
           assert.equal(locationList.locations.county1.children.hasOwnProperty('school1'), true)
+        })
+        test('should get decendents at level specified', () => {
+          const descendents = Loc.filterToDecendentsByParentIdAndLevel(stubLocationList, 'county1', 'school')
+          assert(descendents.length, 4)
         })
       })
 
