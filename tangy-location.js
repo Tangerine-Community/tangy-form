@@ -454,12 +454,12 @@ class TangyLocation extends PolymerElement {
       value: {
         type: Array,
         value: [],
-        // reflectToAttribute: true,
         observer: 'render'
       },
       required: {
         type: Boolean,
         value: false,
+        reflectToAttribute: true,
         observer: 'render'
       },
       invalid: {
