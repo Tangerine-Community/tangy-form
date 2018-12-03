@@ -69,7 +69,7 @@ export class TangyForm extends PolymerElement {
     return (this._responseHasBeenSet) ? this.store.getState() : null 
   }
 
-  // Get an array of all inputs accross items.
+  // Get an array of all inputs across items.
   get inputs() {
     return this.response.items.reduce((acc, item) => [...acc, ...item.inputs], [])
   }
@@ -514,6 +514,8 @@ export class TangyForm extends PolymerElement {
     let inputDisable = (name) => helpers.inputDisable(name)
     let inputEnable = (name) => helpers.inputEnable(name)
     let itemsPerMinute = (input) => helpers.itemsPerMinute(input)
+    // Use itemInputs instead of inputs in modules such as Class in order to summon only the inputs on-screen/in the currently active form.
+    let itemInputs = [...this.shadowRoot.querySelectorAll('[name]')].reduce((acc, input) => Object.assign({}, acc, {[input.name]: input}), {})
     eval(this.getAttribute(hook))
   }
 
