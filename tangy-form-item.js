@@ -255,6 +255,11 @@ export class TangyFormItem extends PolymerElement {
         type: Boolean,
         value: false,
         reflectToAttribute: true
+      },
+      isDirty: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
 
     };
@@ -378,7 +383,10 @@ export class TangyFormItem extends PolymerElement {
     this.$.content
       .querySelectorAll('[name]')
       .forEach(input => {
-        input.addEventListener('change', _ => this.fireHook('on-change', _))
+        input.addEventListener('change', _ => {
+          this.dispatchEvent(new Event('change', {details: _.target}))
+          this.fireHook('on-change', _)
+        })
       })
     let tangyCompleteButtonEl = this.$.content
       .querySelector('tangy-complete-button')

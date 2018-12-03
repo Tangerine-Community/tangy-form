@@ -340,6 +340,7 @@ export class TangyForm extends PolymerElement {
       // Pass in the store so on-change and on-open logic can access it.
       item.store = this.store
       if (this.linearMode) item.noButtons = true
+      item.addEventListener('change', this.onItemChange.bind(this))
       item.addEventListener('ITEM_NEXT', this.onItemNext.bind(this))
       item.addEventListener('ITEM_BACK', this.onItemBack.bind(this))
       item.addEventListener('ITEM_CLOSED', this.onItemClosed.bind(this))
@@ -398,6 +399,14 @@ export class TangyForm extends PolymerElement {
     } else {
       this.store.dispatch({ type: "SHOW_RESPONSE" })
     }
+  }
+
+  onItemChange(event) {
+    this.store.dispatch({
+      type: 'ITEM_CHANGE',
+      itemId: event.target.id
+    })
+    this.fireHook('on-change')
   }
 
   onItemNext(event) {
