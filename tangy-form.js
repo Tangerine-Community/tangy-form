@@ -2,6 +2,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
 
 import './cat.js'
+import 'tangy-translate'
 import './tangy-form-item.js'
 import './tangy-input-groups.js'
 import './tangy-input-group.js'
@@ -16,7 +17,7 @@ import './tangy-checkbox.js'
 import './tangy-checkboxes.js'
 import './tangy-radio-buttons.js'
 import './tangy-select.js'
-import './tangy-location.js'
+import 'tangy-location'
 import './tangy-gps.js'
 import './tangy-complete-button.js'
 import './tangy-overlay.js'

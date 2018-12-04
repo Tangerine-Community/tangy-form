@@ -13,11 +13,13 @@
     <script type="module" src="../tangy-form.js"></script>
   </head>
   <body>
+
     <test-fixture id="ContainerFixture">
       <template>
         <div></div>
       </template>
     </test-fixture>
+
     <test-fixture id="HelloWorldFixture">
       <template>
         <tangy-form id="field-demo" title="Field Demo" on-change="">
@@ -172,27 +174,6 @@
         </tangy-form>
       </template>
     </test-fixture>
-    
-    <test-fixture id="TangyLocationFilterByFixture">
-      <template>
-        <tangy-location name="location" show-levels="county,school" filter-by="school1,school4" location-src="./location-list.json"></tangy-location>
-      </template>
-    </test-fixture>
-
-    <test-fixture id="TangyLocationFilterByGlobalFixture">
-      <template>
-        <tangy-location name="location" show-levels="county,school" filter-by-global location-src="./location-list.json"></tangy-location>
-      </template>
-    </test-fixture>
- 
-    <test-fixture id="TangyInputGroupsFixture">
-      <template>
-        <tangy-input-groups initial-count="3" name="person">
-          <tangy-input name="first_name" label="First name"></tangy-input>
-          <tangy-input name="last_name" label="Last name"></tangy-input>
-        </tangy-input-groups>
-      </template>
-    </test-fixture>
  
     <test-fixture id="TangyInputGroupsFormFixture">
       <template>
@@ -208,12 +189,19 @@
         </tangy-form>
       </template>
     </test-fixture>
+ 
+    <test-fixture id="TangyInputGroupsFixture">
+      <template>
+        <tangy-input-groups initial-count="3" name="person">
+          <tangy-input name="first_name" label="First name"></tangy-input>
+          <tangy-input name="last_name" label="Last name"></tangy-input>
+        </tangy-input-groups>
+      </template>
+    </test-fixture>    
 
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
-      import { Loc } from '../loc.js'
       import stub from './stub.js' 
-      import stubLocationList from './stub-location-list.js' 
       import { TangyFormResponseModel } from '../tangy-form-response-model.js'
 
       suite('tangy-input-groups', () => {
@@ -267,61 +255,6 @@
           let formResponse = new TangyFormResponseModel(stub.tangyCardFormResponse)
           assert.equal(formResponse.inputs.length, 6)
           assert.equal(Object.keys(formResponse.inputsByName).length, 3)
-        })
-      })
-
-
-      suite('loc', () => {
-        test('should flatten', () => {
-          let flattenedLocationList = Loc.flatten(stub.locationList)
-          assert.equal(flattenedLocationList.locations.length, 6)
-          assert.equal(flattenedLocationList.locations.find(location => location.id === 'school1').level, 'school')
-          assert.equal(flattenedLocationList.locations.find(location => location.id === 'county2').level, 'county')
-        })
-        test('should unflatten', () => {
-          let locationList = Loc.unflatten(stub.flatLocationList)
-          assert.equal(locationList.locations.county2.children.school4.id, 'school4')
-        })
-        test('should filter', () => {
-          let locationList = Loc.filterById(stub.locationList, ['school1', 'school4'])
-          assert.equal(locationList.locations.county2.children.school4.id, 'school4')
-          assert.equal(locationList.locations.county2.children.hasOwnProperty('school3'), false)
-        })
-        test('should filter without decendents', () => {
-          let locationList = Loc.filterById(stub.locationList, ['county1'], false)
-          assert.equal(locationList.locations.hasOwnProperty('county2'), false)
-          assert.equal(locationList.locations.county1.children.hasOwnProperty('school1'), false)
-        })
-        test('should filter with decendents', () => {
-          let locationList = Loc.filterById(stub.locationList, ['county1'])
-          assert.equal(locationList.locations.hasOwnProperty('county2'), false)
-          assert.equal(locationList.locations.county1.children.hasOwnProperty('school1'), true)
-        })
-        test('should get decendents at level specified', () => {
-          const descendents = Loc.filterToDecendentsByParentIdAndLevel(stubLocationList, 'county1', 'school')
-          assert(descendents.length, 4)
-        })
-      })
-
-      suite('tangy-location', () => {
-        test('should populate select list locations found in filterBy', (done) => {
-          const element = fixture('TangyLocationFilterByFixture');
-          element.addEventListener('location-list-loaded', () => {
-            element.shadowRoot.querySelector('select').value = 'county2'
-            element.shadowRoot.querySelector('select').dispatchEvent(new Event('change', {bubbles: true}))
-            assert.equal(element.shadowRoot.querySelectorAll('select')[1].querySelectorAll('option').length, 2)
-            done()
-          }, {once: true})
-        })
-        test('should populate filterBy from window.tangyLocationFilterBy', (done) => {
-          window.tangyLocationFilterBy = 'school1,school4'
-          const element = fixture('TangyLocationFilterByGlobalFixture');
-          element.addEventListener('location-list-loaded', () => {
-            element.shadowRoot.querySelector('select').value = 'county2'
-            element.shadowRoot.querySelector('select').dispatchEvent(new Event('change', {bubbles: true}))
-            assert.equal(element.shadowRoot.querySelectorAll('select')[1].querySelectorAll('option').length, 2)
-            done()
-          }, {once: true})
         })
       })
 
