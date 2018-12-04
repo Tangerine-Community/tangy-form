@@ -1,5 +1,6 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-textarea.js'
+import '@polymer/paper-input/paper-input.js'
 import './tangy-common-styles.js'
 import './tangy-element-styles.js'
 
