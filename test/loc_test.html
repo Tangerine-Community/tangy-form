@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>loc test</title>
+
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/wct-browser-legacy/browser.js"></script>
+
+  </head>
+  <body>
+
+    <script type="module">
+      import { Loc } from '../loc.js'
+      import stub from './stub.js'
+
+      suite('loc', () => {
+        test('should flatten', () => {
+          let flattenedLocationList = Loc.flatten(stub.locationList)
+          assert.equal(flattenedLocationList.locations.length, 6)
+          assert.equal(flattenedLocationList.locations.find(location => location.id === 'school1').level, 'school')
+          assert.equal(flattenedLocationList.locations.find(location => location.id === 'county2').level, 'county')
+        })
+        test('should unflatten', () => {
+          let locationList = Loc.unflatten(stub.flatLocationList)
+          assert.equal(locationList.locations.county2.children.school4.id, 'school4')
+        })
+        test('should filter', () => {
+          let locationList = Loc.filterById(stub.locationList, ['school1', 'school4'])
+          assert.equal(locationList.locations.county2.children.school4.id, 'school4')
+          assert.equal(locationList.locations.county2.children.hasOwnProperty('school3'), false)
+        })
+        test('should filter without decendents', () => {
+          let locationList = Loc.filterById(stub.locationList, ['county1'], false)
+          assert.equal(locationList.locations.hasOwnProperty('county2'), false)
+          assert.equal(locationList.locations.county1.children.hasOwnProperty('school1'), false)
+        })
+        test('should filter with decendents', () => {
+          let locationList = Loc.filterById(stub.locationList, ['county1'])
+          assert.equal(locationList.locations.hasOwnProperty('county2'), false)
+          assert.equal(locationList.locations.county1.children.hasOwnProperty('school1'), true)
+        })
+      })
+    </script>
+
+  </body>
+</html>

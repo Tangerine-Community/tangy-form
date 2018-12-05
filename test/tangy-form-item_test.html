@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>tangy-form-item test</title>
+
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/redux/dist/redux.js"></script>
+    <script src="../node_modules/wct-browser-legacy/browser.js"></script>
+
+    <script type="module" src="../tangy-form-item.js"></script>
+  </head>
+  <body>
+
+    <test-fixture id="TangyFormItemFixture">
+      <template>
+        <tangy-form id="form1">
+          <tangy-form-item id="item1">
+            <tangy-input name="foo"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item2">
+            Item 2.
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+    <script type="module">
+      import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
+      import '../tangy-form.js'
+      suite('tangy-form-item', () => {
+        test('should go to next item on input "next" event', () => { 
+          const element = fixture('TangyFormItemFixture');
+          element.newResponse()
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-input').dispatchEvent(new CustomEvent('next'))
+          assert.equal(element.querySelectorAll('tangy-form-item')[1].open, true)
+        })
+        test('should be fullscreen', () => {
+          // @TODO?
+        })
+      })
+    </script>
+
+  </body>
+</html>

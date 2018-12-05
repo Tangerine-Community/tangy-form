@@ -1,4 +1,6 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { t } from './t.js'
+import './html-element-props.js'
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/av-icons.js';
