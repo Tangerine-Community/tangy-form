@@ -8,20 +8,6 @@ import './tangy-common-styles.js'
 import './global-styles.js'
 import { tangyFormReducer } from './tangy-form-reducer.js'
 
-//   <!-- Tangy Custom Inputs Elements -->
-import './tangy-box.js'
-import './tangy-input.js'
-import './tangy-timed.js'
-import './tangy-checkbox.js'
-import './tangy-checkboxes.js'
-import './tangy-radio-buttons.js'
-import './tangy-select.js'
-import 'tangy-location'
-import './tangy-gps.js'
-import './tangy-complete-button.js'
-import './tangy-overlay.js'
-import './tangy-acasi.js';
-import './tangy-eftouch.js';
 
 //   <!-- Dependencies -->
 import '@polymer/paper-fab/paper-fab.js';
