@@ -3,14 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-
     <title>tangy-form test</title>
-
     <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../node_modules/redux/dist/redux.js"></script>
     <script src="../node_modules/wct-browser-legacy/browser.js"></script>
-
-    <script type="module" src="../tangy-form.js"></script>
   </head>
   <body>
 
@@ -178,6 +174,9 @@
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import stub from './stub.js' 
+      import '../tangy-form.js'
+      import '../tangy-input.js'
+      import '../tangy-checkbox.js'
       import { TangyFormResponseModel } from '../tangy-form-response-model.js'
 
       suite('TangyFormResponseModel', () => {
