@@ -1,5 +1,4 @@
 
-
 // Perhaps props should always be based on the attributes... Stop dealing with this transformation of naming and deal with the fact a prop not existing means it is set to false.
 HTMLElement.prototype.getAttributes = function () {
   let attributes = [].slice.call(this.attributes)

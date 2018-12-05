@@ -84,6 +84,13 @@ export class Loc {
     return this.unflatten(Object.assign({}, locationList, {locations: filteredLocations}))
   }
 
+  // Given a parent location ID and a level, returns an array of decendents at the level specified.
+  static filterToDecendentsByParentIdAndLevel(locationList = {locations: {}, locationsLevels: []}, byParentId='', byLevel='') {
+    const flatLocations = this.flatten(locationList).locations
+    const decendents = this.findDecendents(flatLocations, byParentId).filter(locationNode => locationNode.level === byLevel)
+    return decendents
+  }
+
   static findDecendents(flatLocations, locationId) {
     let decendents = []
     function dig(locationId) {

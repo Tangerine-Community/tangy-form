@@ -1,7 +1,5 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
-
-import { t } from './t.js'
 import './html-element-props.js'
 import './tangy-form-item.js'
 import './tangy-input-groups.js'
@@ -18,7 +16,7 @@ import './tangy-checkbox.js'
 import './tangy-checkboxes.js'
 import './tangy-radio-buttons.js'
 import './tangy-select.js'
-import './tangy-location.js'
+import 'tangy-location'
 import './tangy-gps.js'
 import './tangy-complete-button.js'
 import './tangy-overlay.js'
@@ -348,6 +346,7 @@ export class TangyForm extends PolymerElement {
       // Pass in the store so on-change and on-open logic can access it.
       item.store = this.store
       if (this.linearMode) item.noButtons = true
+      item.addEventListener('change', this.onItemChange.bind(this))
       item.addEventListener('ITEM_NEXT', this.onItemNext.bind(this))
       item.addEventListener('ITEM_BACK', this.onItemBack.bind(this))
       item.addEventListener('ITEM_CLOSED', this.onItemClosed.bind(this))
@@ -406,6 +405,14 @@ export class TangyForm extends PolymerElement {
     } else {
       this.store.dispatch({ type: "SHOW_RESPONSE" })
     }
+  }
+
+  onItemChange(event) {
+    this.store.dispatch({
+      type: 'ITEM_CHANGE',
+      itemId: event.target.id
+    })
+    this.fireHook('on-change')
   }
 
   onItemNext(event) {

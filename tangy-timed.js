@@ -275,6 +275,21 @@ class TangyTimed extends PolymerElement {
         type: Number,
         value: 0,
         reflectToAttribute: true
+      },
+      scoreTarget: {
+        type: Number,
+        value: 0,
+        reflectToAttribute: true
+      },
+      scoreBaseline: {
+        type: Number,
+        value: 0,
+        reflectToAttribute: true
+      },
+      scoreSpread: {
+        type: Number,
+        value: 0,
+        reflectToAttribute: true
       }
     };
   }

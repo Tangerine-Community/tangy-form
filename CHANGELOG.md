@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v2.11.0
+- `<tangy-form-item>` will now have a `is-dirty` attribute when it has changes that have not yet been saved.
+
 ## v2.9.0
 - Added `<tangy-input-groups>` as an alternative to `<tangy-cards>`. We will deprecate tangy cards.
 

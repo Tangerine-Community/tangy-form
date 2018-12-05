@@ -121,6 +121,16 @@ const tangyFormReducer = function (state = initialState, action) {
       })})
       break
 
+    case 'ITEM_CHANGE':
+      newState = Object.assign({}, state)
+      // Find the current index of the item opening.
+      return Object.assign({}, newState, {items: state.items.map((item) => {
+        if (item.id == action.itemId) {
+          return Object.assign({}, item, {isDirty: true})
+        }
+        return item
+      })})
+      break
 
     case 'ITEM_CLOSE':
       tmp.itemIndex = state.items.findIndex(item => item.id === action.itemId)
@@ -131,7 +141,7 @@ const tangyFormReducer = function (state = initialState, action) {
         progress: ( ( ( state.items.filter((i) => i.valid).length ) / state.items.length ) * 100 ),
         items: state.items.map((item) => {
           if (item.id == action.itemId) {
-            return Object.assign({}, item, {open: false, valid: true, hideButtons: false})
+            return Object.assign({}, item, {open: false, isDirty: false, valid: true, hideButtons: false})
           }
           return Object.assign({}, item)
         })
@@ -195,7 +205,7 @@ const tangyFormReducer = function (state = initialState, action) {
       newState = Object.assign({}, state, {
         items: state.items.map((item) => {
           if (item.id == action.item.id) {
-            return Object.assign({}, item, action.item)
+            return Object.assign({}, item, action.item, { isDirty: false })
           }
           return item
         })
