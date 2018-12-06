@@ -1,37 +1,24 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import './util/html-element-props.js'
+import './style/tangy-common-styles.js'
 
-import './cat.js'
-import 'tangy-translate'
-import './tangy-form-item.js'
-import './tangy-input-groups.js'
-import './tangy-input-group.js'
-import './tangy-common-styles.js'
-import './global-styles.js'
 import { tangyFormReducer } from './tangy-form-reducer.js'
+import { TangyFormResponseModel } from './tangy-form-response-model.js';
+import { TangyFormItemHelpers } from './tangy-form-item-callback-helpers.js'
 
-//   <!-- Tangy Custom Inputs Elements -->
-import './tangy-input.js'
-import './tangy-timed.js'
-import './tangy-checkbox.js'
-import './tangy-checkboxes.js'
-import './tangy-radio-buttons.js'
-import './tangy-select.js'
-import 'tangy-location'
-import './tangy-gps.js'
+// Core elements.
+import './tangy-form-item.js'
 import './tangy-complete-button.js'
 import './tangy-overlay.js'
-import './tangy-acasi.js';
-import './tangy-eftouch.js';
+import './tangy-input-groups.js'
+import './tangy-input-group.js'
 
 //   <!-- Dependencies -->
 import '@polymer/paper-fab/paper-fab.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-tabs/paper-tab.js';
 import '@polymer/paper-tabs/paper-tabs.js';
-import { TangyFormResponseModel } from './tangy-form-response-model.js';
-import { TangyFormItemHelpers } from './tangy-form-item-callback-helpers.js'
-
 
 /**
  * `tangy-form`
@@ -264,6 +251,10 @@ export class TangyForm extends PolymerElement {
 
   static get properties() {
     return {
+      fullscreen: {
+        type: Boolean,
+        value: false
+      },
       title: {
         type: String,
         value: ''
@@ -333,7 +324,9 @@ export class TangyForm extends PolymerElement {
 
   ready() {
     super.ready()
-  
+    if (this.fullscreen) {
+      this.addEventListener('click', this.enableFullscreen, true)
+    }
     // Pass events of items to the reducer.
     this.hasLazyItems = false
     this.querySelectorAll('tangy-form-item').forEach((item) => {
@@ -490,6 +483,12 @@ export class TangyForm extends PolymerElement {
       this.dispatchEvent(new CustomEvent('ALL_ITEMS_CLOSED'))
     }
 
+    if (this.previousState.form.fullscreen && !state.form.fullscreen) {
+      if(document.webkitExitFullscreen) document.webkitExitFullscreen()
+      if(document.exitFullscreen) document.exitFullscreen()
+      this.removeEventListener('click', this.enableFullscreen, true)
+    }
+
     // Stash as previous state.
     this.previousState = Object.assign({}, state)
 
@@ -541,6 +540,17 @@ export class TangyForm extends PolymerElement {
     this.store.dispatch({ type: 'ITEM_NEXT', itemId: item.id })
   }
 
+  enableFullscreen() {
+    if(this.requestFullscreen) {
+      this.requestFullscreen();
+    } else if(this.mozRequestFullScreen) {
+      this.mozRequestFullScreen();
+    } else if(this.webkitRequestFullscreen) {
+      this.webkitRequestFullscreen();
+    } else if(this.msRequestFullscreen) {
+      this.msRequestFullscreen();
+    }
+  }
 
 }
 

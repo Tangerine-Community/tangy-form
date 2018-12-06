@@ -1,6 +1,8 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import './tangy-common-styles.js'
-import './tangy-element-styles.js'
+import { t } from '../util/t.js'
+import '../util/html-element-props.js'
+import '../style/tangy-common-styles.js'
+import '../style/tangy-element-styles.js'
 
 /**
  * `tangy-timed`

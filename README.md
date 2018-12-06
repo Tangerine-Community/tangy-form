@@ -10,7 +10,7 @@ An element for multipage forms.
 
 Play with the [demo on glitch](https://tangy-form-demo.glitch.me/).
 
-![screenshot](screenshot.png)
+![screenshot](demo/screenshot.png)
 
 
 <!--

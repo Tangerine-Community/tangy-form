@@ -1,7 +1,9 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import './util/html-element-props.js'
 import '@polymer/paper-checkbox/paper-checkbox.js'
-import './tangy-common-styles.js'
-import './tangy-element-styles.js'
+import './style/tangy-common-styles.js'
+import './style/tangy-element-styles.js'
+import './tangy-input-group.js'
 // https://stackoverflow.com/a/2117523/10139471
 function uuid() {
   return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
