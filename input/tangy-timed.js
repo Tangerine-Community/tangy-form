@@ -1,13 +1,13 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { t } from './t.js'
-import './html-element-props.js'
+import { t } from '../util/t.js'
+import '../util/html-element-props.js'
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-icons/av-icons.js';
 import '@polymer/iron-icons/editor-icons.js';
 import '@polymer/iron-icon/iron-icon.js';
 import './tangy-toggle-button.js';
-import './tangy-common-styles.js'
+import '../style/tangy-common-styles.js'
 
 /**
  * `tangy-timed`

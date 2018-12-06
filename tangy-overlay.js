@@ -1,7 +1,6 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { t } from './t.js'
-import './html-element-props.js'
-import './tangy-common-styles.js'
+import './util/html-element-props.js'
+import './style/tangy-common-styles.js'
 
 /**
  * `tangy-overlay`

@@ -3,182 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-
-    <title>tangy-form test</title>
-
+    <title>tangy-radio-buttons test</title>
     <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../node_modules/redux/dist/redux.js"></script>
     <script src="../node_modules/wct-browser-legacy/browser.js"></script>
-
-    <script type="module" src="../tangy-form.js"></script>
   </head>
   <body>
-    <test-fixture id="ContainerFixture">
-      <template>
-        <div></div>
-      </template>
-    </test-fixture>
-    <test-fixture id="HelloWorldFixture">
-      <template>
-        <tangy-form id="field-demo" title="Field Demo" on-change="">
-          <tangy-form-item id="item-1">
-            Hello world.
-          </tangy-form-item>
-        </tangy-form>
-      </template>
-    </test-fixture>
-
-    <test-fixture id="HelloWorldFromTemplateFixture">
-      <template>
-        <!-- 
-          Note the use of preserve-content attribute in template tag below.
-          If using tangy-form in a Polymer App or Element, this is their 
-          workaround for some browser bugs mentioned in the following issue.
-          - https://github.com/Polymer/polymer/issues/2335
-        -->
-        <tangy-form id="field-demo" title="Field Demo" on-change="">
-          <tangy-form-item id="item-1">
-            <template preserve-content>
-              Hello world.
-            </template>
-          </tangy-form-item>
-        </tangy-form>
-      </template>
-    </test-fixture>
-
-    <test-fixture id="SimpleTestFixture">
-      <template>
-        <tangy-form id="test" title="test">
-          <tangy-form-item id="item-1">
-            <tangy-input label='test1' name='input1'></tangy-input>
-          </tangy-form-item>
-          <tangy-form-item id="item-2">
-            <tangy-input label='test2' name='input2'></tangy-input>
-          </tangy-form-item>
-          <tangy-form-item id="item-3">
-            <template>
-              <form>
-                <tangy-input label='test3' name='input3'></tangy-input>
-              </form>
-            </template>
-          </tangy-form-item>
-        </tangy-form>
-      </template>
-    </test-fixture>
-
-    <test-fixture id="GetValueTestFixture">
-      <template>
-        <tangy-form id="field-demo" title="Field Demo" on-change="">
-          <tangy-form-item id="item-1" on-change="
-                inputs.bar.value = getValue('foo')
-                ">
-            <tangy-input label='foo' name='foo'></tangy-input>
-            <tangy-input label='bar' name='bar'></tangy-input>
-          </tangy-form-item>
-          <tangy-form-item id="item-2" on-open="
-              inputs.baz.value = getValue('foo')
-            ">
-            <tangy-input label='zed' name='zed'></tangy-input>
-            <tangy-input label='baz' name='baz'></tangy-input>
-          </tangy-form-item>
-        </tangy-form>
-      </template>
-    </test-fixture>
-
-    <test-fixture id="SkipItemTestFixture">
-      <template>
-        <tangy-form id="my-form" on-change="
-          if (getValue('input1') === 'on') {
-            itemDisable('item2')
-          } else {
-            itemEnable('item2')
-          }
-        ">
-          <tangy-form-item id="item1">
-            <tangy-checkbox name="input1">Would you like to skip item 2?</tangy-checkbox>
-          </tangy-form-item>
-          <tangy-form-item id="item2">
-            <tangy-input name="input2" label="What is your middle name?"></tangy-input>
-          </tangy-form-item>
-          <tangy-form-item id="item3">
-            <tangy-input name="input2" label="What is your last name?"></tangy-input>
-          </tangy-form-item>
-        </tangy-form>
-      </template>
-    </test-fixture>
-
-    <test-fixture id="TangyIfFixture1">
-      <template>
-        <tangy-form id="my-form">
-          <tangy-form-item id="item1">
-            <tangy-checkbox name="input1">Would you like to skip then next input?</tangy-checkbox>
-            <tangy-input 
-              name="input2"
-              tangy-if="notChecked('input1')"
-              label="This input will hide when input1 is checked."
-            ></tangy-input>
-          </tangy-form-item>
-        </tangy-form>
-      </template>
-    </test-fixture>
-
-    <test-fixture id="TangyIfFixture2">
-      <template>
-        <tangy-form id="my-form">
-          <tangy-form-item id="item1">
-            <tangy-checkbox name="input1">Would you like to skip then next input?</tangy-checkbox>
-            <tangy-input 
-              name="input2"
-              tangy-if="inputs.input1.value !== 'on'"
-              tangy-action="editable"
-              label="This input will disable when input1 is checked."
-            ></tangy-input>
-          </tangy-form-item>
-        </tangy-form>
-      </template>
-    </test-fixture>
-
-    <test-fixture id="OnOpenTestFixture">
-      <template>
-        <tangy-form id="field-demo" title="Field Demo">
-          <tangy-form-item id="item-1" on-open="
-                  inputs.input1.value = 'foo'
-                "
-            >
-            <tangy-input label='test' name='input1'></tangy-input>
-          </tangy-form-item>
-        </tangy-form>
-      </template>
-    </test-fixture>
-
-    <test-fixture id="DeprecatedOnOpenTestFixture">
-      <template>
-        <tangy-form id="field-demo" title="Field Demo">
-          <tangy-form-item id="item-1">
-            <template>
-              <form 
-                on-open="
-                  inputs.input1.value = 'foo'
-                "
-                on-change="
-                  inputs.input2.value = 'bar'
-                "
-                >
-                <tangy-input label='test' name='input1'></tangy-input>
-                <tangy-input label='test' name='input2'></tangy-input>
-              </form>
-            </template>
-          </tangy-form-item>
-        </tangy-form>
-      </template>
-    </test-fixture>
     
-    <test-fixture id="TangyRadioButtonHideButtonFixture">
-      <template>
-        <tangy-radio-button name="foo" hide-button>Foo</tangy-radio-button>
-      </template>
-    </test-fixture>
-
     <test-fixture id="TangyRadioButtonsFixture">
       <template>
         <tangy-radio-buttons name="fruit_selection" label="What is your favorite fruit?">
@@ -219,7 +50,7 @@
     </test-fixture>
 
     <script type="module">
-      import '../tangy-radio-buttons.js'
+      import '../input/tangy-radio-buttons.js'
       suite('tangy-radio-buttons', () => {
         test('should have six options', () => {
           const element = fixture('TangyRadioButtonsFixture');

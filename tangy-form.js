@@ -1,13 +1,15 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
-import './html-element-props.js'
+import './util/html-element-props.js'
+
+import './style/tangy-common-styles.js'
+import './style/global-styles.js'
+import { tangyFormReducer } from './tangy-form-reducer.js'
+
+// Core.
 import './tangy-form-item.js'
 import './tangy-input-groups.js'
 import './tangy-input-group.js'
-import './tangy-common-styles.js'
-import './global-styles.js'
-import { tangyFormReducer } from './tangy-form-reducer.js'
-
 
 //   <!-- Dependencies -->
 import '@polymer/paper-fab/paper-fab.js';
