@@ -1,5 +1,4 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { t } from './t.js'
 import '../util/html-element-props.js'
 import '@polymer/paper-radio-button/paper-radio-button.js'
 import '../style/tangy-common-styles.js'
