@@ -1,9 +1,16 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import './util/html-element-props.js'
 import './style/tangy-common-styles.js'
+
 import { tangyFormReducer } from './tangy-form-reducer.js'
+import { TangyFormResponseModel } from './tangy-form-response-model.js';
+import { TangyFormItemHelpers } from './tangy-form-item-callback-helpers.js'
+
+// Core elements.
 import './tangy-form-item.js'
+import './tangy-complete-button.js'
+import './tangy-overlay.js'
 import './tangy-input-groups.js'
 import './tangy-input-group.js'
 
@@ -12,9 +19,6 @@ import '@polymer/paper-fab/paper-fab.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-tabs/paper-tab.js';
 import '@polymer/paper-tabs/paper-tabs.js';
-import { TangyFormResponseModel } from './tangy-form-response-model.js';
-import { TangyFormItemHelpers } from './tangy-form-item-callback-helpers.js'
-
 
 /**
  * `tangy-form`
