@@ -434,6 +434,7 @@ export class TangyFormItem extends PolymerElement {
     this.$.content
       .querySelectorAll('[name]')
       .forEach(input => {
+        input.addEventListener('next', () => this.next())
         input.addEventListener('change', _ => {
           this.dispatchEvent(new Event('change', {details: _.target}))
           this.fireHook('on-change', _)
