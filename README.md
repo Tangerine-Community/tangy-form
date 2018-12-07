@@ -54,7 +54,7 @@ Play with the [demo on glitch](https://tangy-form-demo.glitch.me/).
 ```
 npm install --save tangy-form
 ```
-Because React is not playing nicely with bundlers, you need to include it as a global dependency in [a script tag](https://redux.js.org/#installation) as you will see in the `demo/index.html`.
+Because Redux is not playing nicely with bundlers, you need to include it as a global dependency in [a script tag](https://redux.js.org/#installation) as you will see in the `demo/index.html`.
 
 Then from any of your elements, import tangy-form.
 ```
@@ -77,7 +77,7 @@ import 'tangy-form/tangy-form.js'
 
 Lastly, any module where you are going to use a Web Component you need to let Angular know it can be flexible with the names of components by import `CUSTOM_ELEMENTS_SCHEMA`. Note that just enabling on the app module level is not enough for children modules to also use flexible schema. You need to do the same for those children modules as well.
 
-```
+```javascript
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 ...
 @NgModule({
@@ -89,9 +89,43 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 ```
 
+### Install Tangy Input elements
+Due to the growing number of Tangy input elements, you'll need to specify which Tangy input elements to include in your application with additional import statements. See the `input` folder for a list of elements and import them using...
+
+```javascript
+import 'tangy-form/input/tangy-input.js'
+import 'tangy-form/input/tangy-radio-buttons.js'
+import 'tangy-form/input/tangy-checkboxes.js'
+```
+
+### Theming
+You can provide some CSS overrides by providing a custom style definition in your app's `index.html`.
+
+```html
+<custom-style>
+  <style>
+    html {
+      --document-background-color: #FAFAFA;
+      --primary-color-dark: #3c5b8d;
+      --primary-text-color: var(--light-theme-text-color);
+      --primary-color: #3c5b8d;
+      --accent-color: #f26f10;
+      --accent-text-color: #FFF;
+      --error-color: var(--paper-red-500);
+      --disabled-color: #BBB;
+    }
+    h1, h2, h3, h4, h5 {
+      @apply --paper-font-common-base;
+      color: var(--primary-text-color);
+      margin: 25px 0px 5px 15px;
+    }
+  </style>
+</custom-style>
+```
+
 ## Run the demo
 Requires node.js and npm installed.
-```
+```sh
 git clone https://github.com/tangerine-community/tangy-form
 cd tangy-form
 npm install
