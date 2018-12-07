@@ -3,6 +3,7 @@
 ## v3.0.0
 - You no longer have to include all of the tangy input elements in your build. You define which ones you use by importing then individually. See README.md for more details.
 - Overall code organization refactor. We now place input elements in the input folder, shared style files in the style folder, and some utilities in the util folder.
+- Tests are no longer all in one file. They are split out into files that match up with their related components into a specific "suite". All suites can be run by starting with `npm start` and then opening `http://localhost:8081/test/`. Click on a suite and it will run just the tests for that suite. Handy when you are doing TDD and don't want to wait for other suites to run.
 
 ## v2.11.0
 - `<tangy-form-item>` will now have a `is-dirty` attribute when it has changes that have not yet been saved.
