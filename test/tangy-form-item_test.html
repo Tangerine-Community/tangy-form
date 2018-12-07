@@ -32,7 +32,6 @@
           const element = fixture('TangyFormItemFixture');
           element.newResponse()
           element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-input').dispatchEvent(new CustomEvent('next'))
-          debugger
           assert.equal(element.querySelectorAll('tangy-form-item')[1].open, true)
         })
         test('should be fullscreen', () => {
