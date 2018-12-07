@@ -88,7 +88,8 @@ export class TangyEftouch extends PolymerElement {
       value: {
         type: Object,
         value: {startTime: 0, selectionTime: 0, selection: ''},
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        observer: 'render'
       },
       required: {
         type: Boolean,
@@ -212,11 +213,8 @@ export class TangyEftouch extends PolymerElement {
         #options-box {
           /* background: #EEE; */
         }
-        #option {
+        #cell {
           text-align: center;
-        }
-        #option img {
-          margin: 0 auto;
         }
       </style>
       <div id="messages-box">
@@ -233,25 +231,27 @@ export class TangyEftouch extends PolymerElement {
       </div>
       <div id="options-box">
       ${options.map(option => `
-        <span id="option" 
-          value="${option.value}" 
+        <span id="cell" 
           style="
             display: inline-block;
             width:${Math.floor((option.getAttribute('width')/100)*this.width)}px;
             height:${Math.floor((option.getAttribute('height')/100)*(this.height-60))}px;
           ">
           ${option.getAttribute('src') ? `
-            <img style="
-              max-height: 100%;
-              max-width: 100%;
-            " 
-            src="${option.getAttribute('src')}">
-          ` : option.innerHTML}
+            <img 
+              value="${option.value}" 
+              style="
+                ${this.value.selection === option.value? `background: lightgreen;` : ``}
+                max-height: 100%;
+                max-width: 100%;
+              " 
+              src="${option.getAttribute('src')}">
+          ` : ``}
         </span>
       `).join('')}
       </div>
     `
-    this.shadowRoot.querySelectorAll('span').forEach(el => el.addEventListener('click', _ => this.onSelection(_.target)))
+    this.shadowRoot.querySelectorAll('img').forEach(el => el.addEventListener('click', _ => this.onSelection(_.target)))
   }
 
   onSelection(target) {
