@@ -198,11 +198,28 @@
         </tangy-input-groups>
       </template>
     </test-fixture>    
+ 
+    <test-fixture id="TangyLocationFixture">
+      <template>
+        <tangy-location location-src="location-list.json"></tangy-location>
+      </template>
+    </test-fixture>
 
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import stub from './stub.js' 
       import { TangyFormResponseModel } from '../tangy-form-response-model.js'
+
+      suite('tangy-location', () => {
+        test('should not validate when still loading location list', (done) => {
+          const element = fixture('TangyLocationFixture')
+          assert.equal(element.validate(), false)
+          element.addEventListener('location-list-loaded', () => {
+            assert.equal(element.validate(), true)
+            done()
+          }, {once: true})
+        })
+      })
 
       suite('tangy-input-groups', () => {
         test('tangy-input-groups start with 3 groups', () => {
