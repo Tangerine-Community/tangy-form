@@ -527,6 +527,7 @@ class TangyLocation extends PolymerElement {
       try {
         that.locationList = JSON.parse(this.responseText)
         that.render()
+        that.locationListLoaded = true
         that.dispatchEvent(new CustomEvent('location-list-loaded'))
       } catch(e) {
         // Do nothing. Some stages will not have valid JSON returned.
@@ -685,6 +686,7 @@ class TangyLocation extends PolymerElement {
   }
 
   validate() {
+    if (this.required && !this.locationListLoaded) return false
     let foundIncomplete = false
     this.shadowRoot.querySelectorAll('select').forEach(el => {
       if (!el.value) {
