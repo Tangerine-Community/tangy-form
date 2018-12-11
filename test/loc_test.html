@@ -42,6 +42,11 @@
           assert.equal(locationList.locations.hasOwnProperty('county2'), false)
           assert.equal(locationList.locations.county1.children.hasOwnProperty('school1'), true)
         })
+        test('should transform to include decendents counts', () => {
+          let locationList = Loc.calculateDescendentCounts(stub.locationList)
+          assert.equal(locationList.locations["county1"].descendentsCount, 2)
+          assert.equal(locationList.locations["county1"].children.school1.descendentsCount, 0)
+        })
       })
     </script>
 
