@@ -341,6 +341,76 @@
           assert.equal(element.querySelector('tangy-form-item#item-1').shadowRoot.querySelector('[name=input1]').value, 'foo')
         });
 
+        test('can resume response and on-open override an input with a new value', () => {
+          const element = fixture('OnOpenTestFixture');
+          element.response = {
+            "_id": "4acc5190-1618-451f-96e2-12e1c7dec376",
+            "collection": "TangyFormResponse",
+            "form": {
+              "complete": false,
+              "linearMode": true,
+              "hideClosedItems": true,
+              "hideCompleteFab": false,
+              "tabIndex": 0,
+              "showResponse": false,
+              "showSummary": false,
+              "hasSummary": false,
+              "onSubmit": "",
+              "id": "test",
+              "tagName": "TANGY-FORM"
+            },
+            "items": [
+              {
+                "id": "item-1",
+                "src": "tangy-form-item",
+                "title": "",
+                "summary": false,
+                "hideButtons": true,
+                "hideBackButton": true,
+                "rightToLeft": false,
+                "hideNextButton": false,
+                "showCompleteButton": false,
+                "inputs": [
+                  {
+                    "name": "input1",
+                    "private": false,
+                    "label": "test1",
+                    "type": "",
+                    "errorMessage": "",
+                    "required": false,
+                    "disabled": false,
+                    "hidden": false,
+                    "invalid": false,
+                    "incomplete": true,
+                    "value": "bar",
+                    "allowedPattern": "",
+                    "tagName": "TANGY-INPUT"
+                  }
+                ],
+                "open": false,
+                "incomplete": false,
+                "disabled": false,
+                "hidden": true,
+                "locked": false,
+                "tagName": "TANGY-FORM-ITEM"
+              }
+            ],
+            "inputs": [],
+            "complete": false,
+            "focusIndex": 0,
+            "nextFocusIndex": -1,
+            "previousFocusIndex": -1,
+            "startDatetime": "7/17/2018, 5:17:31 PM",
+            "startUnixtime": 1531862251438,
+            "uploadDatetime": "",
+            "previousItemId": "",
+            "progress": 0
+          }
+          // Response has input1's value set to bar, should be set to "foo" by on-open logic.
+          debugger
+          assert.equal(element.querySelector('tangy-form-item#item-1').shadowRoot.querySelector('[name=input1]').value, 'foo')
+        });
+
         test('tangy-form-item.open-open hook should getValue() from previous item ', () => {
           const element = fixture('GetValueTestFixture');
           element.newResponse()
