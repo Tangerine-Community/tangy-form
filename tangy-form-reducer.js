@@ -18,6 +18,14 @@ const tangyFormReducer = function (state = initialState, action) {
 
     case 'FORM_OPEN':
       newState = Object.assign({}, action.response) 
+      newState.items = action.itemsInDom.map(itemInDom => {
+        const matchingItemInResponse = newState.items.find(item => item.id === itemInDom.id)
+        if (matchingItemInResponse) {
+          return { ...itemInDom, ...matchingItemInResponse }
+        } else {
+          return itemInDom
+        }
+      })
       firstNotDisabled = newState.items.findIndex(item => item.disabled === false)
       newState.items[firstNotDisabled].hideBackButton = true
       const indexOfSummaryItem = newState.items.findIndex(item => item.summary === true)

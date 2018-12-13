@@ -478,9 +478,79 @@
           assert.equal(element.querySelectorAll('[open=""]').length, 1)
           assert.equal(element.querySelector('#item-2').hasAttribute('show-complete-button'), true)
         })
+        test('should open with all items in form DOM even if response has fewer items', () => {
+          const element = fixture('SimpleTestFixture');
+          let response = {
+            "_id": "df7fcdaf-aa01-4ad9-8602-15cb529d3a30",
+            "collection": "TangyFormResponse",
+            "form": {
+              "complete": false,
+              "linearMode": true,
+              "hideClosedItems": true,
+              "hideCompleteFab": false,
+              "tabIndex": 0,
+              "showResponse": false,
+              "showSummary": false,
+              "hasSummary": false,
+              "onSubmit": "",
+              "id": "test",
+              "tagName": "TANGY-FORM"
+            },
+            "items": [
+              {
+                "id": "item-1",
+                "src": "tangy-form-item",
+                "title": "",
+                "summary": false,
+                "hideButtons": true,
+                "hideBackButton": false,
+                "rightToLeft": false,
+                "hideNextButton": false,
+                "showCompleteButton": false,
+                "inputs": [],
+                "open": false,
+                "incomplete": true,
+                "disabled": false,
+                "hidden": true,
+                "locked": false,
+                "tagName": "TANGY-FORM-ITEM"
+              },
+              {
+                "id": "item-2",
+                "src": "tangy-form-item",
+                "title": "",
+                "summary": false,
+                "hideButtons": true,
+                "hideBackButton": true,
+                "rightToLeft": false,
+                "hideNextButton": false,
+                "showCompleteButton": false,
+                "inputs": [],
+                "open": false,
+                "incomplete": true,
+                "disabled": false,
+                "hidden": false,
+                "locked": false,
+                "tagName": "TANGY-FORM-ITEM"
+              }
+            ],
+            "inputs": [],
+            "complete": false,
+            "focusIndex": 0,
+            "nextFocusIndex": 1,
+            "previousFocusIndex": -1,
+            "startDatetime": "7/17/2018, 6:13:38 PM",
+            "startUnixtime": 1531865618651,
+            "uploadDatetime": ""
+          }
+          element.response = response
+          assert.equal(element.response.items.length, 3)
+        })
         test('should be fullscreen') 
         test('should disable fullscreen after submit')
       });
+
+
 
       window.stub = {
        responseWithTangyCard: {"_id":"94897a00-ea84-46ba-b046-21505dd1a1e9","collection":"TangyFormResponse","form":{"title":"My Form","complete":true,"linearMode":false,"hideClosedItems":false,"hideCompleteFab":false,"tabIndex":1,"showResponse":true,"showSummary":false,"hasSummary":false,"onSubmit":"","id":"tangy-cards-demo","tagName":"TANGY-FORM"},"items":[{"id":"item1","title":"People","summary":false,"hideButtons":false,"hideBackButton":true,"rightToLeft":false,"hideNextButton":true,"showCompleteButton":true,"inputs":[{"name":"person","value":[{"name":"c911e052-bea0-4ee9-b3b0-e93023a025c0","value":[{"name":"first_name","private":false,"label":"First name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"foo","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"name":"last_name","private":false,"label":"Last name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"}],"label":"","disabled":false,"invalid":false,"incomplete":true,"hidden":false},{"name":"9d27d598-a811-4e80-b04d-d18523303c12","value":[{"name":"first_name","private":false,"label":"First name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"name":"last_name","private":false,"label":"Last name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"}],"label":"","disabled":false,"invalid":false,"incomplete":true,"hidden":false},{"name":"fd1a64c6-f52a-4480-9a2d-c4792ca2bb39","value":[{"name":"first_name","private":false,"label":"First name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"name":"last_name","private":false,"label":"Last name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"}],"label":"","disabled":false,"invalid":false,"incomplete":true,"hidden":false}],"label":"","disabled":true,"invalid":false,"incomplete":true,"hidden":false}],"open":false,"incomplete":false,"disabled":false,"hidden":false,"locked":true,"tagName":"TANGY-FORM-ITEM"}],"inputs":[],"complete":true,"focusIndex":0,"nextFocusIndex":1,"previousFocusIndex":-1,"startDatetime":"10/5/2018, 12:45:43 PM","startUnixtime":1538757943292,"uploadDatetime":""}
