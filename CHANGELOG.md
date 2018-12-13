@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v3.1.0
+- New `<tangy-photo-capture>` input element for capturing photos on forms.
+- Fix a bug where values set during on-open would be overridden with previous set values.
+- Made safer resuming responses when the items in the form no longer match.
+- EFTouch option positioning improvements.
+
 ## v3.0.0
 - You no longer have to include all of the tangy input elements in your build. You define which ones you use by importing then individually. See README.md for more details.
 - Overall code organization refactor. We now place input elements in the input folder, shared style files in the style folder, and some utilities in the util folder.
