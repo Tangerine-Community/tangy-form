@@ -1,6 +1,9 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import './tangy-common-styles.js'
-import './tangy-element-styles.js'
+import '../style/tangy-common-styles.js'
+import '../style/tangy-element-styles.js'
+import '@polymer/iron-icon/iron-icon.js'
+import '@polymer/paper-button/paper-button.js'
+
 
     /**
      * `tangy-checkbox`
@@ -21,7 +24,7 @@ export class TangyPhotoCapture extends PolymerElement {
       }
     </style>
     <img id="image"/>
-    <div on-click="capturePhoto">[ capture photo ]</div>
+    <paper-button on-click="capturePhoto"><iron-icon icon="camera-enhance"></iron-icon> capture photo </paper-buton>
 
     `
   }

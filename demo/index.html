@@ -47,6 +47,7 @@
     <script type="module" src="../input/tangy-select.js"></script>
     <script type="module" src="../input/tangy-timed.js"></script>
     <script type="module" src="../input/tangy-toggle-button.js"></script>
+    <script type="module" src="../input/tangy-photo-capture.js"></script>
 
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
@@ -63,7 +64,6 @@
           <tangy-form id="my-form" title="My Form">
             <tangy-form-item id="item1">
               <tangy-input name="input1" label="What is your first name?"required></tangy-input>
-              <tangy-photo-capture name="picture"></tangy-photo-capture>
             </tangy-form-item>
             <tangy-form-item id="item2">
               <tangy-input name="input2" label="What is your last name?" required></tangy-input>
@@ -91,6 +91,7 @@
             <tangy-form-item id="item1" title="Fruit Survey">
               <tangy-input name="first_name" label="What is your first name?"></tangy-input>
               <tangy-input name="last_name" label="What is your last name?"></tangy-input>
+              <tangy-photo-capture name="picture"></tangy-photo-capture>
               <tangy-radio-buttons name="fruit_selection" label="What is your favorite fruit?">
                 <option name="orange">Orange</option>
                 <option name="banana">Banana</option>
