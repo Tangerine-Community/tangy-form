@@ -19,9 +19,20 @@ export class TangyEftouch extends PolymerElement {
 
   static get properties() {
     return {
-      columns: {
+      fromTopOfScreen: {
         type: Number,
-        value: 1,
+        value: 115,
+        reflectToAttribute: true,
+        observer: 'render'
+      },
+      height: {
+        type: Number,
+        value: 400,
+        reflectToAttribute: true,
+        observer: 'render'
+      },
+      width: {
+        type: Number,
         reflectToAttribute: true,
         observer: 'render'
       },
@@ -77,7 +88,8 @@ export class TangyEftouch extends PolymerElement {
       value: {
         type: Object,
         value: {startTime: 0, selectionTime: 0, selection: ''},
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        observer: 'render'
       },
       required: {
         type: Boolean,
@@ -117,6 +129,11 @@ export class TangyEftouch extends PolymerElement {
 
   connectedCallback () {
     super.connectedCallback()
+    if (!this.width) {
+      this.width = document.documentElement.offsetWidth
+    }
+    this.style.width = `${this.width}px`
+    this.style.height = `${this.height}px`
     this.render()
     if (this.value.startTime === 0) {
       this.value.startTime = new Date().getTime()
@@ -131,7 +148,7 @@ export class TangyEftouch extends PolymerElement {
         this.transition()
       }, this.timeLimit)
     }
-    this.fitIt()
+    //this.fitIt()
   }
 
   disconnectedCallback () {
@@ -147,7 +164,9 @@ export class TangyEftouch extends PolymerElement {
     this.shadowRoot.innerHTML = `
       <style>
         :host {
-          display: inline-block;
+          position: fixed;
+          top: ${this.fromTopOfScreen}px;
+          left: 0px;
           width: 100%
         }
         :host tangy-radio-buttons {
@@ -187,31 +206,58 @@ export class TangyEftouch extends PolymerElement {
           -ms-transition: opacity .5s ease-in-out;
           -o-transition: opacity .5s ease-in-out;
         }
+        #messages-box {
+          height: 60px;
+          /* background: red; */
+        }
+        #options-box {
+          /* background: #EEE; */
+        }
+        #cell {
+          text-align: center;
+        }
       </style>
-      ${this.transitionMessage ? `
-        <div id="transition">
-          ${this.transitionMessage}
-        </div>
-      ` : ''}
-      ${this.warningMessage ? `
-        <div id="warning">
-          ${this.warningMessage}
-        </div>
-      ` : ''}
-      <tangy-radio-buttons fullscreen columns="${this.columns}" hide-buttons hide-help-text>
-        ${options.map(option => `
-          <option value="${option.value}">${option.getAttribute('src') ? `<img style="width:100%" src="${option.getAttribute('src')}">` : option.innerHTML}</option>
-        `)}
-      </tangy-radio-buttons>
+      <div id="messages-box">
+        ${this.transitionMessage ? `
+          <div id="transition">
+            ${this.transitionMessage}
+          </div>
+        ` : ''}
+        ${this.warningMessage ? `
+          <div id="warning">
+            ${this.warningMessage}
+          </div>
+        ` : ''}
+      </div>
+      <div id="options-box">
+      ${options.map(option => `
+        <span id="cell" 
+          style="
+            display: inline-block;
+            width:${Math.floor((option.getAttribute('width')/100)*this.width)}px;
+            height:${Math.floor((option.getAttribute('height')/100)*(this.height-60))}px;
+          ">
+          ${option.getAttribute('src') ? `
+            <img 
+              value="${option.value}" 
+              style="
+                ${this.value.selection === option.value? `background: lightgreen;` : ``}
+                max-height: 100%;
+                max-width: 100%;
+              " 
+              src="${option.getAttribute('src')}">
+          ` : ``}
+        </span>
+      `).join('')}
+      </div>
     `
-    this.shadowRoot.querySelector('tangy-radio-buttons').addEventListener('change', _ => this.onRadioChange(_.target))
-    this.radioButtonsEl = this.shadowRoot.querySelector('tangy-radio-buttons')
+    this.shadowRoot.querySelectorAll('img').forEach(el => el.addEventListener('click', _ => this.onSelection(_.target)))
   }
 
-  onRadioChange(radioButtons) {
+  onSelection(target) {
     if (this.inputSound) new Audio(this.inputSound).play()
     this.value = Object.assign({}, this.value, {
-      selection: radioButtons.value.find(button => button.value === 'on') ? radioButtons.value.find(button => button.value === 'on').name : '',
+      selection: target.getAttribute('value'),
       selectionTime: new Date().getTime()
     })
     this.dispatchEvent(new Event('change'))

@@ -12,39 +12,71 @@
 
     <test-fixture id="EFTouchFixture">
       <template>
-        <tangy-eftouch columns="3" name="fruit_selection" label="What is your favorite fruit?">
-          <option name="orange">Orange</option>
-          <option name="banana">Banana</option>
-          <option name="tangerine">Tangerine</option>
-          <option name="cantalope">Cantalope</option>
-          <option name="cherry">Cherry</option>
-          <option name="kiwi">Kiwi</option>
-        </tangy-eftouch>
+        <tangy-eftouch name="animal_selection" label="Which is your favorite animal?">
+            <option width=30 height=50 src="assets/images/bird.png" value="bird"></option>
+            <option width=30 height=50 src="assets/images/cat.png" value="cat"></option>
+            <option width=30 height=50 src="assets/images/cow.png" value="cow"></option>
+            <option width=30 height=50 src="assets/images/dog.png" value="dog"></option>
+            <option width=30 height=50 src="assets/images/fish.png" value="fish"></option>
+            <option width=30 height=50 src="assets/images/pig.png" value="pig"></option>
+          </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="UnusualLayoutFixture">
+      <template>
+          <tangy-eftouch name="cat_selection" label="Which is your favorite cat?">
+
+            <option width=10 height=50 src="assets/images/bird.png" value="orange">Orange</option>
+            <option width=70 height=50 src="assets/images/cat.png" value="banana">Banana</option>
+            <option width=10 height=50 src="assets/images/cat.png" value="tangerine">Tangerine</option>
+
+            <option width=80 height=50 src="assets/images/cat.png" value="cantalope">Cantalope</option>
+            <option width=5 height=50 src="assets/images/cat.png" value="cherry">Cherry</option>
+            <option width=5 height=50 src="assets/images/cat.png" value="kiwi">Kiwi</option>
+
+          </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="FixedLayoutFixture">
+      <template>
+          <tangy-eftouch width=100 height=100 name="cat_selection" label="Which is your favorite cat?">
+
+            <option width=10 height=50 src="assets/images/bird.png" value="orange">Orange</option>
+            <option width=70 height=50 src="assets/images/cat.png" value="banana">Banana</option>
+            <option width=10 height=50 src="assets/images/cat.png" value="tangerine">Tangerine</option>
+
+            <option width=80 height=50 src="assets/images/cat.png" value="cantalope">Cantalope</option>
+            <option width=5 height=50 src="assets/images/cat.png" value="cherry">Cherry</option>
+            <option width=5 height=50 src="assets/images/cat.png" value="kiwi">Kiwi</option>
+
+          </tangy-eftouch>
       </template>
     </test-fixture>
 
     <test-fixture id="EFTouchAutoProgressFixture">
       <template>
-        <tangy-eftouch auto-progress columns="3" name="fruit_selection" label="What is your favorite fruit?">
-          <option name="orange">Orange</option>
-          <option name="banana">Banana</option>
-          <option name="tangerine">Tangerine</option>
-          <option name="cantalope">Cantalope</option>
-          <option name="cherry">Cherry</option>
-          <option name="kiwi">Kiwi</option>
+        <tangy-eftouch auto-progress value="fruit_selection" label="What is your favorite fruit?">
+          <option value="orange" src="assets/images/cat.png"></option>
+          <option value="banana" src="assets/images/cat.png"></option>
+          <option value="tangerine" src="assets/images/cat.png"></option>
+          <option value="cantalope" src="assets/images/cat.png"></option>
+          <option value="cherry" src="assets/images/cat.png"></option>
+          <option value="kiwi" src="assets/images/cat.png"></option>
         </tangy-eftouch>
       </template>
     </test-fixture>
 
     <test-fixture id="EFTouchImagesFixture">
       <template>
-        <tangy-eftouch auto-progress columns="3" name="fruit_selection" label="What is your favorite fruit?">
-          <option name="orange" src="assets/images/cat.png"></option>
-          <option name="banana" src="assets/images/cat.png"></option>
-          <option name="tangerine" src="assets/images/cat.png"></option>
-          <option name="cantalope" src="assets/images/cat.png"></option>
-          <option name="cherry" src="assets/images/cat.png"></option>
-          <option name="kiwi" src="assets/images/cat.png"></option>
+        <tangy-eftouch auto-progress value="fruit_selection" label="What is your favorite fruit?">
+          <option value="orange" src="assets/images/cat.png"></option>
+          <option value="banana" src="assets/images/cat.png"></option>
+          <option value="tangerine" src="assets/images/cat.png"></option>
+          <option value="cantalope" src="assets/images/cat.png"></option>
+          <option value="cherry" src="assets/images/cat.png"></option>
+          <option value="kiwi" src="assets/images/cat.png"></option>
         </tangy-eftouch>
       </template>
     </test-fixture>
@@ -61,51 +93,51 @@
           name="fruit_selection"
           label="What is your favorite fruit?"
           >
-          <option name="orange" src="assets/images/cat.png"></option>
-          <option name="banana" src="assets/images/cat.png"></option>
-          <option name="tangerine" src="assets/images/cat.png"></option>
-          <option name="cantalope" src="assets/images/cat.png"></option>
-          <option name="cherry" src="assets/images/cat.png"></option>
-          <option name="kiwi" src="assets/images/cat.png"></option>
+          <option value="orange" src="assets/images/cat.png"></option>
+          <option value="banana" src="assets/images/cat.png"></option>
+          <option value="tangerine" src="assets/images/cat.png"></option>
+          <option value="cantalope" src="assets/images/cat.png"></option>
+          <option value="cherry" src="assets/images/cat.png"></option>
+          <option value="kiwi" src="assets/images/cat.png"></option>
         </tangy-eftouch>
       </template>
     </test-fixture>
 
     <test-fixture id="EFTouchWarningFixture">
       <template>
-        <tangy-eftouch warning-time=100 warning-message="You are running out of time!" columns="3" name="fruit_selection" label="What is your favorite fruit?">
-          <option name="orange" src="assets/images/cat.png"></option>
-          <option name="banana" src="assets/images/cat.png"></option>
-          <option name="tangerine" src="assets/images/cat.png"></option>
-          <option name="cantalope" src="assets/images/cat.png"></option>
-          <option name="cherry" src="assets/images/cat.png"></option>
-          <option name="kiwi" src="assets/images/cat.png"></option>
+        <tangy-eftouch warning-time=100 warning-message="You are running out of time!" value="fruit_selection" label="What is your favorite fruit?">
+          <option value="orange" src="assets/images/cat.png"></option>
+          <option value="banana" src="assets/images/cat.png"></option>
+          <option value="tangerine" src="assets/images/cat.png"></option>
+          <option value="cantalope" src="assets/images/cat.png"></option>
+          <option value="cherry" src="assets/images/cat.png"></option>
+          <option value="kiwi" src="assets/images/cat.png"></option>
         </tangy-eftouch>
       </template>
     </test-fixture>
 
     <test-fixture id="EFTouchTimeLimitFixture">
       <template>
-        <tangy-eftouch time-limit=100 columns="3" name="fruit_selection" label="What is your favorite fruit?">
-          <option name="orange" src="assets/images/cat.png"></option>
-          <option name="banana" src="assets/images/cat.png"></option>
-          <option name="tangerine" src="assets/images/cat.png"></option>
-          <option name="cantalope" src="assets/images/cat.png"></option>
-          <option name="cherry" src="assets/images/cat.png"></option>
-          <option name="kiwi" src="assets/images/cat.png"></option>
+        <tangy-eftouch time-limit=100 value="fruit_selection" label="What is your favorite fruit?">
+          <option value="orange" src="assets/images/cat.png"></option>
+          <option value="banana" src="assets/images/cat.png"></option>
+          <option value="tangerine" src="assets/images/cat.png"></option>
+          <option value="cantalope" src="assets/images/cat.png"></option>
+          <option value="cherry" src="assets/images/cat.png"></option>
+          <option value="kiwi" src="assets/images/cat.png"></option>
         </tangy-eftouch>
       </template>
     </test-fixture>
 
     <test-fixture id="EFTouchCorrectFixture">
       <template>
-        <tangy-eftouch incorrect-message="You chose the wrong option. Try again." columns="3" name="fruit_selection" label="What is your favorite fruit?">
-          <option name="orange" correct src="assets/images/cat.png"></option>
-          <option name="banana" correct src="assets/images/cat.png"></option>
-          <option name="tangerine" src="assets/images/cat.png"></option>
-          <option name="cantalope" src="assets/images/cat.png"></option>
-          <option name="cherry" src="assets/images/cat.png"></option>
-          <option name="kiwi" src="assets/images/cat.png"></option>
+        <tangy-eftouch incorrect-message="You chose the wrong option. Try again." value="fruit_selection" label="What is your favorite fruit?">
+          <option value="orange" correct src="assets/images/cat.png"></option>
+          <option value="banana" correct src="assets/images/cat.png"></option>
+          <option value="tangerine" src="assets/images/cat.png"></option>
+          <option value="cantalope" src="assets/images/cat.png"></option>
+          <option value="cherry" src="assets/images/cat.png"></option>
+          <option value="kiwi" src="assets/images/cat.png"></option>
         </tangy-eftouch>
       </template>
     </test-fixture>
@@ -116,11 +148,31 @@
 
       suite('tangy-eftouch', () => {
 
-        test('should have value after selection', () => { 
+        test('should have a default width of the width of the screen', () => { 
+          const element = fixture('UnusualLayoutFixture')
+          assert.equal(element.offsetWidth, document.documentElement.offsetWidth)
+        })
+
+        test('should have a set width', () => { 
+          const element = fixture('FixedLayoutFixture')
+          assert.equal(element.offsetWidth, 100)
+        })
+
+        test('should have a default height', () => { 
+          const element = fixture('UnusualLayoutFixture')
+          assert.equal(element.offsetHeight, 400)
+        })
+
+        test('should have a set height', () => { 
+          const element = fixture('FixedLayoutFixture')
+          assert.equal(element.offsetHeight, 100)
+        })
+
+        test('should have value and highlight after selection', () => { 
           const element = fixture('EFTouchFixture');
-          element.shadowRoot.querySelector('tangy-radio-buttons').shadowRoot.querySelector('tangy-radio-button').shadowRoot.querySelector('paper-radio-button').click()
           // @TODO Should be 'orange'. There is a bug deeper down causing radio button labels to be names.
-          assert.equal(element.value.selection, 'Orange')
+          element.shadowRoot.querySelector('img').click()
+          assert.equal(element.value.selection, 'bird')
           assert.equal(element.value.startTime !== 0, true)
           assert.equal(element.value.selectionTime !== 0, true)
         })
@@ -131,7 +183,7 @@
           element.addEventListener('next', _ => {
             eventDidFire = true
           })
-          element.shadowRoot.querySelector('tangy-radio-buttons').shadowRoot.querySelector('tangy-radio-button').shadowRoot.querySelector('paper-radio-button').click()
+          element.shadowRoot.querySelector('img').click()
           assert.equal(eventDidFire, true)
         });
 
@@ -154,7 +206,7 @@
           element.addEventListener('next', () => {
             eventDidFire = true
           })
-          element.shadowRoot.querySelector('tangy-radio-buttons').shadowRoot.querySelector('tangy-radio-button').shadowRoot.querySelector('paper-radio-button').click()
+          element.shadowRoot.querySelector('img').click()
           setTimeout(() => {
             assert.equal(eventDidFire, true)
             done()
@@ -174,10 +226,6 @@
             done()
           }, 101)
           assert.equal(eventDidFire, false)
-        });
-
-        test('should position itself in available space', () => {
-          // TODO: Write this test.
         });
 
         test('should have value of correctness');
