@@ -480,6 +480,86 @@
         })
         test('should be fullscreen') 
         test('should disable fullscreen after submit')
+        test('should open form if result has fewer items', () => {
+          const element = fixture('SimpleTestFixture');
+          // Disable item 1 and 3 are disabled in this response being resumed, leaving item-2 the first item not disabled.
+          // Note that before you assign the response, this is your opportunity to set an item to disabled.
+          let response = {
+            "_id": "df7fcdaf-aa01-4ad9-8602-15cb529d3a30",
+            "collection": "TangyFormResponse",
+            "form": {
+              "complete": false,
+              "linearMode": true,
+              "hideClosedItems": true,
+              "hideCompleteFab": false,
+              "tabIndex": 0,
+              "showResponse": false,
+              "showSummary": false,
+              "hasSummary": false,
+              "onSubmit": "",
+              "id": "test",
+              "tagName": "TANGY-FORM"
+            },
+            "items": [
+              {
+                "id": "item-1",
+                "src": "tangy-form-item",
+                "title": "",
+                "summary": false,
+                "hideButtons": true,
+                "hideBackButton": false,
+                "rightToLeft": false,
+                "hideNextButton": false,
+                "showCompleteButton": false,
+                "inputs": [],
+                "open": false,
+                "incomplete": true,
+                "disabled": false,
+                "hidden": true,
+                "locked": false,
+                "tagName": "TANGY-FORM-ITEM"
+              },
+              {
+                "id": "item-2",
+                "src": "tangy-form-item",
+                "title": "",
+                "summary": false,
+                "hideButtons": true,
+                "hideBackButton": true,
+                "rightToLeft": false,
+                "hideNextButton": false,
+                "showCompleteButton": false,
+                "inputs": [],
+                "open": false,
+                "incomplete": true,
+                "disabled": false,
+                "hidden": false,
+                "locked": false,
+                "tagName": "TANGY-FORM-ITEM"
+              }
+            ],
+            "inputs": [],
+            "complete": false,
+            "focusIndex": 0,
+            "nextFocusIndex": 1,
+            "previousFocusIndex": -1,
+            "startDatetime": "7/17/2018, 6:13:38 PM",
+            "startUnixtime": 1531865618651,
+            "uploadDatetime": ""
+          }
+          let itemsToDisable = ['item-2', 'item-3']
+          response.items = response.items.map(item => {
+            if (itemsToDisable.indexOf(item.id) !== -1) {
+              return Object.assign({}, item, {disabled: true})
+            }
+            else {
+              return Object.assign({}, item, {disabled: false})
+            }
+          })
+          element.response = response
+          assert.equal(element.querySelector('[open=""]').id, 'item-1')
+          assert.equal(element.querySelectorAll('[open=""]').length, 1)
+        })
       });
 
       window.stub = {

@@ -48,7 +48,8 @@ export class TangyForm extends PolymerElement {
   // Set a form response to this property to resume a form response.
   set response(value) {
     this._responseHasBeenSet = true
-    this.store.dispatch({ type: 'FORM_OPEN', response: value })
+    let currentItems = [...this.querySelectorAll('tangy-form-item')].map(itemEl => itemEl.getProps())
+    this.store.dispatch({ type: 'FORM_OPEN', response: value, currentItems: currentItems })
     this.fireHook('on-open')
   }
 

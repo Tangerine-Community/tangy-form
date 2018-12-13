@@ -17,10 +17,34 @@ const tangyFormReducer = function (state = initialState, action) {
   switch(action.type) {
 
     case 'FORM_OPEN':
-      newState = Object.assign({}, action.response) 
-      firstNotDisabled = newState.items.findIndex(item => item.disabled === false)
-      newState.items[firstNotDisabled].hideBackButton = true
-      const indexOfSummaryItem = newState.items.findIndex(item => item.summary === true)
+      newState = Object.assign({}, action.response)
+      let currentItems = action.currentItems;
+      let formItemIds = []
+      let allResultItemIds = []
+      currentItems.map(item => formItemIds.push(item.id))
+      // First clean out responses that are for tangy-form-items that are no longer in-use
+      let cleanedItems = newState.items.filter(item => {
+        if (formItemIds.includes(item.id)) {
+          allResultItemIds.push(item.id)
+          return item
+        }
+      })
+      // Next, check if any new items have been added since this response was last saved
+      let newItems = []
+      formItemIds.filter(itemId => {
+        if (!allResultItemIds.includes(itemId)) {
+          currentItems.forEach(item => {
+            if (item.id === itemId) {
+              newItems.push(item)
+            }
+          });
+        }
+      })
+      // // TODO: must the new items be added in the same order as in currentItems?
+      cleanedItems.push(...newItems)
+      firstNotDisabled = cleanedItems.findIndex(item => item.disabled === false)
+      cleanedItems[firstNotDisabled].hideBackButton = true
+      const indexOfSummaryItem = cleanedItems.findIndex(item => item.summary === true)
       if (indexOfSummaryItem !== -1) {
         newState.form.hasSummary = true
       } 
@@ -28,13 +52,13 @@ const tangyFormReducer = function (state = initialState, action) {
         newState.form.linearMode = true
         newState.form.hideClosedItems = true
       }
-      let indexOfLastItem = newState.items.length - ([...newState.items].reverse().findIndex(item => !item.summary && !item.disabled) + 1)
-      newState.items[indexOfLastItem].hideNextButton = true
-      newState.items[indexOfLastItem].showCompleteButton = true
-      if (!newState.form.complete && !newState.items.find(item => item.open)) newState.items[firstNotDisabled].open = true
-      if (newState.form.hideClosedItems === true) newState.items.forEach(item => item.hidden = !item.open)
-      if (newState.form.linearMode === true) newState.items.forEach(item => item.hideButtons = true)
-      if (newState.form.fullscreen === true) newState.items.forEach(item => item.fullscreen = true)
+      let indexOfLastItem = cleanedItems.length - ([...cleanedItems].reverse().findIndex(item => !item.summary && !item.disabled) + 1)
+      cleanedItems[indexOfLastItem].hideNextButton = true
+      cleanedItems[indexOfLastItem].showCompleteButton = true
+      if (!newState.form.complete && !cleanedItems.find(item => item.open)) cleanedItems[firstNotDisabled].open = true
+      if (newState.form.hideClosedItems === true) cleanedItems.forEach(item => item.hidden = !item.open)
+      if (newState.form.linearMode === true) cleanedItems.forEach(item => item.hideButtons = true)
+      if (newState.form.fullscreen === true) cleanedItems.forEach(item => item.fullscreen = true)
       return newState
 
     case 'FORM_RESPONSE_COMPLETE':
