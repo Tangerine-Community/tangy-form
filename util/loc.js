@@ -104,6 +104,24 @@ export class Loc {
     return decendents
   }
 
+  static calculateDescendentCounts(locationList = {}) {
+    return this.unflatten({
+      ...locationList,
+      locations: this
+        .flatten(locationList)
+        .locations
+        .map(locationNode => {
+          return {
+            ...locationNode,
+            descendentsCount: this.filterToDecendentsByParentIdAndLevel(
+              locationList,
+              locationNode.id,
+              locationList.locationsLevels[locationList.locationsLevels.length-1]).length 
+          }
+        })
+    })
+  }
+
   static query (levels, criteria, locationList, qCallback, context) {
     var currentLevelIndex, i, j, len, level, levelIDs, levelMap, locationLevels, locations, resp, targetLevelIndex;
     if (criteria == null) {
