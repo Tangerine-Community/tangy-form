@@ -22,9 +22,10 @@ before_install:
 install:
   - npm install 
 script:
-  - npm run test 
+  - polymer test -l chrome 
 notifications:
   webhooks:
     on_success: change
     on_failure: always
     on_start: false
+

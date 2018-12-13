@@ -34,6 +34,7 @@ const tangyFormReducer = function (state = initialState, action) {
       if (!newState.form.complete && !newState.items.find(item => item.open)) newState.items[firstNotDisabled].open = true
       if (newState.form.hideClosedItems === true) newState.items.forEach(item => item.hidden = !item.open)
       if (newState.form.linearMode === true) newState.items.forEach(item => item.hideButtons = true)
+      if (newState.form.fullscreen === true) newState.items.forEach(item => item.fullscreen = true)
       return newState
 
     case 'FORM_RESPONSE_COMPLETE':
@@ -42,6 +43,7 @@ const tangyFormReducer = function (state = initialState, action) {
         form: Object.assign({}, state.form, {
           complete: true,
           linearMode: false,
+          fullscreen: false,
           hideClosedItems: false
         }),
         items: state.items.map(item => {
@@ -61,6 +63,7 @@ const tangyFormReducer = function (state = initialState, action) {
           }
           props.hideBackButton = true
           props.hideNextButton = true
+          props.fullscreen = false
           props.inputs = item.inputs.map(input => {
             if (input.tagName === 'TANGY-TIMED') {
               return Object.assign({}, input, {disabled: true, mode: 'TANGY_TIMED_MODE_DISABLED'})
@@ -118,6 +121,16 @@ const tangyFormReducer = function (state = initialState, action) {
       })})
       break
 
+    case 'ITEM_CHANGE':
+      newState = Object.assign({}, state)
+      // Find the current index of the item opening.
+      return Object.assign({}, newState, {items: state.items.map((item) => {
+        if (item.id == action.itemId) {
+          return Object.assign({}, item, {isDirty: true})
+        }
+        return item
+      })})
+      break
 
     case 'ITEM_CLOSE':
       tmp.itemIndex = state.items.findIndex(item => item.id === action.itemId)
@@ -128,7 +141,7 @@ const tangyFormReducer = function (state = initialState, action) {
         progress: ( ( ( state.items.filter((i) => i.valid).length ) / state.items.length ) * 100 ),
         items: state.items.map((item) => {
           if (item.id == action.itemId) {
-            return Object.assign({}, item, {open: false, valid: true, hideButtons: false})
+            return Object.assign({}, item, {open: false, isDirty: false, valid: true, hideButtons: false})
           }
           return Object.assign({}, item)
         })
@@ -192,7 +205,7 @@ const tangyFormReducer = function (state = initialState, action) {
       newState = Object.assign({}, state, {
         items: state.items.map((item) => {
           if (item.id == action.item.id) {
-            return Object.assign({}, item, action.item)
+            return Object.assign({}, item, action.item, { isDirty: false })
           }
           return item
         })

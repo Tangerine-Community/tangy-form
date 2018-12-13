@@ -1,39 +1,25 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import './util/html-element-props.js'
+import './style/tangy-common-styles.js'
 
-import './cat.js'
-import './tangy-form-item.js'
-import './tangy-cards.js'
-import './tangy-card.js'
-import './tangy-input-groups.js'
-import './tangy-input-group.js'
-import './tangy-common-styles.js'
-import './global-styles.js'
 import { tangyFormReducer } from './tangy-form-reducer.js'
+import { TangyFormResponseModel } from './tangy-form-response-model.js';
+import { TangyFormItemHelpers } from './tangy-form-item-callback-helpers.js'
 
-//   <!-- Tangy Custom Inputs Elements -->
-import './tangy-input.js'
-import './tangy-timed.js'
-import './tangy-photo-capture.js'
-import './tangy-checkbox.js'
-import './tangy-checkboxes.js'
-import './tangy-radio-buttons.js'
-import './tangy-select.js'
-import './tangy-location.js'
-import './tangy-gps.js'
+
+// Core elements.
+import './tangy-form-item.js'
 import './tangy-complete-button.js'
 import './tangy-overlay.js'
-import './tangy-acasi.js';
-import './tangy-eftouch.js';
+import './tangy-input-groups.js'
+import './tangy-input-group.js'
 
 //   <!-- Dependencies -->
 import '@polymer/paper-fab/paper-fab.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-tabs/paper-tab.js';
 import '@polymer/paper-tabs/paper-tabs.js';
-import { TangyFormResponseModel } from './tangy-form-response-model.js';
-import { TangyFormItemHelpers } from './tangy-form-item-callback-helpers.js'
-
 
 /**
  * `tangy-form`
@@ -72,7 +58,7 @@ export class TangyForm extends PolymerElement {
     return (this._responseHasBeenSet) ? this.store.getState() : null 
   }
 
-  // Get an array of all inputs accross items.
+  // Get an array of all inputs across items.
   get inputs() {
     return this.response.items.reduce((acc, item) => [...acc, ...item.inputs], [])
   }
@@ -266,6 +252,10 @@ export class TangyForm extends PolymerElement {
 
   static get properties() {
     return {
+      fullscreen: {
+        type: Boolean,
+        value: false
+      },
       title: {
         type: String,
         value: ''
@@ -335,7 +325,9 @@ export class TangyForm extends PolymerElement {
 
   ready() {
     super.ready()
-  
+    if (this.fullscreen) {
+      this.addEventListener('click', this.enableFullscreen, true)
+    }
     // Pass events of items to the reducer.
     this.hasLazyItems = false
     this.querySelectorAll('tangy-form-item').forEach((item) => {
@@ -343,6 +335,7 @@ export class TangyForm extends PolymerElement {
       // Pass in the store so on-change and on-open logic can access it.
       item.store = this.store
       if (this.linearMode) item.noButtons = true
+      item.addEventListener('change', this.onItemChange.bind(this))
       item.addEventListener('ITEM_NEXT', this.onItemNext.bind(this))
       item.addEventListener('ITEM_BACK', this.onItemBack.bind(this))
       item.addEventListener('ITEM_CLOSED', this.onItemClosed.bind(this))
@@ -401,6 +394,14 @@ export class TangyForm extends PolymerElement {
     } else {
       this.store.dispatch({ type: "SHOW_RESPONSE" })
     }
+  }
+
+  onItemChange(event) {
+    this.store.dispatch({
+      type: 'ITEM_CHANGE',
+      itemId: event.target.id
+    })
+    this.fireHook('on-change')
   }
 
   onItemNext(event) {
@@ -483,6 +484,12 @@ export class TangyForm extends PolymerElement {
       this.dispatchEvent(new CustomEvent('ALL_ITEMS_CLOSED'))
     }
 
+    if (this.previousState.form.fullscreen && !state.form.fullscreen) {
+      if(document.webkitExitFullscreen) document.webkitExitFullscreen()
+      if(document.exitFullscreen) document.exitFullscreen()
+      this.removeEventListener('click', this.enableFullscreen, true)
+    }
+
     // Stash as previous state.
     this.previousState = Object.assign({}, state)
 
@@ -517,6 +524,8 @@ export class TangyForm extends PolymerElement {
     let inputDisable = (name) => helpers.inputDisable(name)
     let inputEnable = (name) => helpers.inputEnable(name)
     let itemsPerMinute = (input) => helpers.itemsPerMinute(input)
+    // Use itemInputs instead of inputs in modules such as Class in order to summon only the inputs on-screen/in the currently active form.
+    let itemInputs = [...this.shadowRoot.querySelectorAll('[name]')].reduce((acc, input) => Object.assign({}, acc, {[input.name]: input}), {})
     eval(this.getAttribute(hook))
   }
 
@@ -534,6 +543,17 @@ export class TangyForm extends PolymerElement {
     this.store.dispatch({ type: 'ITEM_NEXT', itemId: item.id })
   }
 
+  enableFullscreen() {
+    if(this.requestFullscreen) {
+      this.requestFullscreen();
+    } else if(this.mozRequestFullScreen) {
+      this.mozRequestFullScreen();
+    } else if(this.webkitRequestFullscreen) {
+      this.webkitRequestFullscreen();
+    } else if(this.msRequestFullscreen) {
+      this.msRequestFullscreen();
+    }
+  }
 
 }
 

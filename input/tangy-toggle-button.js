@@ -1,26 +1,43 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import './util/html-element-props.js'
-import './style/tangy-element-styles.js';
-import './style/tangy-common-styles.js'
+import '../util/html-element-props.js'
+import '../style/tangy-element-styles.js';
+import '../style/tangy-common-styles.js'
+
 /**
- * `tangy-complete-button`
+ * `tangy-toggle-button`
  * 
  *
  * @customElement
  * @polymer
  * @demo demo/index.html
  */
-class TangyCompleteButton extends PolymerElement {
+class TangyToggleButton extends PolymerElement {
   static get template() {
     return html`
     <style include="tangy-common-styles"></style>
     <style>
-      
+      :host {
+        display: inline-block;
+        border: solid 3px #777;
+        border-radius: 10px;
+        padding: 0 3px;
+        color: #777;
+        font-size: .7em;
+      }
       :host([hidden]) {
         display: none;
       }
+      :host([pressed]) {
+        background-color: var(--primary-color);;
+        color: #FFF;
+        background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+        background-repeat: no-repeat;
+        background-position: top left; 
+      }
       
-     
+      :host([highlighted]) {
+        border-color: var(--accent-color);
+      }
       :host([required]:not([disabled])) label::before  { 
         content: "*"; 
         color: red; 
@@ -40,19 +57,21 @@ class TangyCompleteButton extends PolymerElement {
         height: 30%;
         /*width: 50%;
         margin: -15% 0 0 -25%;*/
+        text-align: center;
       }
       .text-inner ::slotted(*) {
       }
       
-    </style>
-    <paper-button id="button">
-      <slot></slot>
-    </paper-button>
-      
-`;
+      </style>
+      <div class="text-outer">
+        <div class="text-inner">
+          <slot></slot>
+        </div>
+      </div>
+  `;
   }
 
-  static get is() { return 'tangy-complete-button'; }
+  static get is() { return 'tangy-toggle-button'; }
   static get properties() {
     return {
       name: {
@@ -69,10 +88,14 @@ class TangyCompleteButton extends PolymerElement {
       disabled: {
         type: Boolean,
         value: false,
-        observer: 'onDisabledChange',
         reflectToAttribute: true
       },
-      goHome: {
+      highlighted: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      pressed: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
@@ -82,11 +105,10 @@ class TangyCompleteButton extends PolymerElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('click', this.completePressed.bind(this))
+    this.addEventListener('click', this.togglePressed.bind(this))
   }
 
-  completePressed() {
-    if (this.goHome) window.location.href = './index.html'
+  togglePressed() {
     if (this.disabled) return
     if (this.value == '') {
       this.value = 'on'
@@ -95,9 +117,6 @@ class TangyCompleteButton extends PolymerElement {
     }
   }
 
-  onDisabledChange(newState, oldState) {
-    this.$.button = this.disabled 
-  }
   onValueChange(newState, oldState) {
     if (newState == '') {
       this.pressed = false
@@ -107,4 +126,4 @@ class TangyCompleteButton extends PolymerElement {
   }
 }
 
-window.customElements.define(TangyCompleteButton.is, TangyCompleteButton);
+window.customElements.define(TangyToggleButton.is, TangyToggleButton);

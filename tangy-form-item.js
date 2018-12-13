@@ -1,6 +1,8 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { t } from './util/t.js'
+import './util/html-element-props.js'
 import '@polymer/paper-card/paper-card.js'
-import './tangy-common-styles.js'
+import './style/tangy-common-styles.js'
 import { TangyFormItemHelpers } from './tangy-form-item-callback-helpers.js'
 
 /**
@@ -69,6 +71,50 @@ export class TangyFormItem extends PolymerElement {
         }
         :host([hidden]) {
           display: none;
+        }
+        :host([fullscreen]) paper-card {
+          width: 100%;
+          max-width: 100% !important;
+          height: 100vh;
+        }
+
+       /*
+        * Fullscreen 
+        */
+
+        :host([fullscreen]) {
+          margin: 0px
+        }
+        :host([fullscreen]) paper-card  {
+          padding-top: 53px;
+          overflow: scroll;
+        }
+        :host([fullscreen]) .card-actions {
+          position: fixed;
+          top: 0px;
+          width: 100%;
+          right: 0px;
+          padding: 0px;
+          margin: 0px;
+        }
+        :host([fullscreen]) paper-button {
+          background: white;
+          color: grey;
+        }
+        :host([fullscreen]) paper-button#complete {
+          float: right;
+          margin: 15px;
+          background: green;
+          color: white; 
+        }
+        :host([fullscreen]) paper-button#complete paper-button {
+          display: none;
+        }
+        :host([fullscreen]) label.heading {
+          display: none;
+        }
+        :host([fullscreen]) .card-content {
+          padding-top: 0px;
         }
 
         /*
@@ -198,6 +244,11 @@ export class TangyFormItem extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      fullscreen: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
       hideButtons: {
         type: Boolean,
         value: false,
@@ -252,6 +303,11 @@ export class TangyFormItem extends PolymerElement {
         reflectToAttribute: true
       },
       locked: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      isDirty: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
@@ -378,7 +434,11 @@ export class TangyFormItem extends PolymerElement {
     this.$.content
       .querySelectorAll('[name]')
       .forEach(input => {
-        input.addEventListener('change', _ => this.fireHook('on-change', _))
+        input.addEventListener('next', () => this.next())
+        input.addEventListener('change', _ => {
+          this.dispatchEvent(new Event('change', {details: _.target}))
+          this.fireHook('on-change', _)
+        })
       })
     let tangyCompleteButtonEl = this.$.content
       .querySelector('tangy-complete-button')

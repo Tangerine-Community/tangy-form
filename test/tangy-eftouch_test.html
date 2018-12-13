@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <title>tangy-eftouch test</title>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/redux/dist/redux.js"></script>
+    <script src="../node_modules/wct-browser-legacy/browser.js"></script>
+  </head>
+  <body>
+
+    <test-fixture id="EFTouchFixture">
+      <template>
+        <tangy-eftouch columns="3" name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange">Orange</option>
+          <option name="banana">Banana</option>
+          <option name="tangerine">Tangerine</option>
+          <option name="cantalope">Cantalope</option>
+          <option name="cherry">Cherry</option>
+          <option name="kiwi">Kiwi</option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchAutoProgressFixture">
+      <template>
+        <tangy-eftouch auto-progress columns="3" name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange">Orange</option>
+          <option name="banana">Banana</option>
+          <option name="tangerine">Tangerine</option>
+          <option name="cantalope">Cantalope</option>
+          <option name="cherry">Cherry</option>
+          <option name="kiwi">Kiwi</option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchImagesFixture">
+      <template>
+        <tangy-eftouch auto-progress columns="3" name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange" src="assets/images/cat.png"></option>
+          <option name="banana" src="assets/images/cat.png"></option>
+          <option name="tangerine" src="assets/images/cat.png"></option>
+          <option name="cantalope" src="assets/images/cat.png"></option>
+          <option name="cherry" src="assets/images/cat.png"></option>
+          <option name="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchTransitionFixture">
+      <template>
+        <tangy-eftouch 
+          input-sound="assets/sounds/pop.mp3" 
+          transition-sound="assets/sounds/swish.mp3"
+          transition-delay=100 
+          transition-message="You are being transerred to the next item."
+          auto-progress
+          columns="3"
+          name="fruit_selection"
+          label="What is your favorite fruit?"
+          >
+          <option name="orange" src="assets/images/cat.png"></option>
+          <option name="banana" src="assets/images/cat.png"></option>
+          <option name="tangerine" src="assets/images/cat.png"></option>
+          <option name="cantalope" src="assets/images/cat.png"></option>
+          <option name="cherry" src="assets/images/cat.png"></option>
+          <option name="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchWarningFixture">
+      <template>
+        <tangy-eftouch warning-time=100 warning-message="You are running out of time!" columns="3" name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange" src="assets/images/cat.png"></option>
+          <option name="banana" src="assets/images/cat.png"></option>
+          <option name="tangerine" src="assets/images/cat.png"></option>
+          <option name="cantalope" src="assets/images/cat.png"></option>
+          <option name="cherry" src="assets/images/cat.png"></option>
+          <option name="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchTimeLimitFixture">
+      <template>
+        <tangy-eftouch time-limit=100 columns="3" name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange" src="assets/images/cat.png"></option>
+          <option name="banana" src="assets/images/cat.png"></option>
+          <option name="tangerine" src="assets/images/cat.png"></option>
+          <option name="cantalope" src="assets/images/cat.png"></option>
+          <option name="cherry" src="assets/images/cat.png"></option>
+          <option name="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchCorrectFixture">
+      <template>
+        <tangy-eftouch incorrect-message="You chose the wrong option. Try again." columns="3" name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange" correct src="assets/images/cat.png"></option>
+          <option name="banana" correct src="assets/images/cat.png"></option>
+          <option name="tangerine" src="assets/images/cat.png"></option>
+          <option name="cantalope" src="assets/images/cat.png"></option>
+          <option name="cherry" src="assets/images/cat.png"></option>
+          <option name="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <script type="module">
+      import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
+      import '../input/tangy-eftouch.js'
+
+      suite('tangy-eftouch', () => {
+
+        test('should have value after selection', () => { 
+          const element = fixture('EFTouchFixture');
+          element.shadowRoot.querySelector('tangy-radio-buttons').shadowRoot.querySelector('tangy-radio-button').shadowRoot.querySelector('paper-radio-button').click()
+          // @TODO Should be 'orange'. There is a bug deeper down causing radio button labels to be names.
+          assert.equal(element.value.selection, 'Orange')
+          assert.equal(element.value.startTime !== 0, true)
+          assert.equal(element.value.selectionTime !== 0, true)
+        })
+
+        test('should auto-progress after selection', () => {
+          const element = fixture('EFTouchAutoProgressFixture');
+          let eventDidFire = false
+          element.addEventListener('next', _ => {
+            eventDidFire = true
+          })
+          element.shadowRoot.querySelector('tangy-radio-buttons').shadowRoot.querySelector('tangy-radio-button').shadowRoot.querySelector('paper-radio-button').click()
+          assert.equal(eventDidFire, true)
+        });
+
+        test('should show images for options', () => { 
+          const element = fixture('EFTouchImagesFixture')
+          assert(element.shadowRoot.querySelectorAll('img').length, 6)
+        })
+
+        test('should give warning message after hitting warning time', (done) => { 
+          const element = fixture('EFTouchWarningFixture')
+          setTimeout(() => {
+            assert.equal(element.hasAttribute('warning-triggered'), true)
+            done()
+          }, 100)
+        });
+
+        test('should transition with delay, message, and sound', (done) => { 
+          const element = fixture('EFTouchTransitionFixture')
+          let eventDidFire = false
+          element.addEventListener('next', () => {
+            eventDidFire = true
+          })
+          element.shadowRoot.querySelector('tangy-radio-buttons').shadowRoot.querySelector('tangy-radio-button').shadowRoot.querySelector('paper-radio-button').click()
+          setTimeout(() => {
+            assert.equal(eventDidFire, true)
+            done()
+          }, 101)
+          assert.equal(eventDidFire, false)
+          assert.equal(element.hasAttribute('transition-triggered'), true)
+        });
+
+        test('should transition at time limit', (done) => { 
+          const element = fixture('EFTouchTimeLimitFixture')
+          let eventDidFire = false
+          element.addEventListener('next', () => {
+            eventDidFire = true
+          })
+          setTimeout(() => {
+            assert.equal(eventDidFire, true)
+            done()
+          }, 101)
+          assert.equal(eventDidFire, false)
+        });
+
+        test('should position itself in available space', () => {
+          // TODO: Write this test.
+        });
+
+        test('should have value of correctness');
+        test('should not allow proceeding without correct selection when required (auto progress and manual)')
+        test('should show transition message but not auto progress')
+        test('should not allow correction (important in training, not demonstrating)')
+        test('should not allow proceeding without selection when required (auto progress and manual)')
+        test('should proceed after correction')
+        test('should not show warning message if a selection is made')
+        test('when incorrect option selected, should instruct to provide correction and highlight correct option and not proceed until corrected')
+        test('should instruct to provide correction and not show correct or incorrect options')
+        test('should be able to skip given correctness of prior entry in a set of items')
+        test('can group questions to be able to calculate % correct in a group')
+        test('should leave fullscreen after 5 times pressing x button');
+        test('should resume')
+        test('should disable')
+
+      })
+
+    </script>
+
+  </body>
+</html>
