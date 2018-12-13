@@ -18,6 +18,8 @@ const tangyFormReducer = function (state = initialState, action) {
 
     case 'FORM_OPEN':
       newState = Object.assign({}, action.response) 
+      // Map over state of items in DOM with existing state of items in the response. Use that to replace response items. 
+      newState.items = action.itemsInDom.map(itemInDom => newState.items.reduce((acc, item) => item.id === itemInDom.id ? {...itemInDom, ...item} : acc, itemInDom))
       firstNotDisabled = newState.items.findIndex(item => item.disabled === false)
       newState.items[firstNotDisabled].hideBackButton = true
       const indexOfSummaryItem = newState.items.findIndex(item => item.summary === true)
