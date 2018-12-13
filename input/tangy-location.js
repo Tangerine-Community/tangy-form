@@ -586,6 +586,9 @@ class TangyLocation extends PolymerElement {
     <div class="mdc-select__bottom-line"></div>
     
     </div>
+    <div id="metadata">
+      <!-- @TODO If last level is selected, show table of metadata of that last selected location. -->
+    </div>
     <br />
     <br />
 
