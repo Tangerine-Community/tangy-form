@@ -21,7 +21,7 @@ const tangyFormReducer = function (state = initialState, action) {
       let currentItems = action.currentItems;
       let formItemIds = []
       let allResultItemIds = []
-      currentItems.map(item => formItemIds.push(item.id))
+      formItemIds = currentItems.map(item => item.id)
       // First clean out responses that are for tangy-form-items that are no longer in-use
       let cleanedItems = newState.items.filter(item => {
         if (formItemIds.includes(item.id)) {
