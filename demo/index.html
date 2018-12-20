@@ -38,6 +38,7 @@
     <script type="module" src="../input/tangy-box.js"></script>
     <script type="module" src="../input/tangy-checkbox.js"></script>
     <script type="module" src="../input/tangy-checkboxes.js"></script>
+    <script type="module" src="../input/tangy-checkboxes-dynamic.js"></script>
     <script type="module" src="../input/tangy-eftouch.js"></script>
     <script type="module" src="../input/tangy-gps.js"></script>
     <script type="module" src="../input/tangy-input.js"></script>
@@ -267,36 +268,7 @@
       <demo-snippet>
         <template>
           <tangy-form id="curriculums" title="My Form">
-            <tangy-form-item id="class-registration" title="صف دراسي" hide-back-button hide-next-button on-open="
-    async function loadCurricula(that) {
-     let url = 'forms.json'
-     let response = await fetch(url);
-     let data = await response.json();
-     let tcsEl = that.$.content.querySelector('tangy-checkboxes[name=\'curriculum\']')
-     let cbDiv = tcsEl.$.checkboxes;
-     cbDiv.innerHTML = ''
-     data.forEach(function(el) {
-     	if (el.id !=='class-registration' && el.id !=='student-registration' && el.id !=='example') {
-    		let checkbox = document.createElement('tangy-checkbox')
-            checkbox.name = el.id
-            checkbox.innerHTML = el.title
-            cbDiv.appendChild(checkbox)
-     	}
-     })
-    let newValue = []
-    cbDiv.querySelectorAll('tangy-checkbox')
-      .forEach((el) => {
-        el.addEventListener('change', tcsEl.onCheckboxClick.bind(tcsEl))
-        newValue.push(el.getProps())
-      })
-    if (!that.value || (typeof that.value === 'object' && that.value.length < newValue.length)) {
-      that.value = newValue
-    }
-     }
-     let that = this;
-     loadCurricula(that);
-
-    ">
+            <tangy-form-item id="class-registration" title="Class Registration">
               <template>
                 <tangy-input
                         name="school_name"
@@ -322,8 +294,14 @@
                         required>
                 </tangy-input>
 
-                <tangy-checkboxes name="curriculum" label="Curriculum">
-                </tangy-checkboxes>
+                <tangy-checkboxes-dynamic
+                        name="curriculum"
+                        label="Curriculum"
+                        options-list-source="checkboxes-dynamic-forms.json"
+                        options-list-excludes="class-registration,student-registration"
+                        options-list-properties="id,title"
+                        options-list-exclude-by="id">
+                </tangy-checkboxes-dynamic>
               </template>
             </tangy-form-item>
           </tangy-form>
