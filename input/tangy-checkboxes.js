@@ -1,5 +1,4 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import {Loc} from "../util/loc";
 import { t } from '../util/t.js'
 import '../util/html-element-props.js'
 import './tangy-checkbox.js'
@@ -109,81 +108,14 @@ class TangyCheckboxes extends PolymerElement {
         value: false,
         observer: 'reflect',
         reflectToAttribute: true
-      },
-      optionsListSource: {
-        type: String,
-        observer: 'reflect',
-        value: ''
-      },
-      optionsListProperties: {
-        type: String,
-        observer: 'reflect',
-        value: ''
-      },
-      optionsListExcludes: {
-        type: String,
-        observer: 'reflect',
-        value: ''
-      },
-      optionsListExcludeBy: {
-        type: String,
-        observer: 'reflect',
-        value: ''
-      },
+      }
     }
-  }
-
-  get optionsList() {
-    return this._optionsList ? this._optionsList : undefined
-  }
-
-  set optionsList(optionsList) {
-    this._optionsList = optionsList
   }
 
   connectedCallback() {
     super.connectedCallback()
-
-    if (this.optionsListSource) {
-      let that = this
-      const request = new XMLHttpRequest();
-      request.onreadystatechange = function () {
-        try {
-          that.optionsList = []
-          let optionsDoc = JSON.parse(this.responseText)
-          let propertyNames = that.optionsListProperties.split(",")
-          let excludeList = that.optionsListExcludes.split(",")
-          let name = propertyNames[0]
-          let innerHTML = propertyNames[1]
-          for (let item of optionsDoc) {
-            let excludeOption = false
-            for (let exclude of excludeList) {
-              if (item[that.optionsListExcludeBy] === exclude) {
-                excludeOption = true
-              }
-            }
-            if (!excludeOption) {
-              let option = {
-                value: item[name],
-                innerHTML: item[innerHTML]
-              }
-              that.optionsList.push(option)
-            }
-          }
-          that.render()
-          that.reflect()
-          that.optionsListLoaded = true
-          that.dispatchEvent(new CustomEvent('checkbox-options-loaded'))
-        } catch (e) {
-          // Do nothing. Some stages will not have valid JSON returned.
-        }
-      }
-      request.open('GET', this.optionsListSource);
-      request.send();
-    } else {
-      this.render()
-      this.reflect()
-    }
+    this.render()
+    this.reflect()
   }
 
   reflect() {
@@ -199,9 +131,6 @@ class TangyCheckboxes extends PolymerElement {
     this.$.checkboxes.innerHTML = ''
     // Populate options as tangy-radio-button elements
     let options = this.querySelectorAll('option')
-    if (this.optionsListSource) {
-      options = this.optionsList
-    }
     for (let option of options) {
       let checkbox = document.createElement('tangy-checkbox')
       checkbox.name = option.value

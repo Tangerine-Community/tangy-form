@@ -38,6 +38,7 @@
     <script type="module" src="../input/tangy-box.js"></script>
     <script type="module" src="../input/tangy-checkbox.js"></script>
     <script type="module" src="../input/tangy-checkboxes.js"></script>
+    <script type="module" src="../input/tangy-checkboxes-dynamic.js"></script>
     <script type="module" src="../input/tangy-eftouch.js"></script>
     <script type="module" src="../input/tangy-gps.js"></script>
     <script type="module" src="../input/tangy-input.js"></script>
@@ -293,14 +294,14 @@
                         required>
                 </tangy-input>
 
-                <tangy-checkboxes
+                <tangy-checkboxes-dynamic
                         name="curriculum"
                         label="Curriculum"
-                        options-list-source="forms.json"
+                        options-list-source="checkboxes-dynamic-forms.json"
                         options-list-excludes="class-registration,student-registration"
                         options-list-properties="id,title"
                         options-list-exclude-by="id">
-                </tangy-checkboxes>
+                </tangy-checkboxes-dynamic>
               </template>
             </tangy-form-item>
           </tangy-form>
