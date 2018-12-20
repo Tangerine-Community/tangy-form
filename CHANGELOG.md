@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.2.0
+- Add `<tangy-checkboxes-dynamic>` input element for loading the options of tangy-checkboxes using a json file.
+
 ## v3.1.0
 - New `<tangy-photo-capture>` input element for capturing photos on forms.
 - Fix a bug where values set during on-open would be overridden with previous set values.
@@ -19,7 +22,7 @@
 - Added `<tangy-input-groups>` as an alternative to `<tangy-cards>`. We will deprecate tangy cards.
 
 ## v2.8.1
-- Loc.filterById now includes decendents by default
+- Loc.filterById now includes decendents by default.
 
 ## v2.8.0
 - New APIs: TangyFormResponseModel.inputs, TangyFormResponseModel.inputsByName, Loc.filterById, TangyLocation.filterBy
