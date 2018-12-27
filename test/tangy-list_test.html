@@ -13,8 +13,8 @@
  
     <test-fixture id="TangyListFixture">
       <template>
-        <tangy-list name="person">
-          <template>
+        <tangy-list initial-count=3 name="person">
+          <template type="tangy-list/new-item">
             <tangy-input name="first_name" label="First name"></tangy-input>
             <tangy-input name="last_name" label="Last name"></tangy-input>
           </template>
@@ -28,18 +28,20 @@
           <tangy-form-item id="tangy-input-groups-form--item-1">
             <template>
               <tangy-list initial-count="3" name="person">
-                <template>
+                <template type="tangy-list/new-item">
                   <tangy-input name="first_name" label="First name"></tangy-input>
                   <tangy-input name="last_name" label="Last name"></tangy-input>
                 </template>
-                <tangy-list-item>
-                  <tangy-input name="first_name" label="First name" value="Elaine"></tangy-input>
-                  <tangy-input name="last_name" label="Last name" value="Benes"></tangy-input>
-                </tangy-list-item>
-                <tangy-list-item>
-                  <tangy-input name="first_name" label="First name" value="Bob"></tangy-input>
-                  <tangy-input name="last_name" label="Last name" value="Costanza"></tangy-input>
-                </tangy-list-item>
+                <template type="tangy-list/initial-items">
+                  <tangy-list-item>
+                    <tangy-input name="first_name" label="First name" value="Elaine"></tangy-input>
+                    <tangy-input name="last_name" label="Last name" value="Benes"></tangy-input>
+                  </tangy-list-item>
+                  <tangy-list-item>
+                    <tangy-input name="first_name" label="First name" value="Bob"></tangy-input>
+                    <tangy-input name="last_name" label="Last name" value="Costanza"></tangy-input>
+                  </tangy-list-item>
+                </template>
               </tangy-list>
             </template>
           </tangy-form-item>
@@ -56,29 +58,23 @@
       import '../input/tangy-input.js'
 
       suite('tangy-list', () => {
-        
-        test('tangy-list add a tangy-list-item', () => {
+         test('start with 3 items', () => {
+          const element = fixture('TangyListFixture');
+          assert.equal(element.$.items.querySelectorAll('tangy-list-item').length, 3)
+        });       
+        test('add an item', () => {
           const element = fixture('TangyListFixture');
           element.shadowRoot.querySelector('.add-another').click()
-          assert.equal(element.querySelectorAll('tangy-list-item').length, 2)
+          assert.equal(element.$.items.querySelectorAll('tangy-list-item').length, 4)
         });
-        /*
-        test('tangy-list start with 3 items', () => {
-          const element = fixture('TangyListFixture');
-          assert.equal(element.querySelectorAll('tangy-input-group').length, 3)
-          assert.equal((!!element.querySelectorAll('tangy-input-group')[1].querySelector('[name="person.1.first_name"]')), true)
-        });
-        */
         test('removes an item', () => {
           const element = fixture('TangyListFixture');
-          element.shadowRoot.querySelector('.add-another').click()
-          element.shadowRoot.querySelector('.add-another').click()
-          element.querySelector('tangy-list-item').shadowRoot.querySelector('#remove').click()
-          debugger
-          assert.equal(element.querySelectorAll('tangy-list-item').length, 2)
+          element.$.items.querySelector('tangy-list-item').shadowRoot.querySelector('#remove').click()
+          assert.equal(element.$.items.querySelectorAll('tangy-list-item').length, 2)
           assert.equal(element.value.length, 2)
         });
         test('tangy-input-groups creates a card, user inputs, then value exists on new input', () => {
+          debugger
           const element = fixture('TangyInputGroupsFormFixture');
           element.newResponse()
           element.querySelector('tangy-form-item').shadowRoot.querySelector('dom-if').render()

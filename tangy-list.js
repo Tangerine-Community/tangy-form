@@ -75,7 +75,6 @@ export class TangyList extends PolymerElement {
       <style include="tangy-common-styles"></style>
       <style include="tangy-element-styles"></style>
       <div id="items">
-        <slot></slot>
       </div>
       <paper-button on-click="newItem" style="margin-left: 15px; background: var(--accent-color); color: var(--accent-text-color);" raised class="add-another"><iron-icon icon="add-circle"></iron-icon>ADD ANOTHER</paper-button>
     `
@@ -85,13 +84,14 @@ export class TangyList extends PolymerElement {
   }
 
   get value() {
-    return [...this.querySelectorAll('tangy-list-item')].map(itemEl => itemEl.value)
+    return [...this.shadowRoot.querySelectorAll('tangy-list-item')].map(itemEl => itemEl.value)
   }
 
   connectedCallback () {
     super.connectedCallback()
-    let tangyListItemEls = [...this.querySelectorAll('tangy-list-item')]
-    if (tangyListItemEls.length === 0) {
+    if (this.querySelector(`template[type="tangy-list/initial-items"]`)) {
+      this.$.items.innerHTML = this.querySelector(`template[type="tangy-list/initial-items"]`).innerHTML
+    } else {
       for (let i = 0; i < this.initialCount; i++ ) {
         this.newItem()
       }
@@ -100,13 +100,13 @@ export class TangyList extends PolymerElement {
 
   newItem() {
     const itemEl = document.createElement('tangy-list-item')
-    itemEl.innerHTML = this.querySelector('template').innerHTML
-    this.appendChild(itemEl)
+    itemEl.innerHTML = this.querySelector(`template[type="tangy-list/new-item"]`).innerHTML
+    this.$.items.appendChild(itemEl)
   }
 
   validate() {
     // If one itemEl.validate() returns false, return false.
-    return [...this.querySelectorAll('tangy-list-item')]
+    return [...this.$.items.querySelectorAll('tangy-list-item')]
       .reduce((isValid, itemEl) => itemEl.validate() ? isValid : false, true)
   }
 }
