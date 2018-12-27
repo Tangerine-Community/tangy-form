@@ -90,8 +90,8 @@ export class TangyListItem extends PolymerElement {
   }
 
   validate() {
-   // TODO
-   return true
+    return [...this.querySelectorAll('[name]')]
+      .reduce((isValid, inputEl) => inputEl.validate() ? isValid : false, true)
   }
 
   onRemoveClick() {

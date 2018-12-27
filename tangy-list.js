@@ -76,11 +76,13 @@ export class TangyList extends PolymerElement {
       <style include="tangy-element-styles"></style>
       <div id="items">
       </div>
-      <paper-button on-click="newItem" style="margin-left: 15px; background: var(--accent-color); color: var(--accent-text-color);" raised class="add-another"><iron-icon icon="add-circle"></iron-icon>ADD ANOTHER</paper-button>
+      <paper-button on-click="onClickNewItem" style="margin-left: 15px; background: var(--accent-color); color: var(--accent-text-color);" raised class="add-another"><iron-icon icon="add-circle"></iron-icon>ADD ANOTHER</paper-button>
     `
   }
 
   set value(value) {
+    this.$.items.innerHTML = ``
+    value.forEach(itemValue => this.addItem(itemValue))
   }
 
   get value() {
@@ -93,14 +95,19 @@ export class TangyList extends PolymerElement {
       this.$.items.innerHTML = this.querySelector(`template[type="tangy-list/initial-items"]`).innerHTML
     } else {
       for (let i = 0; i < this.initialCount; i++ ) {
-        this.newItem()
+        this.addItem()
       }
     } 
   }
 
-  newItem() {
+  onClickNewItem(event) {
+    this.addItem()
+  }
+
+  addItem(itemValue) {
     const itemEl = document.createElement('tangy-list-item')
     itemEl.innerHTML = this.querySelector(`template[type="tangy-list/new-item"]`).innerHTML
+    if (itemValue) itemEl.value = itemValue
     this.$.items.appendChild(itemEl)
   }
 
