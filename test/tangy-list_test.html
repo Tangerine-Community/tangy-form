@@ -43,6 +43,31 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyListWithCollapsedTemplateFixture">
+        <template>
+          <tangy-list initial-count="3" name="person">
+            <template type="tangy-list/collapsed-template">
+              <div class="name">${first_name} ${last_name}</div>
+            </template>
+            <template type="tangy-list/new-item">
+              <tangy-input name="first_name" label="First name"></tangy-input>
+              <tangy-input name="last_name" label="Last name"></tangy-input>
+            </template>
+            <template type="tangy-list/initial-items">
+              <tangy-list-item>
+                <tangy-input name="first_name" label="First name" value="Elaine"></tangy-input>
+                <tangy-input name="last_name" label="Last name" value="Benes"></tangy-input>
+              </tangy-list-item>
+              <tangy-list-item>
+                <tangy-input name="first_name" label="First name" value="Bob"></tangy-input>
+                <tangy-input name="last_name" label="Last name" value="Costanza"></tangy-input>
+              </tangy-list-item>
+            </template>
+          </tangy-list>
+        </template>
+      </test-fixture>
+
+
 
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
@@ -161,6 +186,7 @@
           element.$.items.querySelectorAll('tangy-list-item')[0].querySelector('[name="last_name"]').value = 'Benes'
           assert.equal(element.validate(), true)
         })
+        test('shows list in collapsed templates')
       })
 
     </script>
