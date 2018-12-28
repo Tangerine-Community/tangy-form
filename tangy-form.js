@@ -14,6 +14,7 @@ import './tangy-complete-button.js'
 import './tangy-overlay.js'
 import './tangy-input-groups.js'
 import './tangy-input-group.js'
+import './tangy-list.js'
 
 //   <!-- Dependencies -->
 import '@polymer/paper-fab/paper-fab.js';
