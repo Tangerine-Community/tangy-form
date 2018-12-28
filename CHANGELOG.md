@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.3.0
+- Add `<tangy-list>` element for allowing users to currate lists of inputs in an item. This is an alternative to `<tangy-input-groups>` and may replace it in the future.
+
 ## v3.2.0
 - Add `<tangy-checkboxes-dynamic>` input element for loading the options of tangy-checkboxes using a json file.
 
