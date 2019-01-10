@@ -24,7 +24,7 @@
           assert.equal(flattenedLocationList.locations.find(location => location.id === 'county2').level, 'county')
         })
         test('should unflatten', () => {
-          let locationList = Loc.unflatten(stub.flatLocationList)
+          let locationList = Loc.unflatten(Loc.flatten(stub.locationList))
           assert.equal(locationList.locations.county2.children.school4.id, 'school4')
         })
         test('should filter', () => {
@@ -42,10 +42,10 @@
           assert.equal(locationList.locations.hasOwnProperty('county2'), false)
           assert.equal(locationList.locations.county1.children.hasOwnProperty('school1'), true)
         })
-        test('should transform to include decendents counts', () => {
-          let locationList = Loc.calculateDescendentCounts(stub.locationList)
-          assert.equal(locationList.locations["county1"].descendentsCount, 2)
-          assert.equal(locationList.locations["county1"].children.school1.descendentsCount, 0)
+        test('should transform to include decendants counts', () => {
+          let locationList = Loc.calculateDescendantCounts(stub.locationList)
+          assert.equal(locationList.locations["county1"].descendantsCount, 2)
+          assert.equal(locationList.locations["county1"].children.school1.descendantsCount, 0)
         })
       })
     </script>
