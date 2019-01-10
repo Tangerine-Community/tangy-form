@@ -18,7 +18,7 @@ export class TangyCheckbox extends PolymerElement {
     <style include="tangy-common-styles"></style>
     <style include="tangy-element-styles"></style>
 
-      <paper-checkbox id="checkbox">[[label]]</paper-checkbox>
+      <paper-checkbox id="checkbox" id="checkbox"></paper-checkbox>
     `
   }
 
@@ -36,6 +36,7 @@ export class TangyCheckbox extends PolymerElement {
       label: {
         type: String,
         value: '',
+        observer: 'applyLabel',
         reflectToAttribute: true
       },
       required: {
@@ -97,6 +98,10 @@ export class TangyCheckbox extends PolymerElement {
         }
       }))
     })
+  }
+
+  applyLabel(label) {
+    this.$.checkbox.innerHTML = label
   }
 
   onRequiredChange (value) {
