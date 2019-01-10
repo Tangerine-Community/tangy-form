@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v3.3.1
+- Optimize Loc helper methods to avoid callstack limits when working with large location lists.
+- Fix tangy-checkbox applying of labels to no longer prevent markup from being used.
+
 ## v3.3.0
 - Add `<tangy-list>` element for allowing users to currate lists of inputs in an item. This is an alternative to `<tangy-input-groups>` and may replace it in the future.
 
