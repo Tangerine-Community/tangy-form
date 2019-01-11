@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.3.2
+- Fix an bug in Loc.unflatten() where it would return an object with circular references.
+
 ## v3.3.1
 - Optimize Loc helper methods to avoid callstack limits when working with large location lists.
 - Fix tangy-checkbox applying of labels to no longer prevent markup from being used.
