@@ -40,12 +40,24 @@ export class Loc {
           node.children = children
         })
     }
-    return {
+    const getCircularReplacer = () => {
+      const seen = new WeakSet();
+      return (key, value) => {
+        if (typeof value === "object" && value !== null) {
+          if (seen.has(value)) {
+            return;
+          }
+          seen.add(value);
+        }
+        return value;
+      };
+    };
+    return JSON.parse(JSON.stringify({
       ...flatLocationList,
       locations: flatLocationList.locations
         .filter(node => node.level === flatLocationList.locationsLevels[0])
         .reduce((locationsById, node) => { return {...locationsById, [node.id]: node}}, {})
-    }
+    }, getCircularReplacer()))
   }
 
   /*
