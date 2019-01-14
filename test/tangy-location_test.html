@@ -29,10 +29,18 @@
 
     <test-fixture id="TangyLocationShowMetadataFixture">
       <template>
-        <tangy-location required show-levels="county,school" location-src="location-list.json" show-metadata></tangy-location>
+        <tangy-location required show-levels="county,school" location-src="location-list.json" show-meta-data></tangy-location>
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyLocationShowMetadataWithTemplateFixture">
+      <template>
+        <tangy-location required show-levels="county,school" location-src="location-list.json" show-meta-data>
+          <h3>Custom Template</h3>
+          level: ${node.level}
+        </tangy-location>
+      </template>
+    </test-fixture>
 
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
@@ -76,9 +84,20 @@
             element.shadowRoot.querySelector('select').dispatchEvent(new Event('change', {bubbles: true}))
             element.shadowRoot.querySelectorAll('select')[1].value = 'school3'
             element.shadowRoot.querySelectorAll('select')[1].dispatchEvent(new Event('change', {bubbles: true}))
-            debugger
             // Assert at this point that there is metadata showing for school3.
             assert(!!element.shadowRoot.querySelector('#metadata'), true)
+            done()
+          }, {once: true})
+        })
+        test('should show metadata with custom template', (done) => {
+          const element = fixture('TangyLocationShowMetadataWithTemplateFixture');
+          element.addEventListener('location-list-loaded', () => {
+            element.shadowRoot.querySelector('select').value = 'county2'
+            element.shadowRoot.querySelector('select').dispatchEvent(new Event('change', {bubbles: true}))
+            element.shadowRoot.querySelectorAll('select')[1].value = 'school3'
+            element.shadowRoot.querySelectorAll('select')[1].dispatchEvent(new Event('change', {bubbles: true}))
+            // Assert at this point that there is metadata showing for school3.
+            assert(element.shadowRoot.querySelector('#metadata').innerText.includes('Custom Template'), true)
             done()
           }, {once: true})
         })
