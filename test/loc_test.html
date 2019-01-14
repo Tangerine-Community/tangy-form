@@ -54,7 +54,7 @@
         })
       })
       test('should transform to include decendants counts and stringify', () => {
-          let locationList = Loc.calculateDescendantCounts(bigLocationList)
+          let locationList = Loc.calculateDescendantCounts(stub.locationList)
           let locationListJson = JSON.stringify(locationList)
           assert.equal(!!locationListJson, true)
         })
