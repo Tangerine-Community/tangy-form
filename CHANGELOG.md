@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.4.0
+- `<tangy-location show-meta-data>` attribute now shows meta data about a location when selected. You can also add an inline JS template string. https://github.com/Tangerine-Community/tangy-form/pull/13#issuecomment-454157413
+
 ## v3.3.2
 - Fix an bug in Loc.unflatten() where it would return an object with circular references.
 
