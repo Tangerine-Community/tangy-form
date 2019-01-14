@@ -443,7 +443,6 @@ class TangyLocation extends PolymerElement {
   /* End of Materialize Select Styles */
       </style>
       <div id="container"></div>
-      <slot></slot>
 `;
   }
 
@@ -465,6 +464,12 @@ class TangyLocation extends PolymerElement {
         observer: 'render'
       },
       invalid: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        observer: 'render'
+      },
+      showMetaData: {
         type: Boolean,
         value: false,
         reflectToAttribute: true,
@@ -514,10 +519,12 @@ class TangyLocation extends PolymerElement {
 
   set locationList(locationList) {
     this._locationList = locationList
+    this._flatLocationList = Loc.flatten(locationList)
   }
 
   async connectedCallback() {
     super.connectedCallback();
+    this._template = this.innerHTML
     if (this.filterByGlobal) this.filterBy = window.tangyLocationFilterBy
     // When we hear change events, it's coming from users interacting with select lists.
     this.shadowRoot.addEventListener('change', this.onSelectionChange.bind(this))
@@ -586,6 +593,21 @@ class TangyLocation extends PolymerElement {
     <div class="mdc-select__bottom-line"></div>
     
     </div>
+    ${this.showMetaData && selection.value ? `
+      <div id="metadata">
+        ${
+          [this._flatLocationList.locations.find(node => node.id === selection.value)]
+            .map(node => this._template
+              ? eval(`\`${this._template}\``)
+              : Object.keys(node)
+                .map(key => key !== 'parent' && key !== 'children' 
+                  ? `<b>${key}</b>: ${node[key]}<br>`
+                  : ''
+                ).join('')
+            ).join('')
+        }
+      </div>
+    `:``}
     <br />
     <br />
 
