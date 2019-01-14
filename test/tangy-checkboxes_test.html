@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <title>tangy-checkboxes test</title>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/redux/dist/redux.js"></script>
+    <script src="../node_modules/wct-browser-legacy/browser.js"></script>
+  </head>
+  <body>
+    
+    <test-fixture id="TangyCheckboxesFixture">
+      <template>
+        <tangy-checkboxes name="fruit_selection" label="What is your favorite fruit?">
+          <option name="orange">Orange</option>
+          <option name="banana">Banana</option>
+          <option name="tangerine">Tangerine</option>
+          <option name="cantalope">Cantalope</option>
+          <option name="cherry">Cherry</option>
+          <option name="kiwi">Kiwi</option>
+        </tangy-checkboxes>
+      </template>
+    </test-fixture>
+
+    <script type="module">
+      import '../input/tangy-checkboxes.js'
+      suite('tangy-checkboxes', () => {
+        test('should have six options', () => {
+          const element = fixture('TangyCheckboxesFixture');
+          assert.equal(element.shadowRoot.querySelectorAll('tangy-checkbox').length, 6)
+        })
+      })
+    </script>
+
+  </body>
+</html>

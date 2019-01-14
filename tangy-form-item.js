@@ -451,7 +451,6 @@ export class TangyFormItem extends PolymerElement {
       this.fireHook('on-open')
       this.fireHook('on-change')
     }
-    this.reflect()
     this.dispatchEvent(new CustomEvent('TANGY_FORM_ITEM_OPENED'))
   }
 

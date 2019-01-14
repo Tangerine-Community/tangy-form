@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## v3.3.2
+- Fix an bug in Loc.unflatten() where it would return an object with circular references.
+
+## v3.3.1
+- Optimize Loc helper methods to avoid callstack limits when working with large location lists.
+- Fix tangy-checkbox applying of labels to no longer prevent markup from being used.
+
+## v3.3.0
+- Add `<tangy-list>` element for allowing users to currate lists of inputs in an item. This is an alternative to `<tangy-input-groups>` and may replace it in the future.
+
+## v3.2.0
+- Add `<tangy-checkboxes-dynamic>` input element for loading the options of tangy-checkboxes using a json file.
+
+## v3.1.0
+- New `<tangy-photo-capture>` input element for capturing photos on forms.
+- Fix a bug where values set during on-open would be overridden with previous set values.
+- Made safer resuming responses when the items in the form no longer match.
+- EFTouch option positioning improvements.
+
 ## v3.0.0
 - You no longer have to include all of the tangy input elements in your build. You define which ones you use by importing then individually. See README.md for more details.
 - Overall code organization refactor. We now place input elements in the input folder, shared style files in the style folder, and some utilities in the util folder.
@@ -13,7 +32,7 @@
 - Added `<tangy-input-groups>` as an alternative to `<tangy-cards>`. We will deprecate tangy cards.
 
 ## v2.8.1
-- Loc.filterById now includes decendents by default
+- Loc.filterById now includes decendents by default.
 
 ## v2.8.0
 - New APIs: TangyFormResponseModel.inputs, TangyFormResponseModel.inputsByName, Loc.filterById, TangyLocation.filterBy

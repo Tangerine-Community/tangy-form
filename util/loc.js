@@ -24,24 +24,40 @@ export class Loc {
     dig({children: locationList.locations, id: 'root'}, 0)
     return Object.assign({}, locationList, { locations })
   }
+
   /*
    * @returns LocationList {locations: { ... }, locationsLevels: [ ... ]}
    */
   static unflatten(flatLocationList = { locations: [], locationsLevels: []}) {
-    const root = {
-      id: 'root',
-      children: {}
+    for (let level of [...flatLocationList.locationsLevels].reverse()) {
+      flatLocationList
+        .locations
+        .filter(node => node.level === level)
+        .forEach(node => {
+          // not calculating children, have to come up from parent
+          const children = flatLocationList.locations.filter(potentialChild => potentialChild.parent === node.id)
+            .reduce((locationsById, node) => { return {...locationsById, [node.id]: node}}, {})
+          node.children = children
+        })
     }
-    function magnet(node) {
-      node.children = flatLocationList.locations 
-        .filter(location => location.parent === node.id) 
-        .reduce((childrenObject, location) => Object.assign(childrenObject, { [location.id]: location }), {})
-      for (let id in node.children) {
-        magnet(node.children[id])
-      }
-    }
-    magnet(root)
-    return Object.assign({}, flatLocationList, { locations: root.children })
+    const getCircularReplacer = () => {
+      const seen = new WeakSet();
+      return (key, value) => {
+        if (typeof value === "object" && value !== null) {
+          if (seen.has(value)) {
+            return;
+          }
+          seen.add(value);
+        }
+        return value;
+      };
+    };
+    return JSON.parse(JSON.stringify({
+      ...flatLocationList,
+      locations: flatLocationList.locations
+        .filter(node => node.level === flatLocationList.locationsLevels[0])
+        .reduce((locationsById, node) => { return {...locationsById, [node.id]: node}}, {})
+    }, getCircularReplacer()))
   }
 
   /*
@@ -91,8 +107,16 @@ export class Loc {
     return decendents
   }
 
+  // Given a parent location ID and a level, returns an array of decendents at the level specified.
+  static flatFilterToDecendentsByParentIdAndLevel(flatLocationList = {locations: {}, locationsLevels: []}, byParentId='', byLevel='') {
+    const flatLocations = flatLocationList.locations
+    const decendents = this.findDecendents(flatLocations, byParentId).filter(locationNode => locationNode.level === byLevel)
+    return decendents
+  }
+
   static findDecendents(flatLocations, locationId) {
     let decendents = []
+    // Could be a problem here.
     function dig(locationId) {
       let found = flatLocations.filter((location) => location.parent === locationId)
       found.forEach(location => {
@@ -102,6 +126,31 @@ export class Loc {
     }
     dig(locationId)
     return decendents
+  }
+
+  static calculateDescendantCounts(locationList = {}) {
+    const flatLocationList = this.flatten(locationList)
+    for (let level of [...locationList.locationsLevels].reverse()) {
+      flatLocationList
+        .locations
+        .filter(node => node.level === level)
+        .forEach(node => {
+          // not calculating children, have to come up from parent
+          const children = flatLocationList.locations.filter(potentialChild => potentialChild.parent === node.id)
+          if (children.length > 0) {
+            node.descendantsCount = children.reduce((descendantsCount, childNode) => {
+              // If the child has no descendants, then that child IS a descendant so count it as one,
+              // otherwise aggregate descendantsCounts up.
+              return childNode.descendantsCount === 0
+                ? descendantsCount + 1
+                : descendantsCount + childNode.descendantsCount 
+            }, 0)
+          } else {
+            node.descendantsCount = 0
+          }
+        })
+    }
+    return this.unflatten(flatLocationList)
   }
 
   static query (levels, criteria, locationList, qCallback, context) {

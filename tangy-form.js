@@ -7,12 +7,14 @@ import { tangyFormReducer } from './tangy-form-reducer.js'
 import { TangyFormResponseModel } from './tangy-form-response-model.js';
 import { TangyFormItemHelpers } from './tangy-form-item-callback-helpers.js'
 
+
 // Core elements.
 import './tangy-form-item.js'
 import './tangy-complete-button.js'
 import './tangy-overlay.js'
 import './tangy-input-groups.js'
 import './tangy-input-group.js'
+import './tangy-list.js'
 
 //   <!-- Dependencies -->
 import '@polymer/paper-fab/paper-fab.js';
@@ -48,7 +50,7 @@ export class TangyForm extends PolymerElement {
   // Set a form response to this property to resume a form response.
   set response(value) {
     this._responseHasBeenSet = true
-    this.store.dispatch({ type: 'FORM_OPEN', response: value })
+    this.store.dispatch({ type: 'FORM_OPEN', response: value, itemsInDom: [...this.querySelectorAll('tangy-form-item')].map(itemEl => itemEl.getProps())})
     this.fireHook('on-open')
   }
 
