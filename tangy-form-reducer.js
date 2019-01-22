@@ -232,6 +232,15 @@ const tangyFormReducer = function (state = initialState, action) {
       })
       return calculateTargets(newState)
 
+    case 'HIDE_BUTTONS':
+      newState = Object.assign({}, state, {
+        items: state.items.map((item) => {
+          item.hideButtons = true
+          return item
+        })
+      })
+      return newState
+
     default: 
       return state
   }

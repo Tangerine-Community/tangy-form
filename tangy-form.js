@@ -59,6 +59,11 @@ export class TangyForm extends PolymerElement {
     return (this._responseHasBeenSet) ? this.store.getState() : null 
   }
 
+  set hideResponseBar(value)
+  {
+    this.hidebar = value
+  }
+
   // Get an array of all inputs across items.
   get inputs() {
     return this.response.items.reduce((acc, item) => [...acc, ...item.inputs], [])
@@ -115,6 +120,20 @@ export class TangyForm extends PolymerElement {
     let state = this.store.getState()
     let item = state.items.find(item => itemId === item.id)
     if (item && item.disabled) this.store.dispatch({ type: 'ITEM_ENABLE', itemId: itemId })
+  }
+
+  // Disable all tangy-form elements in the form
+  showFormResponse(itemId) {
+    this.store.dispatch({
+      type: 'FORM_RESPONSE_COMPLETE'
+    })
+    this.store.dispatch({
+      type: 'HIDE_BUTTONS'
+    })
+    this.store.dispatch({
+      type: 'ITEM_OPEN',
+      itemId: itemId
+    })
   }
 
   /*
@@ -221,7 +240,7 @@ export class TangyForm extends PolymerElement {
       </style>
 
       <div id="nav"></div>
-      <template is="dom-if" if="{{complete}}">
+      <template is="dom-if" if="[[displayBar()]]">
         <div id="bar">
           <paper-tabs selected="[[tabIndex]]" scrollable>
             <template is="dom-if" if="{{hasSummary}}">
@@ -234,6 +253,10 @@ export class TangyForm extends PolymerElement {
       <div id="items"><slot></slot></div> 
 
         `;
+  }
+
+  displayBar() {
+    return this.complete && !this.hidebar
   }
 
   onClickSummaryTab() {
@@ -279,6 +302,11 @@ export class TangyForm extends PolymerElement {
         reflectToAttribute: true
       },
       hideCompleteFab: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      hidebar: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
