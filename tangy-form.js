@@ -122,22 +122,29 @@ export class TangyForm extends PolymerElement {
     if (item && item.disabled) this.store.dispatch({ type: 'ITEM_ENABLE', itemId: itemId })
   }
 
-  // Disable all tangy-form elements in the form
-  showFormResponse(itemId) {
+  enableItemReadOnly(itemId) {
     this.store.dispatch({
-      type: 'FORM_RESPONSE_COMPLETE'
-    })
-    this.store.dispatch({
-      type: 'HIDE_BUTTONS'
-    })
-    this.store.dispatch({
-      type: 'ITEM_OPEN',
+      type: 'ENABLE_ITEM_READONLY',
       itemId: itemId
     })
   }
-  enableFormInputs(itemId) {
+
+  disableItemReadOnly(itemId) {
     this.store.dispatch({
-      type: 'ENABLE_FORM_ELEMENTS'
+      type: 'DISABLE_ITEM_READONLY',
+      itemId: itemId
+    })
+  }
+
+  hideItemButtons() {
+    this.store.dispatch({
+      type: 'HIDE_ITEM_BUTTONS'
+    })
+  }
+
+  showItemButtons() {
+    this.store.dispatch({
+      type: 'SHOW_ITEM_BUTTONS'
     })
   }
 

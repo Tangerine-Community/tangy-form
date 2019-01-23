@@ -232,7 +232,7 @@ const tangyFormReducer = function (state = initialState, action) {
       })
       return calculateTargets(newState)
 
-    case 'HIDE_BUTTONS':
+    case 'HIDE_ITEM_BUTTONS':
       newState = Object.assign({}, state, {
         items: state.items.map((item) => {
           item.hideButtons = true
@@ -241,10 +241,57 @@ const tangyFormReducer = function (state = initialState, action) {
       })
       return newState
 
-    case 'ENABLE_FORM_ELEMENTS':
+    case 'SHOW_ITEM_BUTTONS':
+      newState = Object.assign({}, state, {
+        items: state.items.map((item) => {
+          item.hideButtons = false
+          return item
+        })
+      })
+      return newState
+
+    case 'ENABLE_ITEM_READONLY':
+      return Object.assign({}, state, {
+        form: Object.assign({}, state.form, {
+          linearMode: false,
+          fullscreen: false,
+          hideClosedItems: false
+        }),
+        items: state.items.map(item => {
+          let props = {}
+          // If the item has inputs, then it was opened and potentially touched so don't hide buttons
+          // so that they may review what is inside.
+          // Look at the inputs for the item, only show buttons if it does actually have input.
+          if (item.disabled) {
+            props.hidden = true
+          } else {
+            props.hidden = false
+            props.open = true
+            props.hideButtons = false
+          }
+          if (!item.summary) {
+            props.locked = true
+          }
+          props.hideBackButton = true
+          props.hideNextButton = true
+          props.fullscreen = false
+          props.inputs = item.inputs.map(input => {
+            if (input.tagName === 'TANGY-TIMED') {
+              return Object.assign({}, input, {disabled: true, mode: 'TANGY_TIMED_MODE_DISABLED'})
+            } else {
+              return Object.assign({}, input, {disabled: true})
+            }
+          })
+          return Object.assign({}, item, props)
+          return item
+        })
+      })
+
+    case 'DISABLE_ITEM_READONLY':
       newState = Object.assign({}, state, {
         items: state.items.map((item) => {
           let props = {}
+          props.locked = false
           props.inputs = item.inputs.map(input => {
             if (input.tagName === 'TANGY-TIMED') {
               return Object.assign({}, input, {disabled: false, mode: 'TANGY_TIMED_MODE_DISABLED'})
