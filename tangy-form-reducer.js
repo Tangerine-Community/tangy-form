@@ -303,7 +303,14 @@ const tangyFormReducer = function (state = initialState, action) {
           item.hideButtons = false
           return item
         })
+      })
+      return newState
 
+    case 'HIDE_BAR':
+      newState = Object.assign({}, state, {
+        form: Object.assign({}, state.form, {
+          hidebar: true
+        })
       })
       return newState
 

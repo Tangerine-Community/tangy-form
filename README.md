@@ -47,12 +47,12 @@ Play with the [demo on glitch](https://tangy-form-demo.glitch.me/).
 ```
 
 Tangy-form also has some convenience methods to disable inputs and item buttons - an easy way to display form results:
-- enableItemReadOnly(itemId)
-- hideItemButtons()
+- enableItemReadOnly(itemId) - disables the inputs in the form
+- hideItemButtons() - hides the Open/Close buttons
 
 ![screenshot](demo/screenshot-response-form.png)
 
-You can re-enable the form by using disableItemReadOnly (and showItemButtons, if necessary).
+You can re-enable the form by using disableItemReadOnly() (and showItemButtons(), if necessary).
 
 ## Installation
 `<tangy-form>` is a Custom Element built with Polymer and can be used in frameworks such as Angular, React, and Vue. Check compatibility with your project's framework on [Custom Elements Everywhere](https://custom-elements-everywhere.com/).  If you are ready to go, run `npm install --save tangy-form` to add it to your project. Depending on your build system/framework, there may be different steps to take to get Web Components loading.
