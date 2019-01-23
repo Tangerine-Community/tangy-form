@@ -135,6 +135,11 @@ export class TangyForm extends PolymerElement {
       itemId: itemId
     })
   }
+  enableFormInputs(itemId) {
+    this.store.dispatch({
+      type: 'ENABLE_FORM_ELEMENTS'
+    })
+  }
 
   /*
    * Private.

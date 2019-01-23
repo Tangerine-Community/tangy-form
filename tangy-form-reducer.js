@@ -241,6 +241,25 @@ const tangyFormReducer = function (state = initialState, action) {
       })
       return newState
 
+    case 'ENABLE_FORM_ELEMENTS':
+      newState = Object.assign({}, state, {
+        items: state.items.map((item) => {
+          let props = {}
+          props.inputs = item.inputs.map(input => {
+            if (input.tagName === 'TANGY-TIMED') {
+              return Object.assign({}, input, {disabled: false, mode: 'TANGY_TIMED_MODE_DISABLED'})
+            } else {
+              return Object.assign({}, input, {disabled: false})
+            }
+          })
+            return Object.assign({}, item, props)
+          item.hideButtons = false
+          return item
+        })
+
+      })
+      return newState
+
     default: 
       return state
   }
