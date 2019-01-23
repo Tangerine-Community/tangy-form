@@ -143,12 +143,6 @@ export class TangyForm extends PolymerElement {
     })
   }
 
-  hideBar() {
-    this.store.dispatch({
-      type: 'HIDE_BAR'
-    })
-  }
-
   /*
    * Private.
    */
@@ -253,7 +247,7 @@ export class TangyForm extends PolymerElement {
       </style>
 
       <div id="nav"></div>
-      <template is="dom-if" if="[[displayBar()]]">
+      <template is="dom-if" if="{{complete}}">
         <div id="bar">
           <paper-tabs selected="[[tabIndex]]" scrollable>
             <template is="dom-if" if="{{hasSummary}}">
@@ -266,10 +260,6 @@ export class TangyForm extends PolymerElement {
       <div id="items"><slot></slot></div> 
 
         `;
-  }
-
-  displayBar() {
-    return this.complete && !this.hidebar
   }
 
   onClickSummaryTab() {
@@ -315,11 +305,6 @@ export class TangyForm extends PolymerElement {
         reflectToAttribute: true
       },
       hideCompleteFab: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
-      hidebar: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
