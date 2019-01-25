@@ -47,7 +47,7 @@ Play with the [demo on glitch](https://tangy-form-demo.glitch.me/).
 ```
 
 Tangy-form also has some convenience methods to disable inputs and item buttons - an easy way to display form results:
-- enableItemReadOnly(itemId) - disables the inputs in the form
+- enableItemReadOnly() - disables the inputs in the form
 - hideItemButtons() - hides the Open/Close buttons
 
 ![screenshot](demo/screenshot-response-form.png)
