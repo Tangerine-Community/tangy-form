@@ -29,7 +29,7 @@
         test('should have two options', () => {
           const element = fixture('TangyCheckboxesDynamicFixture');
           element.addEventListener('checkbox-options-loaded', () => {
-            assert.equal(element.shadowRoot.querySelectorAll('tangy-checkbox').length, 2)
+            assert.equal(element.shadowRoot.querySelectorAll('option').length, 2)
           })
         })
       })

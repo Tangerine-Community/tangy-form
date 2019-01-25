@@ -154,7 +154,6 @@ class TangyCheckboxesDynamic extends PolymerElement {
           }
 
           that.render()
-          that.optionsListLoaded = true
           that.dispatchEvent(new CustomEvent('checkbox-options-loaded'))
         } catch (e) {
           // Do nothing. Some stages will not have valid JSON returned.
