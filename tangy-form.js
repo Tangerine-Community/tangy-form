@@ -117,6 +117,32 @@ export class TangyForm extends PolymerElement {
     if (item && item.disabled) this.store.dispatch({ type: 'ITEM_ENABLE', itemId: itemId })
   }
 
+  enableItemReadOnly() {
+    this.store.dispatch({
+      type: 'ENABLE_ITEM_READONLY'
+    })
+  }
+
+  disableItemReadOnly() {
+    this.store.dispatch({
+      type: 'DISABLE_ITEM_READONLY'
+    })
+  }
+
+  // Hides Open/Close buttons
+  hideItemButtons() {
+    this.store.dispatch({
+      type: 'HIDE_ITEM_BUTTONS'
+    })
+  }
+
+  // Shows Open/Close buttons
+  showItemButtons() {
+    this.store.dispatch({
+      type: 'SHOW_ITEM_BUTTONS'
+    })
+  }
+
   /*
    * Private.
    */

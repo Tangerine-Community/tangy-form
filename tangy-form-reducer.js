@@ -232,6 +232,58 @@ const tangyFormReducer = function (state = initialState, action) {
       })
       return calculateTargets(newState)
 
+    case 'ENABLE_ITEM_READONLY':
+      return Object.assign({}, state, {
+        items: state.items.map(item => {
+          let props = {}
+          props.locked = true
+          props.inputs = item.inputs.map(input => {
+            if (input.tagName === 'TANGY-TIMED') {
+              return Object.assign({}, input, {disabled: true, mode: 'TANGY_TIMED_MODE_DISABLED'})
+            } else {
+              return Object.assign({}, input, {disabled: true})
+            }
+          })
+            return Object.assign({}, item, props)
+          return item
+        })
+      })
+
+    case 'DISABLE_ITEM_READONLY':
+      return Object.assign({}, state, {
+        items: state.items.map((item) => {
+          let props = {}
+          props.locked = false
+          props.inputs = item.inputs.map(input => {
+            if (input.tagName === 'TANGY-TIMED') {
+              return Object.assign({}, input, {disabled: false, mode: 'TANGY_TIMED_MODE_DISABLED'})
+            } else {
+              return Object.assign({}, input, {disabled: false})
+            }
+          })
+            return Object.assign({}, item, props)
+          return item
+        })
+      })
+
+    case 'HIDE_ITEM_BUTTONS':
+      newState = Object.assign({}, state, {
+        items: state.items.map((item) => {
+          item.hideButtons = true
+          return item
+        })
+      })
+      return newState
+
+    case 'SHOW_ITEM_BUTTONS':
+      newState = Object.assign({}, state, {
+        items: state.items.map((item) => {
+          item.hideButtons = false
+          return item
+        })
+      })
+      return newState
+
     default: 
       return state
   }
