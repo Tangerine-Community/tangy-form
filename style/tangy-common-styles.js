@@ -35,6 +35,11 @@ $_documentStyleContainer.innerHTML = `
         --paper-radio-button-size: 1.5em;
         --paper-radio-button-checked-color: var(--primary-color);
       }
+      label.hint-text {
+        color: gray;
+        font-size: small;
+        font-weight: lighter;
+    }
   </style>
   </template>
   </dom-module>

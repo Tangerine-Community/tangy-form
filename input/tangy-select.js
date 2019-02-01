@@ -37,6 +37,11 @@ class TangySelect extends PolymerElement {
         observer: 'reflect',
         reflectToAttribute: true
       },
+      hintText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       required: {
         type: Boolean,
         value: false,
@@ -108,6 +113,7 @@ class TangySelect extends PolymerElement {
     this.querySelectorAll('option').forEach(optionEl => options.push(optionEl))
     this.$.container.innerHTML = `
       <label for="group">${this.label}</label>
+      <label class="hint-text">${this.hintText}</label>
       <div class="mdc-select">
         <select class="mdc-select__surface" value="${this.value}">
           ${ (this.secondaryLabel) ? `
