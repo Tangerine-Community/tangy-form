@@ -7,6 +7,7 @@ import '../style/tangy-common-styles.js'
 import '../style/tangy-element-styles.js'
 import '@polymer/iron-icon/iron-icon.js'
 import '@polymer/iron-icons/image-icons.js'
+import { t } from '../util/t.js'
 /**
  * `tangy-scan`
  * 
@@ -61,10 +62,10 @@ class TangyQr extends PolymerElement {
         </div>
         <div class="card-actions">
           <template is="dom-if" if="{{notScanning}}">
-            <paper-button id="start-scan-button" on-click="startScanning">Scan</paper-button>
+            <paper-button id="start-scan-button" on-click="startScanning">{{t.scan}}</paper-button>
           </template>
           <template is="dom-if" if="{{isScanning}}">
-            <paper-button id="stop-scan-button" on-click="stopScanning">Cancel</paper-button>
+            <paper-button id="stop-scan-button" on-click="stopScanning">{{t.cancel}}</paper-button>
           </template>
         </div>
       </paper-card>
@@ -101,6 +102,11 @@ class TangyQr extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      invalid: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
       disabled: {
         type: Boolean,
         value: false,
@@ -126,6 +132,12 @@ class TangyQr extends PolymerElement {
 
   connectedCallback() {
     super.connectedCallback()
+    this.t = {
+      'scan': t('scan'),
+      'scanning': t('scanning'),
+      'cancel': t('cancel')
+
+    }
   }
 
   stopScanning() {
@@ -136,7 +148,7 @@ class TangyQr extends PolymerElement {
   }
   startScanning() {
     this.value = ''
-    this.statusMessage = "Scanning..."
+    this.statusMessage = `${this.t.scanning}...`
     this.notScanning = false 
     this.isScanning = true
     this.$.container.innerHTML = `
@@ -196,7 +208,13 @@ class TangyQr extends PolymerElement {
   }
 
   validate() {
-    return this.value === '' ? false : true
+    if (this.required && this.value) {
+      this.invalid = true
+      return false
+    } else {
+      this.invalid = false
+      return true
+    } 
   }
 }
 
