@@ -31,6 +31,11 @@ export class TangyEftouch extends PolymerElement {
         reflectToAttribute: true,
         observer: 'render'
       },
+      hintText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       width: {
         type: Number,
         reflectToAttribute: true,
