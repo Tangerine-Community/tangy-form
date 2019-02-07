@@ -149,7 +149,7 @@ class TangyTimed extends PolymerElement {
         padding-top: 70px;
       }
     </style>
-
+    <label class="hint-text">[[hintText]]</label>
     <div id="container">
       
       <div id="info">
@@ -213,6 +213,16 @@ class TangyTimed extends PolymerElement {
         type: Array,
         value: [],
         observer: 'reflect',
+        reflectToAttribute: true
+      },
+      autoStop: {
+        type: Number,
+        value: undefined,
+        reflectToAttribute: true
+      },
+      hintText: {
+        type: String,
+        value: '',
         reflectToAttribute: true
       },
       // Use value for mode. 
@@ -480,12 +490,33 @@ class TangyTimed extends PolymerElement {
 
     }
   }
-
+  shouldGridAutoStop() {
+    console.log(this.autoStop)
+    const isSetsEqual = (a, b) => a.size === b.size && [...a].every(value => b.has(value));
+    const tangyToggleButtons = [].slice.call(this.shadowRoot.querySelectorAll('tangy-toggle-button'))
+    if (!tangyToggleButtons[0].__data.pressed) {
+      return false;
+    } else {
+      const indexes = tangyToggleButtons.slice(0, this.autoStop).map((button, index) => index)
+      let pressedItemsIndex = [];
+      tangyToggleButtons.reduce((prev, curr, index) => {
+        if (curr.__data.pressed) {
+          pressedItemsIndex = [...pressedItemsIndex, index]
+        }
+      }, [])
+      return isSetsEqual(new Set(indexes), new Set(pressedItemsIndex))
+    }
+  }
   onTangyToggleButtonClick(event) {
 
     let tangyToggleButtons = [].slice.call(this.shadowRoot.querySelectorAll('tangy-toggle-button'))
     let inputElements = [].slice.call(this.querySelectorAll('[name]'))
+    if (this.shouldGridAutoStop()) {
+      this.mode = TANGY_TIMED_MODE_LAST_ATTEMPTED
+      this.onStopClick()
+    }
     let newValue = []
+
 
     switch (this.mode) {
       case TANGY_TIMED_MODE_UNTOUCHED:
@@ -493,7 +524,6 @@ class TangyTimed extends PolymerElement {
         break
       case TANGY_TIMED_MODE_MARK:
       case TANGY_TIMED_MODE_RUN:
-
         // If this selection is past the a last attempted index, prevent it.
         let itemLastAttemptedIndex = this.value.findIndex(item => (item.highlighted) ? true : false)
         let itemLastMarkedIndex = this.value.findIndex(item => (item.name === event.target.name))

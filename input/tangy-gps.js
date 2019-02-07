@@ -85,10 +85,12 @@ class TangyGps extends PolymerElement {
       .coordinates {
         margin: 5px 15px;
       }
+      .hint-text{
+        margin-top:6px;
+      }
     </style>
 
     <div class="coordinates">
-
       <div id="lat-long">
         <span class="label">[[t.latitude]]:</span> [[currentLatitude]] <br>
         <span class="label">[[t.longitude]]:</span> [[currentLongitude]] <br>
@@ -107,7 +109,7 @@ class TangyGps extends PolymerElement {
         <br> 
         <span class="label">[[t.disanceFromReference]]:</span> [[currentDelta]] meters
       </template>
-
+      <label class="hint-text">[[hintText]]</label>
     </div>
 
     <div>
@@ -136,6 +138,11 @@ class TangyGps extends PolymerElement {
           accuracy: undefined
         },
         observer: 'reflect',
+        reflectToAttribute: true
+      },
+      hintText: {
+        type: String,
+        value: '',
         reflectToAttribute: true
       },
       required: {
