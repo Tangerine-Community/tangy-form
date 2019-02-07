@@ -149,7 +149,7 @@ class TangyTimed extends PolymerElement {
         padding-top: 70px;
       }
     </style>
-
+    <label class="hint-text">[[hintText]]</label>
     <div id="container">
       
       <div id="info">
@@ -218,6 +218,11 @@ class TangyTimed extends PolymerElement {
       autoStop: {
         type: Number,
         value: undefined,
+        reflectToAttribute: true
+      },
+      hintText: {
+        type: String,
+        value: '',
         reflectToAttribute: true
       },
       // Use value for mode. 

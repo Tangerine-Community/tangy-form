@@ -443,6 +443,7 @@ class TangyLocation extends PolymerElement {
   /* End of Materialize Select Styles */
       </style>
       <div id="container"></div>
+      <label class="hint-text">[[hintText]]</label>
 `;
   }
 
@@ -451,6 +452,10 @@ class TangyLocation extends PolymerElement {
       name: {
         type: String,
         value: 'location'
+      },
+      hintText: {
+        type: String,
+        value: ''
       },
       value: {
         type: Array,

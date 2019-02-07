@@ -22,20 +22,28 @@ export class TangyPhotoCapture extends PolymerElement {
       img {
         width: 100%;
       }
+      .hint-text{
+        margin-top:6px;
+        margin-left:4px;
+      }
     </style>
     <img id="image"/>
-    <paper-button on-click="capturePhoto"><iron-icon icon="camera-enhance"></iron-icon> capture photo </paper-buton>
-
+    <paper-button on-click="capturePhoto"><iron-icon icon="camera-enhance"></iron-icon> capture photo </paper-button>
+    <label class="hint-text">[[hintText]]</label>
     `
   }
 
-  static get is () {
+  static get is() {
     return 'tangy-photo-capture'
   }
 
-  static get properties () {
+  static get properties() {
     return {
       name: {
+        type: String,
+        value: ''
+      },
+      hintText: {
         type: String,
         value: ''
       },

@@ -47,6 +47,7 @@ class TangyCheckboxes extends PolymerElement {
       </style>
       <div class="container">
         <label for="group">[[label]]</label>
+        <label class="hint-text">[[hintText]]</label>
         <span class="secondary_color">[[t.selectOneOrMore]]</span>
         <div id="checkboxes">
         </div>
@@ -66,6 +67,11 @@ class TangyCheckboxes extends PolymerElement {
         type: Array,
         value: [],
         observer: 'reflect',
+        reflectToAttribute: true
+      },
+      hintText: {
+        type: String,
+        value: '',
         reflectToAttribute: true
       },
       atLeast: {

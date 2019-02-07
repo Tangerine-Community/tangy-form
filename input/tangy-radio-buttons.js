@@ -63,6 +63,7 @@ class TangyRadioButtons extends PolymerElement {
 
       <div class="container">
         <label for="group">[[label]]</label>
+        <label class="hint-text">[[hintText]]</label>
         <template is="dom-if" if="{{!hideHelpText}}">
           <span  class="secondary_color">[[t.selectOnlyOne]]</span>
         </template>
@@ -94,6 +95,10 @@ class TangyRadioButtons extends PolymerElement {
         value: [],
         observer: 'reflect',
         reflectToAttribute: true
+      },
+      hintText: {
+        type: String,
+        value: ''
       },
       required: {
         type: Boolean,

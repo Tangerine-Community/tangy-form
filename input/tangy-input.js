@@ -71,6 +71,7 @@ export class TangyInput extends PolymerElement {
           <div slot="suffix"></div>
         </template>
       </paper-input>
+      <label class="hint-text">[[hintText]]</label>
     </div>
   `
   }
@@ -88,6 +89,10 @@ export class TangyInput extends PolymerElement {
         value: false
       },
       label: {
+        type: String,
+        value: ''
+      },
+      hintText: {
         type: String,
         value: ''
       },
