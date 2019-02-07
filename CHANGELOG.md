@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v3.5.0
+- New `<tangy-qr>` input for capturing QR data. https://github.com/Tangerine-Community/tangy-form/pull/30
+- New `hint-text` attribute you can add to most inputs. https://github.com/Tangerine-Community/tangy-form/pull/29
+- New `auto-stop` attribute for `<tangy-timed>` will automatically stop if the first x number of attempts are marked. https://github.com/Tangerine-Community/tangy-form/pull/28
+
+
 ## v3.4.1
 - Add convenience methods to disable inputs and item buttons - an easy way to display form results:
   - enableItemReadOnly() - disables the inputs in the form (disableItemReadOnly() to re-enable the inputs)
