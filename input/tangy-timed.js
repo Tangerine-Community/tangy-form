@@ -351,7 +351,7 @@ class TangyTimed extends PolymerElement {
 
     const rows = [document.createElement('tr')]
     let currentRow = 0
-    let currentColumn = 0
+    let currentColumn = 1
     this.querySelectorAll('option').forEach((option, i) => {
       // Create the tangy toggle button.
       let column = document.createElement('td')
@@ -363,13 +363,16 @@ class TangyTimed extends PolymerElement {
       tangyToggleButton.disabled = true
       if (this.disabled) tangyToggleButton.disabled = true
       column.appendChild(tangyToggleButton)
-      if ((currentColumn) % this.columns === 0) {
+      if ( currentColumn !== 0 && currentColumn % this.columns === 0) {
         rows.push(document.createElement('tr'))
-        currentColumn = 0
+        rows[currentRow].appendChild(column)
+
+        currentColumn = 1
         currentRow++
+      } else {
+        rows[currentRow].appendChild(column)
+        currentColumn++
       }
-      rows[currentRow].appendChild(column)
-      currentColumn++
     })
     for (let row of rows) {
       this.$.grid.appendChild(row)
