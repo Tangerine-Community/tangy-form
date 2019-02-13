@@ -50,19 +50,28 @@ class TangyTimed extends PolymerElement {
         display: block;
       }
       tangy-toggle-button { 
-        display: inline-block;
-        margin:10px 0 0 2%;
-        flex-grow: 1;
+        display: block;
+        width: 90%;
         height:60px;
       }
+      table{
+        width: 100%;
+        border-collapse:collapse;
+      }
+      tr {
+        width: 100%;
+      }
+      
+      td{
+          text-align: left;
+          border: none;
+      } 
       #container {
         width: 100%;
         position: relative;
       }
             
       #grid {
-        display: flex;
-        flex-wrap: wrap;
         width: 100%;
       }
       #stopWatch paper-button {
@@ -195,8 +204,8 @@ class TangyTimed extends PolymerElement {
 
       
 
-      <div id="grid">
-      </div>
+      <table id="grid">
+      </table>
 
     </div>
 `;
@@ -340,20 +349,31 @@ class TangyTimed extends PolymerElement {
     // Set our countdown to the desired duration.
     this.timeRemaining = (this.timeRemaining === undefined) ? this.duration : this.timeRemaining
 
-    // This column mapping is calibrated for a Nexus 7 in landscape mode.
-    let columnsMap = [0, 1, 2.5, 4, 6, 8, 10, 12, 14, 16, 20]
-    let columnWidthCalculation = `calc(100% * (1/${columnsMap[this.columns]}) - 10px - 1px)`
-
+    const rows = [document.createElement('tr')]
+    let currentRow = 0
+    let currentColumn = 0
     this.querySelectorAll('option').forEach((option, i) => {
       // Create the tangy toggle button.
+      let column = document.createElement('td')
+      column.style.width = `${Math.floor(100/this.columns)}%` 
       let tangyToggleButton = document.createElement('tangy-toggle-button')
       tangyToggleButton.setAttribute('name', option.value)
-      tangyToggleButton.style.width = columnWidthCalculation
+      //tangyToggleButton.style.width = `100%` 
       tangyToggleButton.innerHTML = option.innerHTML
       tangyToggleButton.disabled = true
       if (this.disabled) tangyToggleButton.disabled = true
-      this.$.grid.appendChild(tangyToggleButton)
+      column.appendChild(tangyToggleButton)
+      if ((currentColumn) % this.columns === 0) {
+        rows.push(document.createElement('tr'))
+        currentColumn = 0
+        currentRow++
+      }
+      rows[currentRow].appendChild(column)
+      currentColumn++
     })
+    for (let row of rows) {
+      this.$.grid.appendChild(row)
+    }
 
     let newValue = []
     this
