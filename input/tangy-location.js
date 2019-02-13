@@ -492,8 +492,8 @@ class TangyLocation extends PolymerElement {
       },
       hidden: {
         type: Boolean,
-        value: false,
-        observer: 'render'
+        reflectToAttribute: true,
+        value: false
       },
       disabled: {
         type: Boolean,
