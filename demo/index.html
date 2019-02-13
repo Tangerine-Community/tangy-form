@@ -180,12 +180,12 @@
         </template>
       </demo-snippet>
 
-      <h3>Custom validation messages using tangy-if</h3>
+      <h3>Custom validation messages and custom validation logic</h3>
       <demo-snippet>
         <template>
           <tangy-form id="my-form-2" title="My Form 2">
             <tangy-form-item id="item1">
-              <tangy-checkbox name="input1" required>
+              <tangy-checkbox name="input1" valid-if="input.value === 'on'">
                 Do you like tangerines?
               </tangy-checkbox>
               <tangy-box tangy-if="inputs.input1.invalid === true">

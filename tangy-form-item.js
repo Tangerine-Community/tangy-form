@@ -474,16 +474,24 @@ export class TangyFormItem extends PolymerElement {
   }
 
   validate() {
-    let inputs = this.shadowRoot.querySelectorAll('[name]')
+    let inputEls = [...this.shadowRoot.querySelectorAll('[name]')]
+    let inputs = inputEls.reduce((acc, inputEl) => { return { [inputEl.getAttribute('name')]: inputEl, ...acc} }, {})
     let invalidInputNames = []
     let validInputNames = []
-    inputs.forEach((input) => {
-      if (input.validate && !input.hidden && !input.validate()) {
-        invalidInputNames.push(input.name)
+    for (let input of inputEls) {
+      if (!input.hidden) {
+        if ((input.validate && !input.validate()) || (input.hasAttribute('valid-if') && !eval(input.getAttribute('valid-if')))) {
+          input.invalid = true
+          invalidInputNames.push(input.name)
+        } else {
+          input.invalid = false
+          validInputNames.push(input.name)
+        }
       } else {
+        input.invalid = false
         validInputNames.push(input.name)
       }
-    })
+    }
     if (invalidInputNames.length !== 0) {
       this.shadowRoot
         .querySelector(`[name="${invalidInputNames[0]}"]`)

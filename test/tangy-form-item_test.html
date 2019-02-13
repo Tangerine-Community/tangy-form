@@ -23,10 +23,27 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyFormItemValidIfTangyIfFixture">
+      <template>
+        <tangy-form id="my-form-2" title="My Form 2">
+          <tangy-form-item id="item1">
+            <tangy-checkbox name="input1" valid-if="input.value === 'on'">
+              Do you like tangerines?
+            </tangy-checkbox>
+            <tangy-box tangy-if="inputs.input1.invalid === true">
+              You really should consider liking tangerines.
+            </tangy-box>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import '../tangy-form.js'
       import '../input/tangy-input.js'
+      import '../input/tangy-checkbox.js'
+      import '../input/tangy-box.js'
       suite('tangy-form-item', () => {
         test('should go to next item on input "next" event', () => { 
           const element = fixture('TangyFormItemFixture');
@@ -34,8 +51,15 @@
           element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-input').dispatchEvent(new CustomEvent('next'))
           assert.equal(element.querySelectorAll('tangy-form-item')[1].open, true)
         })
-        test('should be fullscreen', () => {
-          // @TODO?
+        test('should be invalid and show custom error message, then continue after correction', () => {
+          const sleep = (milliseconds) => new Promise((res) => setTimeout(() => res(true), milliseconds))
+          const element = fixture('TangyFormItemValidIfTangyIfFixture');
+          element.newResponse()
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').dispatchEvent(new CustomEvent('next'))
+          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').invalid, true)
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').value = 'on'
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').dispatchEvent(new CustomEvent('next'))
+          assert.equal(element.querySelector('tangy-form-item').open, false)
         })
       })
     </script>
