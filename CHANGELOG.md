@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v3.6.0
+- New `<tangy-timed row-markers>` attribute allows you to mark entire rows on a grid. https://github.com/Tangerine-Community/Tangerine/issues/1333
+- Fixed `<tangy-timed columns=4>` attribute. Some situations the columns would not add up correctly.
+- Fixed automatic selection of last attempted when hitting auto-stop https://github.com/Tangerine-Community/Tangerine/issues/1327
+- New `valid-if` attribute on all inputs enables ability to define custom validation logic per input. https://github.com/Tangerine-Community/Tangerine/issues/1319
+- `on-change` now fires after invalid submit allowing for custom validation messages (see new example). https://github.com/Tangerine-Community/Tangerine/issues/1326
+- Fix tangy-if setting Object.hidden to true having an affect via reflect to attribute. https://github.com/Tangerine-Community/Tangerine/issues/1330
+
 ## v3.5.0
 - New `<tangy-qr>` input for capturing QR data. https://github.com/Tangerine-Community/tangy-form/pull/30
 - New `hint-text` attribute you can add to most inputs. https://github.com/Tangerine-Community/tangy-form/pull/29
