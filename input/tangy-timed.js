@@ -491,10 +491,9 @@ class TangyTimed extends PolymerElement {
     }
   }
   shouldGridAutoStop() {
-    console.log(this.autoStop)
     const isSetsEqual = (a, b) => a.size === b.size && [...a].every(value => b.has(value));
     const tangyToggleButtons = [].slice.call(this.shadowRoot.querySelectorAll('tangy-toggle-button'))
-    if (!tangyToggleButtons[0].__data.pressed) {
+    if (!tangyToggleButtons[0].pressed) {
       return false;
     } else {
       const indexes = tangyToggleButtons.slice(0, this.autoStop).map((button, index) => index)
@@ -511,10 +510,7 @@ class TangyTimed extends PolymerElement {
 
     let tangyToggleButtons = [].slice.call(this.shadowRoot.querySelectorAll('tangy-toggle-button'))
     let inputElements = [].slice.call(this.querySelectorAll('[name]'))
-    if (this.shouldGridAutoStop()) {
-      this.mode = TANGY_TIMED_MODE_LAST_ATTEMPTED
-      this.onStopClick()
-    }
+    
     let newValue = []
 
 
@@ -560,6 +556,11 @@ class TangyTimed extends PolymerElement {
         this.dispatchEvent(new Event('change'))
         break
     }
+    if (this.shouldGridAutoStop()) {
+      event.target.highlighted = true
+      this.mode = TANGY_TIMED_MODE_LAST_ATTEMPTED
+      this.onStopClick(null, event.target.name)
+    }
   }
 
   onStartClick() {
@@ -567,10 +568,16 @@ class TangyTimed extends PolymerElement {
     this.mode = TANGY_TIMED_MODE_RUN
   }
 
-  onStopClick() {
+  onStopClick(event, lastItemAttempted) {
     this.endTime = Date.now()
     clearInterval(this.timer);
-    this.value = this.value.map((element, i) => Object.assign({}, element, { highlighted: (this.value.length - 1 === i) ? true : false }))
+    // We have to check for typeof string because the event handler on the stop button puts an integer in the second param for some reason.
+    // If it's a string, then we know it's an ID of something which should actually be lastItemAttempted.
+    if (typeof lastItemAttempted === 'string') {
+      this.value = this.value.map((element, i) => Object.assign({}, element, { highlighted: (lastItemAttempted === element.name) ? true : false }))
+    } else {
+      this.value = this.value.map((element, i) => Object.assign({}, element, { highlighted: (this.value.length - 1 === i) ? true : false }))
+    }
     this.mode = TANGY_TIMED_MODE_LAST_ATTEMPTED
   }
 
