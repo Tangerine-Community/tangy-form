@@ -180,6 +180,22 @@
         </template>
       </demo-snippet>
 
+      <h3>Custom validation messages using tangy-if</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="my-form-2" title="My Form 2">
+            <tangy-form-item id="item1">
+              <tangy-checkbox name="input1" required>
+                Do you like tangerines?
+              </tangy-checkbox>
+              <tangy-box tangy-if="inputs.input1.invalid === true">
+                You really should consider liking tangerines.
+              </tangy-box>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+
       <h3>Advanced input visibility logic with on-open and on-change</h3>
       <demo-snippet>
         <template>
