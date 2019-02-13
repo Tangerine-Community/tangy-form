@@ -489,9 +489,11 @@ export class TangyFormItem extends PolymerElement {
         .querySelector(`[name="${invalidInputNames[0]}"]`)
         .scrollIntoView({ behavior: 'smooth', block: 'start' })
       this.incomplete = true
+      this.fireHook('on-change')
       return false
     } else {
       this.incomplete = false
+      this.fireHook('on-change')
       return true
     }
   }
