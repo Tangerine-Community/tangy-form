@@ -66,6 +66,12 @@ class TangyTimed extends PolymerElement {
           text-align: left;
           border: none;
       } 
+      td.row-marker {
+          padding: 0 0 0 15px;
+          width: 50px;
+          text-align: left;
+          border: none;
+      }
       #container {
         width: 100%;
         position: relative;
@@ -280,6 +286,10 @@ class TangyTimed extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      rowMarkers: {
+        type: Boolean,
+        value: false
+      },
       timeRemaining: {
         type: Number,
         value: undefined,
@@ -366,7 +376,16 @@ class TangyTimed extends PolymerElement {
       if ( currentColumn !== 0 && currentColumn % this.columns === 0) {
         rows.push(document.createElement('tr'))
         rows[currentRow].appendChild(column)
-
+        if (this.rowMarkers) {
+          const rowMarkerEl = document.createElement('td')
+          rowMarkerEl.setAttribute('class', 'row-marker')
+          rowMarkerEl.rowNumber = currentRow
+          rowMarkerEl.addEventListener('click', (event) => {
+            this.rowMarkerClicked(event.target.parentElement.rowNumber)
+          })
+          rowMarkerEl.innerHTML = `<iron-icon icon="done-all"></iron-icon>`
+          rows[currentRow].appendChild(rowMarkerEl)
+        }
         currentColumn = 1
         currentRow++
       } else {
@@ -529,6 +548,24 @@ class TangyTimed extends PolymerElement {
       return isSetsEqual(new Set(indexes), new Set(pressedItemsIndex))
     }
   }
+
+  rowMarkerClicked(rowNumber) {
+    switch (this.mode) {
+      case TANGY_TIMED_MODE_MARK:
+      case TANGY_TIMED_MODE_RUN:
+
+        this.shadowRoot.querySelectorAll('tr')[rowNumber].querySelectorAll('tangy-toggle-button')
+          .forEach(tangyToggleButtonEl => {
+            tangyToggleButtonEl.pressed = true
+          })
+        let newValue = []
+        this.shadowRoot
+          .querySelectorAll('tangy-toggle-button')
+          .forEach(button => newValue.push(button.getProps()))
+        this.value = newValue
+    }
+  }
+
   onTangyToggleButtonClick(event) {
 
     let tangyToggleButtons = [].slice.call(this.shadowRoot.querySelectorAll('tangy-toggle-button'))
