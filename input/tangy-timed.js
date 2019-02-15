@@ -621,7 +621,7 @@ class TangyTimed extends PolymerElement {
         this.dispatchEvent(new Event('change'))
         break
     }
-    if (this.shouldGridAutoStop()) {
+    if (this.autoStop && this.shouldGridAutoStop()) {
       event.target.highlighted = true
       this.mode = TANGY_TIMED_MODE_LAST_ATTEMPTED
       this.gridAutoStopped = true
