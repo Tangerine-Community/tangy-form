@@ -671,13 +671,13 @@ class TangyTimed extends PolymerElement {
 
   validate() {
     let lastAttempted = this.value.find(state => (state.highlighted) ? state : false)
-    if (this.required && !this.hidden && !this.hidden && lastAttempted) {
-      this.invalid = false
-      return true
+    // If this is required, it's not hidden, and there is no last attempted... Then this is invalid.
+    if (this.required && !this.hidden && !lastAttempted) {
+      this.invalid = true 
     } else {
-      this.invalid = true
-      return false
+      this.invalid = false 
     }
+    return !this.invalid 
   }
 
 
