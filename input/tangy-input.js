@@ -18,9 +18,6 @@ export class TangyInput extends PolymerElement {
 
   constructor() {
     super()
-    this.t = {
-      helpText: t('Enter your response to above question here')
-    }
     this.useThis = (this.getAttribute('type') === 'email' ||
       this.getAttribute('type') === 'number' ||
       this.getAttribute('type') === 'date' ||
@@ -47,7 +44,8 @@ export class TangyInput extends PolymerElement {
       <label>[[label]]</label>
       <paper-textarea 
         id="input" 
-        label="[[t.helpText]]" 
+        label="[[innerLabel]]" 
+        placeholder="[[placeholder]]"
         type="[[type]]" 
         error-message="[[errorMessage]]" 
         value="[[value]]" 
@@ -60,7 +58,8 @@ export class TangyInput extends PolymerElement {
       </paper-textarea>
       <paper-input 
         id="input" 
-        label="[[t.helpText]]" 
+        label="[[innerLabel]]" 
+        placeholder="[[placeholder]]"
         type="[[type]]" 
         error-message="[[errorMessage]]" 
         value="[[value]]" 
@@ -91,6 +90,14 @@ export class TangyInput extends PolymerElement {
       label: {
         type: String,
         value: ''
+      },
+      innerLabel: {
+        type: String,
+        value: ''
+      },
+      placeholder: {
+        type: String,
+        value: '',
       },
       hintText: {
         type: String,
@@ -157,6 +164,9 @@ export class TangyInput extends PolymerElement {
 
   connectedCallback() {
     super.connectedCallback()
+    this.innerLabel = this.innerLabel === '' 
+      ? t('Enter your response to above question here') 
+      : this.innerLabel
     this.shadowRoot.querySelector(this.dontUseThis).hidden = true
     this.shadowRoot.querySelector(this.useThis).addEventListener('value-changed', (event) => {
       this.value = this.$.input.value
