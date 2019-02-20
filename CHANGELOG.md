@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.7.1
+- Fix bug that was causing tall elements to get cut off.
+
 ## v3.7.0
 - Fix TangyTimed.validate() to prevent getting stuck on non-required tangy-timed. 
 - Add `placeholder` and `inner-label` attributes to tangy-input for overiding the default `Enter your response to above question here.`.
