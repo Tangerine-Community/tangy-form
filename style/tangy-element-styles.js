@@ -27,7 +27,7 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         -ms-transition: opacity .5s ease-in-out, max-height .5s ease-in-out;
         -o-transition: opacity .5s ease-in-out, max-height .5s ease-in-out;
         opacity: 1;
-        max-height: 3000px;
+        max-height: 99999999999999999px;
       }
 
       :host([hidden]) {
