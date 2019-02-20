@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v3.7.0
+- Fix TangyTimed.validate() to prevent getting stuck on non-required tangy-timed. 
+- Add `placeholder` and `inner-label` attributes to tangy-input for overiding the default `Enter your response to above question here.`.
+
 ## v3.6.0
 - New `<tangy-timed row-markers>` attribute allows you to mark entire rows on a grid. https://github.com/Tangerine-Community/Tangerine/issues/1333
 - Fixed `<tangy-timed columns=4>` attribute. Some situations the columns would not add up correctly.
