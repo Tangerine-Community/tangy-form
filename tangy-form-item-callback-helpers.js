@@ -93,11 +93,22 @@ export class TangyFormItemHelpers {
   itemsPerMinute(input) {
     if (!input) return
     if (input.tagName !== 'TANGY-TIMED') return
-    let numberOfItemsAttempted = input.value.findIndex(el => el.highlighted ? true : false) + 1
-    let numberOfItemsIncorrect = input.value.filter(el => el.value ? true : false).length
-    let numberOfItemsCorrect = numberOfItemsAttempted - numberOfItemsIncorrect 
+    let numberOfItemsAttempted = this.numberOfItemsAttempted(input)
+    let numberOfItemsIncorrect = this.numberOfIncorrectItems(input)
+    let numberOfItemsCorrect = numberOfItemsAttempted - numberOfItemsIncorrect
     let timeSpent = input.duration - input.timeRemaining
     return Math.round(numberOfItemsCorrect / (timeSpent / 60))
   }
-
+  numberOfItemsAttempted(input) {
+    return input.value.findIndex(el => el.highlighted) + 1
+  }
+  numberOfCorrectItems(input) {
+    return (this.numberOfItemsAttempted(input) - this.numberOfIncorrectItems(input))
+  }
+  numberOfIncorrectItems(input) {
+    return input.value.filter(el => el.value).length
+  }
+  gridAutoStopped(input) {
+    return !!input.value.find(el => el.gridAutoStopped)
+  }
 }

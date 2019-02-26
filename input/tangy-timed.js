@@ -235,6 +235,11 @@ class TangyTimed extends PolymerElement {
         value: undefined,
         reflectToAttribute: true
       },
+      gridAutoStopped: {
+        type: Boolean,
+        value: undefined,
+        reflectToAttribute: true
+      },
       hintText: {
         type: String,
         value: '',
@@ -541,7 +546,7 @@ class TangyTimed extends PolymerElement {
       const indexes = tangyToggleButtons.slice(0, this.autoStop).map((button, index) => index)
       let pressedItemsIndex = [];
       tangyToggleButtons.reduce((prev, curr, index) => {
-        if (curr.__data.pressed) {
+        if (curr.pressed) {
           pressedItemsIndex = [...pressedItemsIndex, index]
         }
       }, [])
@@ -616,9 +621,10 @@ class TangyTimed extends PolymerElement {
         this.dispatchEvent(new Event('change'))
         break
     }
-    if (this.shouldGridAutoStop()) {
+    if (this.autoStop && this.shouldGridAutoStop()) {
       event.target.highlighted = true
       this.mode = TANGY_TIMED_MODE_LAST_ATTEMPTED
+      this.gridAutoStopped = true
       this.onStopClick(null, event.target.name)
     }
   }
