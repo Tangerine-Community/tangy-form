@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.8.0
+- Add additional grid helper functions https://github.com/Tangerine-Community/tangy-form/pull/33
+
 ## v3.7.1
 - Fix bug that was causing tall elements to get cut off.
 
