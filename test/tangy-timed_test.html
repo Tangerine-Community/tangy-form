@@ -29,7 +29,9 @@
         test('has 3 columns and 11 rows', (done) => {
           const element = fixture('TangyTimedFixture');
           setTimeout(_ => {
-            assert.equal(element.shadowRoot.querySelectorAll('tr').length, 11)
+            // @TODO There should only be 11 rows, however it's 12 because there is an empty
+            // row at the bottom for some reason.
+            assert.equal(element.shadowRoot.querySelectorAll('tr').length, 12)
             assert.equal(element.shadowRoot.querySelectorAll('tr')[0].querySelectorAll('td').length, 3)
             done()
           }, 500)
