@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.9.1
+- New `<tangy-template>` element evaluates a JS string literal in the context of tangy-form-item's `on-change`. 
+
 ## v3.8.0
 - Add additional grid helper functions https://github.com/Tangerine-Community/tangy-form/pull/33
 
