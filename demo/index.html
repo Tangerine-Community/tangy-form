@@ -259,6 +259,18 @@
         </template>
       </demo-snippet>
 
+      <h3>Tangy Template Demo</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="form1">
+            <tangy-form-item id="item1">
+              <tangy-input name="input1" label="input1"></tangy-input>
+              <tangy-template name="foo">The value of above input is... ${getValue('input1')}</tangy-template>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+
       <h3>Tangy Location Filter By</h3>
       <demo-snippet>
         <template>

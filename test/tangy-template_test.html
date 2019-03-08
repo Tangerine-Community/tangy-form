@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <title>tangy-template test</title>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/redux/dist/redux.js"></script>
+    <script src="../node_modules/wct-browser-legacy/browser.js"></script>
+  </head>
+  <body>
+    
+    <test-fixture id="TangyTemplateFixture">
+      <template>
+        <tangy-form id="form1">
+          <tangy-form-item id="item1">
+            <tangy-input name="input1" label="input1"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item2">
+            <tangy-template name="foo">Output ${getValue('input1')}</tangy-template>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+    <script type="module">
+      import '../tangy-form.js'
+      import '../input/tangy-input.js'
+      suite('tangy-template', () => {
+        test('should have templated output', function () {
+          const form = fixture('TangyTemplateFixture');
+          form.newResponse()
+          form.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
+          form.querySelector('#item1').shadowRoot.querySelector('[name="input1"]').value = 'foo'
+          form.querySelector('#item1').shadowRoot.querySelector('#next').click()
+          assert.equal(form.querySelector('#item2').shadowRoot.querySelector('tangy-template').$.container.innerText, 'Output foo')
+        })
+      })
+    </script>
+
+  </body>
+</html>

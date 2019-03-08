@@ -398,6 +398,12 @@ export class TangyFormItem extends PolymerElement {
     if (this.shadowRoot.querySelector('form') && this.shadowRoot.querySelector('form').hasAttribute(hook)) {
       eval(this.shadowRoot.querySelector('form').getAttribute(hook))
     }
+    // Render <tangy-template> elements.
+    this.shadowRoot.querySelectorAll('tangy-template').forEach(templateEl => {
+      if (templateEl.shadowRoot) {
+        templateEl.$.container.innerHTML = eval('`' + templateEl.template + '`')
+      }
+    })
   }
 
   onOpenButtonPress() {
