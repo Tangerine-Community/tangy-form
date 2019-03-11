@@ -5,6 +5,7 @@ import '@polymer/paper-input/paper-textarea.js'
 import '@polymer/paper-input/paper-input.js'
 import '../style/tangy-common-styles.js'
 import '../style/tangy-element-styles.js'
+import { combTranslations } from 'translation-web-component/util.js'
 
 /**
  * `tangy-input`
@@ -15,17 +16,6 @@ import '../style/tangy-element-styles.js'
  * @demo demo/index.html
  */
 export class TangyInput extends PolymerElement {
-
-  constructor() {
-    super()
-    this.useThis = (this.getAttribute('type') === 'email' ||
-      this.getAttribute('type') === 'number' ||
-      this.getAttribute('type') === 'date' ||
-      this.getAttribute('type') === 'time' ||
-      this.getAttribute('allowed-pattern'))
-      ? 'paper-input' : 'paper-textarea'
-    this.dontUseThis = (this.useThis === 'paper-input') ? 'paper-textarea' : 'paper-input'
-  }
 
   static get template() {
     return html`
@@ -39,38 +29,7 @@ export class TangyInput extends PolymerElement {
       }
 
     </style>
-
-    <div class="container">
-      <label>[[label]]</label>
-      <paper-textarea 
-        id="input" 
-        label="[[innerLabel]]" 
-        placeholder="[[placeholder]]"
-        type="[[type]]" 
-        error-message="[[errorMessage]]" 
-        value="[[value]]" 
-        allowed-pattern="[[allowedPattern]]">
-        min=[[min]]
-        max=[[max]]
-        <template is="dom-if" if="required">
-          <div slot="suffix"></div>
-        </template>
-      </paper-textarea>
-      <paper-input 
-        id="input" 
-        label="[[innerLabel]]" 
-        placeholder="[[placeholder]]"
-        type="[[type]]" 
-        error-message="[[errorMessage]]" 
-        value="[[value]]" 
-        allowed-pattern="[[allowedPattern]]">
-        min=[[min]]
-        max=[[max]]
-        <template is="dom-if" if="required">
-          <div slot="suffix"></div>
-        </template>
-      </paper-input>
-      <label class="hint-text">[[hintText]]</label>
+    <div id="container">
     </div>
   `
   }
@@ -89,38 +48,44 @@ export class TangyInput extends PolymerElement {
       },
       label: {
         type: String,
+        observer: 'reflect',
         value: ''
       },
       innerLabel: {
         type: String,
+        observer: 'reflect',
         value: ''
       },
       placeholder: {
         type: String,
-        value: '',
+        observer: 'reflect',
+        value: ''
       },
       hintText: {
         type: String,
+        observer: 'reflect',
         value: ''
       },
       type: {
         type: String,
+        observer: 'reflect',
         value: ''
       },
       errorMessage: {
         type: String,
+        observer: 'reflect',
         value: ''
       },
       required: {
         type: Boolean,
         value: false,
-        observer: 'onRequiredChange',
+        observer: 'reflect',
         reflectToAttribute: true
       },
       disabled: {
         type: Boolean,
         value: false,
-        observer: 'onDisabledChange',
+        observer: 'reflect',
         reflectToAttribute: true
       },
       hidden: {
@@ -131,7 +96,7 @@ export class TangyInput extends PolymerElement {
       invalid: {
         type: Boolean,
         value: false,
-        observer: 'onInvalidChange',
+        observer: 'reflect',
         reflectToAttribute: true
       },
       incomplete: {
@@ -142,21 +107,25 @@ export class TangyInput extends PolymerElement {
       value: {
         type: String,
         value: '',
+        observer: 'reflect',
         reflectToAttribute: true
       },
       allowedPattern: {
         type: String,
         value: '',
+        observer: 'reflect',
         reflectToAttribute: true
       },
       min: {
         type: String,
         value: '',
+        observer: 'reflect',
         reflectToAttribute: true
       },
       max: {
         type: String,
         value: '',
+        observer: 'reflect',
         reflectToAttribute: true
       }
     }
@@ -164,12 +133,23 @@ export class TangyInput extends PolymerElement {
 
   connectedCallback() {
     super.connectedCallback()
-    this.innerLabel = this.innerLabel === '' 
-      ? t('Enter your response to above question here') 
-      : this.innerLabel
-    this.shadowRoot.querySelector(this.dontUseThis).hidden = true
-    this.shadowRoot.querySelector(this.useThis).addEventListener('value-changed', (event) => {
-      this.value = this.$.input.value
+    // Template.
+    this.$.container.innerHTML = `      
+      <label id="label"></label>
+      ${
+        this.getAttribute('type') === 'email' ||
+        this.getAttribute('type') === 'number' ||
+        this.getAttribute('type') === 'date' ||
+        this.getAttribute('type') === 'time' ||
+        this.getAttribute('allowed-pattern')
+        ? `<paper-textarea id="input"></paper-textarea>`
+        : `<paper-input id="input"></paper-input>`
+      }
+      <label id="hintText"></label>
+    `
+    // Listen for user changes.
+    this.shadowRoot.querySelector('#input').addEventListener('value-changed', (event) => {
+      this.value = this.shadowRoot.querySelector('#input').value
       // @TODO tangy-form-item's listener for change events is not capturing this.
       let incomplete = (event.target.value === '') ? true : false
       this.value = event.target.value
@@ -178,50 +158,50 @@ export class TangyInput extends PolymerElement {
           inputName: this.name,
           inputValue: event.target.value,
           inputIncomplete: incomplete,
-          inputInvalid: !this.$.input.validate()
+          inputInvalid: !this.shadowRoot.querySelector(`#input`).validate()
         },
         bubbles: true
       }))
     })
-    // The template binded min and max are not having an effect on the paper-input paper-textarea perhaps because
-    // those values are only based on the initial value which is going to be null perhaps. Setting directly on the
-    // paper element seems to do the trick.
-    if (this.min || this.max) {
-      this.shadowRoot.querySelector(this.useThis).min = this.min
-      this.shadowRoot.querySelector(this.useThis).max = this.max
-    }
+    this.ready = true
+    this.reflect()
   }
 
-  onRequiredChange(value) {
-    if (value === false) {
-      this.shadowRoot.querySelector(this.useThis).removeAttribute('required')
+  reflect() {
+    if (!this.ready) return
+    if (!this.shadowRoot.querySelector('#input')) return
+    // Reflect data into DOM.
+    this.shadowRoot.querySelector('#hintText').innerHTML = this.hintText
+    this.shadowRoot.querySelector('#label').innerHTML = this.label
+    this.shadowRoot.querySelector('#input').placeholder = combTranslations(this.placeholder)
+    this.shadowRoot.querySelector('#input').label = this.innerLabel === '' 
+      ? t('Enter your response to above question here') 
+      : combTranslations(this.innerLabel)
+    this.shadowRoot.querySelector('#input').errorMessage = combTranslations(this.errorMessage)
+    this.shadowRoot.querySelector('#input').allowedPattern = this.allowedPattern
+    //this.shadowRoot.querySelector('#input').value = this.value
+    this.shadowRoot.querySelector('#input').setAttribute('value', this.value)
+    this.shadowRoot.querySelector('#input').min = this.min
+    this.shadowRoot.querySelector('#input').max = this.max
+        if (this.required === false) {
+      this.shadowRoot.querySelector('#input').removeAttribute('required')
     } else {
-      this.shadowRoot.querySelector(this.useThis).setAttribute('required', true)
+      this.shadowRoot.querySelector('#input').setAttribute('required', true)
     }
-  }
-
-  onDisabledChange(value) {
-    if (value === false) {
-      this.shadowRoot.querySelector(this.useThis).removeAttribute('disabled')
+    if (this.disabled === false) {
+      this.shadowRoot.querySelector('#input').removeAttribute('disabled')
     } else {
-      this.shadowRoot.querySelector(this.useThis).setAttribute('disabled', true)
+      this.shadowRoot.querySelector('#input').setAttribute('disabled', true)
     }
-  }
-
-  onInvalidChange(value) {
-    if (value === false) {
-      this.shadowRoot.querySelector(this.useThis).removeAttribute('invalid')
+    if (this.invalid === false) {
+      this.shadowRoot.querySelector('#input').removeAttribute('invalid')
     } else {
-      this.shadowRoot.querySelector(this.useThis).setAttribute('invalid', true)
+      this.shadowRoot.querySelector('#input').setAttribute('invalid', true)
     }
-  }
-
-  onValueChange(value) {
-    this.shadowRoot.querySelector(this.useThis).setAttribute('value', value)
   }
 
   validate() {
-    return this.shadowRoot.querySelector(this.useThis).validate()
+    return this.shadowRoot.querySelector('#input').validate()
   }
 
 }
