@@ -3,6 +3,7 @@ import '../util/html-element-props.js'
 import '../style/tangy-element-styles.js';
 import '../style/tangy-common-styles.js'
 import '../style/mdc-select-style.js'
+import { combTranslations } from 'translation-web-component/util.js'
 /**
  * `tangy-select`
  *
@@ -123,7 +124,7 @@ class TangySelect extends PolymerElement {
             <option 
               value="${option.value}" 
             >
-              ${option.innerHTML}
+              ${combTranslations(option.innerHTML)}
             </option>
           `)}
         </select>
