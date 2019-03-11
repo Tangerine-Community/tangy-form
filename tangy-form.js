@@ -22,6 +22,7 @@ import '@polymer/paper-fab/paper-fab.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-tabs/paper-tab.js';
 import '@polymer/paper-tabs/paper-tabs.js';
+import 'translation-web-component/t-lang.js'
 
 /**
  * `tangy-form`
