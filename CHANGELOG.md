@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v3.10.0
+- Include the `<t-lang>` web component by default for providing form translations. 
+- Allow use of `<t-lang>` in `<tangy-select>` option labels.
+- Allow HTML in tangy-input's label and hint text. Allow use of <t-lang> for translations in placeholder, innerLabel and error message.
+
 ## v3.9.1
 - New `<tangy-template>` element evaluates a JS string literal in the context of tangy-form-item's `on-change`. 
 
