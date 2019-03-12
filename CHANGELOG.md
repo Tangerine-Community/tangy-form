@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.10.1
+- Fixed issue where some `hint-text` and `label` attributes with markup would show escaped.
+
 ## v3.10.0
 - Include the `<t-lang>` web component by default for providing form translations. 
 - Allow use of `<t-lang>` in `<tangy-select>` option labels.
