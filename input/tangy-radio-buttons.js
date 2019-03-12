@@ -62,8 +62,8 @@ class TangyRadioButtons extends PolymerElement {
 
 
       <div class="container">
-        <label for="group">[[label]]</label>
-        <label class="hint-text">[[hintText]]</label>
+        <label id="label" for="group"></label>
+        <label id="hint-text"></label>
         <template is="dom-if" if="{{!hideHelpText}}">
           <span  class="secondary_color">[[t.selectOnlyOne]]</span>
         </template>
@@ -167,6 +167,8 @@ class TangyRadioButtons extends PolymerElement {
   }
 
   render() {
+    this.$.label.innerHTML = this.label
+    this.$['hint-text'].innerHTML = this.hintText
     this.$.container.innerHTML = ''
     // Populate options as tangy-radio-button elements
     let options = this.querySelectorAll('option')

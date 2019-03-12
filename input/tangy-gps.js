@@ -85,7 +85,7 @@ class TangyGps extends PolymerElement {
       .coordinates {
         margin: 5px 15px;
       }
-      .hint-text{
+      #hint-text{
         margin-top:6px;
       }
     </style>
@@ -109,7 +109,7 @@ class TangyGps extends PolymerElement {
         <br> 
         <span class="label">[[t.disanceFromReference]]:</span> [[currentDelta]] meters
       </template>
-      <label class="hint-text">[[hintText]]</label>
+      <label id="hint-text"></label>
     </div>
 
     <div>
@@ -201,6 +201,7 @@ class TangyGps extends PolymerElement {
   ready() {
     this.hasDelta = false
     super.ready();
+    this.$['hint-text'].innerHTML = this.hintText
     this.active = true
     this.getGeolocationPosition()
     this.currentAccuracy = '...'

@@ -91,34 +91,76 @@
         <template>
           <tangy-form id="fruit-survey" title="Fruit Survey">
             <tangy-form-item id="item1" title="Fruit Survey">
-              <tangy-input name="first_name" label="What is your first name?"></tangy-input>
-              <tangy-input name="last_name" label="What is your last name?"></tangy-input>
+              <tangy-input 
+                name="tangy_input" 
+                type="text"
+                label="This is a regular tangy input label." 
+                inner-label="<t-lang en>This is an inner-label text</t-lang><t-lang fr>Ceci est un texte interne</t-lang>."
+                placeholder="<t-lang en>This is placeholder text</t-lang><t-lang fr>Ceci est un espace réservé</t-lang>."
+                hint-text="This is <b>hint text</b>" 
+                error-message="This is a custom <t-lang en>error message</t-lang>"
+                required>
+              </tangy-input>
+              <tangy-input 
+                name="tangy_input" 
+                type="email"
+                label="This is an email tangy input." 
+                required>
+              </tangy-input>
               <tangy-photo-capture name="picture"></tangy-photo-capture>
-              <tangy-radio-buttons name="fruit_selection" label="What is your favorite fruit?">
+              <tangy-radio-buttons 
+                name="fruit_selection" 
+                label="What is your <b>favorite</b> fruit?"
+                hint-text="This is <b>hint text</b>."
+                required>
                 <option name="orange">Orange</option>
                 <option name="banana">Banana</option>
-                <option name="tangerine">Tangerine</option>
+                <option name="tangerine"><b>Tangerine</b></option>
               </tangy-radio-buttons>
-              <tangy-select name="fruit_selection_2" label="What is your second favorite fruit?">
+              <tangy-select name="fruit_selection_2"
+                label="What is your <b>second favorite</b> fruit?"
+                hint-text="This is <b>hint text</b>."
+                required>
                 <option name="orange">Orange</option>
                 <option name="banana">Banana</option>
-                <option name="tangerine">Tangerine</option>
+                <option name="tangerine"><b>Tangerine</b></option>
               </tangy-select>
-              <tangy-checkboxes name="fruit_time" label="What time do you take fruit?">
+              <tangy-checkboxes
+                name="fruit_time"
+                label="What <b>time</b> do you take fruit?"
+                hint-text="This is <b>hint text</b>."
+                required>
                 <option name="morning">Morning</option>
                 <option name="afternoon">Afternoon</option>
-                <option name="evening">Evening</option>
+                <option name="evening"><i>Evening</i></option>
               </tangy-checkboxes>
               Where do you eat fruit?
-              <tangy-location name="location" location-src="./location-list.json" show-levels="county,school"></tangy-location>
+              <tangy-location 
+                name="location"
+                location-src="./location-list.json"
+                hint-text="This is <b>hint text</b>."
+                show-levels="county,school"
+                required>
+              </tangy-location>
               tangy-gps with hide-coordinates and hide-accuracy-distance:
-              <tangy-gps name="gps" hide-coordinates hide-accuracy-distance></tangy-gps>
+              <tangy-gps
+                name="gps"
+                hint-text="This is <b>hint text</b>."
+                hide-coordinates
+                hide-accuracy-distance
+                required>
+              </tangy-gps>
               tangy-gps without hide-coordinates:
-              <tangy-gps name="gps2"></tangy-gps>
-              <tangy-qr name="qr" label="Scan a QR code"></tangy-qr>
+              <tangy-gps name="gps2" required></tangy-gps>
+              <tangy-qr 
+                name="qr"
+                label="Scan a QR code"
+                hint-text="This is <b>hint text</b>."
+                required>
+              </tangy-qr>
             </tangy-form-item>
             <tangy-form-item id="summary" title="Summary" on-change="debugger">
-              <tangy-input name="fooooooo" label="foooo"></tangy-input>
+              <tangy-input name="comments" label="Comments"></tangy-input>
               Thank you for taking our survey.
             </tangy-form-item>
           </tangy-form>

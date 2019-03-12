@@ -46,8 +46,8 @@ class TangyCheckboxes extends PolymerElement {
         
       </style>
       <div class="container">
-        <label for="group">[[label]]</label>
-        <label class="hint-text">[[hintText]]</label>
+        <label id="label" for="group"></label>
+        <label id="hint-text"></label>
         <span class="secondary_color">[[t.selectOneOrMore]]</span>
         <div id="checkboxes">
         </div>
@@ -134,6 +134,8 @@ class TangyCheckboxes extends PolymerElement {
   }
 
   render() {
+    this.$.label.innerHTML = this.label
+    this.$['hint-text'].innerHTML = this.hintText
     this.$.checkboxes.innerHTML = ''
     // Populate options as tangy-radio-button elements
     let options = this.querySelectorAll('option')

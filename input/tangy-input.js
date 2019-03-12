@@ -27,6 +27,10 @@ export class TangyInput extends PolymerElement {
         --paper-font-subhead_-_font-size: 1em;
         --paper-font-subhead_-_line-height: 1em;
       }
+      :host([invalid]) #hintText {
+        position: relative;
+        top: 5px;
+      }
 
     </style>
     <div id="container">
