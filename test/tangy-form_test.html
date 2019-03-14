@@ -433,24 +433,6 @@
           assert.equal(element.querySelector('#item-2').shadowRoot.querySelector('[name=baz]').value, 'Hello world.');
         });
 
-        test('tangy-input.max and tangy-input.max should validate value', (done) => {
-          const containerEl = fixture('ContainerFixture');
-          containerEl.innerHTML = `
-            <tangy-input name="foo" label="foo" type="number" min="30" max="50"></tangy-input>
-            `
-          const inputEl = containerEl.querySelector('tangy-input')
-          inputEl.setAttribute('value', '44')
-          // Wait a tick for the underlying paper-input to catch up for validation purposes.
-          Polymer.Base.async(function() {
-            assert.equal(inputEl.validate(), true)
-            inputEl.setAttribute('value', '55')
-            Polymer.Base.async(function() {
-              assert.equal(inputEl.validate(), false)
-              done()
-            })
-          })
-        });
-
         test('new response should start on the first item not disabled', () => {
           const element = fixture('SimpleTestFixture');
           // Disable item 1 and 3, leaving item-2 the first item not disabled.

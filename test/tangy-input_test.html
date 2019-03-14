@@ -29,6 +29,12 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="MinMaxFixture">
+      <template>
+        <tangy-input name="foo" label="foo" type="number" min="30" max="50"></tangy-input>
+      </template>
+    </test-fixture>
+
     <test-fixture id="TangyInputInAForm">
       <template>
         <tangy-form id="my-form" title="My Form">
@@ -44,6 +50,7 @@
 
 
     <script type="module">
+      import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import '../input/tangy-input.js'
       suite('tangy-input', () => {
         test('should have value set', async function() {
@@ -59,6 +66,21 @@
           const element = fixture('TranslatablePlaceholderFixture');
           assert(element.shadowRoot.querySelector('#input').placeholder, 'Bonjour')
         })
+        test('min and max should validate value', (done) => {
+          const inputEl = fixture('MinMaxFixture');
+          inputEl.setAttribute('value', '44')
+          // Wait a tick for the underlying paper-input to catch up for validation purposes.
+          Polymer.Base.async(function() {
+            debugger
+            assert.equal(inputEl.validate(), true)
+            inputEl.setAttribute('value', '55')
+            Polymer.Base.async(function() {
+              assert.equal(inputEl.validate(), false)
+              done()
+            })
+          })
+        });
+
         test('should resume in a form', function() {
           const form = fixture('TangyInputInAForm');
           form.newResponse()

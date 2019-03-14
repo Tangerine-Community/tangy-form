@@ -146,8 +146,8 @@ export class TangyInput extends PolymerElement {
         this.getAttribute('type') === 'date' ||
         this.getAttribute('type') === 'time' ||
         this.getAttribute('allowed-pattern')
-        ? `<paper-textarea id="input"></paper-textarea>`
-        : `<paper-input id="input"></paper-input>`
+        ? `<paper-input id="input"></paper-input>`
+        : `<paper-textarea id="input"></paper-textarea>`
       }
       <label id="hintText"></label>
     `
@@ -183,10 +183,10 @@ export class TangyInput extends PolymerElement {
       : combTranslations(this.innerLabel)
     this.shadowRoot.querySelector('#input').errorMessage = combTranslations(this.errorMessage)
     this.shadowRoot.querySelector('#input').allowedPattern = this.allowedPattern
-    //this.shadowRoot.querySelector('#input').value = this.value
+    this.shadowRoot.querySelector('#input').setAttribute('type', this.type ? this.type : 'text')
     this.shadowRoot.querySelector('#input').setAttribute('value', this.value)
-    this.shadowRoot.querySelector('#input').min = this.min
-    this.shadowRoot.querySelector('#input').max = this.max
+    this.shadowRoot.querySelector('#input').setAttribute('min', this.min)
+    this.shadowRoot.querySelector('#input').setAttribute('max', this.max)
         if (this.required === false) {
       this.shadowRoot.querySelector('#input').removeAttribute('required')
     } else {
