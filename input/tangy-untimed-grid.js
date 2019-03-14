@@ -11,7 +11,7 @@ import '../style/tangy-common-styles.js'
 
 /**
  * `tangy-untimed-grid`
- * 
+ *
  *
  * @customElement
  * @polymer
@@ -21,7 +21,6 @@ import '../style/tangy-common-styles.js'
 const TANGY_UNTIMED_GRID_MODE_UNTOUCHED = 'TANGY_UNTIMED_GRID_MODE_UNTOUCHED'
 const TANGY_UNTIMED_GRID_MODE_RUN = 'TANGY_UNTIMED_GRID_MODE_RUN'
 const TANGY_UNTIMED_GRID_MODE_MARK = 'TANGY_UNTIMED_GRID_MODE_MARK'
-const TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED = 'TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED'
 const TANGY_UNTIMED_GRID_MODE_DONE = 'TANGY_UNTIMED_GRID_MODE_DONE'
 const TANGY_UNTIMED_GRID_COMPLETE = 'TANGY_UNTIMED_GRID_COMPLETE'
 const TANGY_UNTIMED_GRID_MODE_DISABLED = 'TANGY_UNTIMED_GRID_MODE_DISABLED'
@@ -143,22 +142,6 @@ class TangyUntimedGrid extends PolymerElement {
       
       <div id="info">
           <div id="statusMessage"> [[statusMessage]] </div>
-          <!--<div id="bar">-->
-            <!--<div id="touchPalette">-->
-              <!--<paper-button id="markButton" mini on-click="onMarkClick">-->
-                <!--<iron-icon icon="editor:mode-edit"></iron-icon> -->
-                <!--<template is="dom-if" if="{{showLabels}}">-->
-                  <!--[[t.mark]] -->
-                <!--</template>-->
-              <!--</paper-button>-->
-              <!--<paper-button id="lastAttemptedButton" mini on-click="onLastAttemptedClick">-->
-                <!--<iron-icon icon="av:playlist-add-check"></iron-icon> -->
-                <!--<template is="dom-if" if="{{showLabels}}">-->
-                  <!--[[t.lastAttempted]]-->
-                <!--</template>-->
-              <!--</paper-button>-->
-            <!--</div>-->
-          <!--</div>-->
       </div>
 
       <table id="grid">
@@ -196,7 +179,7 @@ class TangyUntimedGrid extends PolymerElement {
         value: '',
         reflectToAttribute: true
       },
-      // Use value for mode. 
+      // Use value for mode.
       mode: {
         state: true,
         value: TANGY_UNTIMED_GRID_MODE_UNTOUCHED,
@@ -284,20 +267,9 @@ class TangyUntimedGrid extends PolymerElement {
     setTimeout(() => {
       this.render()
       this.reflect()
-      this.onStartClick()
+      // this.onStartClick()
+      this.mode = TANGY_UNTIMED_GRID_MODE_RUN
     }, 400)
-    // setInterval(_ => {
-    //   if (this.getBoundingClientRect().y < 0 && this.getBoundingClientRect().y + this.getBoundingClientRect().height > 0) {
-    //     this.shadowRoot.querySelector('#bar').style.position = 'fixed'
-    //   } else {
-    //     this.shadowRoot.querySelector('#bar').style.position = 'absolute'
-    //   }
-      // if (this.offsetWidth > 645) {
-      //   this.shadowRoot.querySelector('#info').style.paddingTop = '70px'
-      // } else {
-      //   this.shadowRoot.querySelector('#info').style.paddingTop = '150px'
-      // }
-    // }, 1000)
   }
 
 
@@ -313,19 +285,16 @@ class TangyUntimedGrid extends PolymerElement {
     // Empty the grid, may be a reset.
     this.$.grid.innerHTML = ''
 
-    // Set our countdown to the desired duration.
-    // this.timeRemaining = (this.timeRemaining === undefined) ? this.duration : this.timeRemaining
-
     const rows = [document.createElement('tr')]
     let currentRow = 0
     let currentColumn = 1
     this.querySelectorAll('option').forEach((option, i) => {
       // Create the tangy toggle button.
       let column = document.createElement('td')
-      column.style.width = `${Math.floor(100/this.columns)}%` 
+      column.style.width = `${Math.floor(100/this.columns)}%`
       let tangyToggleButton = document.createElement('tangy-toggle-button')
       tangyToggleButton.setAttribute('name', option.value)
-      //tangyToggleButton.style.width = `100%` 
+      //tangyToggleButton.style.width = `100%`
       tangyToggleButton.innerHTML = option.innerHTML
       tangyToggleButton.disabled = true
       if (this.disabled) tangyToggleButton.disabled = true
@@ -362,7 +331,7 @@ class TangyUntimedGrid extends PolymerElement {
         button.addEventListener('click', this.onTangyToggleButtonClick.bind(this))
         newValue.push(button.getProps())
       })
-    // Grids may change, preserve old values. Ideally we don't need this in the future with 
+    // Grids may change, preserve old values. Ideally we don't need this in the future with
     // proper revisioning of forms.
     if (this.value.length < newValue.length) {
       this.value.forEach(oldInputState => {
@@ -372,7 +341,6 @@ class TangyUntimedGrid extends PolymerElement {
       this.value = newValue
     }
 
-
   }
 
   // Note that mode is actually this.value.
@@ -380,10 +348,6 @@ class TangyUntimedGrid extends PolymerElement {
 
     let tangyToggleButtons = [].slice.call(this.shadowRoot.querySelectorAll('tangy-toggle-button'))
     let inputElements = [].slice.call(this.querySelectorAll('[name]'))
-
-    // reset pressed.
-    let controlElements = [].slice.call(this.shadowRoot.querySelectorAll('paper-button'))
-    controlElements.forEach(element => element.classList.remove('pressed'))
 
     switch (value) {
       case TANGY_UNTIMED_GRID_MODE_DISABLED:
@@ -412,34 +376,12 @@ class TangyUntimedGrid extends PolymerElement {
             disabled: false
           })
         })
-        // this.timer = setInterval(() => {
-        //   let timeSpent = Math.floor((Date.now() - this.startTime) / 1000)
-        //   this.timeRemaining = this.duration - timeSpent
-        //   if (this.timeRemaining <= 0) {
-        //     clearInterval(this.timer)
-        //     this.style.background = 'red'
-        //     this.value = this.value.map((element, i) => Object.assign({}, element, { highlighted: (this.value.length - 1 === i) ? true : false }))
-        //     setTimeout(() => this.style.background = 'white', 200)
-        //     setTimeout(() => this.style.background = 'red', 400)
-        //     setTimeout(() => this.style.background = 'white', 600)
-        //     setTimeout(() => alert(t('Please tap on last item attempted.')), 800)
-        //     this.mode = TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED
-        //   }
-        // }, 200);
         break
       case TANGY_UNTIMED_GRID_MODE_MARK:
         this.statusMessage = t('Tap any boxes that were incorrect during the test.')
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
             disabled: false
-          })
-        })
-        break
-      case TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED:
-        this.statusMessage = t('Tap the item last attempted.')
-        this.value = this.value.map(buttonState => {
-          return Object.assign({}, buttonState, {
-            disabled: true
           })
         })
         break
@@ -453,22 +395,6 @@ class TangyUntimedGrid extends PolymerElement {
         })
         break
 
-    }
-  }
-  shouldGridAutoStop() {
-    const isSetsEqual = (a, b) => a.size === b.size && [...a].every(value => b.has(value));
-    const tangyToggleButtons = [].slice.call(this.shadowRoot.querySelectorAll('tangy-toggle-button'))
-    if (!tangyToggleButtons[0].pressed) {
-      return false;
-    } else {
-      const indexes = tangyToggleButtons.slice(0, this.autoStop).map((button, index) => index)
-      let pressedItemsIndex = [];
-      tangyToggleButtons.reduce((prev, curr, index) => {
-        if (curr.pressed) {
-          pressedItemsIndex = [...pressedItemsIndex, index]
-        }
-      }, [])
-      return isSetsEqual(new Set(indexes), new Set(pressedItemsIndex))
     }
   }
 
@@ -493,9 +419,8 @@ class TangyUntimedGrid extends PolymerElement {
 
     let tangyToggleButtons = [].slice.call(this.shadowRoot.querySelectorAll('tangy-toggle-button'))
     let inputElements = [].slice.call(this.querySelectorAll('[name]'))
-    
-    let newValue = []
 
+    let newValue = []
 
     switch (this.mode) {
       case TANGY_UNTIMED_GRID_MODE_UNTOUCHED:
@@ -518,79 +443,7 @@ class TangyUntimedGrid extends PolymerElement {
         this.value = newValue
         this.dispatchEvent(new Event('change'))
         break
-      case TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED:
-        // Find the last marked and do not set last attempted if what is just clicked is >.
-        let lastMarkedIndex = 0
-        this.value.forEach((option, i) => lastMarkedIndex = (option.pressed) ? i : lastMarkedIndex)
-        // Set the state of the button, assign to value which will trigger reflecting to its element.
-        newValue = this.value.map((option, i) => {
-
-          if (option.name === event.target.name && i >= lastMarkedIndex) {
-            option.highlighted = true
-          } else if (option.name === event.target.name && i < lastMarkedIndex) {
-            alert(t('Last attempted cannot be before an item marked.'))
-            option.highlighted = false
-          } else {
-            option.highlighted = false
-          }
-          return option
-        })
-        this.value = newValue
-        this.dispatchEvent(new Event('change'))
-        break
     }
-    // if (this.autoStop && this.shouldGridAutoStop()) {
-    //   event.target.highlighted = true
-    //   this.mode = TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED
-    //   this.gridAutoStopped = true
-    //   this.onStopClick(null, event.target.name)
-    // }
-  }
-
-  onStartClick() {
-    this.reset()
-    this.mode = TANGY_UNTIMED_GRID_MODE_RUN
-  }
-
-  // onStopClick(event, lastItemAttempted) {
-  //   this.endTime = Date.now()
-  //   clearInterval(this.timer);
-  //   // We have to check for typeof string because the event handler on the stop button puts an integer in the second param for some reason.
-  //   // If it's a string, then we know it's an ID of something which should actually be lastItemAttempted.
-  //   if (typeof lastItemAttempted === 'string') {
-  //     this.value = this.value.map((element, i) => Object.assign({}, element, { highlighted: (lastItemAttempted === element.name) ? true : false }))
-  //   } else {
-  //     this.value = this.value.map((element, i) => Object.assign({}, element, { highlighted: (this.value.length - 1 === i) ? true : false }))
-  //   }
-  //   this.mode = TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED
-  // }
-
-  // onResetClick() {
-  //   this.reset()
-  //   this.mode = TANGY_UNTIMED_GRID_MODE_RUN
-  //   // this.dispatchEvent(new Event('change', {bubbles: true}))
-  // }
-
-  onMarkClick() {
-    if (this.mode != TANGY_UNTIMED_GRID_MODE_RUN) this.mode = TANGY_UNTIMED_GRID_MODE_MARK
-  }
-
-  onLastAttemptedClick(element) {
-    this.mode = TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED
-  }
-
-  onDisabledChange() {
-    if (this.disabled === true) this.mode = TANGY_UNTIMED_GRID_MODE_DISABLED
-  }
-
-  reset() {
-    this.value = this.value.map(option => {
-      option.highlighted = false
-      option.value = ''
-      option.pressed = false
-      option.hidden = true
-      return option
-    })
   }
 
   validate() {
