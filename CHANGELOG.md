@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v3.10.2
+- Fix infinite loop in tangy-input value setting that was causing other parts of tangy-form to quietly fail.
+- Fix broken min and max validation for tangy-input, also type=date
+
 ## v3.10.1
 - Fixed issue where some `hint-text` and `label` attributes with markup would show escaped.
 
