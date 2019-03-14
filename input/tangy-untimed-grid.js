@@ -107,18 +107,9 @@ class TangyUntimedGrid extends PolymerElement {
         padding: 5px 5px 10px 5px;
       }
       
-      #timeRemaining {
-        font-size: 1em;
-        position: relative;
-        top: 7px;
-      }
-      #timeRemaining,
-      paper-button {
-        display: inline-block;
-      }
-      
       paper-button {
         background-color: var(--accent-color) !important;
+        display: inline-block;
       }
       
       paper-button[disabled] {
@@ -164,16 +155,6 @@ class TangyUntimedGrid extends PolymerElement {
         observer: 'reflect',
         reflectToAttribute: true
       },
-      autoStop: {
-        type: Number,
-        value: undefined,
-        reflectToAttribute: true
-      },
-      gridAutoStopped: {
-        type: Boolean,
-        value: undefined,
-        reflectToAttribute: true
-      },
       hintText: {
         type: String,
         value: '',
@@ -188,11 +169,6 @@ class TangyUntimedGrid extends PolymerElement {
         reflectToAttribute: true
       },
       // Config.
-      duration: {
-        type: Number,
-        value: 60,
-        reflectToAttribute: true
-      },
       // Number of columns to show items, calibrated for a Nexus 7 in landscape mode.
       columns: {
         type: Number,
@@ -228,21 +204,6 @@ class TangyUntimedGrid extends PolymerElement {
       rowMarkers: {
         type: Boolean,
         value: false
-      },
-      timeRemaining: {
-        type: Number,
-        value: undefined,
-        reflectToAttribute: true
-      },
-      startTime: {
-        type: Number,
-        value: 0,
-        reflectToAttribute: true
-      },
-      endTime: {
-        type: Number,
-        value: 0,
-        reflectToAttribute: true
       },
       scoreTarget: {
         type: Number,
@@ -351,7 +312,6 @@ class TangyUntimedGrid extends PolymerElement {
 
     switch (value) {
       case TANGY_UNTIMED_GRID_MODE_DISABLED:
-        this.timeRemaining = 0
         this.statusMessage = '';
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
@@ -359,7 +319,6 @@ class TangyUntimedGrid extends PolymerElement {
           })
         })
       case TANGY_UNTIMED_GRID_MODE_UNTOUCHED:
-        this.timeRemaining = this.duration
         this.statusMessage = t('untouched')
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
@@ -368,7 +327,6 @@ class TangyUntimedGrid extends PolymerElement {
         })
         break;
       case TANGY_UNTIMED_GRID_MODE_RUN:
-        // this.startTime = Date.now()
         this.statusMessage = t('Tap items to mark them incorrect.')
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
