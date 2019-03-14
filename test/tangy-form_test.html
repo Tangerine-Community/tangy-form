@@ -44,6 +44,16 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="HelloWorldWithInputFixture">
+      <template>
+        <tangy-form id="field-demo" title="Field Demo" on-change="">
+          <tangy-form-item id="item1">
+            <tangy-input name="input1"></tangy-input>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <test-fixture id="SimpleTestFixture">
       <template>
         <tangy-form id="test" title="test">
@@ -213,6 +223,17 @@
           element.newResponse()
           assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
         });
+
+        test('should submit and be able to review an item', function() {
+          let element = fixture('HelloWorldWithInputFixture')
+          element.newResponse()
+          element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').value = 'foo'
+          element.querySelector('#item1').shadowRoot.querySelector('#complete').click()
+          element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item1').shadowRoot.querySelector('#open').click()
+          assert.equal(element.querySelector('#item1').shadowRoot.querySelector('[name="input1"]').value, 'foo')
+        })
 
         test('Deprecated: tangy-form-item.form.getValue and inputs[inputName] should work in on-change on the current item and on-open on the next item ', () => {
           const element = fixture('DeprecatedOnOpenTestFixture');

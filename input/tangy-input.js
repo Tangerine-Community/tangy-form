@@ -153,10 +153,14 @@ export class TangyInput extends PolymerElement {
     `
     // Listen for user changes.
     this.shadowRoot.querySelector('#input').addEventListener('value-changed', (event) => {
-      this.value = this.shadowRoot.querySelector('#input').value
-      // @TODO tangy-form-item's listener for change events is not capturing this.
-      let incomplete = (event.target.value === '') ? true : false
+      // Prevent infinite loops because this event is triggered by reflecting a value change.
+      if (this.justReflectedValue) {
+        this.justReflectedValue = false
+        return
+      }
+      // Now it's safe to set this.value.
       this.value = event.target.value
+      let incomplete = (event.target.value === '') ? true : false
       this.dispatchEvent(new Event('change', {
         detail: {
           inputName: this.name,
@@ -184,10 +188,21 @@ export class TangyInput extends PolymerElement {
     this.shadowRoot.querySelector('#input').errorMessage = combTranslations(this.errorMessage)
     this.shadowRoot.querySelector('#input').allowedPattern = this.allowedPattern
     this.shadowRoot.querySelector('#input').setAttribute('type', this.type ? this.type : 'text')
-    this.shadowRoot.querySelector('#input').setAttribute('value', this.value)
+    // When comparing the values, make sure they are always strings as opposed to different kinds of untruthiness.
+    const cleanOuterValue = this.value
+      ? this.value
+      : ''
+    const cleanInnerValue = this.shadowRoot.querySelector('#input').value
+      ? this.shadowRoot.querySelector('#input').value
+      : ''
+    if (cleanOuterValue !== cleanInnerValue) {
+      // Prevent infinite loops with this semaphore which will be caught by the value-changed listener above.
+      this.justReflectedValue = true
+      this.shadowRoot.querySelector('#input').value = this.value
+    }
     this.shadowRoot.querySelector('#input').setAttribute('min', this.min)
     this.shadowRoot.querySelector('#input').setAttribute('max', this.max)
-        if (this.required === false) {
+    if (this.required === false) {
       this.shadowRoot.querySelector('#input').removeAttribute('required')
     } else {
       this.shadowRoot.querySelector('#input').setAttribute('required', true)
