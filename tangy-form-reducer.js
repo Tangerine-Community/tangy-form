@@ -76,6 +76,8 @@ const tangyFormReducer = function (state = initialState, action) {
           props.inputs = item.inputs.map(input => {
             if (input.tagName === 'TANGY-TIMED') {
               return Object.assign({}, input, {disabled: true, mode: 'TANGY_TIMED_MODE_DISABLED'})
+            } else if (input.tagName === 'TANGY-UNTIMED-GRID') {
+              return Object.assign({}, input, {disabled: true, mode: 'TANGY_UNTIMED_GRID_MODE_DISABLED'})
             } else {
               return Object.assign({}, input, {disabled: true})
             }
@@ -240,6 +242,8 @@ const tangyFormReducer = function (state = initialState, action) {
           props.inputs = item.inputs.map(input => {
             if (input.tagName === 'TANGY-TIMED') {
               return Object.assign({}, input, {disabled: true, mode: 'TANGY_TIMED_MODE_DISABLED'})
+            } else if (input.tagName === 'TANGY-UNTIMED-GRID') {
+              return Object.assign({}, input, {disabled: true, mode: 'TANGY_UNTIMED_GRID_MODE_DISABLED'})
             } else {
               return Object.assign({}, input, {disabled: true})
             }
@@ -257,6 +261,8 @@ const tangyFormReducer = function (state = initialState, action) {
           props.inputs = item.inputs.map(input => {
             if (input.tagName === 'TANGY-TIMED') {
               return Object.assign({}, input, {disabled: false, mode: 'TANGY_TIMED_MODE_DISABLED'})
+            } else if (input.tagName === 'TANGY-UNTIMED-GRID') {
+              return Object.assign({}, input, {disabled: false, mode: 'TANGY_UNTIMED_GRID_MODE_DISABLED'})
             } else {
               return Object.assign({}, input, {disabled: false})
             }
