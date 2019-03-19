@@ -58,7 +58,7 @@ class TangyConsent extends PolymerElement {
           color: red;
         }
       </style>
-      <label>{{t.consent}}</label>
+      <!--<label>{{t.consent}}</label>-->
       <!--<div class='messages'></div>-->
       <!--<div class='non_consent_form confirmation'>-->
         <!--<div>{{t.consent}}</div>-->

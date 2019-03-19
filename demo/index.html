@@ -396,6 +396,42 @@
                 <!--<tangy-toggle-button>Testing the toggle</tangy-toggle-button>-->
               </template>
             </tangy-form-item>
+            <tangy-form-item id="class-registration" title="Class Registration">
+            <template>
+            <tangy-input
+            name="school_name"
+            label="School name"
+            type="text"
+            error-message="This is required."
+            required>
+            </tangy-input>
+
+            <tangy-input
+            name="school_year"
+            label="School year"
+            type="text"
+            error-message="This is required."
+            required>
+            </tangy-input>
+
+            <tangy-input
+            name="grade"
+            label="Grade"
+            type="text"
+            error-message="This is required."
+            required>
+            </tangy-input>
+
+            <tangy-checkboxes-dynamic
+            name="curriculum"
+            label="Curriculum"
+            options-list-source="checkboxes-dynamic-forms.json"
+            options-list-excludes="class-registration,student-registration"
+            options-list-properties="id,title"
+            options-list-exclude-by="id">
+            </tangy-checkboxes-dynamic>
+            </template>
+            </tangy-form-item>
           </tangy-form>
         </template>
       </demo-snippet>
