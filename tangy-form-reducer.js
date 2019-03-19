@@ -90,6 +90,50 @@ const tangyFormReducer = function (state = initialState, action) {
         })
       })
 
+    case 'FORM_RESPONSE_NO_CONSENT':
+      return Object.assign({}, state, {
+        complete: true,
+        form: Object.assign({}, state.form, {
+          complete: true,
+          linearMode: false,
+          fullscreen: false,
+          hideClosedItems: false
+        }),
+        items: state.items.map(item => {
+          let props = {}
+          // If the item has inputs, then it was opened and potentially touched so don't hide buttons
+          // so that they may review what is inside.
+          // Look at the inputs for the item, only show buttons if it does actually have input.
+          if (item.disabled) {
+            props.hidden = true
+          } else {
+            props.hidden = false
+            props.open = false
+            props.hideButtons = false
+          }
+          if (!item.summary) {
+            props.locked = true
+          }
+          props.hideBackButton = true
+          props.hideNextButton = true
+          props.fullscreen = false
+          props.inputs = item.inputs.map(input => {
+            if (input.tagName === 'TANGY-TIMED') {
+              return Object.assign({}, input, {disabled: true, mode: 'TANGY_TIMED_MODE_DISABLED'})
+            } else if (input.tagName === 'TANGY-UNTIMED-GRID') {
+              return Object.assign({}, input, {disabled: true, mode: 'TANGY_UNTIMED_GRID_MODE_DISABLED'})
+            } else {
+              return Object.assign({}, input, {disabled: true})
+            }
+          })
+          if (item.feedback) {
+            props.open = true
+          }
+          return Object.assign({}, item, props)
+         return item
+        })
+      })
+
     case 'SHOW_RESPONSE':
       return Object.assign({}, state, { 
         form: Object.assign({}, state.form, {
