@@ -370,6 +370,7 @@ export class TangyForm extends PolymerElement {
       item.addEventListener('ITEM_CLOSED', this.onItemClosed.bind(this))
       item.addEventListener('ITEM_OPENED', this.onItemOpened.bind(this))
       item.addEventListener('FORM_RESPONSE_COMPLETE', this.onFormResponseComplete.bind(this))
+      item.addEventListener('FORM_RESPONSE_NO_CONSENT', this.onFormResponseNoConsent.bind(this))
     })
 
     // Subscribe to the store to reflect changes.
@@ -418,6 +419,25 @@ export class TangyForm extends PolymerElement {
     })
     const cancelledComplete = !this.dispatchEvent(new CustomEvent('tangy-form-complete', {cancelable: true}))
     if (cancelledComplete) return
+    if (this.hasSummary) {
+      this.store.dispatch({ type: "SHOW_SUMMARY" })
+    } else {
+      this.store.dispatch({ type: "SHOW_RESPONSE" })
+    }
+  }
+
+  onFormResponseNoConsent(event) {
+    this.store.dispatch({
+      type: 'ITEM_SAVE',
+      item: event.target.getProps()
+    })
+    const cancelledSubmit = !this.dispatchEvent(new CustomEvent('submit', {cancelable: true}))
+    if (cancelledSubmit) return
+    this.store.dispatch({
+      type: 'FORM_RESPONSE_COMPLETE'
+    })
+    // const cancelledComplete = !this.dispatchEvent(new CustomEvent('tangy-form-complete', {cancelable: true}))
+    // if (cancelledComplete) return
     if (this.hasSummary) {
       this.store.dispatch({ type: "SHOW_SUMMARY" })
     } else {
