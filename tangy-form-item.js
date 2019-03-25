@@ -453,10 +453,10 @@ export class TangyFormItem extends PolymerElement {
       tangyCompleteButtonEl.addEventListener('click', this.clickedComplete.bind(this))
     }
 
-    let tangyConsentNoButtonEl = this.shadowRoot.querySelector("tangy-consent").shadowRoot.querySelector('#consentNoButton')
-    if (tangyConsentNoButtonEl) {
+    let tangyConsentEl = this.shadowRoot.querySelector("tangy-consent")
+    if (tangyConsentEl) {
       this.showCompleteButton = false
-      tangyConsentNoButtonEl.addEventListener('click', this.clickedConsent.bind(this))
+      tangyConsentEl.addEventListener('TANGY_INPUT_CONSENT_NO', this.clickedNoConsent.bind(this))
     }
 
     this.reflect()
@@ -538,7 +538,7 @@ export class TangyFormItem extends PolymerElement {
     }
   }
 
-  clickedConsent() {
+  clickedNoConsent() {
     if (this.validate()) {
       this.submit()
       this.dispatchEvent(new CustomEvent('FORM_RESPONSE_NO_CONSENT', {bubbles: true}))

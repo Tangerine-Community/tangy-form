@@ -142,6 +142,7 @@ class TangyConsent extends PolymerElement {
       case "no":
         this.statusMessage = this.t.message_no;
         this.$.consentNoButton.classList.add('pressed')
+        this.dispatchEvent(new CustomEvent('TANGY_INPUT_CONSENT_NO', {bubbles: true}))
         break
     }
   }

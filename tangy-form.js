@@ -434,7 +434,7 @@ export class TangyForm extends PolymerElement {
     const cancelledSubmit = !this.dispatchEvent(new CustomEvent('submit', {cancelable: true}))
     if (cancelledSubmit) return
     this.store.dispatch({
-      type: 'FORM_RESPONSE_NO_CONSENT'
+      type: 'FORM_RESPONSE_COMPLETE'
     })
     // const cancelledComplete = !this.dispatchEvent(new CustomEvent('tangy-form-complete', {cancelable: true}))
     // if (cancelledComplete) return
