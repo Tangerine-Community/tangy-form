@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.12.0
+- Add <tangy-consent> widget
+
 ## v3.11.0
 - Add <tangy-untimed-grid> widget
 
