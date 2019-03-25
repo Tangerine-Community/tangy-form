@@ -131,7 +131,6 @@ class TangyConsent extends PolymerElement {
 
   onValueChange(value) {
 
-    // reset pressed.
     let controlElements = [].slice.call(this.shadowRoot.querySelectorAll('paper-button'))
     controlElements.forEach(element => element.classList.remove('pressed'))
 
