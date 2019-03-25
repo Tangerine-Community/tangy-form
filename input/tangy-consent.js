@@ -58,18 +58,6 @@ class TangyConsent extends PolymerElement {
           color: red;
         }
       </style>
-      <!--<label>{{t.consent}}</label>-->
-      <!--<div class='messages'></div>-->
-      <!--<div class='non_consent_form confirmation'>-->
-        <!--<div>{{t.consent}}</div>-->
-        <!--<button id='non_consent_confirm'>{{t.confirm}}</button>-->
-      <!--</div>-->
-      <!--<div id='consent_options' class='buttonset'>-->
-        <!--<label for='consent_yes'>{{t("yes, continue")}}</label>-->
-        <!--<input id='consent_yes' type='radio' name='participant_consents' value='yes'>-->
-        <!--<label for='consent_no'>{{t("no, stop")}}</label>-->
-        <!--<input id='consent_no' type='radio' name='participant_consents' value='no'>-->
-      <!--</div>-->
       <paper-card>
         <div class="card-content">
           <div id="container">
