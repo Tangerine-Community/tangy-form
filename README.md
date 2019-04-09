@@ -130,6 +130,32 @@ You can provide some CSS overrides by providing a custom style definition in you
 </custom-style>
 ```
 
+### Logic
+
+The tangy-if and valid-if properties can be added to inputs to provide conditional logic to a form. 
+Here is an example for a tangy-form-item reveals a tangy-box if the user does not input the desired selection in a tabgy-checkboxes input:
+
+```
+<tangy-form-item id="item1">
+<tangy-checkboxes name="input1" label="What is your favorite fruit?" valid-if="getValue('input1')[0] === 'Tangerine'">
+  <option name="orange">Orange</option>
+  <option name="banana">Banana</option>
+  <option name="tangerine">Tangerine</option>
+  <option name="cantalope">Cantalope</option>
+  <option name="cherry">Cherry</option>
+  <option name="kiwi">Kiwi</option>
+</tangy-checkboxes>
+<tangy-box tangy-if="inputs.input1.invalid === true">
+  You really should consider liking tangerines.
+</tangy-box>
+</tangy-form-item>
+```
+
+See tests/tangy-form-item_test.html for examples for other inputs.
+
+The exposeHelperFunctions function in tangy-form-item.js exposes helper functions that may be used in tangy-if and valid-if statements. 
+The most commonly used function is getValue(name). It checks the value of a named input first in the DOM and then (if not found in the DOM) in the redux store.
+
 ## Run the demo
 Requires node.js and npm installed.
 ```sh
