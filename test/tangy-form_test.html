@@ -210,6 +210,22 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="SkipFirstItemFixture">
+      <template>
+        <tangy-form id="field-demo" title="Field Demo">
+          <tangy-form-item id="item1" show-if="false">
+            This should never show up.
+          </tangy-form-item>
+          <tangy-form-item id="item2">
+            Should always start here.
+          </tangy-form-item>
+          <tangy-form-item id="item3">
+            The End.
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
 
     
     <script type="module">
@@ -220,9 +236,15 @@
       import '../input/tangy-checkbox.js'
       import { TangyFormResponseModel } from '../tangy-form-response-model.js'
 
-      suite('tangy-form-show-if', () => {
+      suite('tangy-form-item-show-if', () => {
 
-        test('hide an item using show-if', () => {
+        test('should open and immediately hide an item using show-if', () => {
+          const element = fixture('SkipFirstItemFixture');
+          element.newResponse()
+          assert.equal(element.querySelector('tangy-form-item[open]').id, 'item2')
+        });
+
+        test('should hide an item using show-if', () => {
           const element = fixture('ItemShowIfFixture');
           element.newResponse()
           element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
@@ -236,6 +258,7 @@
           element.querySelector('#item1').shadowRoot.querySelector('#next').click()
           assert.equal(element.querySelector('tangy-form-item[open]').id, 'item2')
         });
+
       })
 
       suite('TangyFormResponseModel', () => {

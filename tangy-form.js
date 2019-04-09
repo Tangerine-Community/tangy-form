@@ -108,8 +108,16 @@ export class TangyForm extends PolymerElement {
   // Disable an item so it is skipped.
   itemDisable(itemId) { 
     let state = this.store.getState()
-    let item = state.items.find(item => itemId === item.id)
-    if (item && !item.disabled) this.store.dispatch({ type: 'ITEM_DISABLE', itemId: itemId })
+    let itemIndex = state.items.findIndex(item => itemId === item.id)
+    if (itemIndex !== -1) {
+      let item = state.items[itemIndex]
+      if (!item.disabled) {
+        this.store.dispatch({ type: 'ITEM_DISABLE', itemId: itemId })
+        if (itemIndex === state.focusIndex) {
+          this.store.dispatch({ type: 'ITEM_NEXT', itemId: itemId })
+        }
+      }
+    }
   }
 
   // Enable an item so it is not skipped.
