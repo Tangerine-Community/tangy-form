@@ -446,11 +446,12 @@ export class TangyForm extends PolymerElement {
   }
 
   onItemChange(event) {
-    this.store.dispatch({
-      type: 'ITEM_CHANGE',
-      itemId: event.target.id
-    })
-    this.fireHook('on-change')
+    if (!event.target.hasAttribute('isDirty')) {
+      this.store.dispatch({
+        type: 'IS_DIRTY',
+        itemId: event.target.id
+      })
+    }
   }
 
   onItemNext(event) {
@@ -458,8 +459,8 @@ export class TangyForm extends PolymerElement {
       type: 'ITEM_SAVE',
       item: event.target.getProps()
     })
-    this.focusOnNextItem()
     this.fireHook('on-change')
+    this.store.dispatch({ type: 'ITEM_NEXT', itemId: event.target.id  })
   }
 
   onItemBack(event) {
@@ -467,8 +468,8 @@ export class TangyForm extends PolymerElement {
       type: 'ITEM_SAVE',
       item: event.target.getProps()
     })
-    this.focusOnPreviousItem()
     this.fireHook('on-change')
+    this.store.dispatch({ type: 'ITEM_BACK', itemId: event.target.id })
   }
 
   onItemOpened(event) {
@@ -542,8 +543,6 @@ export class TangyForm extends PolymerElement {
     // Stash as previous state.
     this.previousState = Object.assign({}, state)
 
-    if (!this.complete) this.fireHook('on-change')
-
   }
 
   fireHook(hook, event) {
@@ -573,28 +572,19 @@ export class TangyForm extends PolymerElement {
     // Use itemInputs instead of inputs in modules such as Class in order to summon only the inputs on-screen/in the currently active form.
     let itemInputs = [...this.shadowRoot.querySelectorAll('[name]')].reduce((acc, input) => Object.assign({}, acc, {[input.name]: input}), {})
     this.querySelectorAll('tangy-form-item').forEach(itemEl => {
-      if (itemEl.hasAttribute('show-if') && !eval(itemEl.getAttribute('show-if'))) {
-        this.itemDisable(itemEl.getAttribute('id'))
-      } else if(itemEl.hidden) {
-        this.itemEnable(itemEl.getAttribute('id'))
+      if (itemEl.hasAttribute('show-if')) {
+        if (!eval(itemEl.getAttribute('show-if'))) {
+          this.itemDisable(itemEl.getAttribute('id'))
+        } else if(itemEl.hidden) {
+          this.itemEnable(itemEl.getAttribute('id'))
+        }
       }
     })
-    if (this.hasAttribute(hook)) eval(this.getAttribute(hook))
+    if (this.hasAttribute(hook)) {
+      eval(this.getAttribute(hook))
+    }
   }
 
-  focusOnPreviousItem(event) {
-    // Dispatch action.
-    let state = this.store.getState()
-    let item = state.items.find(item => item.open)
-    this.store.dispatch({ type: 'ITEM_BACK', itemId: item.id })
-  }
-
-  focusOnNextItem(event) {
-    // Dispatch action.
-    let state = this.store.getState()
-    let item = state.items.find(item => item.open)
-    this.store.dispatch({ type: 'ITEM_NEXT', itemId: item.id })
-  }
 
   enableFullscreen() {
     if(this.requestFullscreen) {

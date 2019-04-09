@@ -44,7 +44,7 @@ const tangyFormReducer = function (state = initialState, action) {
       if (newState.form.hideClosedItems === true) newState.items.forEach(item => item.hidden = !item.open)
       if (newState.form.linearMode === true) newState.items.forEach(item => item.hideButtons = true)
       if (newState.form.fullscreen === true) newState.items.forEach(item => item.fullscreen = true)
-      return newState
+      return calculateTargets(newState)
 
     case 'FORM_RESPONSE_COMPLETE':
       return Object.assign({}, state, {
@@ -132,7 +132,7 @@ const tangyFormReducer = function (state = initialState, action) {
       })})
       break
 
-    case 'ITEM_CHANGE':
+    case 'IS_DIRTY':
       newState = Object.assign({}, state)
       // Find the current index of the item opening.
       return Object.assign({}, newState, {items: state.items.map((item) => {
