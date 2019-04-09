@@ -42,7 +42,7 @@
       <template>
         <tangy-form id="my-form-3" title="My Form 3">
           <tangy-form-item id="item1">
-            <tangy-radio-buttons name="input1" label="What is your favorite fruit?" valid-if="input.value[1].value === 'on'">
+            <tangy-radio-buttons name="input1" label="What is your favorite fruit?" valid-if="getValue('input1') === 'Tangerine'">
               <option name="orange">Orange</option>
               <option name="banana">Banana</option>
               <option name="tangerine">Tangerine</option>
@@ -58,6 +58,26 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyFormItemValidIfTangyIfCheckboxesFixture">
+      <template>
+        <tangy-form id="my-form-4" title="My Form 4">
+          <tangy-form-item id="item1">
+            <tangy-checkboxes name="input1" label="What is your favorite fruit?" valid-if="getValue('input1')[0] === 'Tangerine'">
+              <option name="orange">Orange</option>
+              <option name="banana">Banana</option>
+              <option name="tangerine">Tangerine</option>
+              <option name="cantalope">Cantalope</option>
+              <option name="cherry">Cherry</option>
+              <option name="kiwi">Kiwi</option>
+            </tangy-checkboxes>
+            <tangy-box tangy-if="inputs.input1.invalid === true">
+              You really should consider liking tangerines.
+            </tangy-box>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import '../tangy-form.js'
@@ -65,8 +85,9 @@
       import '../input/tangy-checkbox.js'
       import '../input/tangy-box.js'
       import '../input/tangy-radio-buttons.js'
+      import '../input/tangy-checkboxes.js'
       suite('tangy-form-item', () => {
-        test('should go to next item on input "next" event', () => { 
+        test('should go to next item on input "next" event', () => {
           const element = fixture('TangyFormItemFixture');
           element.newResponse()
           element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-input').dispatchEvent(new CustomEvent('next'))
@@ -88,11 +109,23 @@
           element.newResponse()
           element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-radio-buttons').dispatchEvent(new CustomEvent('next'))
           assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-radio-buttons').invalid, true)
-          debugger
           let el = element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-radio-buttons').value
-                  .find(input => (input.name === 'Banana'))
+                  .find(input => (input.name === 'Tangerine'))
           el.value = 'on'
           element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-radio-buttons').dispatchEvent(new CustomEvent('next'))
+          assert.equal(element.querySelector('tangy-form-item').open, false)
+        })
+        test('should be invalid checkboxes and show custom error message, then continue after correction', () => {
+          const sleep = (milliseconds) => new Promise((res) => setTimeout(() => res(true), milliseconds))
+          const element = fixture('TangyFormItemValidIfTangyIfCheckboxesFixture');
+          element.newResponse()
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkboxes').dispatchEvent(new CustomEvent('next'))
+          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkboxes').invalid, true)
+          let el = element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkboxes').value
+                  .find(input => (input.name === 'Tangerine'))
+          debugger
+          el.value = 'on'
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkboxes').dispatchEvent(new CustomEvent('next'))
           assert.equal(element.querySelector('tangy-form-item').open, false)
         })
       })
