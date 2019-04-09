@@ -193,6 +193,24 @@
         </tangy-form>
       </template>
     </test-fixture>
+
+    <test-fixture id="ItemShowIfFixture">
+      <template>
+        <tangy-form id="field-demo" title="Field Demo">
+          <tangy-form-item id="item1">
+            <tangy-checkbox label='Skip next item?' name='skip_next_item'></tangy-checkbox>
+          </tangy-form-item>
+          <tangy-form-item id="item2" show-if="!getValue('skip_next_item')">
+            I should be skippable.
+          </tangy-form-item>
+          <tangy-form-item id="item3">
+            The End.
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+
     
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
@@ -201,6 +219,24 @@
       import '../input/tangy-input.js'
       import '../input/tangy-checkbox.js'
       import { TangyFormResponseModel } from '../tangy-form-response-model.js'
+
+      suite('tangy-form-show-if', () => {
+
+        test('hide an item using show-if', () => {
+          const element = fixture('ItemShowIfFixture');
+          element.newResponse()
+          element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item1').shadowRoot.querySelector('[name=skip_next_item]').value = 'on'
+          element.querySelector('#item1').shadowRoot.querySelector('#next').click()
+          assert.equal(element.querySelector('tangy-form-item[open]').id, 'item3')
+          // Go back, uncheck, then forward to now enabled item2.
+          element.querySelector('#item3').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item3').shadowRoot.querySelector('#back').click()
+          element.querySelector('#item1').shadowRoot.querySelector('[name=skip_next_item]').value = ''
+          element.querySelector('#item1').shadowRoot.querySelector('#next').click()
+          assert.equal(element.querySelector('tangy-form-item[open]').id, 'item2')
+        });
+      })
 
       suite('TangyFormResponseModel', () => {
         test('should have inputs', () => {

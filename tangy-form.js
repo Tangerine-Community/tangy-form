@@ -549,8 +549,6 @@ export class TangyForm extends PolymerElement {
   fireHook(hook, event) {
     // If locked, bail.
     if (this.locked) return
-    // If no hook, bail.
-    if (!this.getAttribute(hook)) return
     // Prepare some helper variables.
     let state = this.store.getState()
     // Inputs.
@@ -560,8 +558,7 @@ export class TangyForm extends PolymerElement {
     inputsArray.forEach(input => inputsKeyedByName[input.name] = input)
     let inputs = inputsKeyedByName
     // Items.
-    let items = {}
-    state.items.forEach(item => items[item.name] = item)
+    let items = state.items.reduce((acc, item) => acc[item.name] = item, {})
     let inputEls = this.shadowRoot.querySelectorAll('[name]')
     let tangyFormStore = this.store
     let itemEnable = name => this.itemEnable(name)
@@ -575,7 +572,14 @@ export class TangyForm extends PolymerElement {
     let itemsPerMinute = (input) => helpers.itemsPerMinute(input)
     // Use itemInputs instead of inputs in modules such as Class in order to summon only the inputs on-screen/in the currently active form.
     let itemInputs = [...this.shadowRoot.querySelectorAll('[name]')].reduce((acc, input) => Object.assign({}, acc, {[input.name]: input}), {})
-    eval(this.getAttribute(hook))
+    this.querySelectorAll('tangy-form-item').forEach(itemEl => {
+      if (itemEl.hasAttribute('show-if') && !eval(itemEl.getAttribute('show-if'))) {
+        this.itemDisable(itemEl.getAttribute('id'))
+      } else if(itemEl.hidden) {
+        this.itemEnable(itemEl.getAttribute('id'))
+      }
+    })
+    if (this.hasAttribute(hook)) eval(this.getAttribute(hook))
   }
 
   focusOnPreviousItem(event) {
