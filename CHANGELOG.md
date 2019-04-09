@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.12.1
+- Make more helper functions available to valid-if (More tests for tangy-if and valid-if [#38](https://github.com/Tangerine-Community/tangy-form/pull/38)).
+
 ## v3.12.0
 - Add <tangy-consent> widget
 
