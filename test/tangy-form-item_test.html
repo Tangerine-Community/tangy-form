@@ -38,6 +38,21 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="ShowIfFixture">
+      <template>
+        <tangy-form id="my-form-2" title="My Form 2">
+          <tangy-form-item id="item1">
+            <tangy-checkbox name="input1">
+              Do you like tangerines?
+            </tangy-checkbox>
+            <tangy-box show-if="inputs.input1.value === 'on'">
+              High five!
+            </tangy-box>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import '../tangy-form.js'
@@ -52,7 +67,6 @@
           assert.equal(element.querySelectorAll('tangy-form-item')[1].open, true)
         })
         test('should be invalid and show custom error message, then continue after correction', () => {
-          const sleep = (milliseconds) => new Promise((res) => setTimeout(() => res(true), milliseconds))
           const element = fixture('TangyFormItemValidIfTangyIfFixture');
           element.newResponse()
           element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').dispatchEvent(new CustomEvent('next'))
@@ -60,6 +74,13 @@
           element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').value = 'on'
           element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').dispatchEvent(new CustomEvent('next'))
           assert.equal(element.querySelector('tangy-form-item').open, false)
+        })
+        test('should show high five because of show-if', () => {
+          const element = fixture('ShowIfFixture');
+          element.newResponse()
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').value = 'on'
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').dispatchEvent(new CustomEvent('change'))
+          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-box').hidden, false)
         })
       })
     </script>

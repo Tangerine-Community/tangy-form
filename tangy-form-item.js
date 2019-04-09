@@ -392,6 +392,13 @@ export class TangyFormItem extends PolymerElement {
           inputActionFactories['visible'].falsey(input.name)
         }
       }
+      if (input.hasAttribute('show-if')) {
+        if (eval(input.getAttribute('show-if'))) {
+          inputActionFactories['visible'].truthy(input.name)
+        } else {
+          inputActionFactories['visible'].falsey(input.name)
+        }
+      }
     })
     eval(this.getAttribute(hook))
     // Backwards compatibility for deprecated use of having hooks on a child form element.
