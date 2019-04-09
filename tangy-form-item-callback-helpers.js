@@ -46,6 +46,7 @@ export class TangyFormItemHelpers {
     if (!value) {
       value = ''
     }
+    // console.log("input name: " + name + " foundInput: " + foundInput + " typeof value " + typeof value + " value: " + value)
     return value
   }
 
