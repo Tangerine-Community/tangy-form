@@ -557,7 +557,8 @@ export class TangyForm extends PolymerElement {
     inputsArray.forEach(input => inputsKeyedByName[input.name] = input)
     let inputs = inputsKeyedByName
     // Items.
-    let items = state.items.reduce((acc, item) => acc[item.name] = item, {})
+    let items = {}
+    state.items.forEach(item => items[item.name] = item)
     let inputEls = this.shadowRoot.querySelectorAll('[name]')
     let tangyFormStore = this.store
     let itemEnable = name => this.itemEnable(name)
