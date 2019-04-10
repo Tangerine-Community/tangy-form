@@ -200,6 +200,10 @@ export class TangyInput extends PolymerElement {
       this.justReflectedValue = true
       this.shadowRoot.querySelector('#input').value = this.value
     }
+    // In cases like type="number", if value is undefined then the input becomes invalid right away. Prevent this.
+    if (this.shadowRoot.querySelector('#input').value === undefined) {
+      this.shadowRoot.querySelector('#input').value = ''
+    }
     this.shadowRoot.querySelector('#input').setAttribute('min', this.min)
     this.shadowRoot.querySelector('#input').setAttribute('max', this.max)
     if (this.required === false) {
