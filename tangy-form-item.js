@@ -359,7 +359,7 @@ export class TangyFormItem extends PolymerElement {
     // Declare namespaces for helper functions for the eval context in form.on-change.
     // We have to do this because bundlers modify the names of things that are imported
     // but do not update the evaled code because it knows not of it.
-    let {getValue, inputHide, inputShow, inputDisable, inputEnable, isChecked, notChecked, itemsPerMinute} = this.exposeHelperFunctions();
+    let {getValue, inputHide, inputShow, inputDisable, inputEnable, isChecked, notChecked, itemsPerMinute, itemHide, itemShow, itemDisable, itemEnable} = this.exposeHelperFunctions();
     let inputActionFactories = {
       visible: {
         truthy: name => inputShow(name),
@@ -403,12 +403,17 @@ export class TangyFormItem extends PolymerElement {
     let getValue = (name) => helpers.getValue(name)
     let inputHide = (name) => helpers.inputHide(name)
     let inputShow = (name) => helpers.inputShow(name)
-    let inputDisable = (name) => helpers.inputDisable(name)
     let inputEnable = (name) => helpers.inputEnable(name)
+    let inputDisable = (name) => helpers.inputDisable(name)
+    // Proxy old "input" term to "item" term.
+    let itemHide = (name) => helpers.inputHide(name)
+    let itemShow = (name) => helpers.inputShow(name)
+    let itemEnable = (name) => helpers.inputEnable(name)
+    let itemDisable = (name) => helpers.inputDisable(name)
     let isChecked = (name) => helpers.isChecked(name)
     let notChecked = (name) => helpers.notChecked(name)
     let itemsPerMinute = (input) => helpers.itemsPerMinute(input)
-    return {getValue, inputHide, inputShow, inputDisable, inputEnable, isChecked, notChecked, itemsPerMinute};
+    return {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute};
   }
 
   onOpenButtonPress() {

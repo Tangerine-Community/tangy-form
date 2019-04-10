@@ -566,6 +566,8 @@ export class TangyForm extends PolymerElement {
     let tangyFormStore = this.store
     let itemEnable = name => this.itemEnable(name)
     let itemDisable = name => this.itemDisable(name)
+    let sectionEnable = name => this.itemEnable(name)
+    let sectionDisable = name => this.itemDisable(name)
     let helpers = new TangyFormItemHelpers(this)
     let getValue = (name) => this.getValue(name)
     let inputHide = (name) => helpers.inputHide(name)
