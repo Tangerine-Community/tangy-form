@@ -1,4 +1,7 @@
 # CHANGELOG
+## v3.12.2
+- In some contexts, section is a more appropriate helper function term than item, and item is a more appropriate term than input. These are now available in corresponding places.
+- A bug on tangy-input using type="number" was causing them to immediately become invalid when empty.
 
 ## v3.12.1
 - Make more helper functions available to valid-if (More tests for tangy-if and valid-if [#38](https://github.com/Tangerine-Community/tangy-form/pull/38)).
