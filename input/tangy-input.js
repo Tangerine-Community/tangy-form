@@ -195,14 +195,10 @@ export class TangyInput extends PolymerElement {
     const cleanInnerValue = this.shadowRoot.querySelector('#input').value
       ? this.shadowRoot.querySelector('#input').value
       : ''
-    if (cleanOuterValue !== cleanInnerValue) {
+    if (cleanOuterValue !== cleanInnerValue || this.shadowRoot.querySelector('#input').value === undefined) {
       // Prevent infinite loops with this semaphore which will be caught by the value-changed listener above.
       this.justReflectedValue = true
       this.shadowRoot.querySelector('#input').value = this.value
-    }
-    // In cases like type="number", if value is undefined then the input becomes invalid right away. Prevent this.
-    if (this.shadowRoot.querySelector('#input').value === undefined) {
-      this.shadowRoot.querySelector('#input').value = ''
     }
     this.shadowRoot.querySelector('#input').setAttribute('min', this.min)
     this.shadowRoot.querySelector('#input').setAttribute('max', this.max)
