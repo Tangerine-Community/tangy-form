@@ -253,6 +253,7 @@ export class TangyForm extends PolymerElement {
       .error {
         background: white;
         border: solid 5px red;
+        padding: 5px;
       }
       </style>
       <div id="nav"></div>

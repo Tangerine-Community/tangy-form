@@ -346,30 +346,30 @@ export class TangyFormItem extends PolymerElement {
     // Let input level hooks piggy back on this hook.
     let inputActionFactories = {
       visible: {
-        truthy: name => this.eval(`inputShow("${name}")`, 'show-if'),
-        falsey: name => this.eval(`inputHide("${name}")`, 'show-if')
+        truthy: name => this.eval(`inputShow("${name}")`, 'show-if', name),
+        falsey: name => this.eval(`inputHide("${name}")`, 'show-if', name)
       },
       editable: {
-        truthy: name => this.eval(`inputEnable("${name}")`, 'disable-if'),
-        falsey: name => this.eval(`inputDisable("${name}")`, 'disable-if')
+        truthy: name => this.eval(`inputEnable("${name}")`, 'disable-if', name),
+        falsey: name => this.eval(`inputDisable("${name}")`, 'disable-if', name)
       }
     }
     this.shadowRoot.querySelectorAll('[name]').forEach(input => {
       if (input.hasAttribute('show-if')) {
-        if (this.eval(input.getAttribute('show-if'), 'show-if')) {
+        if (this.eval(input.getAttribute('show-if'), 'show-if', input.getAttribute('name'))) {
           inputActionFactories['visible'].truthy(input.name)
         } else {
           inputActionFactories['visible'].falsey(input.name)
         }
       }
       if (input.hasAttribute('tangy-if') && input.hasAttribute('tangy-action')) {
-        if (this.eval(input.getAttribute('tangy-if'), 'tangy-if')) {
+        if (this.eval(input.getAttribute('tangy-if'), 'tangy-if', input.getAttribute('name'))) {
           inputActionFactories[input.getAttribute('tangy-action')].truthy(input.name)
         } else {
           inputActionFactories[input.getAttribute('tangy-action')].falsey(input.name)
         }
       } else if (input.hasAttribute('tangy-if') && !input.hasAttribute('tangy-action')) {
-        if (this.eval(input.getAttribute('tangy-if'), 'tangy-if')) {
+        if (this.eval(input.getAttribute('tangy-if'), 'tangy-if', input.getAttribute('name'))) {
           inputActionFactories['visible'].truthy(input.name)
         } else {
           inputActionFactories['visible'].falsey(input.name)
@@ -379,12 +379,12 @@ export class TangyFormItem extends PolymerElement {
     // Let <tangy-template> rendering piggy back on this hook.
     this.shadowRoot.querySelectorAll('tangy-template').forEach(templateEl => {
       if (templateEl.shadowRoot) {
-        templateEl.$.container.innerHTML = this.eval('`' + templateEl.template + '`', 'tangy-template')
+        templateEl.$.container.innerHTML = this.eval('`' + templateEl.template + '`', 'tangy-template', templateEl.getAttribute('name'))
       }
     })
   }
 
-  eval(code, hook) {
+  eval(code, hook, context = '') {
     // Prepare some helper variables.
     let state = this.store.getState()
     // Inputs.
@@ -410,7 +410,7 @@ export class TangyFormItem extends PolymerElement {
       const result = eval(code)
       return result
     } catch(err) {
-      const detail = `${t(`Error detected in the section logic:`)} ${hook}`
+      const detail = `${t(`Error detected in the section logic:`)} ${context} :: ${hook} :: <br> <pre> ${code} </pre>`
       console.log(detail)
       console.log(err)
       this.dispatchEvent(new CustomEvent('logic-error', { detail }))
