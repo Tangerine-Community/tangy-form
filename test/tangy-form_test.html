@@ -172,23 +172,22 @@
       </template>
     </test-fixture>
 
-    <test-fixture id="DeprecatedOnOpenTestFixture">
+    <test-fixture id="ErrorInLogicFixture">
       <template>
-        <tangy-form id="field-demo" title="Field Demo">
-          <tangy-form-item id="item-1">
-            <template>
-              <form 
-                on-open="
-                  inputs.input1.value = 'foo'
-                "
-                on-change="
-                  inputs.input2.value = 'bar'
-                "
-                >
-                <tangy-input label='test' name='input1'></tangy-input>
-                <tangy-input label='test' name='input2'></tangy-input>
-              </form>
-            </template>
+        <tangy-form id="error-fun" title="Error Fun" on-open="thisShould.causeAnError" error-logging>
+          <tangy-form-item id="item1" on-open="thisShould.causeAnError" on-change="thisShould.causeAnError">
+            Hello world.
+            <tangy-input name="input1" show-if="thisShould.causeAnError" label="input1"></tangy-input>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+ 
+    <test-fixture id="ErrorInLogicFixture2">
+      <template>
+        <tangy-form id="error-fun" title="Error Fun" on-open="thisShould.causeAnError" error-logging>
+          <tangy-form-item on-open="thisShould.causeAnError" on-change="thisShould.causeAnError">
+            <tangy-input name="input1" show-if="thisShould.causeAnError" label="input1"></tangy-input>
           </tangy-form-item>
         </tangy-form>
       </template>
@@ -218,6 +217,13 @@
           assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
         });
 
+        test('hello world with caught errors in logic', () => {
+          const element = fixture('ErrorInLogicFixture');
+          element.newResponse()
+          assert.equal(element.shadowRoot.querySelectorAll('.error').length, 5)
+          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
+        });
+
         test('hello world from template without errors', () => {
           const element = fixture('HelloWorldFromTemplateFixture');
           element.newResponse()
@@ -234,14 +240,6 @@
           element.querySelector('#item1').shadowRoot.querySelector('#open').click()
           assert.equal(element.querySelector('#item1').shadowRoot.querySelector('[name="input1"]').value, 'foo')
         })
-
-        test('Deprecated: tangy-form-item.form.getValue and inputs[inputName] should work in on-change on the current item and on-open on the next item ', () => {
-          const element = fixture('DeprecatedOnOpenTestFixture');
-          element.newResponse()
-          assert.equal(element.querySelector('#item-1').shadowRoot.querySelector('[name=input1]').value, 'foo');
-          element.querySelector('#item-1').shadowRoot.querySelector('[name=input1]').dispatchEvent(new Event('change'))
-          assert.equal(element.querySelector('#item-1').shadowRoot.querySelector('[name=input2]').value, 'bar');
-        });
 
         test('tangy-form-item.on-open should run', () => {
           const element = fixture('OnOpenTestFixture');

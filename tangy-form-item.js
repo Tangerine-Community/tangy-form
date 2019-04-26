@@ -336,9 +336,55 @@ export class TangyFormItem extends PolymerElement {
       })
   }
 
+  // Callback for on-open and on-change logic. Also a number of other things piggy back on this opportunity to update
+  // such as input level show-if and tangy-template rendering.
   fireHook(hook, event) {
     // If locked, don't run any logic.
     if (this.locked) return
+    // Run hook.
+    this.eval(this.getAttribute(hook), hook)
+    // Let input level hooks piggy back on this hook.
+    let inputActionFactories = {
+      visible: {
+        truthy: name => this.eval(`inputShow("${name}")`, 'show-if'),
+        falsey: name => this.eval(`inputHide("${name}")`, 'show-if')
+      },
+      editable: {
+        truthy: name => this.eval(`inputEnable("${name}")`, 'disable-if'),
+        falsey: name => this.eval(`inputDisable("${name}")`, 'disable-if')
+      }
+    }
+    this.shadowRoot.querySelectorAll('[name]').forEach(input => {
+      if (input.hasAttribute('show-if')) {
+        if (this.eval(input.getAttribute('show-if'), 'show-if')) {
+          inputActionFactories['visible'].truthy(input.name)
+        } else {
+          inputActionFactories['visible'].falsey(input.name)
+        }
+      }
+      if (input.hasAttribute('tangy-if') && input.hasAttribute('tangy-action')) {
+        if (this.eval(input.getAttribute('tangy-if'), 'tangy-if')) {
+          inputActionFactories[input.getAttribute('tangy-action')].truthy(input.name)
+        } else {
+          inputActionFactories[input.getAttribute('tangy-action')].falsey(input.name)
+        }
+      } else if (input.hasAttribute('tangy-if') && !input.hasAttribute('tangy-action')) {
+        if (this.eval(input.getAttribute('tangy-if'), 'tangy-if')) {
+          inputActionFactories['visible'].truthy(input.name)
+        } else {
+          inputActionFactories['visible'].falsey(input.name)
+        }
+      }
+    })
+    // Let <tangy-template> rendering piggy back on this hook.
+    this.shadowRoot.querySelectorAll('tangy-template').forEach(templateEl => {
+      if (templateEl.shadowRoot) {
+        templateEl.$.container.innerHTML = this.eval('`' + templateEl.template + '`', 'tangy-template')
+      }
+    })
+  }
+
+  eval(code, hook) {
     // Prepare some helper variables.
     let state = this.store.getState()
     // Inputs.
@@ -359,43 +405,17 @@ export class TangyFormItem extends PolymerElement {
     // Declare namespaces for helper functions for the eval context in form.on-change.
     // We have to do this because bundlers modify the names of things that are imported
     // but do not update the evaled code because it knows not of it.
-    let {getValue, inputHide, inputShow, inputDisable, inputEnable, isChecked, notChecked, itemsPerMinute, itemHide, itemShow, itemDisable, itemEnable} = this.exposeHelperFunctions();
-    let inputActionFactories = {
-      visible: {
-        truthy: name => inputShow(name),
-        falsey: name => inputHide(name)
-      },
-      editable: {
-        truthy: name => inputEnable(name),
-        falsey: name => inputDisable(name)
-      }
+    let {getValue, inputHide, inputShow, inputDisable, inputEnable, isChecked, notChecked, itemsPerMinute, itemHide, itemShow, itemDisable, itemEnable} = this.exposeHelperFunctions()
+    try {
+      const result = eval(code)
+      return result
+    } catch(err) {
+      const detail = `${t(`Error detected in the section logic:`)} ${hook}`
+      console.log(detail)
+      console.log(err)
+      this.dispatchEvent(new CustomEvent('logic-error', { detail }))
+      return false
     }
-    this.shadowRoot.querySelectorAll('[name]').forEach(input => {
-      if (input.hasAttribute('tangy-if') && input.hasAttribute('tangy-action')) {
-        if (eval(input.getAttribute('tangy-if'))) {
-          inputActionFactories[input.getAttribute('tangy-action')].truthy(input.name)
-        } else {
-          inputActionFactories[input.getAttribute('tangy-action')].falsey(input.name)
-        }
-      } else if (input.hasAttribute('tangy-if') && !input.hasAttribute('tangy-action')) {
-        if (eval(input.getAttribute('tangy-if'))) {
-          inputActionFactories['visible'].truthy(input.name)
-        } else {
-          inputActionFactories['visible'].falsey(input.name)
-        }
-      }
-    })
-    eval(this.getAttribute(hook))
-    // Backwards compatibility for deprecated use of having hooks on a child form element.
-    if (this.shadowRoot.querySelector('form') && this.shadowRoot.querySelector('form').hasAttribute(hook)) {
-      eval(this.shadowRoot.querySelector('form').getAttribute(hook))
-    }
-    // Render <tangy-template> elements.
-    this.shadowRoot.querySelectorAll('tangy-template').forEach(templateEl => {
-      if (templateEl.shadowRoot) {
-        templateEl.$.container.innerHTML = eval('`' + templateEl.template + '`')
-      }
-    })
   }
 
   exposeHelperFunctions() {

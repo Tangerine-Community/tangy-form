@@ -2,6 +2,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import './util/html-element-props.js'
 import './style/tangy-common-styles.js'
+import { t } from './util/t.js'
 
 import { tangyFormReducer } from './tangy-form-reducer.js'
 import { TangyFormResponseModel } from './tangy-form-response-model.js';
@@ -246,8 +247,14 @@ export class TangyForm extends PolymerElement {
         background: #f26f10;
         color: #FFF
       }
+      :host(:not[error-logging]) #errors {
+        display: none;
+      }
+      .error {
+        background: white;
+        border: solid 5px red;
+      }
       </style>
-
       <div id="nav"></div>
       <template is="dom-if" if="{{complete}}">
         <div id="bar">
@@ -259,6 +266,7 @@ export class TangyForm extends PolymerElement {
           </paper-tabs>
         </div>
       </template>
+      <div id="errors"></div>
       <div id="items"><slot></slot></div> 
 
         `;
@@ -371,6 +379,7 @@ export class TangyForm extends PolymerElement {
       item.addEventListener('ITEM_OPENED', this.onItemOpened.bind(this))
       item.addEventListener('FORM_RESPONSE_COMPLETE', this.onFormResponseComplete.bind(this))
       item.addEventListener('FORM_RESPONSE_NO_CONSENT', this.onFormResponseNoConsent.bind(this))
+      item.addEventListener('logic-error', this.onItemError.bind(this))
     })
 
     // Subscribe to the store to reflect changes.
@@ -388,7 +397,7 @@ export class TangyForm extends PolymerElement {
       this.dispatchEvent(new CustomEvent('TANGY_FORM_UPDATE'))
     })
 
-    if (this.onSubmit) {
+    if (this.hasAttribute('on-submit')) {
       this.addEventListener('submit', (event) => {
         let form = this
         this.fireHook('on-submit')
@@ -485,6 +494,10 @@ export class TangyForm extends PolymerElement {
     })
   }
 
+  onItemError(event) {
+    this.errorMessage(event.detail)
+  }
+
   // Prevent parallel reflects, leads to race conditions.
   throttledReflect(iAmQueued = false) {
     // If there is an reflect already queued, we can quit.
@@ -577,7 +590,23 @@ export class TangyForm extends PolymerElement {
     let itemsPerMinute = (input) => helpers.itemsPerMinute(input)
     // Use itemInputs instead of inputs in modules such as Class in order to summon only the inputs on-screen/in the currently active form.
     let itemInputs = [...this.shadowRoot.querySelectorAll('[name]')].reduce((acc, input) => Object.assign({}, acc, {[input.name]: input}), {})
-    eval(this.getAttribute(hook))
+    try {
+      eval(this.getAttribute(hook))
+    } catch (e) {
+      this.errorMessage(`${t(`Error detected in the form's logic:`)} ${hook}`)
+    }
+  }
+
+  errorMessage(message) {
+    if (!this.hasAttribute('error-logging')) return
+    const errorEl = document.createElement('div')
+    errorEl.innerHTML = message
+    errorEl.classList.add('error')
+    this.shadowRoot.querySelector('#errors').appendChild(errorEl)
+    this.style.background = 'red'
+    setTimeout(() => {
+      this.style.background = 'transparent'
+    }, 400)
   }
 
   focusOnPreviousItem(event) {
