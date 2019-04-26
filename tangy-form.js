@@ -338,10 +338,6 @@ export class TangyForm extends PolymerElement {
         type: Boolean,
         value: false,
         reflectToAttribute: true
-      },
-      onSubmit: {
-        type: String,
-        value: ''
       }
     }
   }
