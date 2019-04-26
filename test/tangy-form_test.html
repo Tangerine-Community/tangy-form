@@ -182,16 +182,6 @@
         </tangy-form>
       </template>
     </test-fixture>
- 
-    <test-fixture id="ErrorInLogicFixture2">
-      <template>
-        <tangy-form id="error-fun" title="Error Fun" on-open="thisShould.causeAnError" error-logging>
-          <tangy-form-item on-open="thisShould.causeAnError" on-change="thisShould.causeAnError">
-            <tangy-input name="input1" show-if="thisShould.causeAnError" label="input1"></tangy-input>
-          </tangy-form-item>
-        </tangy-form>
-      </template>
-    </test-fixture>
     
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
