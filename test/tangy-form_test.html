@@ -182,12 +182,29 @@
         </tangy-form>
       </template>
     </test-fixture>
+
+    <test-fixture id="FormWithLocationFixture">
+      <template>
+        <tangy-form id="field-demo" title="Field Demo" on-change="">
+          <tangy-form-item id="item1">
+              <tangy-location
+                name="location"
+                location-src="./location-list.json"
+                hint-text="This is <b>hint text</b>."
+                show-levels="county,school"
+                required>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import stub from './stub.js' 
       import '../tangy-form.js'
       import '../input/tangy-input.js'
+      import '../input/tangy-location.js'
       import '../input/tangy-checkbox.js'
       import { TangyFormResponseModel } from '../tangy-form-response-model.js'
 
@@ -200,6 +217,7 @@
       })
 
       suite('tangy-form', () => {
+
 
         test('hello world without errors', () => {
           const element = fixture('HelloWorldFixture');
@@ -229,6 +247,28 @@
           element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
           element.querySelector('#item1').shadowRoot.querySelector('#open').click()
           assert.equal(element.querySelector('#item1').shadowRoot.querySelector('[name="input1"]').value, 'foo')
+        })
+
+        test('should contain location information', (done) => {
+          let element = fixture('FormWithLocationFixture')
+          element.newResponse()
+          element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item1').shadowRoot.querySelector('[name=location]').addEventListener('location-list-loaded', () => {
+            element.querySelector('#item1').shadowRoot.querySelector('[name=location]').value = [
+              {
+                "level": "county",
+                "value": "county1"
+              },
+              {
+                "level": "school",
+                "value": "school1"
+              }
+            ]
+            element.querySelector('#item1').shadowRoot.querySelector('#complete').click()
+            assert.equal(element.response.location.county, 'county1')
+            assert.equal(element.response.location.school, 'school1')
+            done()
+          })
         })
 
         test('tangy-form-item.on-open should run', () => {

@@ -221,6 +221,13 @@ const tangyFormReducer = function (state = initialState, action) {
           return item
         })
       })
+      // Attach location information if there is a tangy-location with name of location.
+      const foundLocation = action.item.inputs.find(input => input.name === 'location' && input.tagName === 'TANGY-LOCATION')
+      if (foundLocation) {
+        for (const locationInfo of foundLocation.value) {
+          newState.location = {...newState.location, [locationInfo.level]: locationInfo.value}
+        }
+      } 
       return newState
 
     case 'ITEM_DISABLE':
