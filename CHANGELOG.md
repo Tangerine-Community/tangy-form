@@ -1,4 +1,9 @@
 # CHANGELOG
+
+## v3.13.0
+- Add safe eval of custom logic, error message notifications, and finally remove support for deprecated use of form tags. https://github.com/Tangerine-Community/tangy-form/pull/41
+- Add new helper convention that if a tangy-form has a tangy-location input with a name of location, cache that data at FormResponse.location. https://github.com/Tangerine-Community/tangy-form/pull/41
+
 ## v3.12.2
 - In some contexts, section is a more appropriate helper function term than item, and item is a more appropriate term than input. These are now available in corresponding places.
 - A bug on tangy-input using type="number" was causing them to immediately become invalid when empty.
