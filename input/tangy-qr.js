@@ -144,8 +144,9 @@ class TangyQr extends PolymerElement {
     this.statusMessage = ""
     this.notScanning = true
     this.isScanning = false
-
+    this.dispatchEvent(new CustomEvent('cancel'))
   }
+
   startScanning() {
     this.value = ''
     this.statusMessage = `${this.t.scanning}...`
@@ -205,6 +206,7 @@ class TangyQr extends PolymerElement {
         requestAnimationFrame(tick);
       }
     }
+    this.dispatchEvent(new CustomEvent('scanning'))
   }
 
   validate() {
