@@ -42,26 +42,6 @@ const stub = {
           }
         }
       }
-    },
-    "county2": {
-      "id": "county2",
-      "label": "County 2",
-      "children": {
-        "school3": {
-          "id": "school3",
-          "label": "School 3",
-          "latitude": 44.46567,
-          "longitude": -73.21911
-
-        },
-        "school4": {
-          "id": "school4",
-          "label": "School 4",
-          "latitude": 44.46567,
-          "longitude": -73.21911
-
-        }
-      }
     }
   }
 }

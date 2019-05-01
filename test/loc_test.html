@@ -15,6 +15,8 @@
     <script type="module">
       import { Loc } from '../util/loc.js'
       import stub from './stub.js'
+      import stubLocationList from './stub-location-list.js'
+
 
       suite('loc', () => {
         test('should flatten', () => {
@@ -24,8 +26,10 @@
           assert.equal(flattenedLocationList.locations.find(location => location.id === 'county2').level, 'county')
         })
         test('should unflatten', () => {
-          let locationList = Loc.unflatten(Loc.flatten(stub.locationList))
-          assert.equal(locationList.locations.county2.children.school4.id, 'school4')
+          let flattenedLocationListDeepCopy = JSON.parse(JSON.stringify(Loc.flatten(stubLocationList)))
+          let locationList = Loc.unflatten(flattenedLocationListDeepCopy)
+          assert.equal(locationList.locations.county1.children.subcounty1.children.school1.id, 'school1')
+          assert.equal(locationList.locations.county1.children.subcounty2.children.school5.id, 'school5')
         })
         test('should unflatten and stringify', () => {
           let locationList = Loc.unflatten(Loc.flatten(stub.locationList))
