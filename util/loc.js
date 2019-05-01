@@ -5,10 +5,10 @@ export class Loc {
   /*
    * @returns FlatLocationList {locations: [ LocationNodeWithParentRef, ... ], locationsLevels: [ ... ]}
    */
-  static flatten(locationList = { locations: {}, locationsLevels: []}) {
+  static flatten(locationList = { locations: {}, locationsLevels: [] }) {
     let locations = []
-    let levels = [ ...locationList.locationsLevels ]
-    function dig(node, levelIndex=0) {
+    let levels = [...locationList.locationsLevels]
+    function dig(node, levelIndex = 0) {
       if (!node.children) return
       const level = levels[levelIndex]
       let children = []
