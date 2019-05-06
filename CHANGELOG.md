@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.15.0
+- Added `numberOfItemsAttempted`, `numberOfCorrectItems`, `numberOfIncorrectItems`, and `gridAutoStopped` to `exposeHelperFunctions`.
+
 ## v3.14.0
 - Added `cancel` and `scanning` events to `<tangy-qr>`.
 
