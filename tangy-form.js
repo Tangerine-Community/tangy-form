@@ -585,6 +585,11 @@ export class TangyForm extends PolymerElement {
     let inputDisable = (name) => helpers.inputDisable(name)
     let inputEnable = (name) => helpers.inputEnable(name)
     let itemsPerMinute = (input) => helpers.itemsPerMinute(input)
+    let numberOfItemsAttempted = (input) => helpers.numberOfItemsAttempted(input)
+    let numberOfCorrectItems = (input) => helpers.numberOfCorrectItems(input)
+    let numberOfIncorrectItems = (input) => helpers.numberOfIncorrectItems(input)
+    let gridAutoStopped = (input) => helpers.gridAutoStopped(input)
+
     // Use itemInputs instead of inputs in modules such as Class in order to summon only the inputs on-screen/in the currently active form.
     let itemInputs = [...this.shadowRoot.querySelectorAll('[name]')].reduce((acc, input) => Object.assign({}, acc, {[input.name]: input}), {})
     try {

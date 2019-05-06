@@ -405,7 +405,7 @@ export class TangyFormItem extends PolymerElement {
     // Declare namespaces for helper functions for the eval context in form.on-change.
     // We have to do this because bundlers modify the names of things that are imported
     // but do not update the evaled code because it knows not of it.
-    let {getValue, inputHide, inputShow, inputDisable, inputEnable, isChecked, notChecked, itemsPerMinute, itemHide, itemShow, itemDisable, itemEnable} = this.exposeHelperFunctions()
+    let {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped} = this.exposeHelperFunctions()
     try {
       const result = eval(code)
       return result
@@ -433,7 +433,11 @@ export class TangyFormItem extends PolymerElement {
     let isChecked = (name) => helpers.isChecked(name)
     let notChecked = (name) => helpers.notChecked(name)
     let itemsPerMinute = (input) => helpers.itemsPerMinute(input)
-    return {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute};
+    let numberOfItemsAttempted = (input) => helpers.numberOfItemsAttempted(input)
+    let numberOfCorrectItems = (input) => helpers.numberOfCorrectItems(input)
+    let numberOfIncorrectItems = (input) => helpers.numberOfIncorrectItems(input)
+    let gridAutoStopped = (input) => helpers.gridAutoStopped(input)
+    return {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped};
   }
 
   onOpenButtonPress() {
@@ -523,7 +527,7 @@ export class TangyFormItem extends PolymerElement {
     let validInputNames = []
     for (let input of inputEls) {
       if (!input.hidden) {
-        let {getValue, inputHide, inputShow, inputDisable, inputEnable, isChecked, notChecked, itemsPerMinute} = this.exposeHelperFunctions();
+        let {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped} = this.exposeHelperFunctions();
         if ((input.validate && !input.validate()) || (input.hasAttribute('valid-if') && !eval(input.getAttribute('valid-if')))) {
           input.invalid = true
           invalidInputNames.push(input.name)
