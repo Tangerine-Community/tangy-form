@@ -521,8 +521,8 @@ export class TangyFormItem extends PolymerElement {
   }
 
   validate() {
-    let inputEls = [...this.shadowRoot.querySelectorAll('[name]')]
-    let inputs = inputEls.reduce((acc, inputEl) => { return { [inputEl.getAttribute('name')]: inputEl, ...acc} }, {})
+    // Look only 1 level deep for the inputEls because we don't want to validate elements inside a tangy-editor widget.
+    let inputEls = [...this.shadowRoot.querySelector("#content").children].filter(el => el.hasAttribute("name"))
     let invalidInputNames = []
     let validInputNames = []
     for (let input of inputEls) {
