@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.15.1
+- Fix bug that prevents tangy-form-item from validating when it has nested elements.
+
 ## v3.15.0
 - Added `numberOfItemsAttempted`, `numberOfCorrectItems`, `numberOfIncorrectItems`, and `gridAutoStopped` to `exposeHelperFunctions`.
 
