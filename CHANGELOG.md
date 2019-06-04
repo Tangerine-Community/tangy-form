@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v3.16.0
+- Exposed option-font-size attribute to tangy-timed and tangy-untimed.
+  Usage: <tangy-timed required columns="3" duration=80 name="class1_term2" option-font-size="5">
+  Sets the host font-size in tangy-toggle-button. using the --tangy-toggle-button-font-size custom CSS property.
+
 ## v3.15.1
 - Fix bug that prevents tangy-form-item from validating when it has nested elements.
 
