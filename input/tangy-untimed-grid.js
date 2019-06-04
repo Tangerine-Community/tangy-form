@@ -219,12 +219,22 @@ class TangyUntimedGrid extends PolymerElement {
         type: Number,
         value: 0,
         reflectToAttribute: true
+      },
+      optionFontSize: {
+        type: Number,
+        value: 0.7,
+        reflectToAttribute: true
       }
     };
   }
 
   ready() {
     super.ready();
+    const styleEl = document.createElement("style")
+    styleEl.innerHTML = `tangy-toggle-button { 
+        --tangy-toggle-button-font-size:${this.optionFontSize}em;
+      }`
+    this.shadowRoot.appendChild(styleEl)
     setTimeout(() => {
       this.render()
       this.reflect()

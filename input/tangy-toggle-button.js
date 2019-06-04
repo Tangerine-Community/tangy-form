@@ -22,13 +22,13 @@ class TangyToggleButton extends PolymerElement {
         border-radius: 10px;
         padding: 0 3px;
         color: #777;
-        font-size: .7em;
+        font-size: var(--tangy-toggle-button-font-size, 1);
       }
       :host([hidden]) {
         display: none;
       }
       :host([pressed]) {
-        background-color: var(--primary-color);;
+        background-color: var(--primary-color);
         color: #FFF;
         background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
         background-repeat: no-repeat;
