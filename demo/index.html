@@ -47,6 +47,7 @@
     <script type="module" src="../input/tangy-radio-buttons.js"></script>
     <script type="module" src="../input/tangy-select.js"></script>
     <script type="module" src="../input/tangy-timed.js"></script>
+    <script type="module" src="../input/tangy-untimed-grid.js"></script>
     <script type="module" src="../input/tangy-toggle-button.js"></script>
     <script type="module" src="../input/tangy-photo-capture.js"></script>
     <script type="module" src="../input/tangy-qr.js"></script>
@@ -59,7 +60,6 @@
   </head>
   <body>
     <div class="vertical-section-container centered">
-
 
       <h3>Basic tangy-form demo</h3>
       <demo-snippet>
@@ -432,6 +432,20 @@
             options-list-exclude-by="id">
             </tangy-checkboxes-dynamic>
             </template>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+
+
+      <h3>tangy-untimed-grid</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="untimed-autostop-form" title="My Form">
+            <tangy-form-item id="untimed-autostop-item" title="Autostop Untimed Grid">
+              <tangy-untimed-grid required columns="3" name="untimed-autostop" auto-stop="2">
+                <option value="class1_term2-d">1</option><option value="class1_term2-1">Jumatatu,</option><option value="class1_term2-2">wezi</option><option value="class1_term2-3">walikuja</option><option value="class1_term2-4">kijijini.</option><option value="class1_term2-5">Watu</option><option value="class1_term2-6">wakapiga</option><option value="class1_term2-7">mayowe.</option><option value="class1_term2-8">“Tunataka</option><option value="class1_term2-9">dhahabu!”</option><option value="class1_term2-10">wezi</option><option value="class1_term2-11">wakasema.</option><option value="class1_term2-12">Watu</option><option value="class1_term2-13">walipatwa</option><option value="class1_term2-14">na</option><option value="class1_term2-15">wasiwasi.</option><option value="class1_term2-16">Watu</option><option value="class1_term2-17">wakasema,</option><option value="class1_term2-18">“Hatuna</option><option value="class1_term2-19">chochote</option><option value="class1_term2-20">cha</option><option value="class1_term2-21">thamani.”</option><option value="class1_term2-22">Polisi</option><option value="class1_term2-23">walifika</option><option value="class1_term2-24">hapo.</option><option value="class1_term2-25">Waliwashika</option><option value="class1_term2-26">wezi</option><option value="class1_term2-27">na</option><option value="class1_term2-28">kuwatia</option><option value="class1_term2-29">pingu.</option><option value="class1_term2-30">Wezi</option><option value="class1_term2-31">walipelekwa</option><option value="class1_term2-32">gerezani.</option>
+              </tangy-untimed-grid>
             </tangy-form-item>
           </tangy-form>
         </template>
