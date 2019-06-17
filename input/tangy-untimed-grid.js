@@ -21,6 +21,7 @@ import '../style/tangy-common-styles.js'
 const TANGY_UNTIMED_GRID_MODE_UNTOUCHED = 'TANGY_UNTIMED_GRID_MODE_UNTOUCHED'
 const TANGY_UNTIMED_GRID_MODE_RUN = 'TANGY_UNTIMED_GRID_MODE_RUN'
 const TANGY_UNTIMED_GRID_MODE_MARK = 'TANGY_UNTIMED_GRID_MODE_MARK'
+const TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED = 'TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED'
 const TANGY_UNTIMED_GRID_MODE_DONE = 'TANGY_UNTIMED_GRID_MODE_DONE'
 const TANGY_UNTIMED_GRID_COMPLETE = 'TANGY_UNTIMED_GRID_COMPLETE'
 const TANGY_UNTIMED_GRID_MODE_DISABLED = 'TANGY_UNTIMED_GRID_MODE_DISABLED'
@@ -153,6 +154,16 @@ class TangyUntimedGrid extends PolymerElement {
         type: Array,
         value: [],
         observer: 'reflect',
+        reflectToAttribute: true
+      },
+      autoStop: {
+        type: Number,
+        value: undefined,
+        reflectToAttribute: true
+      },
+      gridAutoStopped: {
+        type: Boolean,
+        value: undefined,
         reflectToAttribute: true
       },
       hintText: {
@@ -353,6 +364,13 @@ class TangyUntimedGrid extends PolymerElement {
           })
         })
         break
+      case TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED:
+        this.value = this.value.map(buttonState => {
+          return Object.assign({}, buttonState, {
+            disabled: true
+          })
+        })
+        break
       // @TODO No longer being used.
       case TANGY_UNTIMED_GRID_MODE_DONE:
         this.statusMessage = t('You may proceed.')
@@ -411,7 +429,49 @@ class TangyUntimedGrid extends PolymerElement {
         this.value = newValue
         this.dispatchEvent(new Event('change'))
         break
+      case TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED:
+        // Ignore - not going to capture last_attempted once autostop has been triggered.
+        break
     }
+    if (this.autoStop && this.shouldGridAutoStop()) {
+      // ignore if we're already in mode TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED
+      if (this.mode !== TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED) {
+        event.target.highlighted = true
+        this.mode = TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED
+        this.gridAutoStopped = true
+        this.onStopClick(null, event.target.name)
+      }
+    }
+  }
+
+  shouldGridAutoStop() {
+    const isSetsEqual = (a, b) => a.size === b.size && [...a].every(value => b.has(value));
+    const tangyToggleButtons = [].slice.call(this.shadowRoot.querySelectorAll('tangy-toggle-button'))
+    if (!tangyToggleButtons[0].pressed) {
+      return false;
+    } else {
+      const indexes = tangyToggleButtons.slice(0, this.autoStop).map((button, index) => index)
+      let pressedItemsIndex = [];
+      tangyToggleButtons.reduce((prev, curr, index) => {
+        if (curr.pressed) {
+          pressedItemsIndex = [...pressedItemsIndex, index]
+        }
+      }, [])
+      return isSetsEqual(new Set(indexes), new Set(pressedItemsIndex))
+    }
+  }
+
+  onStopClick(event, lastItemAttempted) {
+    this.endTime = Date.now()
+    clearInterval(this.timer);
+    // We have to check for typeof string because the event handler on the stop button puts an integer in the second param for some reason.
+    // If it's a string, then we know it's an ID of something which should actually be lastItemAttempted.
+    if (typeof lastItemAttempted === 'string') {
+      this.value = this.value.map((element, i) => Object.assign({}, element, { highlighted: (lastItemAttempted === element.name) ? true : false }))
+    } else {
+      this.value = this.value.map((element, i) => Object.assign({}, element, { highlighted: (this.value.length - 1 === i) ? true : false }))
+    }
+    this.mode = TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED
   }
 
   validate() {

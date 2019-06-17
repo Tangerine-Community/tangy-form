@@ -71,7 +71,6 @@
           inputEl.setAttribute('value', '44')
           // Wait a tick for the underlying paper-input to catch up for validation purposes.
           Polymer.Base.async(function() {
-            debugger
             assert.equal(inputEl.validate(), true)
             inputEl.setAttribute('value', '55')
             Polymer.Base.async(function() {
