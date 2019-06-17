@@ -46,7 +46,6 @@
         test('font size = 5em', (done) => {
           const element = fixture('TangyUnTimedGridFontSizeFixture');
           setTimeout(_ => {
-            debugger;
             assert.equal(element.shadowRoot.innerHTML.includes('--tangy-toggle-button-font-size:5em'), true)
             done()
           }, 500)
