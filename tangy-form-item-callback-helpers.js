@@ -112,4 +112,30 @@ export class TangyFormItemHelpers {
   gridAutoStopped(input) {
     return !!input.value.find(el => el.gridAutoStopped)
   }
+  shouldDisableInputs(el) {
+    let inputEls = [...el.shadowRoot.querySelector("#content").children].filter(el => el.hasAttribute("name"))
+    let selectedIndex = [];
+    let concurrentIncorrectCount = 0
+    let previousIncorrect = 0;
+    inputEls.reduce((prev, curr, index) => {
+      let currentSelection = curr.getSelection()
+      if (currentSelection) {
+        if (currentSelection !== curr.correctValue) {
+          selectedIndex = [...selectedIndex, index]
+          if (index == ++previousIncorrect) {
+            ++concurrentIncorrectCount
+          } else {
+            concurrentIncorrectCount = 1
+          }
+          previousIncorrect = index
+        }
+      }
+    }, [])
+    console.log(" selectedIndex: " + JSON.stringify(selectedIndex) + " concurrentIncorrectCount: " + concurrentIncorrectCount + " previousIncorrect: " + previousIncorrect)
+    let shouldDisable =  concurrentIncorrectCount >= el.disableInputsThreshold ? true : false
+    if (shouldDisable === true) {
+      let highest = Math.max(...selectedIndex) + 1
+      console.log("Making the subsequent inputs hidden starting with " + highest)
+    }
+  }
 }

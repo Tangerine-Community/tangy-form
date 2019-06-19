@@ -78,6 +78,39 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyFormItemAutoStopFixture">
+      <template>
+        <tangy-form id="autostop-radio" title="autostop radio" auto-stop="2">
+          <tangy-form-item id="item1">
+            <tangy-radio-buttons name="fruit_selection1" label="What is your favorite fruit?" correct-value="Cantalope">
+              <option name="orange">Orange</option>
+              <option name="banana">Banana</option>
+              <option name="tangerine">Tangerine</option>
+              <option name="cantalope">Cantalope</option>
+              <option name="cherry">Cherry</option>
+              <option name="kiwi">Kiwi</option>
+            </tangy-radio-buttons>
+            <tangy-radio-buttons name="fruit_selection2" label="What is your favorite fruit?" correct-value="Cherry">
+              <option name="orange">Orange</option>
+              <option name="banana">Banana</option>
+              <option name="tangerine">Tangerine</option>
+              <option name="cantalope">Cantalope</option>
+              <option name="cherry">Cherry</option>
+              <option name="kiwi">Kiwi</option>
+            </tangy-radio-buttons>
+            <tangy-radio-buttons name="fruit_selection3" label="What is your favorite fruit?" correct-value="Banana">
+              <option name="orange">Orange</option>
+              <option name="banana">Banana</option>
+              <option name="tangerine">Tangerine</option>
+              <option name="cantalope">Cantalope</option>
+              <option name="cherry">Cherry</option>
+              <option name="kiwi">Kiwi</option>
+            </tangy-radio-buttons>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import '../tangy-form.js'
@@ -124,6 +157,19 @@
           let el = element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkboxes').value
                   .find(input => (input.name === 'Tangerine'))
           el.value = 'on'
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkboxes').dispatchEvent(new CustomEvent('next'))
+          assert.equal(element.querySelector('tangy-form-item').open, false)
+        })
+        test('should autostop after 2 answers.', () => {
+          const sleep = (milliseconds) => new Promise((res) => setTimeout(() => res(true), milliseconds))
+          const element = fixture('TangyFormItemValidIfTangyIfCheckboxesFixture');
+          element.newResponse()
+          let el = element.querySelector('tangy-form-item').shadowRoot.querySelector('[name=fruit_selection1]').value
+                  .find(input => (input.name === 'Tangerine'))
+          el.value = 'on'
+          let el2 = element.querySelector('tangy-form-item').shadowRoot.querySelector('[name=fruit_selection1]').value
+                  .find(input => (input.name === 'Tangerine'))
+          el2.value = 'on'
           element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkboxes').dispatchEvent(new CustomEvent('next'))
           assert.equal(element.querySelector('tangy-form-item').open, false)
         })
