@@ -33,13 +33,11 @@ class TangySelect extends PolymerElement {
       value: {
         type: String,
         value: '',
-        observer: 'render',
         reflectToAttribute: true
       },
       hintText: {
         type: String,
         value: '',
-        observer: 'render',
         reflectToAttribute: true
       },
       required: {
@@ -49,19 +47,16 @@ class TangySelect extends PolymerElement {
       disabled: {
         type: Boolean,
         value: false,
-        observer: 'render',
         reflectToAttribute: true
       },
       label: {
         type: String,
         value: '',
-        observer: 'render',
         reflectToAttribute: true
       },
       secondaryLabel: {
         type: String,
         value: '',
-        observer: 'render',
         reflectToAttribute: true
       },
       hidden: {

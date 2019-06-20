@@ -75,16 +75,22 @@
           assert.equal(element.shadowRoot.querySelector('[selected]').getAttribute('value'), 'b')
         })
 
-        test('should update after value set', () => {
+        test('should update after value set', (done) => {
           const element = fixture('TangySelectValueSetFixture')
+          element.addEventListener('render', () => {
+            assert.equal(element.shadowRoot.querySelector('[selected]').getAttribute('value'), 'c')
+            done()
+          })
           element.value = 'c'
-          assert.equal(element.shadowRoot.querySelector('[selected]').getAttribute('value'), 'c')
         })
 
-        test('should disable', () => {
+        test('should disable', (done) => {
           const element = fixture('TangySelectFixture')
           element.setAttribute('disabled', true)
-          assert.equal(element.shadowRoot.querySelector('select').hasAttribute('disabled'), true)
+          element.addEventListener('render', () => {
+            assert.equal(element.shadowRoot.querySelector('select').hasAttribute('disabled'), true)
+            done()
+          })
         })
 
         test('should have label with markup', () => {
