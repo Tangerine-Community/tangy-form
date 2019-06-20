@@ -28,14 +28,11 @@ class TangySelect extends PolymerElement {
     return {
       name: {
         type: String,
-        value: '',
-        observer: 'reflect',
-        reflectToAttribute: true
+        value: ''
       },
       value: {
         type: String,
         value: '',
-        observer: 'reflect',
         reflectToAttribute: true
       },
       hintText: {
@@ -45,69 +42,45 @@ class TangySelect extends PolymerElement {
       },
       required: {
         type: Boolean,
-        value: false,
-        observer: 'reflect',
-        reflectToAttribute: true
+        value: false
       },
       disabled: {
         type: Boolean,
         value: false,
-        observer: 'reflect',
         reflectToAttribute: true
       },
       label: {
         type: String,
         value: '',
-        observer: 'reflect',
         reflectToAttribute: true
       },
       secondaryLabel: {
         type: String,
         value: '',
-        observer: 'reflect',
         reflectToAttribute: true
       },
       hidden: {
         type: Boolean,
-        value: false,
-        observer: 'reflect',
-        reflectToAttribute: true
+        value: false
       },
       invalid: {
         type: Boolean,
-        value: false,
-        observer: 'reflect',
-        reflectToAttribute: true
+        value: false
       },
       incomplete: {
         type: Boolean,
-        value: true,
-        observer: 'reflect',
-        reflectToAttribute: true
+        value: true
       }
     }
   }
 
-  constructor() {
-    super()
-    this.value = ''
-  }
-
   connectedCallback() {
     super.connectedCallback()
+    const observer = new MutationObserver(this.render.bind(this))
+    observer.observe(this, { attributes: true, childList: true, subtree: true })
     this.render()
-    this.reflect()
   }
   
-  reflect() {
-    let selectEl = this
-      .shadowRoot
-      .querySelector('select')
-    if (selectEl) {
-      selectEl.setProps(this.getProps())
-    }
-  }
-
   render() {
     this.$.container.innerHTML = ''
     let options = []
@@ -116,13 +89,14 @@ class TangySelect extends PolymerElement {
       <label for="group">${this.label}</label>
       <label class="hint-text">${this.hintText}</label>
       <div class="mdc-select">
-        <select class="mdc-select__surface" value="${this.value}">
+        <select class="mdc-select__surface" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
           ${ (this.secondaryLabel) ? `
             <option value="" default selected disabled>${this.secondaryLabel}</option>
           ` : ``}
           ${options.map((option, i) => `
             <option 
               value="${option.value}" 
+              ${this.value === option.value ? 'selected' : ''}
             >
               ${combTranslations(option.innerHTML)}
             </option>
@@ -130,14 +104,12 @@ class TangySelect extends PolymerElement {
         </select>
       </div>
       <div class="mdc-select__bottom-line"></div>
-    
     `
-
-    this
+    this._onChangeListener = this
       .shadowRoot
       .querySelector('select')
       .addEventListener('change', this.onChange.bind(this))
-
+    this.dispatchEvent(new CustomEvent('render'))
   }
 
   onChange(event) {
