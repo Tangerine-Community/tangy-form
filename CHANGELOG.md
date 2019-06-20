@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.16.1
+- Fix adding of `<option>` elements to `<tangy-select>` after first load. [#46](https://github.com/Tangerine-Community/tangy-form/pull/46)
+
 ## v3.16.0
 - Exposed option-font-size attribute to tangy-timed and tangy-untimed.
   Usage: <tangy-timed required columns="3" duration=80 name="class1_term2" option-font-size="5">
