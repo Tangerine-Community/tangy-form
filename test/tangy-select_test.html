@@ -81,6 +81,12 @@
           assert.equal(element.shadowRoot.querySelector('[selected]').getAttribute('value'), 'c')
         })
 
+        test('should disable', () => {
+          const element = fixture('TangySelectFixture')
+          element.setAttribute('disabled', true)
+          assert.equal(element.shadowRoot.querySelector('select').hasAttribute('disabled'), true)
+        })
+
         test('should have label with markup', () => {
           const element = fixture('TangySelectWithMarkupFixture')
           assert.equal(element.shadowRoot.querySelectorAll('label b').length, 1)

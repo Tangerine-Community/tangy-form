@@ -28,9 +28,7 @@ class TangySelect extends PolymerElement {
     return {
       name: {
         type: String,
-        value: '',
-        observer: 'render',
-        reflectToAttribute: true
+        value: ''
       },
       value: {
         type: String,
@@ -41,13 +39,12 @@ class TangySelect extends PolymerElement {
       hintText: {
         type: String,
         value: '',
+        observer: 'render',
         reflectToAttribute: true
       },
       required: {
         type: Boolean,
-        value: false,
-        observer: 'render',
-        reflectToAttribute: true
+        value: false
       },
       disabled: {
         type: Boolean,
@@ -69,21 +66,15 @@ class TangySelect extends PolymerElement {
       },
       hidden: {
         type: Boolean,
-        value: false,
-        observer: 'render',
-        reflectToAttribute: true
+        value: false
       },
       invalid: {
         type: Boolean,
-        value: false,
-        observer: 'render',
-        reflectToAttribute: true
+        value: false
       },
       incomplete: {
         type: Boolean,
-        value: true,
-        observer: 'render',
-        reflectToAttribute: true
+        value: true
       }
     }
   }
@@ -103,7 +94,7 @@ class TangySelect extends PolymerElement {
       <label for="group">${this.label}</label>
       <label class="hint-text">${this.hintText}</label>
       <div class="mdc-select">
-        <select class="mdc-select__surface" value="${this.value}">
+        <select class="mdc-select__surface" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
           ${ (this.secondaryLabel) ? `
             <option value="" default selected disabled>${this.secondaryLabel}</option>
           ` : ``}
