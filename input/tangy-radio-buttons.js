@@ -240,35 +240,11 @@ class TangyRadioButtons extends PolymerElement {
 
   }
 
-  shouldDisableInputs(inputEls, disableInputsThreshold) {
-    let selectedIndex = [];
-    let concurrentIncorrectCount = 0
-    let previousIncorrect = 0;
-    inputEls.reduce((prev, curr, index) => {
-      let currentSelection = curr.getSelection()
-      if (currentSelection) {
-        if (currentSelection !== curr.correctValue) {
-          selectedIndex = [...selectedIndex, index]
-          if (index == ++previousIncorrect) {
-            ++concurrentIncorrectCount
-          } else {
-            concurrentIncorrectCount = 1
-          }
-          previousIncorrect = index
-        }
-      }
-    }, [])
-    console.log("this.name: " + this.name + " selectedIndex: " + JSON.stringify(selectedIndex) + " concurrentIncorrectCount: " + concurrentIncorrectCount + " previousIncorrect: " + previousIncorrect)
-    return concurrentIncorrectCount >= disableInputsThreshold ? true : false
-  }
-
   validate(inputEls) {
     let foundOne = false
     this.shadowRoot.querySelectorAll('[name]').forEach(el => {
       if (el.value === 'on') foundOne = true
     })
-    // let disable = this.shouldDisableInputs(inputEls, 2)
-    // console.log("disable: " + disable)
     if (this.required && !this.hidden && !this.disabled && !foundOne) {
       this.invalid = true
       return false
@@ -276,19 +252,6 @@ class TangyRadioButtons extends PolymerElement {
       this.invalid = false
       return true
     }
-  }
-
-  getSelection() {
-    let selection = null;
-    // Array.from(this.shadowRoot.querySelectorAll('[name]')).some(el => {
-    let inputs = this.shadowRoot.querySelectorAll('[name]'), i
-    for (i = 0; i < inputs.length; ++i) {
-      if (inputs[i].value === 'on') {
-        return inputs[i].name
-        break
-      }
-    }
-    // return selection;
   }
 
 }

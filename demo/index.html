@@ -450,11 +450,12 @@
         </template>
       </demo-snippet>
 
-      <h3>autostop with radio-buttons</h3>
+      <h3>hideInputsUponThreshhold with radio-buttons</h3>
+      <p>Demonstrates the hideInputsUponThreshhold helper function and incorrect-threshold attribute to provide auto-stop functionality to tangy-form-item..</p>
       <demo-snippet>
         <template>
           <tangy-form id="autostop-radio" title="autostop radio">
-            <tangy-form-item id="item1" disable-inputs-threshold="2" on-change="let disableInputsThreshold = 2; shouldDisableInputs(this)" disableInputsThreshold="2">
+            <tangy-form-item id="item1" incorrect-threshold="2" on-change="hideInputsUponThreshhold(this)">
               <tangy-radio-buttons name="fruit_selection1" label="What is your favorite fruit?" correct-value="Cherry">
                 <option name="tangerine">Tangerine</option>
                 <option name="cantalope">Cantalope</option>
@@ -466,6 +467,21 @@
                 <option name="cherry">Cherry</option>
               </tangy-radio-buttons>
               <tangy-radio-buttons name="fruit_selection3" label="What is your favorite fruit?" correct-value="Cantalope">
+                <option name="tangerine">Tangerine</option>
+                <option name="cantalope">Cantalope</option>
+                <option name="cherry">Cherry</option>
+              </tangy-radio-buttons>
+              <tangy-radio-buttons name="fruit_selection4" label="What is your favorite fruit?" correct-value="Cantalope">
+                <option name="tangerine">Tangerine</option>
+                <option name="cantalope">Cantalope</option>
+                <option name="cherry">Cherry</option>
+              </tangy-radio-buttons>
+              <tangy-radio-buttons name="fruit_selection5" label="What is your favorite fruit?" correct-value="Cantalope">
+                <option name="tangerine">Tangerine</option>
+                <option name="cantalope">Cantalope</option>
+                <option name="cherry">Cherry</option>
+              </tangy-radio-buttons>
+              <tangy-radio-buttons name="fruit_selection6" label="What is your favorite fruit?" correct-value="Cantalope">
                 <option name="tangerine">Tangerine</option>
                 <option name="cantalope">Cantalope</option>
                 <option name="cherry">Cherry</option>

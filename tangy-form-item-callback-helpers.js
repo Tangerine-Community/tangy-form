@@ -112,15 +112,16 @@ export class TangyFormItemHelpers {
   gridAutoStopped(input) {
     return !!input.value.find(el => el.gridAutoStopped)
   }
-  shouldDisableInputs(el) {
+  hideInputsUponThreshhold(el) {
     let inputEls = [...el.shadowRoot.querySelector("#content").children].filter(el => el.hasAttribute("name"))
     let selectedIndex = [];
     let concurrentIncorrectCount = 0
     let previousIncorrect = 0;
-    inputEls.reduce((prev, curr, index) => {
-      let currentSelection = curr.getSelection()
+    inputEls.forEach((input, index) => {
+      // let currentSelection = input.getSelection()
+      let currentSelection = input.value.find(element => element.value === 'on')
       if (currentSelection) {
-        if (currentSelection !== curr.correctValue) {
+        if (currentSelection.name !== input.correctValue) {
           selectedIndex = [...selectedIndex, index]
           if (index == ++previousIncorrect) {
             ++concurrentIncorrectCount
@@ -128,14 +129,23 @@ export class TangyFormItemHelpers {
             concurrentIncorrectCount = 1
           }
           previousIncorrect = index
+        } else {
+          // reset concurrentIncorrectCount
+          // console.log("Correct answer; resetting concurrentIncorrectCount to 0")
+          concurrentIncorrectCount = 0
         }
       }
     }, [])
-    console.log(" selectedIndex: " + JSON.stringify(selectedIndex) + " concurrentIncorrectCount: " + concurrentIncorrectCount + " previousIncorrect: " + previousIncorrect)
-    let shouldDisable =  concurrentIncorrectCount >= el.disableInputsThreshold ? true : false
+    // console.log(" selectedIndex: " + JSON.stringify(selectedIndex) + " concurrentIncorrectCount: " + concurrentIncorrectCount + " previousIncorrect: " + previousIncorrect)
+    let shouldDisable =  concurrentIncorrectCount >= el.incorrectThreshold ? true : false
     if (shouldDisable === true) {
       let highest = Math.max(...selectedIndex) + 1
-      console.log("Making the subsequent inputs hidden starting with " + highest)
+      // console.log("Making the subsequent inputs hidden starting with " + highest)
+      let inputsToHide = inputEls.slice(highest)
+      inputsToHide.forEach((inputEl, index) => {
+        inputEl.hidden = true
+      }  )
     }
+    return shouldDisable
   }
 }

@@ -312,7 +312,7 @@ export class TangyFormItem extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
-      disableInputsThreshold: {
+      incorrectThreshold: {
         type: Number,
         value: undefined,
         reflectToAttribute: true
@@ -410,7 +410,7 @@ export class TangyFormItem extends PolymerElement {
     // Declare namespaces for helper functions for the eval context in form.on-change.
     // We have to do this because bundlers modify the names of things that are imported
     // but do not update the evaled code because it knows not of it.
-    let {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, shouldDisableInputs} = this.exposeHelperFunctions()
+    let {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold} = this.exposeHelperFunctions()
     try {
       const result = eval(code)
       return result
@@ -442,8 +442,8 @@ export class TangyFormItem extends PolymerElement {
     let numberOfCorrectItems = (input) => helpers.numberOfCorrectItems(input)
     let numberOfIncorrectItems = (input) => helpers.numberOfIncorrectItems(input)
     let gridAutoStopped = (input) => helpers.gridAutoStopped(input)
-    let shouldDisableInputs = (input) => helpers.shouldDisableInputs(input)
-    return {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, shouldDisableInputs};
+    let hideInputsUponThreshhold = (input) => helpers.hideInputsUponThreshhold(input)
+    return {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold};
   }
 
   onOpenButtonPress() {
@@ -533,7 +533,7 @@ export class TangyFormItem extends PolymerElement {
     let validInputNames = []
     for (let input of inputEls) {
       if (!input.hidden) {
-        let {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, shouldDisableInputs} = this.exposeHelperFunctions();
+        let {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold} = this.exposeHelperFunctions();
         if ((input.validate && !input.validate()) || (input.hasAttribute('valid-if') && !eval(input.getAttribute('valid-if')))) {
           input.invalid = true
           invalidInputNames.push(input.name)
@@ -546,7 +546,7 @@ export class TangyFormItem extends PolymerElement {
         validInputNames.push(input.name)
       }
     }
-    // let disable = this.shouldDisableInputs(inputEls)
+    // let disable = this.hideInputsUponThreshhold(inputEls)
     // console.log("disable: " + disable)
     if (invalidInputNames.length !== 0) {
       this.shadowRoot
