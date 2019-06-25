@@ -166,14 +166,7 @@ class TangyCheckboxes extends PolymerElement {
       .querySelectorAll('tangy-checkbox')
       .forEach(el => newValue.push(el.getProps()))
     this.value = newValue
-    this.dispatchEvent(new CustomEvent('change', {
-      bubbles: true, detail: {
-        inputName: this.name,
-        inputValue: newValue,
-        inputIncomplete: false,
-        inputInvalid: false
-      }
-    }))
+    this.dispatchEvent(new CustomEvent('change'))
   }
 
   validate() {
