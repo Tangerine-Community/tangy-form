@@ -128,9 +128,22 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="EFTouchMultiSelectFixture">
+      <template>
+        <tangy-eftouch name="fruit_selection" multi-select label="What is your favorite fruit?">
+          <option width=30 height=50 value="orange" src="assets/images/cat.png"></option>
+          <option width=30 height=50 value="banana" src="assets/images/cat.png"></option>
+          <option width=30 height=50 value="tangerine" src="assets/images/cat.png"></option>
+          <option width=30 height=50 value="cantalope" src="assets/images/cat.png"></option>
+          <option width=30 height=50 value="cherry" src="assets/images/cat.png"></option>
+          <option width=30 height=50 value="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
     <test-fixture id="EFTouchCorrectFixture">
       <template>
-        <tangy-eftouch incorrect-message="You chose the wrong option. Try again." value="fruit_selection" label="What is your favorite fruit?">
+        <tangy-eftouch incorrect-message="You chose the wrong option. Try again." name="fruit_selection" label="What is your favorite fruit?">
           <option value="orange" correct src="assets/images/cat.png"></option>
           <option value="banana" correct src="assets/images/cat.png"></option>
           <option value="tangerine" src="assets/images/cat.png"></option>
@@ -138,6 +151,35 @@
           <option value="cherry" src="assets/images/cat.png"></option>
           <option value="kiwi" src="assets/images/cat.png"></option>
         </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchWithCorrectFixture">
+      <template>
+        <tangy-eftouch 
+          name="animal_selection" 
+          label="Which animal can breath under water?"
+          incorrect-message="You chose the wrong option. Try again."
+          transition-message="Great job!"
+          transition-delay="1000"
+          >
+            <option width=30 height=50 src="assets/images/bird.png" value="bird"></option>
+            <option width=30 height=50 src="assets/images/cat.png" value="cat"></option>
+            <option width=30 height=50 src="assets/images/cow.png" value="cow"></option>
+            <option width=30 height=50 src="assets/images/dog.png" value="dog"></option>
+            <option width=30 height=50 src="assets/images/fish.png" value="fish" correct></option>
+            <option width=30 height=50 src="assets/images/pig.png" value="pig"></option>
+          </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchWithMultipleCorrectFixture">
+      <template>
+        <tangy-eftouch multi-select name="animal_selection" label="Which animals can not breath under water?">
+            <option width=30 height=50 src="assets/images/cow.png" value="cow" correct></option>
+            <option width=30 height=50 src="assets/images/dog.png" value="dog" correct></option>
+            <option width=30 height=50 src="assets/images/fish.png" value="fish"></option>
+          </tangy-eftouch>
       </template>
     </test-fixture>
 
@@ -213,7 +255,7 @@
           assert.equal(eventDidFire, false)
           assert.equal(element.hasAttribute('transition-triggered'), true)
         });
-
+        
         test('should transition at time limit', (done) => { 
           const element = fixture('EFTouchTimeLimitFixture')
           let eventDidFire = false
@@ -227,7 +269,30 @@
           assert.equal(eventDidFire, false)
         });
 
-        test('should have value of correctness');
+        test('should allow multi-select', () => { 
+          const element = fixture('EFTouchMultiSelectFixture');
+          element.shadowRoot.querySelectorAll('img')[0].click()
+          element.shadowRoot.querySelectorAll('img')[4].click()
+          assert(element.shadowRoot.querySelectorAll('[selected]').length, 2)
+          assert(element.value.selection.length, 2)
+        });
+
+        test('should have value of correctness', () => { 
+          const element = fixture('EFTouchWithCorrectFixture');
+          element.shadowRoot.querySelectorAll('img')[0].click()
+          assert.equal(element.value.correct, false)
+          element.shadowRoot.querySelectorAll('img')[4].click()
+          assert.equal(element.value.correct, true)
+        });
+
+        test('should have value of correctness with multi-select', () => { 
+          const element = fixture('EFTouchWithMultipleCorrectFixture');
+          element.shadowRoot.querySelectorAll('img')[0].click()
+          assert.equal(element.value.correct, false)
+          element.shadowRoot.querySelectorAll('img')[1].click()
+          assert.equal(element.value.correct, true)
+        });
+        
         test('should not allow proceeding without correct selection when required (auto progress and manual)')
         test('should show transition message but not auto progress')
         test('should not allow correction (important in training, not demonstrating)')

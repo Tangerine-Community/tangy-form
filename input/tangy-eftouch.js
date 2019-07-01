@@ -180,6 +180,7 @@ export class TangyEftouch extends PolymerElement {
         :host([fullscreen-size-complete]) tangy-radio-buttons {
           opacity: 1 !important;
         }
+
         tangy-radio-buttons {
           margin: 0 auto;
         }
@@ -221,6 +222,9 @@ export class TangyEftouch extends PolymerElement {
         #cell {
           text-align: center;
         }
+        #cell[selected] {
+          background: lightgreen;
+        }
       </style>
       <div id="messages-box">
         ${this.transitionMessage ? `
@@ -236,7 +240,13 @@ export class TangyEftouch extends PolymerElement {
       </div>
       <div id="options-box">
       ${options.map(option => `
-        <span id="cell" 
+        <span 
+          id="cell" 
+          ${
+            this.hasAttribute('multi-select')
+              ? this.value.selection.includes(option.value) ? `selected` : ``
+              : this.value.selection === option.value ? `selected` : ``
+          }
           style="
             display: inline-block;
             width:${Math.floor((option.getAttribute('width')/100)*this.width)}px;
@@ -245,8 +255,8 @@ export class TangyEftouch extends PolymerElement {
           ${option.getAttribute('src') ? `
             <img 
               value="${option.value}" 
+              
               style="
-                ${this.value.selection === option.value? `background: lightgreen;` : ``}
                 max-height: 100%;
                 max-width: 100%;
               " 
@@ -262,9 +272,27 @@ export class TangyEftouch extends PolymerElement {
   onSelection(target) {
     if (this.inputSound) new Audio(this.inputSound).play()
     this.value = Object.assign({}, this.value, {
-      selection: target.getAttribute('value'),
+      selection: this.hasAttribute('multi-select')
+        ? this.value.selection.includes(target.getAttribute('value'))
+          ? this.value.selection.reduce((selection, value) => value !== target.getAttribute('value') ? [value, ...selection] : selection, [])
+          : [...this.value.selection, target.getAttribute('value')]
+        : target.getAttribute('value'),
       selectionTime: new Date().getTime()
     })
+    if (this.querySelectorAll('[correct]').length > 0) {
+      const correctSelections = [...this.querySelectorAll('[correct]')].map(optionEl => optionEl.getAttribute('value'))
+      this.value = {
+        ...this.value, 
+        ...{
+          correct: this.hasAttribute('multi-select') 
+            ? correctSelections
+              .reduce((allCorrectSelectionsMade, value) => {
+                return allCorrectSelectionsMade === false ? false : this.value.selection.includes(value)
+              }, true) 
+            : correctSelections.includes(this.value.selection)
+        }
+      }     
+    }
     this.dispatchEvent(new Event('change'))
     if (this.autoProgress && this.transitionDelay > 0) {
       this.setAttribute('transition-triggered', true)
