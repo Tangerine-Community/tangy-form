@@ -255,7 +255,7 @@
           assert.equal(eventDidFire, false)
           assert.equal(element.hasAttribute('transition-triggered'), true)
         });
-        
+
         test('should transition at time limit', (done) => { 
           const element = fixture('EFTouchTimeLimitFixture')
           let eventDidFire = false
@@ -275,6 +275,10 @@
           element.shadowRoot.querySelectorAll('img')[4].click()
           assert(element.shadowRoot.querySelectorAll('[selected]').length, 2)
           assert(element.value.selection.length, 2)
+          element.shadowRoot.querySelectorAll('img')[4].click()
+          assert(element.shadowRoot.querySelectorAll('[selected]').length, 1)
+          assert(element.value.selection.length, 1)
+
         });
 
         test('should have value of correctness', () => { 
