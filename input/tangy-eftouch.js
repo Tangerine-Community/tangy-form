@@ -215,19 +215,19 @@ export class TangyEftouch extends PolymerElement {
         }
         #messages-box {
           height: 60px;
-          /* background: red; */
         }
-        #options-box {
-          /* background: #EEE; */
+        #cell img {
+          border: #FFF solid 5px;
+        }
+        #cell[selected] img {
+          border: red solid 5px;
         }
         #cell {
+          padding: 5px;
           text-align: center;
         }
-        #cell[selected] {
-          background: lightgreen;
-        }
-        :host([highlight-correct]) #cell[correct] {
-          background: yellow;
+        :host([highlight-correct]) #cell[correct] img {
+          border: yellow solid 5px;
         }
 
       </style>
