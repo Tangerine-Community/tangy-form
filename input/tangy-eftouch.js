@@ -56,6 +56,11 @@ export class TangyEftouch extends PolymerElement {
         value: '',
         reflectToAttribute: true
       },
+      openSound: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       transitionDelay: {
         type: Number,
         value: 0,
@@ -134,6 +139,7 @@ export class TangyEftouch extends PolymerElement {
 
   connectedCallback () {
     super.connectedCallback()
+    if (this.openSound) new Audio(this.openSound).play()
     if (!this.width) {
       this.width = document.documentElement.offsetWidth
     }
@@ -150,6 +156,7 @@ export class TangyEftouch extends PolymerElement {
     }
     if (this.timeLimit) {
       this.timeLimitTimeout = setTimeout(() => {
+        this.disabled = true
         this.transition()
       }, this.timeLimit)
     }
@@ -180,6 +187,7 @@ export class TangyEftouch extends PolymerElement {
         :host([fullscreen-size-complete]) tangy-radio-buttons {
           opacity: 1 !important;
         }
+
         tangy-radio-buttons {
           margin: 0 auto;
         }
@@ -213,14 +221,21 @@ export class TangyEftouch extends PolymerElement {
         }
         #messages-box {
           height: 60px;
-          /* background: red; */
         }
-        #options-box {
-          /* background: #EEE; */
+        #cell img {
+          border: #FFF solid 5px;
+        }
+        #cell[selected] img {
+          border: red solid 5px;
         }
         #cell {
+          padding: 5px;
           text-align: center;
         }
+        :host([highlight-correct]) #cell[correct] img {
+          border: yellow solid 5px;
+        }
+
       </style>
       <div id="messages-box">
         ${this.transitionMessage ? `
@@ -233,51 +248,115 @@ export class TangyEftouch extends PolymerElement {
             ${this.warningMessage}
           </div>
         ` : ''}
+        ${this.incorrectMessage ? `
+          <div id="incorrect">
+            ${this.incorrectMessage}
+          </div>
+        ` : ''}
       </div>
       <div id="options-box">
       ${options.map(option => `
-        <span id="cell" 
+        <span 
+          id="cell"
+          ${option.hasAttribute('correct') ? 'correct' : ''}
+          ${
+            this.hasAttribute('multi-select')
+              ? !option.hasAttribute('disabled') && this.value.selection.includes(option.value) ? `selected` : ``
+              : !option.hasAttribute('disabled') && this.value.selection === option.value ? `selected` : ``
+          }
           style="
             display: inline-block;
             width:${Math.floor((option.getAttribute('width')/100)*this.width)}px;
             height:${Math.floor((option.getAttribute('height')/100)*(this.height-60))}px;
           ">
-          ${option.getAttribute('src') ? `
-            <img 
-              value="${option.value}" 
+          <img 
+            ${option.hasAttribute('disabled') ? `disabled` : ''}
+            value="${option.value}" 
+            ${!option.hasAttribute('src') || option.getAttribute('src') === '' ? `
+              disabled
               style="
-                ${this.value.selection === option.value? `background: lightgreen;` : ``}
+                height: 100%;
+                width: 100%;
+              " 
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNgYAAAAAMAASsJTYQAAAAASUVORK5CYII="
+            ` : `
+              style="
                 max-height: 100%;
                 max-width: 100%;
-              " 
-              src="${option.getAttribute('src')}">
-          ` : ``}
+              "
+              src="${option.getAttribute('src')}"
+            `}
+          >
         </span>
       `).join('')}
       </div>
     `
-    this.shadowRoot.querySelectorAll('img').forEach(el => el.addEventListener('click', _ => this.onSelection(_.target)))
+    this.shadowRoot.querySelectorAll('img:not([disabled])').forEach(el => el.addEventListener('click', _ => this.onSelection(_.target)))
   }
 
   onSelection(target) {
+    if (this.disabled === true || target.hasAttribute('disabled')) return
+    if (this.hasAttribute('no-corrections') && this.value && this.value.correct === false) {
+      // Do nothing.
+      return
+    }
     if (this.inputSound) new Audio(this.inputSound).play()
     this.value = Object.assign({}, this.value, {
-      selection: target.getAttribute('value'),
+      selection: this.hasAttribute('multi-select')
+        ? this.value.selection.includes(target.getAttribute('value'))
+          ? this.value.selection.reduce((selection, value) => value !== target.getAttribute('value') ? [value, ...selection] : selection, [])
+          : [...this.value.selection, target.getAttribute('value')]
+        : target.getAttribute('value'),
       selectionTime: new Date().getTime()
     })
+    if (this.querySelectorAll('[correct]').length > 0) {
+      const correctSelections = [...this.querySelectorAll('[correct]')].map(optionEl => optionEl.getAttribute('value'))
+      this.value = {
+        ...this.value, 
+        ...{
+          correct: this.hasAttribute('multi-select') 
+            ? correctSelections
+              .reduce((allCorrectSelectionsMade, value) => {
+                return allCorrectSelectionsMade === false ? false : this.value.selection.includes(value)
+              }, true) 
+            : correctSelections.includes(this.value.selection)
+        }
+      }     
+    }
+    if (this.hasAttribute('if-incorrect-then-highlight-correct') && this.value.correct === false) {
+      this.setAttribute('highlight-correct', '')
+    } else if (this.hasAttribute('if-incorrect-then-highlight-correct') && this.value.correct === true) {
+      this.removeAttribute('highlight-correct')
+    }
+    if (this.hasAttribute('incorrect-message') && this.value.correct === false) {
+      this.incorrectMessage = this.getAttribute('incorrect-message')
+      this.render()
+    } else if (this.hasAttribute('incorrect-message') && this.value.correct === true) {
+      this.incorrectMessage = '' 
+      this.render()
+    }
     this.dispatchEvent(new Event('change'))
-    if (this.autoProgress && this.transitionDelay > 0) {
-      this.setAttribute('transition-triggered', true)
-      setTimeout(() => this.transition(), this.transitionDelay)
-    } else if (this.autoProgress && this.transitionDelay === 0) {
-      this.setAttribute('transition-triggered', true)
+    if (this.canTransition) this.startTransition()
+  }
+
+  get canTransition() {
+    return this.validate() && (this.transitionMessage || this.autoProgress || this.timeLimit)
+  }
+
+  startTransition() {
+    this.setAttribute('transition-triggered', true)
+    if (this.transitionDelay > 0) {
+      setTimeout(() => {
+        this.transition()
+      }, this.transitionDelay)
+    } else {
       this.transition()
     }
   }
 
   transition() {
     if (this.transitionSound) new Audio(this.transitionSound).play()
-    this.dispatchEvent(new CustomEvent('next'))
+    if (this.autoProgress) this.dispatchEvent(new CustomEvent('next'))
   }
 
   fitIt() {
@@ -295,6 +374,18 @@ export class TangyEftouch extends PolymerElement {
       this.radioButtonsEl.style.width = `${targetWidth}px`
       this.setAttribute('fullscreen-size-complete', '')
     }, 100)
+  }
+
+  validate() {
+    if (this.hasAttribute('required-correct')) {
+      return this.value.correct ? true : false
+    } else if (this.hasAttribute('required') && this.hasAttribute('multi-select')) {
+      return this.value.selection && this.value.selection.length > 0 ? true: false
+    } else if (this.hasAttribute('required')) {
+      return this.value.selection ? true: false
+    } else {
+      return true
+    }
   }
 
 }
