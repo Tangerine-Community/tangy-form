@@ -150,6 +150,7 @@ export class TangyEftouch extends PolymerElement {
     }
     if (this.timeLimit) {
       this.timeLimitTimeout = setTimeout(() => {
+        this.disabled = true
         this.transition()
       }, this.timeLimit)
     }
@@ -225,6 +226,10 @@ export class TangyEftouch extends PolymerElement {
         #cell[selected] {
           background: lightgreen;
         }
+        :host([highlight-correct]) #cell[correct] {
+          background: yellow;
+        }
+
       </style>
       <div id="messages-box">
         ${this.transitionMessage ? `
@@ -237,11 +242,17 @@ export class TangyEftouch extends PolymerElement {
             ${this.warningMessage}
           </div>
         ` : ''}
+        ${this.incorrectMessage ? `
+          <div id="incorrect">
+            ${this.incorrectMessage}
+          </div>
+        ` : ''}
       </div>
       <div id="options-box">
       ${options.map(option => `
         <span 
-          id="cell" 
+          id="cell"
+          ${option.hasAttribute('correct') ? 'correct' : ''}
           ${
             this.hasAttribute('multi-select')
               ? this.value.selection.includes(option.value) ? `selected` : ``
@@ -270,6 +281,11 @@ export class TangyEftouch extends PolymerElement {
   }
 
   onSelection(target) {
+    if (this.disabled === true) return
+    if (this.hasAttribute('no-corrections') && this.value && this.value.correct === false) {
+      // Do nothing.
+      return
+    }
     if (this.inputSound) new Audio(this.inputSound).play()
     this.value = Object.assign({}, this.value, {
       selection: this.hasAttribute('multi-select')
@@ -293,19 +309,40 @@ export class TangyEftouch extends PolymerElement {
         }
       }     
     }
+    if (this.hasAttribute('if-incorrect-then-highlight-correct') && this.value.correct === false) {
+      this.setAttribute('highlight-correct', '')
+    } else if (this.hasAttribute('if-incorrect-then-highlight-correct') && this.value.correct === true) {
+      this.removeAttribute('highlight-correct')
+    }
+    if (this.hasAttribute('incorrect-message') && this.value.correct === false) {
+      this.incorrectMessage = this.getAttribute('incorrect-message')
+      this.render()
+    } else if (this.hasAttribute('incorrect-message') && this.value.correct === true) {
+      this.incorrectMessage = '' 
+      this.render()
+    }
     this.dispatchEvent(new Event('change'))
-    if (this.autoProgress && this.transitionDelay > 0) {
-      this.setAttribute('transition-triggered', true)
-      setTimeout(() => this.transition(), this.transitionDelay)
-    } else if (this.autoProgress && this.transitionDelay === 0) {
-      this.setAttribute('transition-triggered', true)
+    if (this.canTransition) this.startTransition()
+  }
+
+  get canTransition() {
+    return this.validate() && (this.transitionMessage || this.autoProgress || this.timeLimit)
+  }
+
+  startTransition() {
+    this.setAttribute('transition-triggered', true)
+    if (this.transitionDelay > 0) {
+      setTimeout(() => {
+        this.transition()
+      }, this.transitionDelay)
+    } else {
       this.transition()
     }
   }
 
   transition() {
     if (this.transitionSound) new Audio(this.transitionSound).play()
-    this.dispatchEvent(new CustomEvent('next'))
+    if (this.autoProgress) this.dispatchEvent(new CustomEvent('next'))
   }
 
   fitIt() {
@@ -323,6 +360,18 @@ export class TangyEftouch extends PolymerElement {
       this.radioButtonsEl.style.width = `${targetWidth}px`
       this.setAttribute('fullscreen-size-complete', '')
     }, 100)
+  }
+
+  validate() {
+    if (this.hasAttribute('required-correct')) {
+      return this.value.correct ? true : false
+    } else if (this.hasAttribute('required') && this.hasAttribute('multi-select')) {
+      return this.value.selection && this.value.selection.length > 0 ? true: false
+    } else if (this.hasAttribute('required')) {
+      return this.value.selection ? true: false
+    } else {
+      return true
+    }
   }
 
 }
