@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.17.0
+- Add support for eftouch multi-select attribute and multiple values of correct options [#48](https://github.com/Tangerine-Community/tangy-form/pull/48)
+
 ## v3.16.1
 - Fix adding of `<option>` elements to `<tangy-select>` after first load. [#46](https://github.com/Tangerine-Community/tangy-form/pull/46)
 
