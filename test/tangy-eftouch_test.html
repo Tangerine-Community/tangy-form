@@ -115,6 +115,19 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="EFTouchOpenSoundFixture">
+      <template>
+        <tangy-eftouch name="animal_selection" open-sound="assets/sounds/pop.mp3" label="Which is your favorite animal?">
+            <option width=30 height=50 src="assets/images/bird.png" value="bird"></option>
+            <option width=30 height=50 src="assets/images/cat.png" value="cat"></option>
+            <option width=30 height=50 src="assets/images/cow.png" value="cow"></option>
+            <option width=30 height=50 src="assets/images/dog.png" value="dog"></option>
+            <option width=30 height=50 src="assets/images/fish.png" value="fish"></option>
+            <option width=30 height=50 src="assets/images/pig.png" value="pig"></option>
+          </tangy-eftouch>
+      </template>
+    </test-fixture>
+
     <test-fixture id="EFTouchWarningFixture">
       <template>
         <tangy-eftouch warning-time=100 warning-message="You are running out of time!" value="fruit_selection" label="What is your favorite fruit?">
@@ -312,6 +325,14 @@
           assert(element.shadowRoot.querySelectorAll('img').length, 6)
         })
 
+        test('should make an open sound', () => { 
+          const element = fixture('EFTouchOpenSoundFixture')
+          // No way to programatically test this...
+          debugger
+        })
+
+
+
         test('should give warning message after hitting warning time', (done) => { 
           const element = fixture('EFTouchWarningFixture')
           setTimeout(() => {
@@ -342,6 +363,7 @@
             done()
           }, 105)
         })
+
         test('should auto-progress at time limit', (done) => { 
           const element = fixture('EFTouchTimeLimitAutoProgressFixture')
           let eventDidFire = false
@@ -385,7 +407,7 @@
           assert.equal(element.value.correct, false)
           element.shadowRoot.querySelectorAll('img')[1].click()
           assert.equal(element.value.correct, true)
-        });
+        })
         
         test('should not allow proceeding without selection when required', () => {
           const element = fixture('EFTouchRequiredFixture');
