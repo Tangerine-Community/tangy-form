@@ -287,6 +287,16 @@
           assert.equal(element.value.selection, 'bird')
         })
 
+        test('should resume', () => {
+          const element = fixture('EFTouchFixture');
+          element.value = {
+            "startTime": 1562069141106,
+            "selectionTime": 1562069146071,
+            "selection": "bird"
+          }
+          assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 1)
+        })
+
         test('should auto-progress after selection', () => {
           const element = fixture('EFTouchAutoProgressFixture');
           let eventDidFire = false
@@ -420,7 +430,6 @@
         test('should be able to skip given correctness of prior entry in a set of items')
         test('can group questions to be able to calculate % correct in a group')
         test('should leave fullscreen after 5 times pressing x button');
-        test('should resume')
 
       })
 
