@@ -23,6 +23,16 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="EFTouchDisabledOptionFixture">
+      <template>
+        <tangy-eftouch name="animal_selection" label="Which is your favorite animal?">
+            <option width=30 height=50 src="assets/images/bird.png" value="bird"></option>
+            <option width=30 height=50 disabled></option>
+            <option width=30 height=50 src="assets/images/cow.png" value="cow"></option>
+          </tangy-eftouch>
+      </template>
+    </test-fixture>
+
     <test-fixture id="UnusualLayoutFixture">
       <template>
           <tangy-eftouch name="cat_selection" label="Which is your favorite cat?">
@@ -310,6 +320,13 @@
           assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 1)
         })
 
+        test('should have disabled option that cannot be selected', () => {
+          const element = fixture('EFTouchDisabledOptionFixture');
+          element.shadowRoot.querySelectorAll('img')[0].click()
+          element.shadowRoot.querySelectorAll('img')[1].click()
+          assert.equal(element.value.selection, 'bird')
+        })
+
         test('should auto-progress after selection', () => {
           const element = fixture('EFTouchAutoProgressFixture');
           let eventDidFire = false
@@ -328,10 +345,7 @@
         test('should make an open sound', () => { 
           const element = fixture('EFTouchOpenSoundFixture')
           // No way to programatically test this...
-          debugger
         })
-
-
 
         test('should give warning message after hitting warning time', (done) => { 
           const element = fixture('EFTouchWarningFixture')

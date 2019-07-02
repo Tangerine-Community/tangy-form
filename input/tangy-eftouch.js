@@ -261,33 +261,41 @@ export class TangyEftouch extends PolymerElement {
           ${option.hasAttribute('correct') ? 'correct' : ''}
           ${
             this.hasAttribute('multi-select')
-              ? this.value.selection.includes(option.value) ? `selected` : ``
-              : this.value.selection === option.value ? `selected` : ``
+              ? !option.hasAttribute('disabled') && this.value.selection.includes(option.value) ? `selected` : ``
+              : !option.hasAttribute('disabled') && this.value.selection === option.value ? `selected` : ``
           }
           style="
             display: inline-block;
             width:${Math.floor((option.getAttribute('width')/100)*this.width)}px;
             height:${Math.floor((option.getAttribute('height')/100)*(this.height-60))}px;
           ">
-          ${option.getAttribute('src') ? `
-            <img 
-              value="${option.value}" 
-              
+          <img 
+            ${option.hasAttribute('disabled') ? `disabled` : ''}
+            value="${option.value}" 
+            ${!option.hasAttribute('src') || option.getAttribute('src') === '' ? `
+              disabled
+              style="
+                height: 100%;
+                width: 100%;
+              " 
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNgYAAAAAMAASsJTYQAAAAASUVORK5CYII="
+            ` : `
               style="
                 max-height: 100%;
                 max-width: 100%;
-              " 
-              src="${option.getAttribute('src')}">
-          ` : ``}
+              "
+              src="${option.getAttribute('src')}"
+            `}
+          >
         </span>
       `).join('')}
       </div>
     `
-    this.shadowRoot.querySelectorAll('img').forEach(el => el.addEventListener('click', _ => this.onSelection(_.target)))
+    this.shadowRoot.querySelectorAll('img:not([disabled])').forEach(el => el.addEventListener('click', _ => this.onSelection(_.target)))
   }
 
   onSelection(target) {
-    if (this.disabled === true) return
+    if (this.disabled === true || target.hasAttribute('disabled')) return
     if (this.hasAttribute('no-corrections') && this.value && this.value.correct === false) {
       // Do nothing.
       return
