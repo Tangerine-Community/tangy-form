@@ -56,6 +56,11 @@ export class TangyEftouch extends PolymerElement {
         value: '',
         reflectToAttribute: true
       },
+      openSound: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       transitionDelay: {
         type: Number,
         value: 0,
@@ -134,6 +139,7 @@ export class TangyEftouch extends PolymerElement {
 
   connectedCallback () {
     super.connectedCallback()
+    if (this.openSound) new Audio(this.openSound).play()
     if (!this.width) {
       this.width = document.documentElement.offsetWidth
     }
