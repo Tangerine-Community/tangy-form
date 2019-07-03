@@ -68,22 +68,22 @@ export class TangyAcasi extends PolymerElement {
       },
       introSrc: {
         type: String,
-        value: '../content/assets/sounds/1.mp3'
+        value: './assets/sounds/1.mp3'
       },
       transitionSrc: {
         type: String,
-        value: '../content/assets/sounds/swish.mp3'
+        value: './assets/sounds/swish.mp3'
       },
       touchSrc: {
         type: String,
-        value: '../content/assets/sounds/pop.mp3'
+        value: './assets/sounds/pop.mp3'
       },
       touchSources: {
         type: Array
       },
       images: {
         type: String,
-        value: '../content/assets/images/never.png,../content/assets/images/once.png,../content/assets/images/few.png,../content/assets/images/many.png'
+        value: './assets/images/never.png,./assets/images/once.png,./assets/images/few.png,./assets/images/many.png'
       },
       onChange: {
         type: String,
@@ -156,6 +156,7 @@ export class TangyAcasi extends PolymerElement {
       button.name = name
       if (this.disabled) button.setAttribute('disabled', true)
       let imageEl = document.createElement('img')
+      // TODO append '../' to src
       imageEl.src = src
       imageEl.className = "acasi-image";
       button.innerHTML = imageEl.outerHTML
@@ -180,7 +181,7 @@ export class TangyAcasi extends PolymerElement {
 
   ready() {
     super.ready();
-    const transition_sound_url = '../content/assets/sounds/swish.mp3'
+    const transition_sound_url = './assets/sounds/swish.mp3'
 
     if (this.getAttribute('introSrc')) {
       this.introSound = new Audio(this.getAttribute('introSrc'));
