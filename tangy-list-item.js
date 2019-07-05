@@ -34,7 +34,7 @@ export class TangyListItem extends PolymerElement {
   }
 
   static get _props() {
-   return ['name','value','label','disabled','invalid','incomplete','hidden']
+   return ['name','value','label','disabled','invalid','incomplete','hidden','correct']
   }
 
   static get properties () {
@@ -65,6 +65,11 @@ export class TangyListItem extends PolymerElement {
         reflectToAttribute: true
       },
       hidden: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      correct: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
