@@ -68,22 +68,22 @@ export class TangyAcasi extends PolymerElement {
       },
       introSrc: {
         type: String,
-        value: '../content/assets/sounds/1.mp3'
+        value: './assets/sounds/1.mp3'
       },
       transitionSrc: {
         type: String,
-        value: '../content/assets/sounds/swish.mp3'
+        value: './assets/sounds/swish.mp3'
       },
       touchSrc: {
         type: String,
-        value: '../content/assets/sounds/pop.mp3'
+        value: './assets/sounds/pop.mp3'
       },
       touchSources: {
         type: Array
       },
       images: {
         type: String,
-        value: '../content/assets/images/never.png,../content/assets/images/once.png,../content/assets/images/few.png,../content/assets/images/many.png'
+        value: './assets/images/never.png,./assets/images/once.png,./assets/images/few.png,./assets/images/many.png'
       },
       onChange: {
         type: String,
@@ -156,6 +156,7 @@ export class TangyAcasi extends PolymerElement {
       button.name = name
       if (this.disabled) button.setAttribute('disabled', true)
       let imageEl = document.createElement('img')
+      // TODO append '../' to src
       imageEl.src = src
       imageEl.className = "acasi-image";
       button.innerHTML = imageEl.outerHTML
@@ -180,14 +181,15 @@ export class TangyAcasi extends PolymerElement {
 
   ready() {
     super.ready();
-    const transition_sound_url = '../content/assets/sounds/swish.mp3'
+    const transition_sound_url = './assets/sounds/swish.mp3'
 
     if (this.getAttribute('introSrc')) {
-      this.transitionSound = new Audio(this.getAttribute('introSrc'));
+      this.introSound = new Audio(this.getAttribute('introSrc'));
     } else {
-      this.transitionSound = new Audio(transition_sound_url);
+      this.introSound = new Audio(transition_sound_url);
     }
-    this.transitionSound.play();
+    this.introSound.load();
+    setTimeout(() => this.introSound.play(), 0);
 
     if (this.getAttribute('touchsrc')) {
       this.touchSources = this.getAttribute('touchsrc').split(",")
@@ -255,15 +257,12 @@ export class TangyAcasi extends PolymerElement {
     if (!this.isReady) return
     // The value we dispatch is the event.target.name. Remember, that's the option that was just selected
     // and the option's name selected is the value of this element.
-    this.dispatchEvent(new CustomEvent('INPUT_VALUE_CHANGE', {
-      detail: {
-        inputName: this.name,
-        inputValue: event.target.name,
-        inputInvalid: false,
-        inputIncomplete: false
-      },
-      bubbles: true
-    }))
+    let newValue = []
+    this.shadowRoot
+        .querySelectorAll('paper-radio-button')
+        .forEach(el => newValue.push(el.getProps()))
+    this.value = event.target.name
+    this.dispatchEvent(new CustomEvent('change'))
   }
 
   onValueChange(value) {
@@ -282,7 +281,8 @@ export class TangyAcasi extends PolymerElement {
 
   replay() {
     console.log('Replay')
-    this.transitionSound.play();
+    this.introSound = new Audio(this.getAttribute('introSrc'));
+    this.introSound.play();
   }
 
 }

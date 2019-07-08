@@ -112,4 +112,45 @@ export class TangyFormItemHelpers {
   gridAutoStopped(input) {
     return !!input.value.find(el => el.gridAutoStopped)
   }
+  hideInputsUponThreshhold(el) {
+    let shouldDisable = false
+    const correctEls = el.shadowRoot.querySelector("#content").querySelectorAll('[correct]')
+    if (correctEls.length > 0) {
+      let inputEls = [...el.shadowRoot.querySelector("#content").children].filter(el => el.hasAttribute("name"))
+      let selectedIndex = [];
+      let concurrentIncorrectCount = 0
+      let previousIncorrect = 0;
+      inputEls.forEach((input, index) => {
+        const correctEls = input.querySelectorAll('[correct]')
+        const correctSelections = Array.from(correctEls).map(optionEl => optionEl.value)
+        let currentSelection = input.value.find(element => element.value === 'on')
+        if (currentSelection) {
+          if (!correctSelections.join().includes(currentSelection.name)) {
+            selectedIndex = [...selectedIndex, index]
+            if (index == ++previousIncorrect) {
+              ++concurrentIncorrectCount
+            } else {
+              concurrentIncorrectCount = 1
+            }
+            previousIncorrect = index
+          } else {
+            // reset concurrentIncorrectCount
+            // console.log("Correct answer; resetting concurrentIncorrectCount to 0")
+            concurrentIncorrectCount = 0
+          }
+        }
+      }, [])
+      // console.log(" selectedIndex: " + JSON.stringify(selectedIndex) + " concurrentIncorrectCount: " + concurrentIncorrectCount + " previousIncorrect: " + previousIncorrect)
+      shouldDisable = concurrentIncorrectCount >= el.incorrectThreshold ? true : false
+      if (shouldDisable === true) {
+        let highest = Math.max(...selectedIndex) + 1
+        // console.log("Making the subsequent inputs hidden starting with " + highest)
+        let inputsToHide = inputEls.slice(highest)
+        inputsToHide.forEach((inputEl, index) => {
+          inputEl.hidden = true
+        })
+      }
+    }
+    return shouldDisable
+  }
 }

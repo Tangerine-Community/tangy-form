@@ -78,6 +78,45 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyFormItemAutoStopFixture">
+      <template>
+        <tangy-form id="autostop-radio" title="autostop radio">
+          <tangy-form-item id="item1" incorrect-threshold="2">
+            <tangy-radio-buttons name="fruit_selection1" label="What is your favorite fruit?">
+              <option name="tangerine">Tangerine</option>
+              <option name="cantalope">Cantalope</option>
+              <option name="cherry" correct>Cherry</option>
+            </tangy-radio-buttons>
+            <tangy-radio-buttons name="fruit_selection2" label="What is your favorite fruit?">
+              <option name="tangerine">Tangerine</option>
+              <option name="cantalope">Cantalope</option>
+              <option name="cherry" correct>Cherry</option>
+            </tangy-radio-buttons>
+            <tangy-radio-buttons name="fruit_selection3" label="What is your favorite fruit?">
+              <option name="tangerine">Tangerine</option>
+              <option name="cantalope" correct>Cantalope</option>
+              <option name="cherry">Cherry</option>
+            </tangy-radio-buttons>
+            <tangy-radio-buttons name="fruit_selection4" label="What is your favorite fruit?">
+              <option name="tangerine">Tangerine</option>
+              <option name="cantalope" correct>Cantalope</option>
+              <option name="cherry">Cherry</option>
+            </tangy-radio-buttons>
+            <tangy-radio-buttons name="fruit_selection5" label="What is your favorite fruit?">
+              <option name="tangerine">Tangerine</option>
+              <option name="cantalope" correct>Cantalope</option>
+              <option name="cherry">Cherry</option>
+            </tangy-radio-buttons>
+            <tangy-radio-buttons name="fruit_selection6" label="What is your favorite fruit?">
+              <option name="tangerine">Tangerine</option>
+              <option name="cantalope" correct>Cantalope</option>
+              <option name="cherry">Cherry</option>
+            </tangy-radio-buttons>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import '../tangy-form.js'
@@ -86,6 +125,7 @@
       import '../input/tangy-box.js'
       import '../input/tangy-radio-buttons.js'
       import '../input/tangy-checkboxes.js'
+      import { TangyFormItemHelpers } from '../tangy-form-item-callback-helpers.js'
       suite('tangy-form-item', () => {
         test('should go to next item on input "next" event', () => {
           const element = fixture('TangyFormItemFixture');
@@ -126,6 +166,24 @@
           el.value = 'on'
           element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkboxes').dispatchEvent(new CustomEvent('next'))
           assert.equal(element.querySelector('tangy-form-item').open, false)
+        })
+        test('should autostop after 2 answers.', () => {
+          const sleep = (milliseconds) => new Promise((res) => setTimeout(() => res(true), milliseconds))
+          const element = fixture('TangyFormItemAutoStopFixture');
+          element.newResponse()
+          let formItem = element.querySelector('tangy-form-item')
+          let el1 = formItem.shadowRoot.querySelector('[name=fruit_selection1]').value
+                  .find(input => (input.name === 'Tangerine'))
+          el1.value = 'on'
+          let helpers = new TangyFormItemHelpers(formItem)
+          let hideInputsUponThreshhold = (input) => helpers.hideInputsUponThreshhold(input)
+          let disable = hideInputsUponThreshhold(formItem)
+          assert.equal(disable, false)
+          let el2 = formItem.shadowRoot.querySelector('[name=fruit_selection2]').value
+                  .find(input => (input.name === 'Tangerine'))
+          el2.value = 'on'
+          disable = hideInputsUponThreshhold(formItem)
+          assert.equal(disable, true)
         })
       })
     </script>
