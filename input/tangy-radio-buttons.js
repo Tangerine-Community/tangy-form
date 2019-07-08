@@ -147,11 +147,6 @@ class TangyRadioButtons extends PolymerElement {
         value: false,
         observer: 'reflect',
         reflecttoattribute: true
-      },
-      correctValue: {
-        type: String,
-        value: '',
-        reflectToAttribute: true
       }
     }
   }
@@ -240,7 +235,7 @@ class TangyRadioButtons extends PolymerElement {
 
   }
 
-  validate(inputEls) {
+  validate() {
     let foundOne = false
     this.shadowRoot.querySelectorAll('[name]').forEach(el => {
       if (el.value === 'on') foundOne = true

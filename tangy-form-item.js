@@ -546,8 +546,6 @@ export class TangyFormItem extends PolymerElement {
         validInputNames.push(input.name)
       }
     }
-    // let disable = this.hideInputsUponThreshhold(inputEls)
-    // console.log("disable: " + disable)
     if (invalidInputNames.length !== 0) {
       this.shadowRoot
         .querySelector(`[name="${invalidInputNames[0]}"]`)

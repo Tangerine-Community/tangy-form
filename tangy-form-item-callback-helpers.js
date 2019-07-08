@@ -113,7 +113,6 @@ export class TangyFormItemHelpers {
     return !!input.value.find(el => el.gridAutoStopped)
   }
   hideInputsUponThreshhold(el) {
-    debugger;
     let shouldDisable = false
     const correctEls = el.shadowRoot.querySelector("#content").querySelectorAll('[correct]')
     if (correctEls.length > 0) {
