@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## v3.18.0
+- Add support for autostop in tangy-radio-buttons and path changes for the tangy-acasi widget [#49](https://github.com/Tangerine-Community/tangy-form/pull/49)
+  - Autostop is implemented by using the hideInputsUponThreshhold helper, which takes a tangy-form-item element and compares the number of correct radio button answers to the value in its incorrect-threshold attribute.
+    
+    Usage: `<tangy-form-item id="item1" incorrect-threshold="2">`
+  - A new "correct" attribute has been added to tangy-list-item to store the correct value.
+    
+    Usage: 
+    ```
+    <tangy-radio-buttons name="fruit_selection2" label="What is your favorite fruit?">
+      <option name="tangerine">Tangerine</option>
+      <option name="cherry" correct>Cherry</option>
+    </tangy-radio-buttons>
+    ```
+
 ## v3.17.0
 - Add support for eftouch multi-select attribute and multiple values of correct options [#48](https://github.com/Tangerine-Community/tangy-form/pull/48)
 
