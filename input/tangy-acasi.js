@@ -98,7 +98,8 @@ export class TangyAcasi extends PolymerElement {
       },
       required: {
         type: Boolean,
-        value: false
+        value: false,
+        reflectToAttribute: true
       },
       disabled: {
         type: Boolean,
@@ -283,6 +284,16 @@ export class TangyAcasi extends PolymerElement {
     console.log('Replay')
     this.introSound = new Audio(this.getAttribute('introSrc'));
     this.introSound.play();
+  }
+
+  validate() {
+    if (this.required && this.value === '') {
+      this.invalid = true
+      return false
+    } else {
+      this.invalid = false
+      return true
+    }
   }
 
 }
