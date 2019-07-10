@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.19.0
+- Add validate function to tangy-acasi input in order to enable 'required' feature.
+
 ## v3.18.0
 - Add support for autostop in tangy-radio-buttons and path changes for the tangy-acasi widget [#49](https://github.com/Tangerine-Community/tangy-form/pull/49)
   - Autostop is implemented by using the hideInputsUponThreshhold helper, which takes a tangy-form-item element and compares the number of correct radio button answers to the value in its incorrect-threshold attribute.
