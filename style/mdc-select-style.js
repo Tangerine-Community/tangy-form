@@ -22,9 +22,9 @@ $_documentStyleContainer.innerHTML = `
     font-family: Roboto, sans-serif;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
-    font-size: 1rem;
+    font-size: var(--tangy-select-container-font-size, 1rem);
     width: 100%;
-    line-height: 1.75rem;
+    line-height: var(--tangy-select-container-line-height, 1.75rem);
     font-weight: 400;
     letter-spacing: 0.04em;
     text-decoration: inherit;
@@ -45,7 +45,7 @@ $_documentStyleContainer.innerHTML = `
             justify-content: flex-start;
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
-    height: 56px;
+    height: var(--tangy-select-container-height, 56px);
     border: none;
     border-radius: 4px 4px 0 0;
     outline: none;
@@ -71,8 +71,8 @@ $_documentStyleContainer.innerHTML = `
       font-family: Roboto, sans-serif;
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
-      font-size: 1rem;
-      line-height: 1.75rem;
+      font-size: var(--tangy-select-font-size, 1rem);
+      line-height: var(--tangy-select-line-height, 1.75rem);
       font-weight: 400;
       letter-spacing: 0.04em;
       text-decoration: inherit;
@@ -80,8 +80,8 @@ $_documentStyleContainer.innerHTML = `
       /* @alternate */
       color: rgba(0, 0, 0, 0.87);
       color: var(--mdc-theme-text-primary-on-light, rgba(0, 0, 0, 0.87));
-      padding-left: 16px;
-      padding-right: 26px;
+      padding-left: var(--tangy-select-padding-left, 16px);
+      padding-right: var(--tangy-select-padding-right, 26px);
       --mdc-ripple-fg-size: 0;
       --mdc-ripple-left: 0;
       --mdc-ripple-top: 0;
@@ -98,11 +98,11 @@ $_documentStyleContainer.innerHTML = `
           -ms-flex-positive: 1;
               flex-grow: 1;
       width: 100%;
-      height: 56px;
+      height: var(--tangy-select-height, 56px);
       border: none;
-      border-radius: 4px 4px 0 0;
+      border-radius: var(--tangy-select-border-radius, 4px 4px 0 0);
       outline: none;
-      background-color: rgba(0, 0, 0, 0.04);
+      background-color: var(--tangy-select-background-color, rgba(0, 0, 0, 0.04));
       -webkit-appearance: none;
          -moz-appearance: none;
               appearance: none;
@@ -266,7 +266,7 @@ $_documentStyleContainer.innerHTML = `
       transition: -webkit-transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
       transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
       transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
-      background-color: rgba(0, 0, 0, 0.5); }
+      background-color: var(--tangy-select-bottom-line-background-color, rgba(0, 0, 0, 0.5)); }
       .mdc-select__bottom-line::after {
         /* @alternate */
         background-color: var(--primary-color);
@@ -432,7 +432,9 @@ $_documentStyleContainer.innerHTML = `
     }
   /* End of Materialize Select Styles */
 
-
+  label:empty {
+    margin: 0;
+  }
 
 
 
