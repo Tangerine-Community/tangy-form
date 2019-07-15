@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.20.0
+- Adding variables so that the select element may be styled. [#50](https://github.com/Tangerine-Community/tangy-form/pull/50)
+
 ## v3.19.0
 - Add validate function to tangy-acasi input in order to enable 'required' feature.
 
