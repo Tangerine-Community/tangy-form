@@ -586,7 +586,10 @@ export class TangyFormItem extends PolymerElement {
   }
 
   onExitFullscreenClick() {
-    this.dispatchEvent(new CustomEvent('exit-fullscreen', { bubbles: true }))
+    this._exitClicks = this._exitClicks ? 1 : this._exitClicks + 1
+    if ((!this.hasAttribute('exit-clicks')) || (this.hasAttribute('exit-clicks') && exitClicks >= parseInt(this.getAttribute('exit-clicks')))) {
+      this.dispatchEvent(new CustomEvent('exit-fullscreen', { bubbles: true }))
+    }
   }
 
   onEnterFullscreenClick() {
