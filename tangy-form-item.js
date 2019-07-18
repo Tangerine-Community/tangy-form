@@ -72,24 +72,23 @@ export class TangyFormItem extends PolymerElement {
         :host([hidden]) {
           display: none;
         }
-        :host([fullscreen]) paper-card {
-          width: 100%;
-          max-width: 100% !important;
-          height: 100vh;
-        }
 
        /*
         * Fullscreen 
         */
-
-        :host([fullscreen]) {
+        :host([fullscreen-enabled]) paper-card {
+          width: 100%;
+          max-width: 100% !important;
+          height: 100vh;
+        }
+        :host([fullscreen-enabled]) {
           margin: 0px
         }
-        :host([fullscreen]) paper-card  {
+        :host([fullscreen-enabled]) paper-card  {
           padding-top: 53px;
           overflow: scroll;
         }
-        :host([fullscreen]) .card-actions {
+        :host([fullscreen-enabled]) .card-actions {
           position: fixed;
           top: 0px;
           width: 100%;
@@ -97,36 +96,36 @@ export class TangyFormItem extends PolymerElement {
           padding: 0px;
           margin: 0px;
         }
-        :host([fullscreen]) paper-button {
+        :host([fullscreen-enabled]) paper-button {
           background: white;
           color: grey;
         }
-        :host([fullscreen]) paper-button#complete {
+        :host([fullscreen-enabled]) paper-button#complete {
           float: right;
           margin: 15px;
           background: green;
           color: white; 
         }
-        :host([fullscreen]) paper-button#complete paper-button {
+        :host([fullscreen-enabled]) paper-button#complete paper-button {
           display: none;
         }
-        :host([fullscreen]) label.heading {
+        :host([fullscreen-enabled]) label.heading {
           display: none;
         }
-        :host([fullscreen]) .card-content {
+        :host([fullscreen-enabled]) .card-content {
           padding-top: 0px;
         }
         :host(:not([fullscreen])) #enable-fullscreen,
         :host(:not([fullscreen])) #disable-fullscreen,
         :host([fullscreen]:not([fullscreen-enabled])) #disable-fullscreen,
         :host([fullscreen]):host([fullscreen-enabled]) #enable-fullscreen
-         {
+        {
           display: none;
         }
         #disable-fullscreen,
-        #enable-fullscreen
+        #enable-fullscreen 
         {
-          position: fixed;
+          position: absolute;
           left: 50%;
           transform: translateX(-50%);  
         }
