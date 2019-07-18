@@ -116,6 +116,21 @@ export class TangyFormItem extends PolymerElement {
         :host([fullscreen]) .card-content {
           padding-top: 0px;
         }
+        :host(:not([fullscreen])) #enable-fullscreen,
+        :host(:not([fullscreen])) #disable-fullscreen,
+        :host([fullscreen]:not([fullscreen-enabled])) #disable-fullscreen,
+        :host([fullscreen]):host([fullscreen-enabled]) #enable-fullscreen
+         {
+          display: none;
+        }
+        #disable-fullscreen,
+        #enable-fullscreen
+        {
+          position: fixed;
+          left: 50%;
+          transform: translateX(-50%);  
+        }
+
 
         /*
         * Action Buttons
@@ -171,6 +186,12 @@ export class TangyFormItem extends PolymerElement {
           <div id="content"></div>
         </div>
         <div class="card-actions">
+          <paper-button id="disable-fullscreen" on-click="onExitFullscreenClick" >
+            <iron-icon icon="fullscreen-exit"></iron-icon>
+          </paper-button>
+          <paper-button id="enable-fullscreen" on-click="onEnterFullscreenClick" >
+            <iron-icon icon="fullscreen"></iron-icon>
+          </paper-button>
           <template is="dom-if" if="{{!hideButtons}}">
             <paper-button id="open" on-click="onOpenButtonPress">[[t.open]]</paper-button>
             <template is="dom-if" if="{{!locked}}">
@@ -245,6 +266,11 @@ export class TangyFormItem extends PolymerElement {
         reflectToAttribute: true
       },
       fullscreen: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      fullscreenEnabled: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
@@ -558,6 +584,14 @@ export class TangyFormItem extends PolymerElement {
       this.fireHook('on-change')
       return true
     }
+  }
+
+  onExitFullscreenClick() {
+    this.dispatchEvent(new CustomEvent('exit-fullscreen', { bubbles: true }))
+  }
+
+  onEnterFullscreenClick() {
+    this.dispatchEvent(new CustomEvent('enter-fullscreen', { bubbles: true }))
   }
 
   next() {

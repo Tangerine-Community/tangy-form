@@ -406,6 +406,13 @@ export class TangyForm extends PolymerElement {
         this.newResponse()
       }
     })
+
+    this.addEventListener('enter-fullscreen', () => {
+      this.store.dispatch({type: 'ENTER_FULLSCREEN'})
+    })
+    this.addEventListener('exit-fullscreen', () => {
+      this.store.dispatch({type: 'EXIT_FULLSCREEN'})
+    })
     
   }
 
@@ -543,10 +550,13 @@ export class TangyForm extends PolymerElement {
       this.dispatchEvent(new CustomEvent('ALL_ITEMS_CLOSED'))
     }
 
-    if (this.previousState.form.fullscreen && !state.form.fullscreen) {
-      if(document.webkitExitFullscreen) document.webkitExitFullscreen()
-      if(document.exitFullscreen) document.exitFullscreen()
-      this.removeEventListener('click', this.enableFullscreen, true)
+    if (state.form.fullscreen) {
+      if (!this.previousState.fullscreenEnabled && state.fullscreenEnabled) {
+        this.enableFullscreen()
+      }
+      else if (this.previousState.fullscreenEnabled && !state.fullscreenEnabled) {
+        this.disableFullscreen()
+      }
     }
 
     // Stash as previous state.
@@ -623,6 +633,12 @@ export class TangyForm extends PolymerElement {
     let state = this.store.getState()
     let item = state.items.find(item => item.open)
     this.store.dispatch({ type: 'ITEM_NEXT', itemId: item.id })
+  }
+
+  disableFullscreen() {
+    if(document.webkitExitFullscreen) document.webkitExitFullscreen()
+    if(document.exitFullscreen) document.exitFullscreen()
+    this.removeEventListener('click', this.enableFullscreen, true)
   }
 
   enableFullscreen() {
