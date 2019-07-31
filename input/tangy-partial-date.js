@@ -239,13 +239,14 @@ class TangyPartialDate extends PolymerElement {
 
   onTodayClick(event) {
     const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const yyyy = today.getFullYear();
-    this.value = yyyy + '-' + mm + '-' + dd;
-    this.shadowRoot.querySelector("select[name='day']").value = yyyy;
-    this.shadowRoot.querySelector("select[name='month']").value = mm;
-    this.shadowRoot.querySelector("select[name='year']").value = dd;
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+    this.value = year + '-' + month + '-' + day;
+    this.shadowRoot.querySelector("select[name='day']").value = year;
+    this.shadowRoot.querySelector("select[name='month']").value = month;
+    this.shadowRoot.querySelector("select[name='year']").value = day;
+    this.render()
     console.log('Date value updated to ' + this.value);
   }
 
@@ -274,17 +275,23 @@ class TangyPartialDate extends PolymerElement {
   validate() {
     if (this.required && !this.hidden && !this.disabled && !this.value) {
       this.invalid = true;
+      console.log("Missing date");
       return false;
-    } 
+    }    
     if (!this.isValidDate(this.value)) {
       this.invalid = true;
+      console.log("Invalid date");
       return false;
     }
-    // Check for future date
 
-      this.invalid = false
-      return true
+    if (this.disallowFutureDate && this.isFutureDate(this.value)) {
+      this.invalid = true;
+      console.log('Future date');
+      return false;
     }
+    this.invalid = false
+    return true
+  }
 
   reflect() {
     this.allowUnknownDay = typeof this.attributes.allowUnknownDay !== 'undefined' ? true : false;
@@ -307,6 +314,35 @@ class TangyPartialDate extends PolymerElement {
 
   unpad(a) {
     return +a;
+  }
+
+  isFutureDate(dateValue) {
+    const today = new Date();
+    const enteredDay = this.unpad(dateValue.split("-")[2]);
+    const enteredMonth = this.unpad(dateValue.split("-")[1]);
+    const enteredYear = dateValue.split("-")[0]; 
+    if (enteredDay !== '' && enteredDay !== 99 && enteredMonth !== '' && enteredMonth !== 99) {
+      const fullDate = new Date(enteredYear, enteredMonth - 1, enteredDay);
+      if (fullDate > today) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    if (enteredMonth !== '' && enteredMonth !== 99) {
+      const imputedDate = new Date(enteredYear, enteredMonth - 1, 1);
+      if (imputedDate > today) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    const imputedDate = new Date(enteredYear, 0, 1);
+      if (imputedDate > today) {
+        return true;
+      } else {
+        return false;
+      }
   }
 
   isValidDate(str) {
