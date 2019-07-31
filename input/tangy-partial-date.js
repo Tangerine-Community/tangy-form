@@ -19,26 +19,26 @@ class TangyPartialDate extends PolymerElement {
     <style include="tangy-common-styles"></style>
     <style include="mdc-select-style"></style>
     <style>
-    .partial-date-select {
-      background-image: url(data:image/svg+xml,%3Csvg%20width%3D%2210px%22%20height%3D%225px%22%20viewBox%3D%227%2010%2010%205%22%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%0A%20%20%20%20%3Cpolygon%20id%3D%22Shape%22%20stroke%3D%22none%22%20fill%3D%22%230%22%20fill-rule%3D%22evenodd%22%20opacity%3D%220.54%22%20points%3D%227%2010%2012%2015%2017%2010%22%3E%3C%2Fpolygon%3E%0A%3C%2Fsvg%3E);
-      background-repeat: no-repeat;
-      background-position: right 10px center;
-      border-bottom: 1px solid black;
-    }
-    .partial-date-format {
-      background-image: none;
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
-    .partial-date-float {
-      float:left;
-      margin-right:20px;
-    }
-    .partial-date-headings {
-      color: black;
-      font-size: medium;
-      font-weight: normal;
-    }
+      .partial-date-select {
+        background-image: url(data:image/svg+xml,%3Csvg%20width%3D%2210px%22%20height%3D%225px%22%20viewBox%3D%227%2010%2010%205%22%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%0A%20%20%20%20%3Cpolygon%20id%3D%22Shape%22%20stroke%3D%22none%22%20fill%3D%22%230%22%20fill-rule%3D%22evenodd%22%20opacity%3D%220.54%22%20points%3D%227%2010%2012%2015%2017%2010%22%3E%3C%2Fpolygon%3E%0A%3C%2Fsvg%3E);
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        border-bottom: 1px solid black;
+      }
+      .partial-date-format {
+        background-image: none;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+      .partial-date-float {
+        float:left;
+        margin-right:20px;
+      }
+      .partial-date-headings {
+        color: black;
+        font-size: medium;
+        font-weight: normal;
+      }
     </style>
     <div id="container"></div>
     `;
@@ -72,11 +72,6 @@ class TangyPartialDate extends PolymerElement {
         reflectToAttribute: true
       },
       label: {
-        type: String,
-        value: '',
-        reflectToAttribute: true
-      },
-      secondaryLabel: {
         type: String,
         value: '',
         reflectToAttribute: true
@@ -123,7 +118,13 @@ class TangyPartialDate extends PolymerElement {
         observer: 'render',
         reflectToAttribute: true
       },
-      allowFutureDate: {
+      disallowFutureDate: {
+        type: Boolean,
+        value: true,
+        observer: 'render',
+        reflectToAttribute: true
+      },
+      showTodayButton: {
         type: Boolean,
         value: true,
         observer: 'render',
@@ -159,10 +160,9 @@ class TangyPartialDate extends PolymerElement {
     const unknownText = combTranslations("<t-lang en>Unknown</t-lang><t-lang fr>inconnu</t-lang>");
     this.allowUnknownDay && days.push(99);
     this.allowUnknownMonth && months.push(unknownText);
-    this.$.container.innerHTML = '';
 
     this.$.container.innerHTML = `
-      <label for="group">${combTranslations(this.label)}</label>
+      <label for="group">${this.label}</label>
       <label class="hint-text">${this.hintText}</label>
       <div class="mdc-select partial-date-format">
         <div class='partial-date-float'>
@@ -197,11 +197,20 @@ class TangyPartialDate extends PolymerElement {
                 </option>
               `)}
             </select>
-        </div>
+        </div>  
+        ${(this.showTodayButton ? `
+          <paper-button style="margin-top:30px; height:30px; text-transform:capitalize" id="today" on-click="setToday"><t-lang en>Today</t-lang><t-lang fr>Aujourd'hui</t-lang></paper-button>` : '' 
+        )}
       </div>
       <input type='hidden'></input>
     `;
-
+    if (this.showTodayButton) {
+      this._onClickListener = this
+        .shadowRoot
+        .querySelector('paper-button')
+        .addEventListener('click', this.onTodayClick.bind(this))
+      this.dispatchEvent(new CustomEvent('render'))
+    }
     this._onChangeListener = this
       .shadowRoot
       .querySelector('select[name="day"]')
@@ -226,7 +235,18 @@ class TangyPartialDate extends PolymerElement {
       this.shadowRoot.querySelector("select[name='month']").value = this.unpad(dateValue.split("-")[1]);
       this.shadowRoot.querySelector("select[name='year']").value = dateValue.split("-")[0];  
     }
-    
+  }
+
+  onTodayClick(event) {
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+    this.value = yyyy + '-' + mm + '-' + dd;
+    this.shadowRoot.querySelector("select[name='day']").value = yyyy;
+    this.shadowRoot.querySelector("select[name='month']").value = mm;
+    this.shadowRoot.querySelector("select[name='year']").value = dd;
+    console.log('Date value updated to ' + this.value);
   }
 
   onChange(event) {
@@ -273,6 +293,8 @@ class TangyPartialDate extends PolymerElement {
     this.numericMonth = typeof this.attributes.numericMonth !== 'undefined' ? true : false;
     this.minYear = typeof this.attributes.minYear !== 'undefined' ? this.attributes.minYear.value : 2010;
     this.maxYear = typeof this.attributes.maxYear !== 'undefined' ? this.attributes.maxYear.value : new Date().getFullYear();
+    this.disallowFutureDate = typeof this.attributes.disallowFutureDate !== 'undefined' ? true : false;
+    this.showTodayButton  = typeof this.attributes.showTodayButton !== 'undefined' ? true : false;
   }
 
   pad(a,b) {
@@ -281,10 +303,12 @@ class TangyPartialDate extends PolymerElement {
     } else {
       return '';
     }
-  };
+  }
+
   unpad(a) {
     return +a;
   }
+
   isValidDate(str) {
     var parts = str.split('-');
     if (parts.length < 3)
@@ -316,6 +340,6 @@ class TangyPartialDate extends PolymerElement {
         return true;
     }
   }
-
 }
+
 window.customElements.define(TangyPartialDate.is, TangyPartialDate);
