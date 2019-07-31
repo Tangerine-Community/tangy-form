@@ -57,20 +57,23 @@
                 <li><strong>allowUnknownMonth:</strong> boolean to indicate that a month is not required</li>    
                 <li><strong>allowUnknownYear:</strong> boolean to indicate that a year is not required</li>    
                 <li><strong>minYear:</strong> earliest year accepted</li>    
-                <li><strong>maxYear:</strong> latest year acceptedf</li>    
+                <li><strong>maxYear:</strong> latest year accepted</li>    
                 <li><strong>numericMonth:</strong> boolean to indicate month should be displayed numerically</li>    
                 <li><strong>missingDateErrorText:</strong> custom error text for missing date</li>
                 <li><strong>invalidDateErrorText:</strong> custom error text for invalid date</li> 
                 <li><strong>futureDateErrorText:</strong> custom error text for future date</li>    
-                <li><strong>value:</strong> default value in yyyy-mm-dd format</li>            
+                <li><strong>value:</strong> default value in yyyy-mm-dd format</li>
+                <li><strong>questionNumber:</strong> optional question number</li>            
               </ul>
               <tangy-form-item id="item1">
-                <tangy-partial-date name="test" label="
-                  <t-lang en>1. Please enter the child's date of birth.</t-lang>
-                  <t-lang fr>1. S'il vous plaît entrer la date de naissance de l'enfant.</t-lang>"
+                <tangy-partial-date name="test" questionNumber="25." label="
+                  <t-lang en>Please enter the child's date of birth.</t-lang>
+                  <t-lang fr>S'il vous plaît entrer la date de naissance de l'enfant.</t-lang>"
                 hint-text="
-                  <t-lang en>A partial date is <b>allowed</b>.</t-lang>
-                  <t-lang fr>Une date partielle <b>est autorisée.</b></t-lang>"
+                  <t-lang en>Please enter the complete date of birth if known. If the complete date of birth is not known, please enter as much information as possible. A partial date is allowed.</t-lang>
+                  <t-lang fr>S'il vous plaît entrer la date de naissance complète si connue. Si la date de naissance complète n'est pas connue, veuillez entrer autant d'informations que possible. Une date partielle est autorisée.</t-lang>"
+                  futureDateErrorText="<t-lang en>You have entered a date that is in the future but the child's date of birth must be in the past. Please review the date and make an appropriate correction.</t-lang><t-lang fr>
+                      Vous avez entré une date future, mais la date de naissance de l'enfant doit être passée. Veuillez revoir la date et apporter une correction appropriée.</t-lang>"
                 required disallowFutureDate showTodayButton allowUnknownDay allowUnknownMonth  minYear="1990" maxYear="2020">
               </tangy-partial-date> 
           </tangy-form-item>

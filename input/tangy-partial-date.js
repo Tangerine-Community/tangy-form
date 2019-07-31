@@ -36,17 +36,31 @@ class TangyPartialDate extends PolymerElement {
       }
       .partial-date-headings {
         color: black;
-        font-size: medium;
+        font-size: s;
         font-weight: normal;
       }
       #errorText {
-        padding: 10px 10px 10px 10px;
+        padding: 10px 10px 10px 0px;
         font-size: medium;
         font-weight: bold;
         color: var(--error-color);
       }
+      :host([invalid]) {
+        border: none;
+      }
+      #container {
+        margin-left:30px;
+      }
+      label.hint-text {
+        color: gray;
+        font-size: 1em;
+        font-weight: lighter;
+    }
     </style>
-    <div id="container"></div>
+    <div>
+      <div id="qnum" style="float:left;"></div>
+      <div id="container"></div>
+    </div>
     `;
   }
 
@@ -160,6 +174,12 @@ class TangyPartialDate extends PolymerElement {
         value: "",
         observer: 'render',
         reflectToAttribute: true
+      },
+      questionNumber: {
+        type: String,
+        value: "",
+        observer: 'render',
+        reflectToAttribute: true
       }
     }
   }
@@ -191,6 +211,8 @@ class TangyPartialDate extends PolymerElement {
     const unknownText = combTranslations("<t-lang en>Unknown</t-lang><t-lang fr>inconnu</t-lang>");
     this.allowUnknownDay && days.push(99);
     this.allowUnknownMonth && months.push(unknownText);
+
+    this.$.qnum.innerHTML = `<label>${this.questionNumber}</label>`;
 
     this.$.container.innerHTML = `
       <label for="group">${this.label}</label>
@@ -229,13 +251,16 @@ class TangyPartialDate extends PolymerElement {
               `)}
             </select>
         </div>  
-        ${(this.showTodayButton ? `
-          <paper-button style="margin-top:30px; height:30px; text-transform:capitalize" id="today" on-click="setToday"><t-lang en>Today</t-lang><t-lang fr>Aujourd'hui</t-lang></paper-button>` : '' 
+        ${(this.showTodayButton ? ` 
+          <paper-button style="margin-top:30px; height:40px; text-transform:capitalize" id="today" on-click="setToday">
+            <iron-icon icon="query-builder"></iron-icon>&nbsp;
+            <t-lang en>Today</t-lang><t-lang fr>Aujourd'hui</t-lang>
+          </paper-button>` : '' 
         )}
       </div>
       <div id="errorText">
-        ${(this.errorText !== "" ? `<iron-icon icon="error"></iron-icon>` : '')}
-        ${this.errorText}
+        ${(this.errorText !== "" ? `<div style="float:left;margin-right:10px;"><iron-icon icon="error""></iron-icon></div><div style="margin-left:35px;">` : '')}
+        ${this.errorText}</div>
       </div>      
       <input type='hidden'></input>
     `;
@@ -340,6 +365,7 @@ class TangyPartialDate extends PolymerElement {
     this.missingDateErrorText = typeof this.attributes.missingDateErrorText !== 'undefined' ? this.attributes.missingDateErrorText.value : "<t-lang en>The date is missing. Please enter a valid date.</t-lang><t-lang fr>La date n'est pas manquante. Veuillez entrer une date valide.</t-lang>";
     this.invalidDateErrorText = typeof this.attributes.invalidDateErrorText !== 'undefined' ? this.attributes.invalidDateErrorText.value : "<t-lang en>The date is not valid. Please enter a valid date.</t-lang><t-lang fr>La date n'est pas valide. Veuillez entrer une date valide.</t-lang>";
     this.futureDateErrorText = typeof this.attributes.futureDateErrorText !== 'undefined' ? this.attributes.futureDateErrorText.value : "<t-lang en>The data cannot be in the future. Please enter a date on or before today.</t-lang><t-lang fr>Les données ne peuvent pas être dans le futur. Veuillez entrer une date au plus tard aujourd'hui.</t-lang>";
+    this.questionNumber = typeof this.attributes.questionNumber !== 'undefined' ? this.attributes.questionNumber.value : "";
   }
 
   pad(a,b) {
