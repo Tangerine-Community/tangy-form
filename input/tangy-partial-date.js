@@ -39,6 +39,12 @@ class TangyPartialDate extends PolymerElement {
         font-size: medium;
         font-weight: normal;
       }
+      #errorText {
+        padding: 10px 10px 10px 10px;
+        font-size: medium;
+        font-weight: bold;
+        color: var(--error-color);
+      }
     </style>
     <div id="container"></div>
     `;
@@ -82,7 +88,9 @@ class TangyPartialDate extends PolymerElement {
       },
       invalid: {
         type: Boolean,
-        value: false
+        value: false,
+        observer: 'reflect',
+        reflectToAttribute: true
       },
       incomplete: {
         type: Boolean,
@@ -129,6 +137,29 @@ class TangyPartialDate extends PolymerElement {
         value: true,
         observer: 'render',
         reflectToAttribute: true
+      },
+      errorText: {
+        type: String,
+        value: '',
+        observer: 'render'
+      },
+      missingDateErrorText: {
+        type: String,
+        value: "",
+        observer: 'render',
+        reflectToAttribute: true
+      },
+      invalidDateErrorText: {
+        type: String,
+        value: "",
+        observer: 'render',
+        reflectToAttribute: true
+      },
+      futureDateErrorText: {
+        type: String,
+        value: "",
+        observer: 'render',
+        reflectToAttribute: true
       }
     }
   }
@@ -141,7 +172,7 @@ class TangyPartialDate extends PolymerElement {
   }
   
   render() {
-    const months = [
+     const months = [
       "<t-lang en>January</t-lang><t-lang fr>janvier</t-lang>",
       "<t-lang en>February</t-lang><t-lang fr>fèvrier</t-lang>",
       "<t-lang en>March</t-lang><t-lang fr>mars</t-lang>",
@@ -202,6 +233,10 @@ class TangyPartialDate extends PolymerElement {
           <paper-button style="margin-top:30px; height:30px; text-transform:capitalize" id="today" on-click="setToday"><t-lang en>Today</t-lang><t-lang fr>Aujourd'hui</t-lang></paper-button>` : '' 
         )}
       </div>
+      <div id="errorText">
+        ${(this.errorText !== "" ? `<iron-icon icon="error"></iron-icon>` : '')}
+        ${this.errorText}
+      </div>      
       <input type='hidden'></input>
     `;
     if (this.showTodayButton) {
@@ -275,20 +310,20 @@ class TangyPartialDate extends PolymerElement {
   validate() {
     if (this.required && !this.hidden && !this.disabled && !this.value) {
       this.invalid = true;
-      console.log("Missing date");
+      this.errorText = this.missingDateErrorText;
       return false;
     }    
     if (!this.isValidDate(this.value)) {
       this.invalid = true;
-      console.log("Invalid date");
+      this.errorText = this.invalidDateErrorText;
       return false;
     }
-
     if (this.disallowFutureDate && this.isFutureDate(this.value)) {
       this.invalid = true;
-      console.log('Future date');
+      this.errorText = this.futureDateErrorText;
       return false;
     }
+    this.errorText = "";
     this.invalid = false
     return true
   }
@@ -302,6 +337,9 @@ class TangyPartialDate extends PolymerElement {
     this.maxYear = typeof this.attributes.maxYear !== 'undefined' ? this.attributes.maxYear.value : new Date().getFullYear();
     this.disallowFutureDate = typeof this.attributes.disallowFutureDate !== 'undefined' ? true : false;
     this.showTodayButton  = typeof this.attributes.showTodayButton !== 'undefined' ? true : false;
+    this.missingDateErrorText = typeof this.attributes.missingDateErrorText !== 'undefined' ? this.attributes.missingDateErrorText.value : "<t-lang en>The date is missing. Please enter a valid date.</t-lang><t-lang fr>La date n'est pas manquante. Veuillez entrer une date valide.</t-lang>";
+    this.invalidDateErrorText = typeof this.attributes.invalidDateErrorText !== 'undefined' ? this.attributes.invalidDateErrorText.value : "<t-lang en>The date is not valid. Please enter a valid date.</t-lang><t-lang fr>La date n'est pas valide. Veuillez entrer une date valide.</t-lang>";
+    this.futureDateErrorText = typeof this.attributes.futureDateErrorText !== 'undefined' ? this.attributes.futureDateErrorText.value : "<t-lang en>The data cannot be in the future. Please enter a date on or before today.</t-lang><t-lang fr>Les données ne peuvent pas être dans le futur. Veuillez entrer une date au plus tard aujourd'hui.</t-lang>";
   }
 
   pad(a,b) {
