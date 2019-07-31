@@ -32,7 +32,7 @@ class TangyPartialDate extends PolymerElement {
       }
       .partial-date-float {
         float:left;
-        margin-right:20px;
+        margin-right:15px;
       }
       .partial-date-headings {
         color: black;
