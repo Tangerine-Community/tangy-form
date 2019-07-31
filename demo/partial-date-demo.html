@@ -42,29 +42,29 @@
   </head>
   <body>
     <div class="vertical-section-container centered">
-      <h3>Tangy-form Partial Date Web Component</h3>
-      <p>The <strong>tangy-partial-date</strong> web component is a configureable date picker component with the following options:</p>
-      <ul>
-        <li><strong>name:</strong> control/variable name</li>
-        <li><strong>label:</strong> question text (can be html)</li>
-        <li><strong>hint-text:</strong> extra information displayed under the question</li>
-        <li><strong>disallowFutureDate:</strong> boolean to disallow future dates</li>
-        <li><strong>showTodayButton:</strong> boolean to enable a button to insert the current date</li>    
-        <li><strong>allowUnknownDay:</strong> boolean to indicate that a day is not required</li>    
-        <li><strong>allowUnknownMonth:</strong> boolean to indicate that a month is not required</li>    
-        <li><strong>allowUnknownYear:</strong> boolean to indicate that a year is not required</li>    
-        <li><strong>minYear:</strong> earliest year accepted</li>    
-        <li><strong>maxYear:</strong> latest year acceptedf</li>    
-        <li><strong>numericMonth:</strong> boolean to indicate month should be displayed numerically</li>    
-        <li><strong>missingDateErrorText:</strong> custom error text for missing date</li>
-        <li><strong>invalidDateErrorText:</strong> custom error text for invalid date</li> 
-        <li><strong>futureDateErrorText:</strong> custom error text for future date</li>    
-        <li><strong>value:</strong> default value in yyyy-mm-dd format</li>            
-      </ul>
-      <demo-snippet>
-        <template> 
+     <demo-snippet>
+        <template>      
           <tangy-form id="my-form" title="My Form">
-            <tangy-form-item id="item1">
+              <h3>Tangy-form Partial Date Web Component</h3>
+              <p>The <strong>tangy-partial-date</strong> web component is a configurable date picker component with the following options:</p>
+              <ul>
+                <li><strong>name:</strong> control/variable name</li>
+                <li><strong>label:</strong> question text (can be html)</li>
+                <li><strong>hint-text:</strong> extra information displayed under the question</li>
+                <li><strong>disallowFutureDate:</strong> boolean to disallow future dates</li>
+                <li><strong>showTodayButton:</strong> boolean to enable a button to insert the current date</li>    
+                <li><strong>allowUnknownDay:</strong> boolean to indicate that a day is not required</li>    
+                <li><strong>allowUnknownMonth:</strong> boolean to indicate that a month is not required</li>    
+                <li><strong>allowUnknownYear:</strong> boolean to indicate that a year is not required</li>    
+                <li><strong>minYear:</strong> earliest year accepted</li>    
+                <li><strong>maxYear:</strong> latest year acceptedf</li>    
+                <li><strong>numericMonth:</strong> boolean to indicate month should be displayed numerically</li>    
+                <li><strong>missingDateErrorText:</strong> custom error text for missing date</li>
+                <li><strong>invalidDateErrorText:</strong> custom error text for invalid date</li> 
+                <li><strong>futureDateErrorText:</strong> custom error text for future date</li>    
+                <li><strong>value:</strong> default value in yyyy-mm-dd format</li>            
+              </ul>
+              <tangy-form-item id="item1">
                 <tangy-partial-date name="test" label="
                   <t-lang en>1. Please enter the child's date of birth.</t-lang>
                   <t-lang fr>1. S'il vous plaît entrer la date de naissance de l'enfant.</t-lang>"
@@ -73,10 +73,10 @@
                   <t-lang fr>Une date partielle <b>est autorisée.</b></t-lang>"
                 required disallowFutureDate showTodayButton allowUnknownDay allowUnknownMonth  minYear="1990" maxYear="2020">
               </tangy-partial-date> 
-             </tangy-form-item>
-          </tangy-form>
-        </template>
-      </demo-snippet>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </demo-snippet>
     </div>
   </body>
 </html>
