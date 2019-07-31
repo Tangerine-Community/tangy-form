@@ -36,7 +36,7 @@ class TangyPartialDate extends PolymerElement {
       }
       .partial-date-headings {
         color: black;
-        font-size: s;
+        font-size: smaller;
         font-weight: normal;
       }
       #errorText {
