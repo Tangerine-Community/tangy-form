@@ -137,7 +137,6 @@ class TangyPartialDate extends PolymerElement {
       numericMonth: {
         type: Boolean,
         value: false,
-        observer: 'render',
         reflectToAttribute: true
       },
       disallowFutureDate: {
@@ -159,19 +158,19 @@ class TangyPartialDate extends PolymerElement {
       },
       missingDateErrorText: {
         type: String,
-        value: "",
+        value: "<t-lang en>The date is missing. Please enter a valid date.</t-lang><t-lang fr>La date n'est pas manquante. Veuillez entrer une date valide.</t-lang>",
         observer: 'render',
         reflectToAttribute: true
       },
       invalidDateErrorText: {
         type: String,
-        value: "",
+        value: "<t-lang en>The date is not valid. Please enter a valid date.</t-lang><t-lang fr>La date n'est pas valide. Veuillez entrer une date valide.</t-lang>",
         observer: 'render',
         reflectToAttribute: true
       },
       futureDateErrorText: {
         type: String,
-        value: "",
+        value: "<t-lang en>The date cannot be in the future. Please enter a date that is on or before today.</t-lang><t-lang>La date ne peut pas être dans le futur. S'il vous plaît entrer une date qui est sur ou avant aujourd'hui.</t-lang>",
         observer: 'render',
         reflectToAttribute: true
       },
@@ -211,7 +210,6 @@ class TangyPartialDate extends PolymerElement {
     this.allowUnknownMonth && months.push(unknownText);
 
     this.$.qnum.innerHTML = `<label>${this.questionNumber}</label>`;
-
     this.$.container.innerHTML = `
       <label for="group">${this.label}</label>
       <label class="hint-text">${this.hintText}</label>
@@ -233,7 +231,7 @@ class TangyPartialDate extends PolymerElement {
             <option value="" default selected disabled></option>
             ${months.map((month, i) => `
               <option value="${(month === unknownText ? 99 : months.indexOf(month) + 1)}">
-                ${(this.numericMonth ? (month === unknownText ? 99 : months.indexOf(month) + 1) : (month === unknownText ? unknownText : combTranslations(month)))}
+                ${(this.numericMonth ? (month === unknownText ? unknownText : months.indexOf(month) + 1) : (month === unknownText ? unknownText : combTranslations(month)))}
               </option>
             `)}    
           </select>
@@ -260,33 +258,26 @@ class TangyPartialDate extends PolymerElement {
         ${(this.errorText !== "" ? `<div style="float:left;margin-right:10px;"><iron-icon icon="error""></iron-icon></div><div style="margin-left:35px;">` : '')}
         ${this.errorText}</div>
       </div>      
-      <input type='hidden'></input>
     `;
     if (this.showTodayButton) {
       this._onClickListener = this
         .shadowRoot
         .querySelector('paper-button')
         .addEventListener('click', this.onTodayClick.bind(this))
-      this.dispatchEvent(new CustomEvent('render'))
     }
     this._onChangeListener = this
       .shadowRoot
       .querySelector('select[name="day"]')
-      .addEventListener('change', this.onChange.bind(this))
-    this.dispatchEvent(new CustomEvent('render'))
-
+      .addEventListener('change', this.onChange.bind(this));
     this._onChangeListener = this
       .shadowRoot
       .querySelector('select[name="month"]')
-      .addEventListener('change', this.onChange.bind(this))
-    this.dispatchEvent(new CustomEvent('render'))
-
+      .addEventListener('change', this.onChange.bind(this));
     this._onChangeListener = this
       .shadowRoot
       .querySelector('select[name="year"]')
-      .addEventListener('change', this.onChange.bind(this))
+      .addEventListener('change', this.onChange.bind(this));
     this.dispatchEvent(new CustomEvent('render'))
-
     if (this.value !== '') {
       const dateValue = this.value;
       this.shadowRoot.querySelector("select[name='day']").value = this.unpad(dateValue.split("-")[2]);
@@ -304,41 +295,26 @@ class TangyPartialDate extends PolymerElement {
     this.shadowRoot.querySelector("select[name='day']").value = year;
     this.shadowRoot.querySelector("select[name='month']").value = month;
     this.shadowRoot.querySelector("select[name='year']").value = day;
-    this.render()
-    console.log('Date value updated to ' + this.value);
+    this.render();
   }
 
   onChange(event) {
-    if (event.target.type === 'hidden' | event.target.type === 'text') {
-      const dateValue = event.target.value;
-      if (dateValue === '') {
-        this.shadowRoot.querySelector("select[name='day']").value = '';
-        this.shadowRoot.querySelector("select[name='month']").value = '';
-        this.shadowRoot.querySelector("select[name='year']").value = '';
-      } else {
-        this.shadowRoot.querySelector("select[name='day']").value = this.unpad(dateValue.split("-")[2]);
-        this.shadowRoot.querySelector("select[name='month']").value = this.unpad(dateValue.split("-")[1]);
-        this.shadowRoot.querySelector("select[name='year']").value = dateValue.split("-")[0];    
-      }
-    }
-
     this.value =  this.shadowRoot.querySelector("select[name='year']").value + '-' +
                   this.pad(this.shadowRoot.querySelector("select[name='month']").value,2) + '-' +
                   this.pad(this.shadowRoot.querySelector("select[name='day']").value,2);
-
     console.log("Date value updated to " + this.value);          
-    this.dispatchEvent(new CustomEvent('change'))
+    this.dispatchEvent(new CustomEvent('change'));
   }
 
   validate() {
     if (this.required && !this.hidden && !this.disabled && !this.value) {
       this.invalid = true;
-      this.errorText = (this.missingDateErrorText === '' ? "<t-lang en>The date is missing. Please enter a valid date.</t-lang><t-lang fr>La date n'est pas manquante. Veuillez entrer une date valide.</t-lang>" : this.missingDateErrorText);
+      this.errorText = this.missingDateErrorText;
       return false;
     }    
     if (!this.isValidDate(this.value)) {
       this.invalid = true;
-      this.errorText = (this.invalidDateErrorText === '' ? "<t-lang en>The date is not valid. Please enter a valid date.</t-lang><t-lang fr>La date n'est pas valide. Veuillez entrer une date valide.</t-lang>" : this.invalidDateErrorText);
+      this.errorText = this.invalidDateErrorText;
       return false;
     }
     if (this.disallowFutureDate && this.isFutureDate(this.value)) {
@@ -347,8 +323,8 @@ class TangyPartialDate extends PolymerElement {
       return false;
     }
     this.errorText = "";
-    this.invalid = false
-    return true
+    this.invalid = false;
+    return true;
   }
 
   pad(a,b) {
@@ -395,32 +371,34 @@ class TangyPartialDate extends PolymerElement {
   isValidDate(str) {
     var parts = str.split('-');
     if (parts.length < 3)
-        return false;
+      return false;
     else {
-        var day = parseInt(parts[2]);
-        var month = parseInt(parts[1]);
-        var year = parseInt(parts[0]);
-        if (isNaN(day) || isNaN(month) || isNaN(year)) {
-            return false;
-        }
-        if (day < 1 || year < 1)
-            return false;
-        if((month>12||month<1) & month !== 99)
-            return false;
-        if ((month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) && day > 31 && day !== 99)
-            return false;
-        if ((month == 4 || month == 6 || month == 9 || month == 11 ) && day > 30 & day !== 99)
-            return false;
-        if (month == 2) {
-            if (((year % 4) == 0 && (year % 100) != 0) || ((year % 400) == 0 && (year % 100) == 0)) {
-                if (day > 29)
-                    return false;
-            } else {
-                if (day > 28)
-                    return false;
-            }      
-        }
-        return true;
+      var day = parseInt(parts[2]);
+      var month = parseInt(parts[1]);
+      var year = parseInt(parts[0]);
+      if (isNaN(day) || isNaN(month) || isNaN(year)) {
+          return false;
+      }
+      if (day < 1 || year < 1)
+          return false;
+      if((month>12||month<1) & month !== 99)
+          return false;
+      if ((month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) && day > 31 && day !== 99)
+          return false;
+      if ((month == 4 || month == 6 || month == 9 || month == 11 ) && day > 30 & day !== 99)
+          return false;
+      if (month == 2) {
+        if (day === 99)
+          return true;
+        if (((year % 4) == 0 && (year % 100) != 0) || ((year % 400) == 0 && (year % 100) == 0)) {
+            if (day > 29)
+                return false;
+        } else {
+            if (day > 28)
+                return false;
+        }      
+      }
+      return true;
     }
   }
 }
