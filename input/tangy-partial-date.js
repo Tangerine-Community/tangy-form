@@ -136,7 +136,7 @@ class TangyPartialDate extends PolymerElement {
       },
       numericMonth: {
         type: Boolean,
-        value: true,
+        value: false,
         observer: 'render',
         reflectToAttribute: true
       },
@@ -333,12 +333,12 @@ class TangyPartialDate extends PolymerElement {
   validate() {
     if (this.required && !this.hidden && !this.disabled && !this.value) {
       this.invalid = true;
-      this.errorText = this.missingDateErrorText;
+      this.errorText = (this.missingDateErrorText === '' ? "<t-lang en>The date is missing. Please enter a valid date.</t-lang><t-lang fr>La date n'est pas manquante. Veuillez entrer une date valide.</t-lang>" : this.missingDateErrorText);
       return false;
     }    
     if (!this.isValidDate(this.value)) {
       this.invalid = true;
-      this.errorText = this.invalidDateErrorText;
+      this.errorText = (this.invalidDateErrorText === '' ? "<t-lang en>The date is not valid. Please enter a valid date.</t-lang><t-lang fr>La date n'est pas valide. Veuillez entrer une date valide.</t-lang>" : this.invalidDateErrorText);
       return false;
     }
     if (this.disallowFutureDate && this.isFutureDate(this.value)) {
