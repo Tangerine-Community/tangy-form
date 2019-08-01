@@ -103,7 +103,7 @@ class TangyPartialDate extends PolymerElement {
       invalid: {
         type: Boolean,
         value: false,
-        observer: 'reflect',
+        observer: 'render',
         reflectToAttribute: true
       },
       incomplete: {
@@ -125,7 +125,7 @@ class TangyPartialDate extends PolymerElement {
       allowUnknownDay: {
         type: Boolean,
         value: true,
-        observer: 'reflect',
+        observer: 'render',
         reflectToAttribute: true
       },
       allowUnknownMonth: {
@@ -186,8 +186,6 @@ class TangyPartialDate extends PolymerElement {
 
   connectedCallback() {
     super.connectedCallback()
-    const observer = new MutationObserver(this.render.bind(this))
-    observer.observe(this, { attributes: true, childList: true, subtree: true })
     this.render()
   }
   
@@ -351,21 +349,6 @@ class TangyPartialDate extends PolymerElement {
     this.errorText = "";
     this.invalid = false
     return true
-  }
-
-  reflect() {
-    this.allowUnknownDay = typeof this.attributes.allowUnknownDay !== 'undefined' ? true : false;
-    this.allowUnknownMonth = typeof this.attributes.allowUnknownMonth !== 'undefined' ? true : false;
-    this.allowUnknownYear = typeof this.attributes.allowUnknownYear !== 'undefined' ? true : false;
-    this.numericMonth = typeof this.attributes.numericMonth !== 'undefined' ? true : false;
-    this.minYear = typeof this.attributes.minYear !== 'undefined' ? this.attributes.minYear.value : 2010;
-    this.maxYear = typeof this.attributes.maxYear !== 'undefined' ? this.attributes.maxYear.value : new Date().getFullYear();
-    this.disallowFutureDate = typeof this.attributes.disallowFutureDate !== 'undefined' ? true : false;
-    this.showTodayButton  = typeof this.attributes.showTodayButton !== 'undefined' ? true : false;
-    this.missingDateErrorText = typeof this.attributes.missingDateErrorText !== 'undefined' ? this.attributes.missingDateErrorText.value : "<t-lang en>The date is missing. Please enter a valid date.</t-lang><t-lang fr>La date n'est pas manquante. Veuillez entrer une date valide.</t-lang>";
-    this.invalidDateErrorText = typeof this.attributes.invalidDateErrorText !== 'undefined' ? this.attributes.invalidDateErrorText.value : "<t-lang en>The date is not valid. Please enter a valid date.</t-lang><t-lang fr>La date n'est pas valide. Veuillez entrer une date valide.</t-lang>";
-    this.futureDateErrorText = typeof this.attributes.futureDateErrorText !== 'undefined' ? this.attributes.futureDateErrorText.value : "<t-lang en>The data cannot be in the future. Please enter a date on or before today.</t-lang><t-lang fr>Les données ne peuvent pas être dans le futur. Veuillez entrer une date au plus tard aujourd'hui.</t-lang>";
-    this.questionNumber = typeof this.attributes.questionNumber !== 'undefined' ? this.attributes.questionNumber.value : "";
   }
 
   pad(a,b) {
