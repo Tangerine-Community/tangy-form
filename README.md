@@ -8,9 +8,9 @@ An element for multipage forms.
 - Loads of handy input elements such as `<tangy-gps>`.
 - Easy to write logic for the form for hiding / showing and disabling / enabled inputs.
 
-Play with the [demo on glitch](https://tangy-form-demo.glitch.me/).
+Try out the [demos on glitch](https://tangy-form-demo.glitch.me/) or get started creating your own Tangy Form on [CodePen](https://codepen.io/rjsteinert/pen/RXxwmP).
 
-![screenshot](demo/screenshot.png)
+[![screenshot](demo/screenshot.png)](https://codepen.io/rjsteinert/pen/RXxwmP)
 
 
 <!--
@@ -56,6 +56,16 @@ You can re-enable the form by using disableItemReadOnly() (and showItemButtons()
 
 ## Installation
 `<tangy-form>` is a Custom Element built with Polymer and can be used in frameworks such as Angular, React, and Vue. Check compatibility with your project's framework on [Custom Elements Everywhere](https://custom-elements-everywhere.com/).  If you are ready to go, run `npm install --save tangy-form` to add it to your project. Depending on your build system/framework, there may be different steps to take to get Web Components loading.
+
+### Install using the CDN
+A quick and easy way to get started with Tangy Form in your app is to add the necessary script tags to import dependencies from CDNs. The following should be all you need to get started.
+
+```
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/2.2.10/webcomponents-loader.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.4/redux.js"></script>
+  <script src="https://unpkg.com/tangy-form@3.21.0/dist/bundle.js" type="module"></script>
+```
+
 
 ### Install in a Polymer v3 project
 ```
