@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.21.0
+- Add support for distributing bundles in `dist/bundle.js`.
+
 ## v3.20.0
 - Adding variables so that the select element may be styled. [#50](https://github.com/Tangerine-Community/tangy-form/pull/50)
 
