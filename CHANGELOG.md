@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.22.0
+- Add new `<tangy-partial-date>` input for capturing partial dates. See `demo/partial-date-demo.html` for a demo.
+
 ## v3.21.0
 - Add support for distributing bundles in `dist/bundle.js`.
 
