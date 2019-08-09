@@ -101,12 +101,15 @@ export class TangyFormItemHelpers {
     return Math.round(numberOfItemsCorrect / (timeSpent / 60))
   }
   numberOfItemsAttempted(input) {
+    if (!input) return
     return input.value.findIndex(el => el.highlighted) + 1
   }
   numberOfCorrectItems(input) {
+    if (!input) return
     return (this.numberOfItemsAttempted(input) - this.numberOfIncorrectItems(input))
   }
   numberOfIncorrectItems(input) {
+    if (!input) return
     return input.value.filter(el => el.value).length
   }
   gridAutoStopped(input) {
