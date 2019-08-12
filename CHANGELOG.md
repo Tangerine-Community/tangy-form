@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.22.1
+- Fix resuming a `<tangy-parial-date>` and use of boolean attributes. [#62](https://github.com/Tangerine-Community/tangy-form/pull/62)
+
 ## v3.22.0
 - Add new `<tangy-partial-date>` input for capturing partial dates. See `demo/partial-date-demo.html` for a demo.
 
