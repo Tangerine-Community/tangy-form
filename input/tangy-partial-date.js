@@ -75,7 +75,8 @@ class TangyPartialDate extends PolymerElement {
       value: {
         type: String,
         value: '',
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        observer: 'render'
       },
       hintText: {
         type: String,
@@ -124,13 +125,16 @@ class TangyPartialDate extends PolymerElement {
       },
       allowUnknownDay: {
         type: Boolean,
-        value: true,
         observer: 'render',
         reflectToAttribute: true
       },
       allowUnknownMonth: {
         type: Boolean,
-        value: true,
+        observer: 'render',
+        reflectToAttribute: true
+      },
+      allowUnknownYear: {
+        type: Boolean,
         observer: 'render',
         reflectToAttribute: true
       },
@@ -141,13 +145,11 @@ class TangyPartialDate extends PolymerElement {
       },
       disallowFutureDate: {
         type: Boolean,
-        value: true,
         observer: 'render',
         reflectToAttribute: true
       },
       showTodayButton: {
         type: Boolean,
-        value: true,
         observer: 'render',
         reflectToAttribute: true
       },
@@ -189,6 +191,7 @@ class TangyPartialDate extends PolymerElement {
   }
   
   render() {
+
      const months = [
       "<t-lang en>January</t-lang><t-lang fr>janvier</t-lang>",
       "<t-lang en>February</t-lang><t-lang fr>fèvrier</t-lang>",
@@ -208,6 +211,7 @@ class TangyPartialDate extends PolymerElement {
     const unknownText = combTranslations("<t-lang en>Unknown</t-lang><t-lang fr>inconnu</t-lang>");
     this.allowUnknownDay && days.push(99);
     this.allowUnknownMonth && months.push(unknownText);
+    this.allowUnknownYear && years.push(9999);
 
     this.$.qnum.innerHTML = `<label>${this.questionNumber}</label>`;
     this.$.container.innerHTML = `
@@ -242,7 +246,7 @@ class TangyPartialDate extends PolymerElement {
               <option value="" default selected disabled></option>
               ${years.map((year, i) => `
                 <option value="${year}">
-                  ${year}
+                ${(year === 9999 ? combTranslations("<t-lang en>Unknown</t-lang><t-lang fr>inconnu</t-lang>") : year)}
                 </option>
               `)}
             </select>
