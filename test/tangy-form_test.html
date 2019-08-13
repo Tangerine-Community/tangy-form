@@ -222,39 +222,39 @@
         test('hello world without errors', () => {
           const element = fixture('HelloWorldFixture');
           element.newResponse()
-          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
+          assert.equal(element.querySelector('tangy-form-item').innerText, 'Hello world.');
         });
 
         test('hello world with caught errors in logic', () => {
           const element = fixture('ErrorInLogicFixture');
           element.newResponse()
           assert.equal(element.shadowRoot.querySelectorAll('.error').length, 5)
-          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
+          assert.equal(element.querySelector('tangy-form-item').innerText, 'Hello world.');
         });
 
         test('hello world from template without errors', () => {
           const element = fixture('HelloWorldFromTemplateFixture');
           element.newResponse()
-          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('#content').innerText, 'Hello world.');
+          assert.equal(element.querySelector('tangy-form-item').innerText, 'Hello world.');
         });
 
         test('should submit and be able to review an item', function() {
           let element = fixture('HelloWorldWithInputFixture')
           element.newResponse()
           element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
-          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').value = 'foo'
+          element.querySelector('#item1').querySelector('[name=input1]').value = 'foo'
           element.querySelector('#item1').shadowRoot.querySelector('#complete').click()
           element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
           element.querySelector('#item1').shadowRoot.querySelector('#open').click()
-          assert.equal(element.querySelector('#item1').shadowRoot.querySelector('[name="input1"]').value, 'foo')
+          assert.equal(element.querySelector('#item1').querySelector('[name="input1"]').value, 'foo')
         })
 
         test('should contain location information', (done) => {
           let element = fixture('FormWithLocationFixture')
           element.newResponse()
           element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
-          element.querySelector('#item1').shadowRoot.querySelector('[name=location]').addEventListener('location-list-loaded', () => {
-            element.querySelector('#item1').shadowRoot.querySelector('[name=location]').value = [
+          element.querySelector('#item1').querySelector('[name=location]').addEventListener('location-list-loaded', () => {
+            element.querySelector('#item1').querySelector('[name=location]').value = [
               {
                 "level": "county",
                 "value": "county1"
@@ -274,36 +274,36 @@
         test('tangy-form-item.on-open should run', () => {
           const element = fixture('OnOpenTestFixture');
           element.newResponse()
-          assert.equal(element.querySelector('#item-1').shadowRoot.querySelector('[name=input1]').value, 'foo');
+          assert.equal(element.querySelector('#item-1').querySelector('[name=input1]').value, 'foo');
         });
 
         test('should hide and show input according to tangy-if and tangy-action attributes', () => {
           const element = fixture('TangyIfFixture1');
           element.newResponse()
-          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').value = 'on'
-          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').dispatchEvent(new Event('change'))
-          assert.equal(element.querySelector('#item1').shadowRoot.querySelector('[name=input2]').hidden, true)
-          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').value = ''
-          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').dispatchEvent(new Event('change'))
-          assert.equal(element.querySelector('#item1').shadowRoot.querySelector('[name=input2]').hidden, false)
+          element.querySelector('#item1').querySelector('[name=input1]').value = 'on'
+          element.querySelector('#item1').querySelector('[name=input1]').dispatchEvent(new Event('change'))
+          assert.equal(element.querySelector('#item1').querySelector('[name=input2]').hidden, true)
+          element.querySelector('#item1').querySelector('[name=input1]').value = ''
+          element.querySelector('#item1').querySelector('[name=input1]').dispatchEvent(new Event('change'))
+          assert.equal(element.querySelector('#item1').querySelector('[name=input2]').hidden, false)
 
         });
 
         test('should enable and disable input according to tangy-if and tangy-action attributes', () => {
           const element = fixture('TangyIfFixture2');
           element.newResponse()
-          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').value = 'on'
-          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').dispatchEvent(new Event('change'))
-          assert.equal(element.querySelector('#item1').shadowRoot.querySelector('[name=input2]').disabled, true)
-          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').value = ''
-          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').dispatchEvent(new Event('change'))
-          assert.equal(element.querySelector('#item1').shadowRoot.querySelector('[name=input2]').disabled, false)
+          element.querySelector('#item1').querySelector('[name=input1]').value = 'on'
+          element.querySelector('#item1').querySelector('[name=input1]').dispatchEvent(new Event('change'))
+          assert.equal(element.querySelector('#item1').querySelector('[name=input2]').disabled, true)
+          element.querySelector('#item1').querySelector('[name=input1]').value = ''
+          element.querySelector('#item1').querySelector('[name=input1]').dispatchEvent(new Event('change'))
+          assert.equal(element.querySelector('#item1').querySelector('[name=input2]').disabled, false)
         });
 
         test('should skip item and be hidden after form complete', () => {
           const element = fixture('SkipItemTestFixture');
           element.newResponse()
-          element.querySelector('#item1').shadowRoot.querySelector('[name=input1]').value = 'on'
+          element.querySelector('#item1').querySelector('[name=input1]').value = 'on'
           // Force dom-if to not defer render so buttons are shown.
           element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
           element.querySelector('#item1').shadowRoot.querySelector('#next').click()
@@ -400,7 +400,7 @@
           }
           // Go back and item and see if input1 has been assigned the resumed value of "foo".
           element.back()
-          assert.equal(element.querySelector('tangy-form-item#item-1').shadowRoot.querySelector('[name=input1]').value, 'foo')
+          assert.equal(element.querySelector('tangy-form-item#item-1').querySelector('[name=input1]').value, 'foo')
         });
 
         test('can resume response and on-open override an input with a new value', () => {
@@ -469,17 +469,17 @@
             "progress": 0
           }
           // Response has input1's value set to bar, should be set to "foo" by on-open logic.
-          assert.equal(element.querySelector('tangy-form-item#item-1').shadowRoot.querySelector('[name=input1]').value, 'foo')
+          assert.equal(element.querySelector('tangy-form-item#item-1').querySelector('[name=input1]').value, 'foo')
         });
 
         test('tangy-form-item.open-open hook should getValue() from previous item ', () => {
           const element = fixture('GetValueTestFixture');
           element.newResponse()
-          element.querySelector('#item-1').shadowRoot.querySelector('[name=foo]').value = 'Hello world.'
-          element.querySelector('#item-1').shadowRoot.querySelector('[name=foo]').dispatchEvent(new CustomEvent('change'))
-          assert.equal(element.querySelector('#item-1').shadowRoot.querySelector('[name=bar]').value, 'Hello world.');
+          element.querySelector('#item-1').querySelector('[name=foo]').value = 'Hello world.'
+          element.querySelector('#item-1').querySelector('[name=foo]').dispatchEvent(new CustomEvent('change'))
+          assert.equal(element.querySelector('#item-1').querySelector('[name=bar]').value, 'Hello world.');
           element.querySelector('#item-1').next()
-          assert.equal(element.querySelector('#item-2').shadowRoot.querySelector('[name=baz]').value, 'Hello world.');
+          assert.equal(element.querySelector('#item-2').querySelector('[name=baz]').value, 'Hello world.');
         });
 
         test('new response should start on the first item not disabled', () => {

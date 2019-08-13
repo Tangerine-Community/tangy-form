@@ -130,41 +130,41 @@
         test('should go to next item on input "next" event', () => {
           const element = fixture('TangyFormItemFixture');
           element.newResponse()
-          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-input').dispatchEvent(new CustomEvent('next'))
+          element.querySelector('tangy-form-item').querySelector('tangy-input').dispatchEvent(new CustomEvent('next'))
           assert.equal(element.querySelectorAll('tangy-form-item')[1].open, true)
         })
         test('should be invalid and show custom error message, then continue after correction', () => {
           const sleep = (milliseconds) => new Promise((res) => setTimeout(() => res(true), milliseconds))
           const element = fixture('TangyFormItemValidIfTangyIfFixture');
           element.newResponse()
-          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').dispatchEvent(new CustomEvent('next'))
-          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').invalid, true)
-          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').value = 'on'
-          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').dispatchEvent(new CustomEvent('next'))
+          element.querySelector('tangy-form-item').querySelector('tangy-checkbox').dispatchEvent(new CustomEvent('next'))
+          assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-checkbox').invalid, true)
+          element.querySelector('tangy-form-item').querySelector('tangy-checkbox').value = 'on'
+          element.querySelector('tangy-form-item').querySelector('tangy-checkbox').dispatchEvent(new CustomEvent('next'))
           assert.equal(element.querySelector('tangy-form-item').open, false)
         })
         test('should be invalid radio and show custom error message, then continue after correction', () => {
           const sleep = (milliseconds) => new Promise((res) => setTimeout(() => res(true), milliseconds))
           const element = fixture('TangyFormItemValidIfTangyIfRadioFixture');
           element.newResponse()
-          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-radio-buttons').dispatchEvent(new CustomEvent('next'))
-          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-radio-buttons').invalid, true)
-          let el = element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-radio-buttons').value
+          element.querySelector('tangy-form-item').querySelector('tangy-radio-buttons').dispatchEvent(new CustomEvent('next'))
+          assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-radio-buttons').invalid, true)
+          let el = element.querySelector('tangy-form-item').querySelector('tangy-radio-buttons').value
                   .find(input => (input.name === 'Tangerine'))
           el.value = 'on'
-          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-radio-buttons').dispatchEvent(new CustomEvent('next'))
+          element.querySelector('tangy-form-item').querySelector('tangy-radio-buttons').dispatchEvent(new CustomEvent('next'))
           assert.equal(element.querySelector('tangy-form-item').open, false)
         })
         test('should be invalid checkboxes and show custom error message, then continue after correction', () => {
           const sleep = (milliseconds) => new Promise((res) => setTimeout(() => res(true), milliseconds))
           const element = fixture('TangyFormItemValidIfTangyIfCheckboxesFixture');
           element.newResponse()
-          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkboxes').dispatchEvent(new CustomEvent('next'))
-          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkboxes').invalid, true)
-          let el = element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkboxes').value
+          element.querySelector('tangy-form-item').querySelector('tangy-checkboxes').dispatchEvent(new CustomEvent('next'))
+          assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-checkboxes').invalid, true)
+          let el = element.querySelector('tangy-form-item').querySelector('tangy-checkboxes').value
                   .find(input => (input.name === 'Tangerine'))
           el.value = 'on'
-          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkboxes').dispatchEvent(new CustomEvent('next'))
+          element.querySelector('tangy-form-item').querySelector('tangy-checkboxes').dispatchEvent(new CustomEvent('next'))
           assert.equal(element.querySelector('tangy-form-item').open, false)
         })
         test('should autostop after 2 answers.', () => {
@@ -172,14 +172,14 @@
           const element = fixture('TangyFormItemAutoStopFixture');
           element.newResponse()
           let formItem = element.querySelector('tangy-form-item')
-          let el1 = formItem.shadowRoot.querySelector('[name=fruit_selection1]').value
+          let el1 = formItem.querySelector('[name=fruit_selection1]').value
                   .find(input => (input.name === 'Tangerine'))
           el1.value = 'on'
           let helpers = new TangyFormItemHelpers(formItem)
           let hideInputsUponThreshhold = (input) => helpers.hideInputsUponThreshhold(input)
           let disable = hideInputsUponThreshhold(formItem)
           assert.equal(disable, false)
-          let el2 = formItem.shadowRoot.querySelector('[name=fruit_selection2]').value
+          let el2 = formItem.querySelector('[name=fruit_selection2]').value
                   .find(input => (input.name === 'Tangerine'))
           el2.value = 'on'
           disable = hideInputsUponThreshhold(formItem)
