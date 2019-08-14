@@ -23,6 +23,21 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyFormItemValidIfFixture">
+      <template>
+        <tangy-form id="my-form-2" title="My Form 2">
+          <tangy-form-item id="item1">
+            <tangy-checkbox name="input1" valid-if="input.value === 'on'">
+              Do you like tangerines?
+            </tangy-checkbox>
+            <tangy-checkbox name="input2" valid-if="inputs.input1.value === 'on'">
+              Please agree.
+            </tangy-checkbox>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <test-fixture id="TangyFormItemValidIfTangyIfFixture">
       <template>
         <tangy-form id="my-form-2" title="My Form 2">
@@ -132,6 +147,17 @@
           element.newResponse()
           element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-input').dispatchEvent(new CustomEvent('next'))
           assert.equal(element.querySelectorAll('tangy-form-item')[1].open, true)
+        })
+        test('should be invalid from valid-if statements', () => {
+          const sleep = (milliseconds) => new Promise((res) => setTimeout(() => res(true), milliseconds))
+          const element = fixture('TangyFormItemValidIfFixture');
+          element.newResponse()
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').dispatchEvent(new CustomEvent('next'))
+          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('[name=input1]').invalid, true)
+          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('[name=input2]').invalid, true)
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').value = 'on'
+          element.querySelector('tangy-form-item').shadowRoot.querySelector('tangy-checkbox').dispatchEvent(new CustomEvent('next'))
+          assert.equal(element.querySelector('tangy-form-item').open, false)
         })
         test('should be invalid and show custom error message, then continue after correction', () => {
           const sleep = (milliseconds) => new Promise((res) => setTimeout(() => res(true), milliseconds))
