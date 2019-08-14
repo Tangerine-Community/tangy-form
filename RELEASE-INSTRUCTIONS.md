@@ -1,7 +1,8 @@
 # Instruction for releasing a new version of Tangy Form
 
+0. Make sure your local master branch is up to date and clean. `git fetch origin && git checkout master && git merge origin/master && status`.
 1. Increment the version number in `package.json`. 
-2. Create an and fill out an entry in `CHANGELOG.md` for the release.
+2. Complete an entry in `CHANGELOG.md` for the release.
 3. Run `npm run build`.
 4. Git add the `dist` folder, `package.json`, and `CHANGELOG.md`.
 5. Git commit with a git commit message of the same release number.
