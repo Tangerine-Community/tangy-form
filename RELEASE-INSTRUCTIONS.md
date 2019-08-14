@@ -9,3 +9,4 @@
 6. Git tag with the same name as the release number.
 7. Git push the master branch, git push the tag.
 8. Ensure you have a clean directory with a `git status` then run `npm publish`. 
+9. Draft a new release on Github of the same tag name using that tag. Use the CHANGELOG notes.
