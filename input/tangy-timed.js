@@ -492,14 +492,7 @@ class TangyTimed extends PolymerElement {
           let timeSpent = Math.floor((Date.now() - this.startTime) / 1000)
           this.timeRemaining = this.duration - timeSpent
           if (this.timeRemaining <= 0) {
-            clearInterval(this.timer)
-            this.style.background = 'red'
-            this.value = this.value.map((element, i) => Object.assign({}, element, { highlighted: (this.value.length - 1 === i) ? true : false }))
-            setTimeout(() => this.style.background = 'white', 200)
-            setTimeout(() => this.style.background = 'red', 400)
-            setTimeout(() => this.style.background = 'white', 600)
-            setTimeout(() => alert(t('Please tap on last item attempted.')), 800)
-            this.mode = TANGY_TIMED_MODE_LAST_ATTEMPTED
+            this.stopGrid()
           }
         }, 200);
         break
@@ -564,7 +557,16 @@ class TangyTimed extends PolymerElement {
       return isSetsEqual(new Set(indexes), new Set(pressedItemsIndex))
     }
   }
-
+  stopGrid() {
+    clearInterval(this.timer)
+    this.style.background = 'red'
+    this.value = this.value.map((element, i) => Object.assign({}, element, { highlighted: (this.value.length - 1 === i) ? true : false }))
+    setTimeout(() => this.style.background = 'white', 200)
+    setTimeout(() => this.style.background = 'red', 400)
+    setTimeout(() => this.style.background = 'white', 600)
+    setTimeout(() => alert(t('Please tap on last item attempted.')), 800)
+    this.mode = TANGY_TIMED_MODE_LAST_ATTEMPTED
+  }
   rowMarkerClicked(rowNumber) {
     switch (this.mode) {
       case TANGY_TIMED_MODE_MARK:
@@ -586,7 +588,7 @@ class TangyTimed extends PolymerElement {
 
     let tangyToggleButtons = [].slice.call(this.shadowRoot.querySelectorAll('tangy-toggle-button'))
     let inputElements = [].slice.call(this.querySelectorAll('[name]'))
-    
+
     let newValue = []
 
 
@@ -634,7 +636,7 @@ class TangyTimed extends PolymerElement {
     }
     if (this.autoStop && this.shouldGridAutoStop()) {
       event.target.highlighted = true
-      this.mode = TANGY_TIMED_MODE_LAST_ATTEMPTED
+      this.stopGrid()
       this.gridAutoStopped = true
       this.onStopClick(null, event.target.name)
     }
