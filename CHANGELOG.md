@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.23.0
+- Add ability to reference inputs.NAME in valid-if attributes. [#65](https://github.com/Tangerine-Community/tangy-form/pull/65)
+
 ## v3.22.1
 - Fix resuming a `<tangy-parial-date>` and use of boolean attributes. [#62](https://github.com/Tangerine-Community/tangy-form/pull/62)
 
