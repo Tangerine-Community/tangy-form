@@ -72,24 +72,23 @@ export class TangyFormItem extends PolymerElement {
         :host([hidden]) {
           display: none;
         }
-        :host([fullscreen]) paper-card {
-          width: 100%;
-          max-width: 100% !important;
-          height: 100vh;
-        }
 
        /*
         * Fullscreen 
         */
-
-        :host([fullscreen]) {
+        :host([fullscreen-enabled]) paper-card {
+          width: 100%;
+          max-width: 100% !important;
+          height: 100vh;
+        }
+        :host([fullscreen-enabled]) {
           margin: 0px
         }
-        :host([fullscreen]) paper-card  {
+        :host([fullscreen-enabled]) paper-card  {
           padding-top: 53px;
           overflow: scroll;
         }
-        :host([fullscreen]) .card-actions {
+        :host([fullscreen-enabled]) .card-actions {
           position: fixed;
           top: 0px;
           width: 100%;
@@ -97,25 +96,40 @@ export class TangyFormItem extends PolymerElement {
           padding: 0px;
           margin: 0px;
         }
-        :host([fullscreen]) paper-button {
+        :host([fullscreen-enabled]) paper-button {
           background: white;
           color: grey;
         }
-        :host([fullscreen]) paper-button#complete {
+        :host([fullscreen-enabled]) paper-button#complete {
           float: right;
           margin: 15px;
           background: green;
           color: white; 
         }
-        :host([fullscreen]) paper-button#complete paper-button {
+        :host([fullscreen-enabled]) paper-button#complete paper-button {
           display: none;
         }
-        :host([fullscreen]) label.heading {
+        :host([fullscreen-enabled]) label.heading {
           display: none;
         }
-        :host([fullscreen]) .card-content {
+        :host([fullscreen-enabled]) .card-content {
           padding-top: 0px;
         }
+        :host(:not([fullscreen])) #enable-fullscreen,
+        :host(:not([fullscreen])) #disable-fullscreen,
+        :host([fullscreen]:not([fullscreen-enabled])) #disable-fullscreen,
+        :host([fullscreen]):host([fullscreen-enabled]) #enable-fullscreen
+        {
+          display: none;
+        }
+        #disable-fullscreen,
+        #enable-fullscreen 
+        {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);  
+        }
+
 
         /*
         * Action Buttons
@@ -171,6 +185,12 @@ export class TangyFormItem extends PolymerElement {
           <slot></slot>
         </div>
         <div class="card-actions">
+          <paper-button id="disable-fullscreen" on-click="onExitFullscreenClick" >
+            <iron-icon icon="fullscreen-exit"></iron-icon>
+          </paper-button>
+          <paper-button id="enable-fullscreen" on-click="onEnterFullscreenClick" >
+            <iron-icon icon="fullscreen"></iron-icon>
+          </paper-button>
           <template is="dom-if" if="{{!hideButtons}}">
             <paper-button id="open" on-click="onOpenButtonPress">[[t.open]]</paper-button>
             <template is="dom-if" if="{{!locked}}">
@@ -245,6 +265,11 @@ export class TangyFormItem extends PolymerElement {
         reflectToAttribute: true
       },
       fullscreen: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      fullscreenEnabled: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
@@ -528,6 +553,9 @@ export class TangyFormItem extends PolymerElement {
   validate() {
     // Look only 1 level deep for the inputEls because we don't want to validate elements inside a tangy-editor widget.
     let inputEls = [...this.children].filter(el => el.hasAttribute("name"))
+    const inputs = inputEls.reduce((inputsKeyedByName, input) => {
+      return { [input.name]: input, ...inputsKeyedByName }
+    }, {})
     let invalidInputNames = []
     let validInputNames = []
     for (let input of inputEls) {
@@ -557,6 +585,14 @@ export class TangyFormItem extends PolymerElement {
       this.fireHook('on-change')
       return true
     }
+  }
+
+  onExitFullscreenClick() {
+    this.dispatchEvent(new CustomEvent('exit-fullscreen', { bubbles: true }))
+  }
+
+  onEnterFullscreenClick() {
+    this.dispatchEvent(new CustomEvent('enter-fullscreen', { bubbles: true }))
   }
 
   next() {
