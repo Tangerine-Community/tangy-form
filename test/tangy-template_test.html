@@ -31,9 +31,9 @@
           const form = fixture('TangyTemplateFixture');
           form.newResponse()
           form.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
-          form.querySelector('#item1').shadowRoot.querySelector('[name="input1"]').value = 'foo'
+          form.querySelector('#item1').querySelector('[name="input1"]').value = 'foo'
           form.querySelector('#item1').shadowRoot.querySelector('#next').click()
-          assert.equal(form.querySelector('#item2').shadowRoot.querySelector('tangy-template').$.container.innerText, 'Output foo')
+          assert.equal(form.querySelector('#item2').querySelector('tangy-template').$.container.innerText, 'Output foo')
         })
       })
     </script>
