@@ -161,7 +161,7 @@ export class TangyFormItem extends PolymerElement {
         }
 
         .card-actions paper-button {
-          font-size: .8em;
+          font-size: 1.2em;
           line-height: 1em;
         }
       </style>
@@ -185,34 +185,34 @@ export class TangyFormItem extends PolymerElement {
               <template is="dom-if" if="{{showCompleteButton}}">
                 <paper-button id="complete" on-click="clickedComplete" style="float:left">
                   [[t.submit]]
-                <paper-button>
+                </paper-button>
               </template>
               <template is="dom-if" if="{{!hideNextButton}}">
                 <paper-button id="back" on-click="next" >
                   <iron-icon icon="arrow-back"></iron-icon>
-                <paper-button>
+                </paper-button>
               </template>
               <template is="dom-if" if="{{!hideBackButton}}">
                 <paper-button id="next" on-click="back" >
                   <iron-icon icon="arrow-forward"></iron-icon>
-                <paper-button>
+                </paper-button>
               </template>
             </template>
             <template is="dom-if" if="{{!rightToLeft}}">
               <template is="dom-if" if="{{!hideBackButton}}">
                 <paper-button id="back" on-click="back" >
                   <iron-icon icon="arrow-back"></iron-icon>
-                <paper-button>
+                </paper-button>
               </template>
               <template is="dom-if" if="{{!hideNextButton}}">
                 <paper-button id="next" on-click="next" >
                   <iron-icon icon="arrow-forward"></iron-icon>
-                <paper-button>
+                </paper-button>
               </template>
               <template is="dom-if" if="{{showCompleteButton}}">
                 <paper-button id="complete" on-click="clickedComplete" style="float:right" >
                   [[t.submit]]
-                <paper-button>
+                </paper-button>
               </template>
             </template>
           </template>

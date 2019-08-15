@@ -60,15 +60,44 @@ class TangyRadioButtons extends PolymerElement {
         }
       </style>
 
+      <style>
+      #error-text {
+        padding: 10px 10px 10px 0px;
+        font-size: medium;
+        font-weight: bold;
+        color: var(--error-color);
+      }
+    
+      #container {
+        margin-left:30px;
+      }
+  
+      #hint-text {
+        color: gray;
+        font-size: 1em;
+        font-weight: lighter;
+      }
+      .container {
+        margin-left:30px;
+      }
+  
+   
+      </style>
+      <div>
+        <div id="qnum" style="float:left;"></div>
+        <div class="container">
+          <label id="label" for="group"></label>
+          <label id="hint-text"></label>
+        
+          <div id="container"></div>
+     
+            <label id="error-text"></label>
 
-      <div class="container">
-        <label id="label" for="group"></label>
-        <label id="hint-text"></label>
-        <template is="dom-if" if="{{!hideHelpText}}">
-          <span  class="secondary_color">[[t.selectOnlyOne]]</span>
-        </template>
-        <div id="container"></div>
+        </div>
+
       </div>
+    
+     
     `;
   }
 
@@ -147,6 +176,18 @@ class TangyRadioButtons extends PolymerElement {
         value: false,
         observer: 'reflect',
         reflecttoattribute: true
+      },
+      questionNumber: {
+        type: String,
+        value: '',
+        observer: 'reflect',
+        reflectToAttribute: true
+      },
+      errorText: {
+        type: String,
+        value: '',
+        observer: 'reflect',
+        reflectToAttribute: true
       }
     }
   }
@@ -167,6 +208,8 @@ class TangyRadioButtons extends PolymerElement {
   }
 
   render() {
+
+    this.$.qnum.innerHTML = `<label>${this.questionNumber}</label>`;
     this.$.label.innerHTML = this.label
     this.$['hint-text'].innerHTML = this.hintText
     this.$.container.innerHTML = ''
@@ -197,6 +240,8 @@ class TangyRadioButtons extends PolymerElement {
         this.$.container.appendChild(button)
       }
     }
+
+
 
     let newValue = []
     this
@@ -242,8 +287,14 @@ class TangyRadioButtons extends PolymerElement {
     })
     if (this.required && !this.hidden && !this.disabled && !foundOne) {
       this.invalid = true
+      this.$['error-text'].innerHTML =  `
+      ${(this.errorText !== "" ? `<div style="float:left;margin-right:10px;"><iron-icon icon="error""></iron-icon></div><div style="margin-left:35px;">` : '')}
+      ${this.errorText}</div>`
+
+
       return false
     } else {
+      this.$['error-text'].innerHTML = ""
       this.invalid = false
       return true
     }

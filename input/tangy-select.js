@@ -18,7 +18,36 @@ class TangySelect extends PolymerElement {
     <style include="tangy-element-styles"></style>
     <style include="tangy-common-styles"></style>
     <style include="mdc-select-style"></style>
-    <div id="container"></div>
+
+    <style>
+    #errorText {
+      padding: 10px 10px 10px 0px;
+      font-size: medium;
+      font-weight: bold;
+      color: var(--error-color);
+    }
+  
+    #container {
+      margin-left:30px;
+    }
+
+    label.hint-text {
+      color: gray;
+      font-size: 1em;
+      font-weight: lighter;
+    }
+    #container {
+      margin-left:30px;
+    }
+
+ 
+    </style>
+
+    <div>
+      <div id="qnum" style="float:left;"></div>
+      <div id="container">
+    </div>
+  </div>
     `;
   }
 
@@ -70,7 +99,17 @@ class TangySelect extends PolymerElement {
       incomplete: {
         type: Boolean,
         value: true
-      }
+      },
+      questionNumber: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      errorText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
     }
   }
 
@@ -82,6 +121,8 @@ class TangySelect extends PolymerElement {
   }
   
   render() {
+    this.$.qnum.innerHTML = `<label>${this.questionNumber}</label>`;
+    
     this.$.container.innerHTML = ''
     let options = []
     this.querySelectorAll('option').forEach(optionEl => options.push(optionEl))
@@ -102,14 +143,18 @@ class TangySelect extends PolymerElement {
             </option>
           `)}
         </select>
+        <div class="mdc-select__bottom-line"></div>
       </div>
-      <div class="mdc-select__bottom-line"></div>
+      <label id="errorText"></label>
     `
     this._onChangeListener = this
       .shadowRoot
       .querySelector('select')
       .addEventListener('change', this.onChange.bind(this))
     this.dispatchEvent(new CustomEvent('render'))
+
+
+
   }
 
   onChange(event) {
@@ -120,9 +165,15 @@ class TangySelect extends PolymerElement {
   validate() {
     if (this.required && !this.hidden && !this.disabled && !this.value) {
       this.invalid = true
+      
+      this.shadowRoot.querySelector('#errorText').innerHTML = `
+      ${(this.errorText !== "" ? `<div style="float:left;margin-right:10px;"><iron-icon icon="error""></iron-icon></div><div style="margin-left:35px;">` : '')}
+      ${this.errorText}</div>`
+
       return false
     } else {
       this.invalid = false
+      this.shadowRoot.querySelector('#errorText').innerHTML = '';
       return true
     }
   }

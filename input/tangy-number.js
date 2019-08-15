@@ -32,31 +32,9 @@ export class TangyInput extends PolymerElement {
         top: 5px;
       }
 
-        #errorText {
-          padding: 10px 10px 10px 0px;
-          font-size: medium;
-          font-weight: bold;
-          color: var(--error-color);
-        }
-      
-        #container {
-          margin-left:30px;
-        }
-        label.hint-text {
-          color: gray;
-          font-size: 1em;
-          font-weight: lighter;
-        }
-        #container {
-          margin-left:30px;
-        }
     </style>
-
-    <div>
-      <div id="qnum" style="float:left;"></div>
-      <div id="container"></div>
+    <div id="container">
     </div>
-
   `
   }
 
@@ -153,18 +131,6 @@ export class TangyInput extends PolymerElement {
         value: '',
         observer: 'reflect',
         reflectToAttribute: true
-      },
-      questionNumber: {
-        type: String,
-        value: '',
-        observer: 'reflect',
-        reflectToAttribute: true
-      },
-      errorText: {
-        type: String,
-        value: '',
-        observer: 'reflect',
-        reflectToAttribute: true
       }
     }
   }
@@ -172,9 +138,8 @@ export class TangyInput extends PolymerElement {
   connectedCallback() {
     super.connectedCallback()
     // Template.
-    this.$.container.innerHTML = `   
+    this.$.container.innerHTML = `      
       <label id="label"></label>
-      <label id="hintText" class="hint-text"></label>
       ${
         this.getAttribute('type') === 'email' ||
         this.getAttribute('type') === 'number' ||
@@ -184,8 +149,7 @@ export class TangyInput extends PolymerElement {
         ? `<paper-input id="input"></paper-input>`
         : `<paper-textarea id="input"></paper-textarea>`
       }
-      <div id="errorText"></div>    
-    
+      <label id="hintText"></label>
     `
     // Listen for user changes.
     this.shadowRoot.querySelector('#input').addEventListener('value-changed', (event) => {
@@ -209,16 +173,12 @@ export class TangyInput extends PolymerElement {
     })
     this.ready = true
     this.reflect()
-
   }
 
   reflect() {
     if (!this.ready) return
     if (!this.shadowRoot.querySelector('#input')) return
     // Reflect data into DOM.
-
-
-    this.$.qnum.innerHTML = `<label>${this.questionNumber}</label>`;
     this.shadowRoot.querySelector('#hintText').innerHTML = this.hintText
     this.shadowRoot.querySelector('#label').innerHTML = this.label
     this.shadowRoot.querySelector('#input').placeholder = combTranslations(this.placeholder)
@@ -226,7 +186,6 @@ export class TangyInput extends PolymerElement {
       ? t('Enter your response to above question here') 
       : combTranslations(this.innerLabel)
     this.shadowRoot.querySelector('#input').errorMessage = combTranslations(this.errorMessage)
-
     this.shadowRoot.querySelector('#input').allowedPattern = this.allowedPattern
     this.shadowRoot.querySelector('#input').setAttribute('type', this.type ? this.type : 'text')
     // When comparing the values, make sure they are always strings as opposed to different kinds of untruthiness.
@@ -255,12 +214,8 @@ export class TangyInput extends PolymerElement {
     }
     if (this.invalid === false) {
       this.shadowRoot.querySelector('#input').removeAttribute('invalid')
-      this.shadowRoot.querySelector('#errorText').innerHTML = ""
     } else {
       this.shadowRoot.querySelector('#input').setAttribute('invalid', true)
-      this.shadowRoot.querySelector('#errorText').innerHTML = `
-      ${(this.errorText !== "" ? `<div style="float:left;margin-right:10px;"><iron-icon icon="error""></iron-icon></div><div style="margin-left:35px;">` : '')}
-      ${this.errorText}</div>`
     }
   }
 
