@@ -18,7 +18,14 @@ export class TangyCheckbox extends PolymerElement {
     <style include="tangy-common-styles"></style>
     <style include="tangy-element-styles"></style>
 
-      <paper-checkbox id="checkbox" id="checkbox"></paper-checkbox>
+      <paper-checkbox id="checkbox" id="checkbox">
+        <div id="checkbox-text">
+        </div>
+        <label class="hint-text">
+          [[hintText]]
+        </label>
+      </paper-checkbox>
+      
     `
   }
 
@@ -72,8 +79,13 @@ export class TangyCheckbox extends PolymerElement {
         value: '',
         observer: 'onValueChange',
         reflectToAttribute: true
+      },
+      hintText: {
+        type: String,
+        value: '',
+        observer: 'applyHintText',
+        reflectToAttribute: true
       }
-
     }
   }
 
@@ -81,8 +93,12 @@ export class TangyCheckbox extends PolymerElement {
     super.connectedCallback()
     if (this.value) this.$.checkbox.checked = true
     if (this.label == '' && this.innerHTML !== '') {
-      this.label = this.innerHTML
+     this.label = this.innerHTML
     }
+
+    
+
+
     this.$.checkbox.addEventListener('change', (e) => {
       e.stopPropagation()
       let incomplete = (!e.target.checked)
@@ -101,7 +117,7 @@ export class TangyCheckbox extends PolymerElement {
   }
 
   applyLabel(label) {
-    this.$.checkbox.innerHTML = label
+    this.$.checkbox.children['checkbox-text'].innerHTML = this.label 
   }
 
   onRequiredChange (value) {

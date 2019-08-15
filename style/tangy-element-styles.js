@@ -49,16 +49,18 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         opacity: .7;
       }
 
+      /*
       :host([invalid]) {
         border: solid var(--error-color) 5px;
       }
-
+      */
+     
       :host([required]:not([disabled]))::before  { 
         content: "*"; 
         color: var(--accent-color); 
         position: absolute;
-        top: 8px;
-        left: -20px;
+        top: -2px;
+        left: -18px;
         font-size: 2em;
       }
 
@@ -70,15 +72,16 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
       label {
         display: block;
         font-size: 1.2em;
-        margin-bottom: 15px;
         color: var(--primary-text-color);
         margin-bottom: 5px;
       }
-  
+   
       .secondary_color {
         color: var(--accent-color);
       }
    
+      
+     
   
     </style>
     </template>

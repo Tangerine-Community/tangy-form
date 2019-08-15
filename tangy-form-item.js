@@ -175,7 +175,7 @@ export class TangyFormItem extends PolymerElement {
         }
 
         .card-actions paper-button {
-          font-size: .8em;
+          font-size: 1.2em;
           line-height: 1em;
         }
       </style>

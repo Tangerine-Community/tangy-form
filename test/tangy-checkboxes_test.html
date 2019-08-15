@@ -23,13 +23,32 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyCheckboxesHintTextFixture">
+        <template>
+          <tangy-checkboxes name="fruit_selection" label="What is your favorite fruit?">
+            <option name="orange" hint-text='Oranges but not tangerines.'>Orange</option>
+            <option name="banana">Banana</option>
+            <option name="tangerine">Tangerine</option>
+            <option name="cantalope">Cantalope</option>
+            <option name="cherry">Cherry</option>
+            <option name="kiwi">Kiwi</option>
+          </tangy-checkboxes>
+        </template>
+      </test-fixture>
+
     <script type="module">
       import '../input/tangy-checkboxes.js'
       suite('tangy-checkboxes', () => {
-        test('should have six options', () => {
-          const element = fixture('TangyCheckboxesFixture');
-          assert.equal(element.shadowRoot.querySelectorAll('tangy-checkbox').length, 6)
+        // test('should have six options', () => {
+        //   const element = fixture('TangyCheckboxesFixture');
+        //   assert.equal(element.shadowRoot.querySelectorAll('tangy-checkbox').length, 6)
+        // })
+        test('should have hint text', () => {
+          const element = fixture('TangyCheckboxesHintTextFixture');
+          debugger
+          assert.equal(element.shadowRoot.querySelector('tangy-checkbox').shadowRoot.innerHTML.includes('Oranges'), true)
         })
+
       })
     </script>
 

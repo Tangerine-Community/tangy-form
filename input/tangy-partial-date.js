@@ -252,7 +252,7 @@ class TangyPartialDate extends PolymerElement {
             </select>
         </div>  
         ${(this.showTodayButton ? ` 
-          <paper-button style="margin-top:30px; height:40px; text-transform:capitalize" id="today" on-click="setToday">
+          <paper-button style="margin-top:30px; height:40px;" id="today" on-click="setToday">
             <iron-icon icon="query-builder"></iron-icon>&nbsp;
             <t-lang en>Today</t-lang><t-lang fr>Aujourd'hui</t-lang>
           </paper-button>` : '' 
