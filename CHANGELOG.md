@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## v4.0.0
+- Enable content of a form to be styled from the parent document. https://github.com/Tangerine-Community/tangy-form/pull/64
+
+__Upgrade instructions__:
+This is considered to be a major release because some users' forms would look into a form item's contents using `tangyFormItemEl.shadowRoot.querySelector(...)`. The contents of the form can now be accessed at `tangyFormItemEl.querySelector(...)`. If you have any use of `shadowRoot` in our form content, beware. The advantage of moving this content out of the shadow DOM is that you can now style it directly from your app.
+
+
+## v3.23.0
+- Add ability to reference inputs.NAME in valid-if attributes. [#65](https://github.com/Tangerine-Community/tangy-form/pull/65)
+
+## v3.22.1
+- Fix resuming a `<tangy-parial-date>` and use of boolean attributes. [#62](https://github.com/Tangerine-Community/tangy-form/pull/62)
+
+## v3.22.0
+- Add new `<tangy-partial-date>` input for capturing partial dates. See `demo/partial-date-demo.html` for a demo.
+
+## v3.21.0
+- Add support for distributing bundles in `dist/bundle.js`.
+
 ## v3.20.0
 - Adding variables so that the select element may be styled. [#50](https://github.com/Tangerine-Community/tangy-form/pull/50)
 

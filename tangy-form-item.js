@@ -19,13 +19,13 @@ export class TangyFormItem extends PolymerElement {
   static get is() { return 'tangy-form-item'; }
 
   connectedCallback() {
-    super.connectedCallback()
     if (this.querySelector('template')) {
       this.template = this.querySelector('template').innerHTML
     } else {
       this.template = this.innerHTML
     }
     this.innerHTML = ''
+    super.connectedCallback()
     this.t = {
       open: t('open'),
       close: t('close'),
@@ -72,24 +72,23 @@ export class TangyFormItem extends PolymerElement {
         :host([hidden]) {
           display: none;
         }
-        :host([fullscreen]) paper-card {
-          width: 100%;
-          max-width: 100% !important;
-          height: 100vh;
-        }
 
        /*
         * Fullscreen 
         */
-
-        :host([fullscreen]) {
+        :host([fullscreen-enabled]) paper-card {
+          width: 100%;
+          max-width: 100% !important;
+          height: 100vh;
+        }
+        :host([fullscreen-enabled]) {
           margin: 0px
         }
-        :host([fullscreen]) paper-card  {
+        :host([fullscreen-enabled]) paper-card  {
           padding-top: 53px;
           overflow: scroll;
         }
-        :host([fullscreen]) .card-actions {
+        :host([fullscreen-enabled]) .card-actions {
           position: fixed;
           top: 0px;
           width: 100%;
@@ -97,25 +96,40 @@ export class TangyFormItem extends PolymerElement {
           padding: 0px;
           margin: 0px;
         }
-        :host([fullscreen]) paper-button {
+        :host([fullscreen-enabled]) paper-button {
           background: white;
           color: grey;
         }
-        :host([fullscreen]) paper-button#complete {
+        :host([fullscreen-enabled]) paper-button#complete {
           float: right;
           margin: 15px;
           background: green;
           color: white; 
         }
-        :host([fullscreen]) paper-button#complete paper-button {
+        :host([fullscreen-enabled]) paper-button#complete paper-button {
           display: none;
         }
-        :host([fullscreen]) label.heading {
+        :host([fullscreen-enabled]) label.heading {
           display: none;
         }
-        :host([fullscreen]) .card-content {
+        :host([fullscreen-enabled]) .card-content {
           padding-top: 0px;
         }
+        :host(:not([fullscreen])) #enable-fullscreen,
+        :host(:not([fullscreen])) #disable-fullscreen,
+        :host([fullscreen]:not([fullscreen-enabled])) #disable-fullscreen,
+        :host([fullscreen]):host([fullscreen-enabled]) #enable-fullscreen
+        {
+          display: none;
+        }
+        #disable-fullscreen,
+        #enable-fullscreen 
+        {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);  
+        }
+
 
         /*
         * Action Buttons
@@ -167,10 +181,16 @@ export class TangyFormItem extends PolymerElement {
       </style>
       <paper-card id="card" class="shrunk">
         <div class="card-content">
-        <label class="heading">[[title]]</label>
-          <div id="content"></div>
+          <label class="heading">[[title]]</label>
+          <slot></slot>
         </div>
         <div class="card-actions">
+          <paper-button id="disable-fullscreen" on-click="onExitFullscreenClick" >
+            <iron-icon icon="fullscreen-exit"></iron-icon>
+          </paper-button>
+          <paper-button id="enable-fullscreen" on-click="onEnterFullscreenClick" >
+            <iron-icon icon="fullscreen"></iron-icon>
+          </paper-button>
           <template is="dom-if" if="{{!hideButtons}}">
             <paper-button id="open" on-click="onOpenButtonPress">[[t.open]]</paper-button>
             <template is="dom-if" if="{{!locked}}">
@@ -245,6 +265,11 @@ export class TangyFormItem extends PolymerElement {
         reflectToAttribute: true
       },
       fullscreen: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      fullscreenEnabled: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
@@ -327,7 +352,7 @@ export class TangyFormItem extends PolymerElement {
     this.inputs
       .filter(input => input.tagName === 'TANGY-INPUT-GROUPS')
       .forEach((inputState) => {
-        let inputEl = this.shadowRoot.querySelector(`[name="${inputState.name}"]`)
+        let inputEl = this.querySelector(`[name="${inputState.name}"]`)
         if (inputEl) {
           inputEl.setProps(inputState)
           inputEl.value = inputState.value
@@ -336,7 +361,7 @@ export class TangyFormItem extends PolymerElement {
     this.inputs
       .filter(input => input.tagName !== 'TANGY-INPUT-GROUPS')
       .forEach((inputState) => {
-        let inputEl = this.shadowRoot.querySelector(`[name="${inputState.name}"]`)
+        let inputEl = this.querySelector(`[name="${inputState.name}"]`)
         if (inputEl) inputEl.setProps(inputState)
       })
   }
@@ -359,7 +384,7 @@ export class TangyFormItem extends PolymerElement {
         falsey: name => this.eval(`inputDisable("${name}")`, 'disable-if', name)
       }
     }
-    this.shadowRoot.querySelectorAll('[name]').forEach(input => {
+    this.querySelectorAll('[name]').forEach(input => {
       if (input.hasAttribute('show-if')) {
         if (this.eval(input.getAttribute('show-if'), 'show-if', input.getAttribute('name'))) {
           inputActionFactories['visible'].truthy(input.name)
@@ -382,7 +407,7 @@ export class TangyFormItem extends PolymerElement {
       }
     })
     // Let <tangy-template> rendering piggy back on this hook.
-    this.shadowRoot.querySelectorAll('tangy-template').forEach(templateEl => {
+    this.querySelectorAll('tangy-template').forEach(templateEl => {
       if (templateEl.shadowRoot) {
         templateEl.$.container.innerHTML = this.eval('`' + templateEl.template + '`', 'tangy-template', templateEl.getAttribute('name'))
       }
@@ -395,17 +420,17 @@ export class TangyFormItem extends PolymerElement {
     // Inputs.
     let inputsArray = []
     state.items.forEach(item => inputsArray = [...inputsArray, ...item.inputs])
-    this.shadowRoot.querySelectorAll('[name]').forEach(input => inputsArray.push(input))
+    this.querySelectorAll('[name]').forEach(input => inputsArray.push(input))
     let inputsKeyedByName = {}
     inputsArray.forEach(input => inputsKeyedByName[input.name] = input)
     let inputs = inputsKeyedByName
     // Elements.
     let elementsById = {}
-    this.shadowRoot.querySelectorAll('[id]').forEach(el => elementsById[el.id] = el)
+    this.querySelectorAll('[id]').forEach(el => elementsById[el.id] = el)
     // Items.
     let items = {}
     state.items.forEach(item => items[item.name] = item)
-    let inputEls = this.shadowRoot.querySelectorAll('[name]')
+    let inputEls = this.querySelectorAll('[name]')
     let tangyFormStore = this.store
     // Declare namespaces for helper functions for the eval context in form.on-change.
     // We have to do this because bundlers modify the names of things that are imported
@@ -466,18 +491,18 @@ export class TangyFormItem extends PolymerElement {
   onOpenChange(open) {
     // Close it.
     if (open === false) {
-      this.$.content.innerHTML = ''
+      this.innerHTML = ''
     }
     // Open it, but only if empty because we might be stuck.
-    if (open === true && this.$.content.innerHTML === '') {
+    if (open === true && this.innerHTML === '') {
       this.openWithContent(this.template)
     }
     
   }
 
   openWithContent(contentHTML) {
-    this.$.content.innerHTML = contentHTML
-    this.$.content
+    this.innerHTML = contentHTML
+    this
       .querySelectorAll('[name]')
       .forEach(input => {
         input.addEventListener('next', () => this.next())
@@ -486,14 +511,14 @@ export class TangyFormItem extends PolymerElement {
           this.fireHook('on-change', _)
         })
       })
-    let tangyCompleteButtonEl = this.$.content
+    let tangyCompleteButtonEl = this
       .querySelector('tangy-complete-button')
     if (tangyCompleteButtonEl) {
       this.showCompleteButton = false 
       tangyCompleteButtonEl.addEventListener('click', this.clickedComplete.bind(this))
     }
 
-    let tangyConsentEl = this.shadowRoot.querySelector("tangy-consent")
+    let tangyConsentEl = this.querySelector("tangy-consent")
     if (tangyConsentEl) {
       this.showCompleteButton = false
       tangyConsentEl.addEventListener('TANGY_INPUT_CONSENT_NO', this.clickedNoConsent.bind(this))
@@ -516,7 +541,6 @@ export class TangyFormItem extends PolymerElement {
   submit() {
     let inputs = []
     this
-      .shadowRoot
       .querySelectorAll('[name]')
       .forEach(input => inputs.push(input.getProps()))
     this.inputs = inputs
@@ -528,7 +552,10 @@ export class TangyFormItem extends PolymerElement {
 
   validate() {
     // Look only 1 level deep for the inputEls because we don't want to validate elements inside a tangy-editor widget.
-    let inputEls = [...this.shadowRoot.querySelector("#content").children].filter(el => el.hasAttribute("name"))
+    let inputEls = [...this.children].filter(el => el.hasAttribute("name"))
+    const inputs = inputEls.reduce((inputsKeyedByName, input) => {
+      return { [input.name]: input, ...inputsKeyedByName }
+    }, {})
     let invalidInputNames = []
     let validInputNames = []
     for (let input of inputEls) {
@@ -547,7 +574,7 @@ export class TangyFormItem extends PolymerElement {
       }
     }
     if (invalidInputNames.length !== 0) {
-      this.shadowRoot
+      this
         .querySelector(`[name="${invalidInputNames[0]}"]`)
         .scrollIntoView({ behavior: 'smooth', block: 'start' })
       this.incomplete = true
@@ -558,6 +585,14 @@ export class TangyFormItem extends PolymerElement {
       this.fireHook('on-change')
       return true
     }
+  }
+
+  onExitFullscreenClick() {
+    this.dispatchEvent(new CustomEvent('exit-fullscreen', { bubbles: true }))
+  }
+
+  onEnterFullscreenClick() {
+    this.dispatchEvent(new CustomEvent('enter-fullscreen', { bubbles: true }))
   }
 
   next() {

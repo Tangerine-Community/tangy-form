@@ -2,7 +2,7 @@ export class TangyFormItemHelpers {
 
   constructor(element) {
     this.element = element
-    this.inputs = [].slice.call(this.element.shadowRoot.querySelectorAll(`[name]`))
+    this.inputs = [].slice.call(this.element.querySelectorAll(`[name]`))
     if (typeof this.inputs !== 'object') {
       this.inputs = []
     }
@@ -101,12 +101,15 @@ export class TangyFormItemHelpers {
     return Math.round(numberOfItemsCorrect / (timeSpent / 60))
   }
   numberOfItemsAttempted(input) {
+    if (!input) return
     return input.value.findIndex(el => el.highlighted) + 1
   }
   numberOfCorrectItems(input) {
+    if (!input) return
     return (this.numberOfItemsAttempted(input) - this.numberOfIncorrectItems(input))
   }
   numberOfIncorrectItems(input) {
+    if (!input) return
     return input.value.filter(el => el.value).length
   }
   gridAutoStopped(input) {
@@ -114,9 +117,9 @@ export class TangyFormItemHelpers {
   }
   hideInputsUponThreshhold(el) {
     let shouldDisable = false
-    const correctEls = el.shadowRoot.querySelector("#content").querySelectorAll('[correct]')
+    const correctEls = el.querySelectorAll('[correct]')
     if (correctEls.length > 0) {
-      let inputEls = [...el.shadowRoot.querySelector("#content").children].filter(el => el.hasAttribute("name"))
+      let inputEls = [...el.children].filter(el => el.hasAttribute("name"))
       let selectedIndex = [];
       let concurrentIncorrectCount = 0
       let previousIncorrect = 0;

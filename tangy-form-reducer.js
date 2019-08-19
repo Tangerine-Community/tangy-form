@@ -297,6 +297,24 @@ const tangyFormReducer = function (state = initialState, action) {
       })
       return newState
 
+    case 'ENTER_FULLSCREEN':
+      return {
+        ...state,
+        fullscreenEnabled: true,
+        items: state.items.map(item => {
+          return { ...item, fullscreenEnabled: true}
+        })
+      }
+
+    case 'EXIT_FULLSCREEN':
+      return {
+        ...state,
+        fullscreenEnabled: false,
+        items: state.items.map(item => {
+          return { ...item, fullscreenEnabled: false}
+        })
+      }
+
     default: 
       return state
   }

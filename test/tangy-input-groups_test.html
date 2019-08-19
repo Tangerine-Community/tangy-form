@@ -65,14 +65,14 @@
           element.newResponse()
           element.querySelector('tangy-form-item').shadowRoot.querySelector('dom-if').render()
           element
-            .querySelector('tangy-form-item').shadowRoot
+            .querySelector('tangy-form-item')
             .querySelector('tangy-input-groups').shadowRoot
             .querySelector('.add-another').click()
           element
-            .querySelector('tangy-form-item').shadowRoot
+            .querySelector('tangy-form-item')
             .querySelector('[name="person.2.first_name"]').value = 'foo'
           element
-            .querySelector('tangy-form-item').shadowRoot
+            .querySelector('tangy-form-item')
             .querySelector('[name="person.3.first_name"]').value = 'bar'
           element.querySelector('tangy-form-item').shadowRoot.querySelector('#complete').click()
           assert.equal((element.response.items[0].inputs.length > 0), true)
@@ -84,8 +84,8 @@
           element.response = {"_id":"6d7e7785-f56e-4765-aeab-88851451a338","collection":"TangyFormResponse","form":{"title":"","complete":true,"linearMode":false,"hideClosedItems":false,"hideCompleteFab":false,"tabIndex":1,"showResponse":true,"showSummary":false,"hasSummary":false,"onSubmit":"","id":"tangy-input-groups-form","tagName":"TANGY-FORM"},"items":[{"id":"tangy-input-groups-form--item-1","title":"","summary":false,"hideButtons":false,"hideBackButton":true,"rightToLeft":false,"hideNextButton":true,"showCompleteButton":true,"inputs":[{"tagName":"TANGY-INPUT-GROUPS","name":"person","value":["person-0","person-1","person-2","person-3"],"label":"","disabled":true,"invalid":false,"incomplete":true,"hidden":false},{"tagName":"TANGY-INPUT-GROUP","name":"person-0","value":[],"label":"","disabled":true,"invalid":false,"incomplete":true,"hidden":false},{"name":"person-0.first_name","private":false,"label":"First name","type":"","errorMessage":"","required":false,"disabled":true,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"name":"person-0.last_name","private":false,"label":"Last name","type":"","errorMessage":"","required":false,"disabled":true,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"tagName":"TANGY-INPUT-GROUP","name":"person-1","value":[],"label":"","disabled":true,"invalid":false,"incomplete":true,"hidden":false},{"name":"person-1.first_name","private":false,"label":"First name","type":"","errorMessage":"","required":false,"disabled":true,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"name":"person-1.last_name","private":false,"label":"Last name","type":"","errorMessage":"","required":false,"disabled":true,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"tagName":"TANGY-INPUT-GROUP","name":"person-2","value":[],"label":"","disabled":true,"invalid":false,"incomplete":true,"hidden":false},{"name":"person-2.first_name","private":false,"label":"First name","type":"","errorMessage":"","required":false,"disabled":true,"hidden":false,"invalid":false,"incomplete":true,"value":"foo","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"name":"person-2.last_name","private":false,"label":"Last name","type":"","errorMessage":"","required":false,"disabled":true,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"tagName":"TANGY-INPUT-GROUP","name":"person-3","value":[],"label":"","disabled":true,"invalid":false,"incomplete":true,"hidden":false},{"name":"person-3.first_name","private":false,"label":"First name","type":"","errorMessage":"","required":false,"disabled":true,"hidden":false,"invalid":false,"incomplete":true,"value":"bar","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"name":"person-3.last_name","private":false,"label":"Last name","type":"","errorMessage":"","required":false,"disabled":true,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"}],"open":false,"incomplete":false,"disabled":false,"hidden":false,"locked":true,"tagName":"TANGY-FORM-ITEM"}],"complete":true,"focusIndex":0,"nextFocusIndex":1,"previousFocusIndex":-1,"startDatetime":"10/7/2018, 10:49:15 PM","startUnixtime":1538966955659,"uploadDatetime":""}
           element.querySelector('tangy-form-item').shadowRoot.querySelector('dom-if').render()
           element.querySelector('tangy-form-item').shadowRoot.querySelector('#open').click()
-          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('[name="person-2.first_name"]').value, 'foo')
-          assert.equal(element.querySelector('tangy-form-item').shadowRoot.querySelector('[name="person-3.first_name"]').value, 'bar')
+          assert.equal(element.querySelector('tangy-form-item').querySelector('[name="person-2.first_name"]').value, 'foo')
+          assert.equal(element.querySelector('tangy-form-item').querySelector('[name="person-3.first_name"]').value, 'bar')
         });
       })
 
