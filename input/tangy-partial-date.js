@@ -90,7 +90,8 @@ class TangyPartialDate extends PolymerElement {
       disabled: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        observer: 'render'
       },
       label: {
         type: String,
@@ -252,7 +253,7 @@ class TangyPartialDate extends PolymerElement {
             </select>
         </div>  
         ${(this.showTodayButton ? ` 
-          <paper-button style="margin-top:30px; height:40px; text-transform:capitalize" id="today" on-click="setToday">
+          <paper-button style="align-self:flex-end;" id="today" on-click="setToday" ${this.disabled ? 'disabled' : ''}>
             <iron-icon icon="query-builder"></iron-icon>&nbsp;
             <t-lang en>Today</t-lang><t-lang fr>Aujourd'hui</t-lang>
           </paper-button>` : '' 
@@ -345,10 +346,10 @@ class TangyPartialDate extends PolymerElement {
 
   isFutureDate(dateValue) {
     const today = new Date();
-    const enteredDay = this.unpad(dateValue.split("-")[2]);
-    const enteredMonth = this.unpad(dateValue.split("-")[1]);
-    const enteredYear = dateValue.split("-")[0]; 
-    if (enteredDay !== '' && enteredDay !== 99 && enteredMonth !== '' && enteredMonth !== 99) {
+    const enteredDay = parseInt(this.unpad(dateValue.split("-")[2]));
+    const enteredMonth = parseInt(this.unpad(dateValue.split("-")[1]));
+    const enteredYear = parseInt(dateValue.split("-")[0]); 
+    if (enteredDay !== 99 && enteredMonth !== 99 && enteredYear !== 9999) {
       const fullDate = new Date(enteredYear, enteredMonth - 1, enteredDay);
       if (fullDate > today) {
         return true;
@@ -356,7 +357,7 @@ class TangyPartialDate extends PolymerElement {
         return false;
       }
     }
-    if (enteredMonth !== '' && enteredMonth !== 99) {
+    if (enteredMonth !== 99 && enteredYear !== 9999) {
       const imputedDate = new Date(enteredYear, enteredMonth - 1, 1);
       if (imputedDate > today) {
         return true;
@@ -364,12 +365,16 @@ class TangyPartialDate extends PolymerElement {
         return false;
       }
     }
-    const imputedDate = new Date(enteredYear, 0, 1);
+    if (enteredYear !== 9999) {
+      const imputedDate = new Date(enteredYear, 0, 1);
       if (imputedDate > today) {
         return true;
       } else {
         return false;
       }
+    }
+    return false;
+ 
   }
 
   isValidDate(str) {
