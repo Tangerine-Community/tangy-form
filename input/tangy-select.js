@@ -66,7 +66,7 @@ class TangySelect extends PolymerElement {
       },
       optionSelectLabel: {
         type: String,
-        value: t('Select One'),
+        value: t('----'),
         reflectToAttribute: true
       },
       hidden: {
