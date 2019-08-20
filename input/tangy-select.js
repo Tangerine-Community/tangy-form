@@ -21,9 +21,6 @@ class TangySelect extends PolymerElement {
     <style include="tangy-common-styles"></style>
     <style include="mdc-select-style"></style>
     <style>
-    :host([invalid]) {
-        border: solid var(--error-color) 5px;
-    }
     .mdc-error {
         border: solid var(--error-color) 5px;
     }
