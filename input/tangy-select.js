@@ -66,6 +66,7 @@ class TangySelect extends PolymerElement {
         value: t('----'),
         reflectToAttribute: true
       },
+      // deprecated
       secondaryLabel: {
         type: String,
         value: '',
