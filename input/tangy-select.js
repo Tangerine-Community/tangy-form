@@ -4,6 +4,8 @@ import '../style/tangy-element-styles.js';
 import '../style/tangy-common-styles.js'
 import '../style/mdc-select-style.js'
 import { combTranslations } from 'translation-web-component/util.js'
+import { t } from '../util/t.js'
+
 /**
  * `tangy-select`
  *
@@ -18,6 +20,11 @@ class TangySelect extends PolymerElement {
     <style include="tangy-element-styles"></style>
     <style include="tangy-common-styles"></style>
     <style include="mdc-select-style"></style>
+    <style>
+    .mdc-error {
+        border: solid var(--error-color) 5px;
+    }
+</style>
     <div id="container"></div>
     `;
   }
@@ -54,6 +61,12 @@ class TangySelect extends PolymerElement {
         value: '',
         reflectToAttribute: true
       },
+      optionSelectLabel: {
+        type: String,
+        value: t('----'),
+        reflectToAttribute: true
+      },
+      // deprecated
       secondaryLabel: {
         type: String,
         value: '',
@@ -85,14 +98,13 @@ class TangySelect extends PolymerElement {
     this.$.container.innerHTML = ''
     let options = []
     this.querySelectorAll('option').forEach(optionEl => options.push(optionEl))
+    this.optionSelectLabel = this.secondaryLabel === '' ? this.optionSelectLabel : this.secondaryLabel
     this.$.container.innerHTML = `
       <label for="group">${this.label}</label>
       <label class="hint-text">${this.hintText}</label>
       <div class="mdc-select">
         <select class="mdc-select__surface" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
-          ${ (this.secondaryLabel) ? `
-            <option value="" default selected disabled>${this.secondaryLabel}</option>
-          ` : ``}
+            <option value="" default selected disabled>${this.optionSelectLabel}</option>
           ${options.map((option, i) => `
             <option 
               value="${option.value}" 
@@ -120,9 +132,11 @@ class TangySelect extends PolymerElement {
   validate() {
     if (this.required && !this.hidden && !this.disabled && !this.value) {
       this.invalid = true
+      this.shadowRoot.querySelector('select').classList.add('mdc-error')
       return false
     } else {
       this.invalid = false
+      this.shadowRoot.querySelector('select').classList.remove('mdc-error')
       return true
     }
   }
