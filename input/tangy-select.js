@@ -66,6 +66,11 @@ class TangySelect extends PolymerElement {
         value: t('----'),
         reflectToAttribute: true
       },
+      secondaryLabel: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       hidden: {
         type: Boolean,
         value: false
@@ -92,6 +97,7 @@ class TangySelect extends PolymerElement {
     this.$.container.innerHTML = ''
     let options = []
     this.querySelectorAll('option').forEach(optionEl => options.push(optionEl))
+    this.optionSelectLabel = this.secondaryLabel === '' ? this.optionSelectLabel : this.secondaryLabel
     this.$.container.innerHTML = `
       <label for="group">${this.label}</label>
       <label class="hint-text">${this.hintText}</label>
