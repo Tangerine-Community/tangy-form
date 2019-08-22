@@ -39,7 +39,8 @@ class TangyRadioButtons extends PolymerElement {
         }
         :host([columns]) tangy-radio-button {
           padding: 0px;
-          margin: 15px 0px 0px;
+          /*margin: 15px 0px 0px;*/
+          margin: 10px 0 15px;
         }
         :host([hide-buttons]) tangy-radio-button {
           border: 5px solid white;
@@ -58,43 +59,22 @@ class TangyRadioButtons extends PolymerElement {
         :host(:not([columns="0"])) tangy-radio-button {
           display: inline-block;
         }
+      
+        #hint-text {
+          color: gray;
+          font-size: 1em;
+          font-weight: lighter;
+        }
       </style>
-
-      <style>
-      #error-text {
-        padding: 10px 10px 10px 0px;
-        font-size: medium;
-        font-weight: bold;
-        color: var(--error-color);
-      }
-    
-      #container {
-        margin-left:30px;
-      }
-  
-      #hint-text {
-        color: gray;
-        font-size: 1em;
-        font-weight: lighter;
-      }
-      .container {
-        margin-left:30px;
-      }
-  
-   
-      </style>
-      <div>
-        <div id="qnum" style="float:left;"></div>
+      
+      <div class="flex-container m-y-25">
+        <div id="qnum"></div>
         <div class="container">
           <label id="label" for="group"></label>
           <label id="hint-text"></label>
-        
           <div id="container"></div>
-     
-            <label id="error-text"></label>
-
+          <label id="error-text"></label>
         </div>
-
       </div>
     
      
@@ -288,7 +268,7 @@ class TangyRadioButtons extends PolymerElement {
     if (this.required && !this.hidden && !this.disabled && !foundOne) {
       this.invalid = true
       this.$['error-text'].innerHTML =  `
-      ${(this.errorText !== "" ? `<div style="float:left;margin-right:10px;"><iron-icon icon="error""></iron-icon></div><div style="margin-left:35px;">` : '')}
+      ${(this.errorText !== "" ? `<iron-icon icon="error""></iron-icon><div>` : '')}
       ${this.errorText}</div>`
 
 

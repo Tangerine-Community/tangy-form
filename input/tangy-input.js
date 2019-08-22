@@ -32,28 +32,22 @@ export class TangyInput extends PolymerElement {
         top: 5px;
       }
 
-        #errorText {
-          padding: 10px 10px 10px 0px;
-          font-size: medium;
-          font-weight: bold;
-          color: var(--error-color);
-        }
-      
-        #container {
-          margin-left:30px;
-        }
-        label.hint-text {
-          color: gray;
-          font-size: 1em;
-          font-weight: lighter;
-        }
-        #container {
-          margin-left:30px;
-        }
+      #errorText {
+        padding: 10px 10px 10px 0px;
+        font-size: medium;
+        font-weight: bold;
+        color: var(--error-color);
+      }
+
+      label.hint-text {
+        color: gray;
+        font-size: 1em;
+        font-weight: lighter;
+      }
     </style>
 
-    <div>
-      <div id="qnum" style="float:left;"></div>
+    <div class="flex-container m-y-25">
+      <div id="qnum"></div>
       <div id="container"></div>
     </div>
 
@@ -259,7 +253,7 @@ export class TangyInput extends PolymerElement {
     } else {
       this.shadowRoot.querySelector('#input').setAttribute('invalid', true)
       this.shadowRoot.querySelector('#errorText').innerHTML = `
-      ${(this.errorText !== "" ? `<div style="float:left;margin-right:10px;"><iron-icon icon="error""></iron-icon></div><div style="margin-left:35px;">` : '')}
+      ${(this.errorText !== "" ? `<iron-icon icon="error"></iron-icon><div>` : '')}
       ${this.errorText}</div>`
     }
   }

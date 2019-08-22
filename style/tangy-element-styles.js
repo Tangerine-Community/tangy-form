@@ -16,9 +16,9 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         color: var(--primary-text-color);
         display: block;
         position: relative;
-        border: solid white 5px;
+        border: var(--tangy-element-border, solid white 5px);
         padding: 0px;
-        margin: 10px;
+        margin: var(--tangy-element-margin, 10px);
       }
 
       :host(:not([hidden])) {
@@ -68,6 +68,17 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         /* color: var(--disabled-color); */
       }
 
+      .flex-container {
+        display: flex;
+      }
+      .flex-container > #container {
+        width: 100%;
+        padding-right: 2em;
+      }
+      #qnum > label {
+        margin-right: 0.5rem;
+        min-width: 2em;
+      }
 
       label {
         display: block;
@@ -75,9 +86,32 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         color: var(--primary-text-color);
         margin-bottom: 5px;
       }
+
+      #error-text, #errorText {
+        font-size: medium;
+        font-weight: bold;
+        color: var(--error-color);
+        display: flex;
+        margin-bottom: 30px;
+      }
+      #error-text > iron-icon, #errorText > iron-icon {
+        padding-right: 0.8em;
+        height: 24px;
+        width: 24px;
+      }
+      #error-text > div, #errorText > div {
+        line-height: 24px;
+      }
+      #error-text:empty, #errorText:empty {
+        margin-bottom: 0;
+      }
    
       .secondary_color {
         color: var(--accent-color);
+      }
+
+      .m-y-25 {
+        margin: 25px 0;
       }
    
       
