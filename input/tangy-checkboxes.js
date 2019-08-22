@@ -32,11 +32,7 @@ class TangyCheckboxes extends PolymerElement {
 
         :host {
           @apply --tangy-font-common-base;
-        }
-        
-        tangy-checkbox {
-          margin-top: 15px;
-          margin-right: 25px;
+          /*--tangy-element-margin: 15px 25px 10px 10px;*/
         }
         
         :host([invalid]) #hintText {
@@ -44,33 +40,21 @@ class TangyCheckboxes extends PolymerElement {
           top: 5px;
         }
   
-          #errorText {
-            padding: 10px 10px 10px 0px;
-            font-size: medium;
-            font-weight: bold;
-            color: var(--error-color);
-          }
-        
-          #container {
-            margin-left:30px;
-          }
 
           label.hint-text {
             color: gray;
             font-size: 1em;
             font-weight: lighter;
           }
-      
-          #error-text {
-            padding: 10px 10px 10px 0px;
-            font-size: medium;
-            font-weight: bold;
-            color: var(--error-color);
+
+          tangy-checkbox {
+            margin: 10px 0 15px;
           }
+
       </style>
 
-      <div>
-        <div id="qnum" style="float:left;"></div>
+      <div class="flex-container m-y-25">
+        <div id="qnum"></div>
         <div id="container">
           <label id="label" for="group"></label>
           <label id="hint-text" class="hint-text"></label>
@@ -219,7 +203,7 @@ class TangyCheckboxes extends PolymerElement {
       this.invalid = true
 
       this.$['error-text'].innerHTML =  `
-      ${(this.errorText !== "" ? `<div style="float:left;margin-right:10px;"><iron-icon icon="error""></iron-icon></div><div style="margin-left:35px;">` : '')}
+      ${(this.errorText !== "" ? `<iron-icon icon="error"></iron-icon><div>` : '')}
       ${this.errorText}</div>`
 
       return false

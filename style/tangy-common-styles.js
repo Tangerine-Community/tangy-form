@@ -28,11 +28,11 @@ $_documentStyleContainer.innerHTML = `
         min-width: 1em;
         height:40px; 
         text-transform:capitalize;
-        font-size: 1.2em;
+        font-size: 1.2rem;
       }
 
       .card-actions paper-button {
-        font-size: 1.2em;
+        font-size: 1.2rem;
       }
       paper-checkbox {
         --paper-checkbox-size: 1.25em;
@@ -47,6 +47,10 @@ $_documentStyleContainer.innerHTML = `
         color: gray;
         font-size: small;
         font-weight: lighter;
+    }
+
+    .b-b-2 {
+      border-bottom: 2px solid #efefef;
     }
   </style>
   </template>
