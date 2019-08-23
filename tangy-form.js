@@ -57,7 +57,14 @@ export class TangyForm extends PolymerElement {
     let initialResponse = new TangyFormResponseModel() 
     initialResponse.form = this.getProps()
     this.querySelectorAll('tangy-form-item').forEach((item) => {
-      initialResponse.items.push(item.getProps())
+      initialResponse.items.push({
+        ...item.getProps(),
+        inputs: item.getInputsMeta().map(input => {
+          return {
+            name: input.name
+          }
+        })
+      })
     })
     this.response = initialResponse
   }
@@ -360,6 +367,11 @@ export class TangyForm extends PolymerElement {
         reflectToAttribute: true
       },
       hasSummary: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      locked: {
         type: Boolean,
         value: false,
         reflectToAttribute: true

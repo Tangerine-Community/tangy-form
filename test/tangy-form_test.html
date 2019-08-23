@@ -76,11 +76,11 @@
 
     <test-fixture id="Simple2ItemFixture">
       <template>
-        <tangy-form id="test" title="test">
-          <tangy-form-item id="item-1">
+        <tangy-form id="test" title="...">
+          <tangy-form-item id="item-1" title="Item 1">
             <tangy-input label='test1' name='input1'></tangy-input>
           </tangy-form-item>
-          <tangy-form-item id="item-2">
+          <tangy-form-item id="item-2" title="Item 2">
             <tangy-input label='test2' name='input2'></tangy-input>
           </tangy-form-item>
         </tangy-form>
@@ -246,6 +246,15 @@
           assert(meta.items[0].inputs.length, 1)
         });
 
+        test('should lock and unlock', function() {
+          let element = fixture('Simple2ItemFixture')
+          element.newResponse()
+          element.lock()
+          assert.equal(element.locked, true)
+          element.unlock()
+          assert.equal(element.locked, false)
+        })
+ 
         test('should submit and be able to review an item', function() {
           let element = fixture('HelloWorldWithInputFixture')
           element.newResponse()
