@@ -317,6 +317,11 @@ export class TangyFormItem extends PolymerElement {
         value: true,
         reflectToAttribute: true
       },
+      locked: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
       disabled: {
         type: Boolean,
         value: false,

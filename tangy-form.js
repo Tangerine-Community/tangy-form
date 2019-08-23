@@ -146,6 +146,18 @@ export class TangyForm extends PolymerElement {
     })
   }
 
+  lock() {
+    this.store.dispatch({
+      type: 'FORM_LOCK'
+    })
+  }
+
+  unlock() {
+    this.store.dispatch({
+      type: 'FORM_UNLOCK'
+    })
+  }
+
   /*
    * Private.
    */
