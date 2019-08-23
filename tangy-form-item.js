@@ -626,6 +626,12 @@ export class TangyFormItem extends PolymerElement {
     }
   }
 
+  getInputsMeta() {
+    const container = document.createElement('div')
+    container.innerHTML = this.template
+    return [...container.querySelectorAll('[name]')].map(el => el.getProps())
+  }
+
 }
 
 window.customElements.define(TangyFormItem.is, TangyFormItem);
