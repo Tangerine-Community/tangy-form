@@ -3,6 +3,7 @@ import '../util/html-element-props.js'
 import '@polymer/paper-checkbox/paper-checkbox.js'
 import '../style/tangy-common-styles.js'
 import '../style/tangy-element-styles.js'
+import { LockedBehaviorMixin } from '../mixins/locked-behavior-mixin.js';
 
     /**
      * `tangy-checkbox`
@@ -12,7 +13,7 @@ import '../style/tangy-element-styles.js'
      * @polymer
      * @demo demo/index.html
      */
-export class TangyCheckbox extends PolymerElement {
+export class TangyCheckbox extends LockedBehaviorMixin(PolymerElement) {
   static get template () {
     return html`
     <style include="tangy-common-styles"></style>

@@ -8,6 +8,7 @@ import '@polymer/iron-icons/editor-icons.js';
 import '@polymer/iron-icon/iron-icon.js';
 import './tangy-toggle-button.js';
 import '../style/tangy-common-styles.js'
+import { LockedBehaviorMixin } from '../mixins/locked-behavior-mixin.js';
 
 /**
  * `tangy-timed`
@@ -26,7 +27,7 @@ const TANGY_TIMED_MODE_DONE = 'TANGY_TIMED_MODE_DONE'
 const TANGY_TIMED_COMPLETE = 'TANGY_TIMED_COMPLETE'
 const TANGY_TIMED_MODE_DISABLED = 'TANGY_TIMED_MODE_DISABLED'
 
-class TangyTimed extends PolymerElement {
+class TangyTimed extends LockedBehaviorMixin(PolymerElement) {
   constructor() {
     super()
     this.t = {

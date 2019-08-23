@@ -3,6 +3,7 @@ import '../style/tangy-common-styles.js'
 import '../style/tangy-element-styles.js'
 import '@polymer/iron-icon/iron-icon.js'
 import '@polymer/paper-button/paper-button.js'
+import { LockedBehaviorMixin } from '../mixins/locked-behavior-mixin.js';
 
 
     /**
@@ -13,7 +14,7 @@ import '@polymer/paper-button/paper-button.js'
      * @polymer
      * @demo demo/index.html
      */
-export class TangyPhotoCapture extends PolymerElement {
+export class TangyPhotoCapture extends LockedBehaviorMixin(PolymerElement) {
   static get template () {
     return html`
     <style include="tangy-common-styles"></style>

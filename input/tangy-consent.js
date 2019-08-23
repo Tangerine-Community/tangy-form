@@ -6,6 +6,7 @@ import '../style/tangy-element-styles.js'
 import '@polymer/iron-icon/iron-icon.js'
 import '@polymer/iron-icons/image-icons.js'
 import { t } from '../util/t.js'
+import { LockedBehaviorMixin } from '../mixins/locked-behavior-mixin.js';
 
 /**
  * `tangy-consent`
@@ -15,7 +16,7 @@ import { t } from '../util/t.js'
  * @polymer
  * @demo demo/index.html
  */
-class TangyConsent extends PolymerElement {
+class TangyConsent extends LockedBehaviorMixin(PolymerElement) {
   static get template() {
     return html`
       <style include="tangy-common-styles"></style>

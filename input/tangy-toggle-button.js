@@ -2,6 +2,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '../util/html-element-props.js'
 import '../style/tangy-element-styles.js';
 import '../style/tangy-common-styles.js'
+import { LockedBehaviorMixin } from '../mixins/locked-behavior-mixin.js';
 
 /**
  * `tangy-toggle-button`
@@ -11,7 +12,7 @@ import '../style/tangy-common-styles.js'
  * @polymer
  * @demo demo/index.html
  */
-class TangyToggleButton extends PolymerElement {
+class TangyToggleButton extends LockedBehaviorMixin(PolymerElement) {
   static get template() {
     return html`
     <style include="tangy-common-styles"></style>

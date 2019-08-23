@@ -5,6 +5,7 @@ import '../style/tangy-common-styles.js'
 import '../style/mdc-select-style.js'
 import { combTranslations } from 'translation-web-component/util.js'
 import { t } from '../util/t.js'
+import { LockedBehaviorMixin } from '../mixins/locked-behavior-mixin.js';
 
 /**
  * `tangy-select`
@@ -14,7 +15,7 @@ import { t } from '../util/t.js'
  * @polymer
  * @demo demo/index.html
  */
-class TangySelect extends PolymerElement {
+class TangySelect extends LockedBehaviorMixin(PolymerElement) {
   static get template() {
     return html`
     <style include="tangy-element-styles"></style>

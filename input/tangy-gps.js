@@ -3,6 +3,7 @@ import { t } from '../util/t.js'
 import '../util/html-element-props.js'
 import '../style/tangy-common-styles.js'
 import '../style/tangy-element-styles.js'
+import { LockedBehaviorMixin } from '../mixins/locked-behavior-mixin.js';
 
 /**
  * `tangy-timed`
@@ -14,7 +15,7 @@ import '../style/tangy-element-styles.js'
  * it shows the latitude, Longitude, Acuuracy, And accuracy Levels
  * @demo demo/index.html
  */
-class TangyGps extends PolymerElement {
+class TangyGps extends LockedBehaviorMixin(PolymerElement) {
 
   static get is() { return 'tangy-gps'; }
 
