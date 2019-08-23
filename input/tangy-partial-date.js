@@ -4,6 +4,7 @@ import '../style/tangy-element-styles.js';
 import '../style/tangy-common-styles.js'
 import '../style/mdc-select-style.js'
 import { combTranslations } from 'translation-web-component/util.js'
+import { LockedBehaviorMixin } from '../mixins/locked-behavior-mixin.js';
 /**
  * `tangy-partial-date`
  *
@@ -12,7 +13,7 @@ import { combTranslations } from 'translation-web-component/util.js'
  * @polymer
  * @demo demo/index.html
  */
-class TangyPartialDate extends PolymerElement {
+class TangyPartialDate extends LockedBehaviorMixin(PolymerElement) {
   static get template() {
     return html`
     <style include="tangy-element-styles"></style>

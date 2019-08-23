@@ -16,7 +16,7 @@ import { t } from '../util/t.js'
  * @polymer
  * @demo demo/index.html
  */
-class TangyQr extends PolymerElement {
+class TangyQr extends LockedBehaviorMixin(PolymerElement) {
   static get template() {
     return html`
 

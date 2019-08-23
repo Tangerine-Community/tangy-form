@@ -4,6 +4,7 @@ import '../util/html-element-props.js'
 import './tangy-checkbox.js'
 import '../style/tangy-element-styles.js';
 import '../style/tangy-common-styles.js'
+import { LockedBehaviorMixin } from '../mixins/locked-behavior-mixin.js';
 
 /**
  * `tangy-checkboxes`
@@ -13,7 +14,7 @@ import '../style/tangy-common-styles.js'
  * @polymer
  * @demo demo/index.html
  */
-class TangyCheckboxesDynamic extends PolymerElement {
+class TangyCheckboxesDynamic extends LockedBehaviorMixin(PolymerElement) {
 
   static get is() { return 'tangy-checkboxes-dynamic'; }
 

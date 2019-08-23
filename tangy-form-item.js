@@ -317,17 +317,17 @@ export class TangyFormItem extends PolymerElement {
         value: true,
         reflectToAttribute: true
       },
+      locked: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
       disabled: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
       },
       hidden: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
-      locked: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
@@ -619,6 +619,12 @@ export class TangyFormItem extends PolymerElement {
       this.submit()
       this.dispatchEvent(new CustomEvent('FORM_RESPONSE_NO_CONSENT', {bubbles: true}))
     }
+  }
+
+  getInputsMeta() {
+    const container = document.createElement('div')
+    container.innerHTML = this.template
+    return [...container.querySelectorAll('[name]')].map(el => el.getProps())
   }
 
 }

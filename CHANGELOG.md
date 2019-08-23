@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.1.0
+- API change in tangy-select - use of secondaryLabel is supported but deprecated; Use optionSelectLabel instead. 
+  
 ## v4.0.0
 - Enable content of a form to be styled from the parent document. https://github.com/Tangerine-Community/tangy-form/pull/64
 

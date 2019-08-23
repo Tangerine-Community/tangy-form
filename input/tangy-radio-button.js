@@ -3,6 +3,7 @@ import '../util/html-element-props.js'
 import '@polymer/paper-radio-button/paper-radio-button.js'
 import '../style/tangy-common-styles.js'
 import '../style/tangy-element-styles.js'
+import { LockedBehaviorMixin } from '../mixins/locked-behavior-mixin.js';
 
     /**
      * `tangy-radio-button`
@@ -12,7 +13,7 @@ import '../style/tangy-element-styles.js'
      * @polymer
      * @demo demo/index.html
      */
-export class TangyRadioButton extends PolymerElement {
+export class TangyRadioButton extends LockedBehaviorMixin(PolymerElement) {
   static get template () {
     return html``
   }

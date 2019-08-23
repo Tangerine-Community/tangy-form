@@ -46,6 +46,37 @@ const tangyFormReducer = function (state = initialState, action) {
       if (newState.form.fullscreen === true) newState.items.forEach(item => item.fullscreen = true)
       return newState
 
+    case 'FORM_LOCK': 
+    case 'FORM_UNLOCK':
+      return calculateTargets({...state, ...{
+        form: {
+          ...state.form,
+          locked: action.type === 'FORM_LOCK' ? true : false
+        },
+        items: state.items.map((item, i) => {
+          firstNotDisabled = state.items.findIndex(item => item.disabled === false)
+          return {
+            ...item,
+            disabled: item.disabled ? true : false,
+            hidden: action.type === 'FORM_LOCK' || firstNotDisabled === i ? false : true,
+            //hidden: false,
+            open: action.type === 'FORM_LOCK' ? false : i === 0 ? true : false,
+            hideButtons: true,
+            hideBackButton: action.type === 'FORM_LOCK' || firstNotDisabled === i ? true : false,
+            hideNextButton: action.type === 'FORM_LOCK' || i === state.items.length-1 ? true : false,
+            fullscreen: false,
+            // Means something different for items... Need to reconcile for clarity sake.
+            //locked: action.type === 'FORM_LOCK' ? true : false,
+            inputs: item.inputs.map(input => {
+              return {
+                ...input,
+                locked: action.type === 'FORM_LOCK' ? true : false
+              }
+            })
+          }
+        })
+      }})
+
     case 'FORM_RESPONSE_COMPLETE':
       return Object.assign({}, state, {
         complete: true,

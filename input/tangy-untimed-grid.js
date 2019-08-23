@@ -8,6 +8,7 @@ import '@polymer/iron-icons/editor-icons.js';
 import '@polymer/iron-icon/iron-icon.js';
 import './tangy-toggle-button.js';
 import '../style/tangy-common-styles.js'
+import { LockedBehaviorMixin } from '../mixins/locked-behavior-mixin.js';
 
 /**
  * `tangy-untimed-grid`
@@ -26,7 +27,7 @@ const TANGY_UNTIMED_GRID_MODE_DONE = 'TANGY_UNTIMED_GRID_MODE_DONE'
 const TANGY_UNTIMED_GRID_COMPLETE = 'TANGY_UNTIMED_GRID_COMPLETE'
 const TANGY_UNTIMED_GRID_MODE_DISABLED = 'TANGY_UNTIMED_GRID_MODE_DISABLED'
 
-class TangyUntimedGrid extends PolymerElement {
+class TangyUntimedGrid extends LockedBehaviorMixin(PolymerElement) {
   constructor() {
     super()
     this.t = {

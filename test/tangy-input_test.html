@@ -84,12 +84,12 @@
           const form = fixture('TangyInputInAForm');
           form.newResponse()
           form.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
-          form.querySelector('#item1').shadowRoot.querySelector('[name="input1"]').value = 'foo'
+          form.querySelector('#item1').querySelector('[name="input1"]').value = 'foo'
           form.querySelector('#item1').shadowRoot.querySelector('#next').click()
           form.querySelector('#item2').shadowRoot.querySelector('dom-if').render()
           form.querySelector('#item2').shadowRoot.querySelector('#back').click()
           form.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
-          assert(form.querySelector('#item1').shadowRoot.querySelector('[name="input1"]').value, 'foo')
+          assert(form.querySelector('#item1').querySelector('[name="input1"]').value, 'foo')
         })
       })
     </script>

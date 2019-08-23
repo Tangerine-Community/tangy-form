@@ -2,6 +2,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '../util/html-element-props.js'
 import './tangy-radio-buttons.js'
 import '../style/tangy-common-styles.js'
+import { LockedBehaviorMixin } from '../mixins/locked-behavior-mixin.js';
 
 /**
  * `tangy-acasi`
@@ -11,7 +12,7 @@ import '../style/tangy-common-styles.js'
  * @polymer
  * @demo demo/index.html
  */
-export class TangyEftouch extends PolymerElement {
+export class TangyEftouch extends LockedBehaviorMixin(PolymerElement) {
 
   static get is() {
     return 'tangy-eftouch'
