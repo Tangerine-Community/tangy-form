@@ -285,7 +285,7 @@
             assert.equal(element.response.location.county, 'county1')
             assert.equal(element.response.location.school, 'school1')
             done()
-          })
+          }, {once:true})
         })
 
         test('tangy-form-item.on-open should run', () => {
