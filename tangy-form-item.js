@@ -332,11 +332,6 @@ export class TangyFormItem extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
-      locked: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
       isDirty: {
         type: Boolean,
         value: false,
