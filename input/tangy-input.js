@@ -6,6 +6,7 @@ import '@polymer/paper-input/paper-input.js'
 import '../style/tangy-common-styles.js'
 import '../style/tangy-element-styles.js'
 import { combTranslations } from 'translation-web-component/util.js'
+import { LockedBehaviorMixin } from '../mixins/locked-behavior-mixin.js';
 
 /**
  * `tangy-input`
@@ -15,7 +16,7 @@ import { combTranslations } from 'translation-web-component/util.js'
  * @polymer
  * @demo demo/index.html
  */
-export class TangyInput extends PolymerElement {
+export class TangyInput extends LockedBehaviorMixin(PolymerElement) {
 
   static get template() {
     return html`
