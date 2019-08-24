@@ -8,6 +8,7 @@ import '../style/tangy-element-styles.js'
 import '@polymer/iron-icon/iron-icon.js'
 import '@polymer/iron-icons/image-icons.js'
 import { t } from '../util/t.js'
+import { LockedBehaviorMixin } from '../mixins/locked-behavior-mixin.js';
 /**
  * `tangy-scan`
  * 
