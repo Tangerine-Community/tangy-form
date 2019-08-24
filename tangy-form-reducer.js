@@ -17,6 +17,9 @@ const tangyFormReducer = function (state = initialState, action) {
 
   switch(action.type) {
 
+    case 'FORM_LOAD':
+      return {...action.response}
+
     case 'FORM_OPEN':
       newState = Object.assign({}, action.response)
       // Ensure that the only items we have in the response are those that are in the DOM but maintain state of the existing items in the response.
