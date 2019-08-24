@@ -79,6 +79,10 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         margin-right: 0.5rem;
         min-width: 2em;
       }
+      #qnum > label:empty {
+        margin: 0;
+        min-width: 0;
+      }
 
       label {
         display: block;
