@@ -27,8 +27,8 @@ $_documentStyleContainer.innerHTML = `
         display: inline-flex;
         min-width: 1em;
         height:40px; 
-        text-transform:capitalize;
         font-size: 1.2rem;
+        text-transform: capitalize;
       }
 
       .card-actions paper-button {
