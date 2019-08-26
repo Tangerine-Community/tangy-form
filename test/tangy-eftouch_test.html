@@ -169,6 +169,30 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="EFTouchTimeLimitAutoProgressTransitionSoundFixture">
+      <template>
+        <tangy-eftouch time-limit=100
+                       auto-progress
+                       value="fruit_selection"
+                       label="What is your favorite fruit?"
+                       transition-sound="assets/sounds/swish.mp3">
+          <option value="cherry" src="assets/images/cat.png"></option>
+          <option value="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchTransitionSoundFixture">
+      <template>
+        <tangy-eftouch value="fruit_selection"
+                       label="What is your favorite fruit?"
+                       transition-sound="assets/sounds/swish.mp3">
+          <option value="cherry" src="assets/images/cat.png"></option>
+          <option value="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
     <test-fixture id="EFTouchMultiSelectFixture">
       <template>
         <tangy-eftouch name="fruit_selection" multi-select label="What is your favorite fruit?">
@@ -344,7 +368,7 @@
 
         test('should make an open sound', () => { 
           const element = fixture('EFTouchOpenSoundFixture')
-          // No way to programatically test this...
+          assert(element.openSoundTriggered)
         })
 
         test('should give warning message after hitting warning time', (done) => { 
@@ -391,6 +415,42 @@
           assert.equal(eventDidFire, false)
         });
 
+        // TODO: new attribute: auto-progress-at-timelimit
+        test('should transition automatically at time-limit but not on user input');
+
+        // TODO: new attribute: auto-progress-on-user-input
+        test('should transition automatically on user input but not on time-limit');
+
+        test('should play transition-sound when auto-progress is triggered', (done) => {
+          const element = fixture('EFTouchTimeLimitAutoProgressTransitionSoundFixture')
+          let eventDidFire = false
+          element.addEventListener('next', () => {
+            eventDidFire = true
+          })
+          setTimeout(() => {
+            assert.equal(eventDidFire, true)
+            assert.equal(element.transitionSoundTriggered, true)
+            done()
+          }, 105)
+          assert.equal(eventDidFire, false)
+        });
+
+        test('should play transition-sound when next button is clicked without auto-progress', (done) => {
+          const element = fixture('EFTouchTransitionSoundFixture')
+          let eventDidFire = false
+          element.addEventListener('manual-next', () => {
+            debugger;
+            eventDidFire = true
+            assert.equal(element.transitionSoundTriggered, true)
+          })
+          element.shadowRoot.querySelector('img').click()
+          setTimeout(() => {
+            done()
+          }, 105)
+          assert.equal(eventDidFire, false)
+        });
+
+        // Are we supporting transition messages to be shown when there is no transition time? - i.e. after user input?
         test('should show transition message but no auto progress', () => {
           const element = fixture('EFTouchTransitionNoAutoProgressFixture')
           element.shadowRoot.querySelectorAll('img')[0].click()
@@ -465,7 +525,6 @@
         test('should not show warning message if a selection is made')
         test('should be able to skip given correctness of prior entry in a set of items')
         test('can group questions to be able to calculate % correct in a group')
-        test('should leave fullscreen after 5 times pressing x button');
 
       })
 
