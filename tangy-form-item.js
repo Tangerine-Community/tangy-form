@@ -221,12 +221,12 @@ export class TangyFormItem extends PolymerElement {
             <template is="dom-if" if="{{!rightToLeft}}">
               <template is="dom-if" if="{{!hideBackButton}}">
                 <paper-button id="back" on-click="back" >
-                  <iron-icon icon="arrow-back"></iron-icon>
+                    Previous
                 </paper-button>
               </template>
               <template is="dom-if" if="{{!hideNextButton}}">
                 <paper-button id="next" on-click="next" >
-                  <iron-icon icon="arrow-forward"></iron-icon>
+                  Next
                 </paper-button>
               </template>
               <template is="dom-if" if="{{showCompleteButton}}">

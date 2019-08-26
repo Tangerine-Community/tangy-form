@@ -246,13 +246,20 @@
           assert(meta.items[0].inputs.length, 1)
         });
 
-        test('should lock and unlock', function() {
+        test('should lock and unlock and stay consistent throughout resuming', function() {
           let element = fixture('Simple2ItemFixture')
           element.newResponse()
+          element.querySelector('#item-1').querySelector('[name=input1]').value = 'foo'
+          element.querySelector('#item-1').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item-1').shadowRoot.querySelector('#next').click()
           element.lock()
-          assert.equal(element.locked, true)
-          element.unlock()
-          assert.equal(element.locked, false)
+          let element2 = fixture('Simple2ItemFixture')
+          element2.response = {"_id":"17c7c63d-00c0-45bd-8ba8-c54ec3e0acf5","collection":"TangyFormResponse","form":{"fullscreen":false,"title":"...","complete":false,"linearMode":true,"hideClosedItems":true,"hideCompleteFab":false,"tabIndex":0,"showResponse":false,"showSummary":false,"hasSummary":false,"locked":true,"id":"test","tagName":"TANGY-FORM"},"items":[{"id":"item-1","title":"Item 1","summary":false,"fullscreen":false,"fullscreenEnabled":false,"hideButtons":false,"hideBackButton":true,"rightToLeft":false,"hideNextButton":true,"showCompleteButton":false,"inputs":[{"name":"input1","private":false,"label":"test1","innerLabel":"","placeholder":"","hintText":"","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"foo","allowedPattern":"","min":"","max":"","questionNumber":"","errorText":"","tagName":"TANGY-INPUT","locked":true}],"open":false,"incomplete":false,"locked":false,"disabled":false,"hidden":false,"isDirty":false,"tagName":"TANGY-FORM-ITEM"},{"id":"item-2","title":"Item 2","summary":false,"fullscreen":false,"fullscreenEnabled":false,"hideButtons":false,"hideBackButton":true,"rightToLeft":false,"hideNextButton":true,"showCompleteButton":true,"inputs":[{"name":"input2","locked":true}],"open":false,"incomplete":true,"locked":false,"disabled":false,"hidden":false,"isDirty":false,"tagName":"TANGY-FORM-ITEM"}],"complete":false,"focusIndex":-1,"nextFocusIndex":0,"previousFocusIndex":-1,"startDatetime":"8/23/2019, 11:43:54 PM","startUnixtime":1566618234879,"uploadDatetime":"","location":{},"nextItemId":"item-1","progress":0}
+          assert.equal(element2.locked, true)
+          element2.unlock()
+          let element3 = fixture('Simple2ItemFixture')
+          element3.response = {"_id":"17c7c63d-00c0-45bd-8ba8-c54ec3e0acf5","collection":"TangyFormResponse","form":{"fullscreen":false,"title":"...","complete":false,"linearMode":true,"hideClosedItems":true,"hideCompleteFab":false,"tabIndex":0,"showResponse":false,"showSummary":false,"hasSummary":false,"locked":false,"id":"test","tagName":"TANGY-FORM"},"items":[{"id":"item-1","title":"Item 1","summary":false,"fullscreen":false,"fullscreenEnabled":false,"hideButtons":true,"hideBackButton":true,"rightToLeft":false,"hideNextButton":false,"showCompleteButton":false,"inputs":[{"name":"input1","private":false,"label":"test1","innerLabel":"","placeholder":"","hintText":"","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"foo","allowedPattern":"","min":"","max":"","questionNumber":"","errorText":"","tagName":"TANGY-INPUT","locked":false}],"open":true,"incomplete":false,"locked":false,"disabled":false,"hidden":false,"isDirty":false,"tagName":"TANGY-FORM-ITEM"},{"id":"item-2","title":"Item 2","summary":false,"fullscreen":false,"fullscreenEnabled":false,"hideButtons":true,"hideBackButton":false,"rightToLeft":false,"hideNextButton":true,"showCompleteButton":true,"inputs":[{"name":"input2","locked":false}],"open":false,"incomplete":true,"locked":false,"disabled":false,"hidden":true,"isDirty":false,"tagName":"TANGY-FORM-ITEM"}],"complete":false,"focusIndex":0,"nextFocusIndex":1,"previousFocusIndex":-1,"startDatetime":"8/23/2019, 11:43:54 PM","startUnixtime":1566618234879,"uploadDatetime":"","location":{},"nextItemId":"item-2","progress":0}
+          assert.equal(element3.locked, false)
         })
  
         test('should submit and be able to review an item', function() {

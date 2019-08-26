@@ -59,9 +59,9 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         content: "*"; 
         color: var(--accent-color); 
         position: absolute;
-        top: -2px;
-        left: -18px;
-        font-size: 2em;
+        top: -4px;
+        left: -10px;
+        font-size: 1.2em;
       }
 
       :host([disabled]) label {
@@ -77,7 +77,7 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
       }
       #qnum > label {
         margin-right: 0.5rem;
-        min-width: 2em;
+        min-width: 1.4em;
       }
       #qnum > label:empty {
         margin: 0;
@@ -117,7 +117,8 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
       .m-y-25 {
         margin: 25px 0;
       }
-   
+
+      
       
      
   

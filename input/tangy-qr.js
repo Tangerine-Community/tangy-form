@@ -8,6 +8,7 @@ import '../style/tangy-element-styles.js'
 import '@polymer/iron-icon/iron-icon.js'
 import '@polymer/iron-icons/image-icons.js'
 import { t } from '../util/t.js'
+import { LockedBehaviorMixin } from '../mixins/locked-behavior-mixin.js';
 /**
  * `tangy-scan`
  * 
@@ -58,7 +59,7 @@ class TangyQr extends LockedBehaviorMixin(PolymerElement) {
           <div id="container">
             <iron-icon id="scan-icon" icon="image:center-focus-weak"></iron-icon>
           </div>
-          <paper-textarea value="[[value]]" placeholder="[[statusMessage]]" id="output" readonly></paper-textarea>
+          <paper-textarea value="[[value]]" placeholder="[[statusMessage]]" id="output" readonly hidden></paper-textarea>
         </div>
         <div class="card-actions">
           <template is="dom-if" if="{{notScanning}}">

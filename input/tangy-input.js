@@ -23,15 +23,30 @@ export class TangyInput extends LockedBehaviorMixin(PolymerElement) {
     <style include="tangy-common-styles"></style>
     <style include="tangy-element-styles"></style>
     <style>
+  
+  
       paper-input, paper-textarea {
-        --paper-input-container-shared-input-style_-_font-size: 1em;
-        --paper-font-subhead_-_font-size: 1em;
-        --paper-font-subhead_-_line-height: 1em;
+        margin-top:10px;
+        --paper-input-container-shared-input-style_-_font-size: 1.1em;
+        --paper-font-subhead_-_font-size: 1.1em;
+        --paper-font-subhead_-_line-height: 1.1em;
+
+        background-color: var(--tangy-select-background-color, rgba(0, 0, 0, 0.04));
+        height: 3em;
+
+        --paper-input-container-color: black;
+        --paper-input-container-focus-color: black;
+        --paper-input-container-invalid-color: black;
+
+
+
       }
       :host([invalid]) #hintText {
         position: relative;
         top: 5px;
       }
+
+      
 
       #errorText {
         padding: 10px 10px 10px 0px;
