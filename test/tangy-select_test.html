@@ -67,18 +67,22 @@
 
         test('should render options', () => {
           const element = fixture('TangySelectFixture')
-          assert.equal(element.shadowRoot.querySelectorAll('option').length, 3)
+          assert.equal(element.shadowRoot.querySelectorAll('option').length, 4)
         })
 
         test('should have value set on load', () => {
           const element = fixture('TangySelectValueSetFixture')
-          assert.equal(element.shadowRoot.querySelector('[selected]').getAttribute('value'), 'b')
+          const selectedIndex = element.shadowRoot.querySelector('select').selectedIndex
+          const option = element.shadowRoot.querySelectorAll('option')[selectedIndex];
+          assert.equal(option.getAttribute('value'), 'b')
         })
 
         test('should update after value set', (done) => {
           const element = fixture('TangySelectValueSetFixture')
           element.addEventListener('render', () => {
-            assert.equal(element.shadowRoot.querySelector('[selected]').getAttribute('value'), 'c')
+            const selectedIndex = element.shadowRoot.querySelector('select').selectedIndex
+            const option = element.shadowRoot.querySelectorAll('option')[selectedIndex];
+            assert.equal(option.getAttribute('value'), 'c')
             done()
           })
           element.value = 'c'
@@ -101,7 +105,7 @@
         test('should add an option dynamically', (done) => {
           const element = fixture('DynamicTangySelectFixture');
           element.addEventListener('render', () => {
-            assert.equal(element.shadowRoot.querySelectorAll('option').length, 3)
+            assert.equal(element.shadowRoot.querySelectorAll('option').length, 4)
             done()
           })
           element.innerHTML = `
