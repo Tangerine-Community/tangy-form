@@ -86,7 +86,7 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
 
       label {
         display: block;
-        font-size: 1.2em;
+        font-size: 1.2rem;
         color: var(--primary-text-color);
         margin-bottom: 5px;
       }

@@ -171,7 +171,7 @@ export class TangyFormItem extends PolymerElement {
           width: 84px;
         }
         #back iron-icon {
-          margin: 0px 0px 0px 21px;
+          margin: 0 21px 0 0;
         }
 
         .card-actions paper-button {
