@@ -33,6 +33,7 @@ export class TangyInput extends LockedBehaviorMixin(PolymerElement) {
 
         background-color: var(--tangy-select-background-color, rgba(0, 0, 0, 0.04));
         height: 3em;
+        border-radius: 4px 4px 0 0;
 
         --paper-input-container-color: black;
         --paper-input-container-focus-color: black;
