@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.1.1
+- Fix tangy-select test regression and work on EFTouch transition sound plays only on auto-progress [#137](https://github.com/Tangerine-Community/Tangerine/issues/1371)
+
 ## v4.1.0
 - API change in tangy-select - use of secondaryLabel is supported but deprecated; Use optionSelectLabel instead. 
   
