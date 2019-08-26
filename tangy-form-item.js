@@ -194,7 +194,7 @@ export class TangyFormItem extends PolymerElement {
           <template is="dom-if" if="{{!hideButtons}}">
             <paper-button id="open" on-click="onOpenButtonPress">[[t.open]]</paper-button>
             <template is="dom-if" if="{{!locked}}">
-              <paper-button id="close" on-click="onCloseButtonPress">[[t.save]]</paper-button>
+              <paper-button id="close" on-click="onCloseButtonPress">[[t.close]]</paper-button>
             </template>
             <template is="dom-if" if="{{locked}}">
               <paper-button id="close" on-click="onCloseButtonPress">[[t.close]]</paper-button>
