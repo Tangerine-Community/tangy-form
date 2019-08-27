@@ -624,7 +624,25 @@ export class TangyFormItem extends PolymerElement {
   getInputsMeta() {
     const container = document.createElement('div')
     container.innerHTML = this.template
-    return [...container.querySelectorAll('[name]')].map(el => el.getProps())
+    return [...container.querySelectorAll('[name]')]
+      .map(el => {
+        const propsData = el.getProps()
+        const optionsData = [...el.querySelectorAll('option')].map(optionEl => {
+          return {
+            label: optionEl.innerHTML,
+            value: optionEl.hasAttribute('name') ? optionEl.getAttribute('name') : optionEl.getAttribute('value')
+          }
+        })
+        return {
+          ...propsData,
+          value: optionsData.length > 0 ? optionsData : propsData.value 
+        }
+      })
+      .reduce((elementsThatAreNotOptions, element) => {
+        return element.tagName === 'OPTION'
+          ? elementsThatAreNotOptions 
+          : [...elementsThatAreNotOptions, element]
+      }, [])
   }
 
 }
