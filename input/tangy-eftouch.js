@@ -130,6 +130,18 @@ export class TangyEftouch extends LockedBehaviorMixin(PolymerElement) {
         type: Boolean,
         value: true,
         reflectToAttribute: true
+      },
+      inputSoundTriggered: {
+        type: Boolean,
+        value: false
+      },
+      openSoundTriggered: {
+        type: Boolean,
+        value: false
+      },
+      transitionSoundTriggered: {
+        type: Boolean,
+        value: false
       }
     };
   }
@@ -140,7 +152,10 @@ export class TangyEftouch extends LockedBehaviorMixin(PolymerElement) {
 
   connectedCallback () {
     super.connectedCallback()
-    if (this.openSound) new Audio(this.openSound).play()
+    if (this.openSound) {
+      new Audio(this.openSound).play()
+      this.openSoundTriggered = true
+    }
     if (!this.width) {
       this.width = document.documentElement.offsetWidth
     }
@@ -169,6 +184,14 @@ export class TangyEftouch extends LockedBehaviorMixin(PolymerElement) {
     if (this.fitItInterval) clearInterval(this.fitItInterval)
     if (this.warningTimeout) clearTimeout(this.warningTimeout)
     if (this.timeLimitTimeout) clearTimeout(this.timeLimitTimeout)
+    // fire transition snd if configured *and* if it has not already been fired when we get here.
+    // it may have fired due to auto-progress
+    // see if a flag has been set when the xistion snd was fired (didTransitionSound fire...)
+    if (this.transitionSound && !this.transitionSoundTriggered) {
+      new Audio(this.transitionSound).play()
+      this.transitionSoundTriggered = true
+      this.dispatchEvent(new CustomEvent('manual-next'))
+    }
   }
 
   render(value) {
@@ -301,7 +324,10 @@ export class TangyEftouch extends LockedBehaviorMixin(PolymerElement) {
       // Do nothing.
       return
     }
-    if (this.inputSound) new Audio(this.inputSound).play()
+    if (this.inputSound) {
+      new Audio(this.inputSound).play()
+      this.inputSoundTriggered = true
+    }
     this.value = Object.assign({}, this.value, {
       selection: this.hasAttribute('multi-select')
         ? this.value.selection.includes(target.getAttribute('value'))
@@ -356,7 +382,10 @@ export class TangyEftouch extends LockedBehaviorMixin(PolymerElement) {
   }
 
   transition() {
-    if (this.transitionSound) new Audio(this.transitionSound).play()
+    if (this.transitionSound) {
+      new Audio(this.transitionSound).play()
+      this.transitionSoundTriggered = true
+    }
     if (this.autoProgress) this.dispatchEvent(new CustomEvent('next'))
   }
 

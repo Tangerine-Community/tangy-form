@@ -1,6 +1,6 @@
 # Instruction for releasing a new version of Tangy Form
 
-0. Make sure your local master branch is up to date and clean. `git fetch origin && git checkout master && git merge origin/master && status`.
+0. Make sure your local master branch is up to date and clean. `git fetch origin && git checkout master && git merge origin/master && git status`.
 1. Refresh sandbox and run tests with `rm -r node_modules && npm install && npm run test`.
 1. Increment the version number in `package.json`. 
 2. Complete an entry in `CHANGELOG.md` for the release.
