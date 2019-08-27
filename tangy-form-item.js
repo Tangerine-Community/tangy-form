@@ -343,8 +343,8 @@ export class TangyFormItem extends PolymerElement {
         reflectToAttribute: true
       },
       exitClicks: {
-        type: Boolean,
-        value: false,
+        type: Number,
+        value: undefined,
         reflectToAttribute: true
       }
     };
