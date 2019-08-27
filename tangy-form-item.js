@@ -341,8 +341,12 @@ export class TangyFormItem extends PolymerElement {
         type: Number,
         value: undefined,
         reflectToAttribute: true
+      },
+      exitClicks: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
-
     };
   }
 
@@ -589,7 +593,7 @@ export class TangyFormItem extends PolymerElement {
 
   onExitFullscreenClick() {
     this._exitClicks = this._exitClicks ? 1 : this._exitClicks + 1
-    if ((!this.hasAttribute('exit-clicks')) || (this.hasAttribute('exit-clicks') && exitClicks >= parseInt(this.getAttribute('exit-clicks')))) {
+    if ((!this.hasAttribute('exit-clicks')) || (this.hasAttribute('exit-clicks') && this.exitClicks >= parseInt(this.getAttribute('exit-clicks')))) {
       this.dispatchEvent(new CustomEvent('exit-fullscreen', { bubbles: true }))
     }
   }
