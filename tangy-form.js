@@ -343,6 +343,11 @@ export class TangyForm extends PolymerElement {
       fullScreenGranted: {
         type: Boolean,
         value: false,
+      },
+      exitClicks: {
+        type: Number,
+        value: undefined,
+        reflectToAttribute: true
       }
     }
   }

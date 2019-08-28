@@ -297,12 +297,14 @@ const tangyFormReducer = function (state = initialState, action) {
       })
       return newState
 
+    // check state.form.exitClicks for exitClicks value
     case 'ENTER_FULLSCREEN':
       return {
         ...state,
         fullscreenEnabled: true,
+        exitClicks:state.form.exitClicks,
         items: state.items.map(item => {
-          return { ...item, fullscreenEnabled: true}
+          return { ...item, fullscreenEnabled: true, exitClicks: state.form.exitClicks}
         })
       }
 
