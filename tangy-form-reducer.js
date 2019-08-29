@@ -297,7 +297,6 @@ const tangyFormReducer = function (state = initialState, action) {
       })
       return newState
 
-    // check state.form.exitClicks for exitClicks value
     case 'ENTER_FULLSCREEN':
       return {
         ...state,
