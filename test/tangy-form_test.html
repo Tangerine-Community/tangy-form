@@ -767,9 +767,6 @@
 
         test('should try to launch in fullscreen', function() {
           let element = fixture('HelloWorldWithFullScreenFixture')
-          // element.newResponse()
-          // element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
-          // assert.equal(element.querySelector('#item1').$.card.querySelector('#enable-fullscreen'), true)
           const fullscreenEl = element.querySelector('#item1').$.card.querySelector('#enable-fullscreen')
           fullscreenEl.click()
           const  isFullScreenEnabled = element.querySelector('#item1').fullscreenEnabled
@@ -784,7 +781,6 @@
             assert.equal(fullScreenGranted, false)
           })
         })
-
       });
 
       window.stub = {
