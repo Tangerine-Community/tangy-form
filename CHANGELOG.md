@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.2.0
+- Added the exit-clicks attribute to tangy-form and tangy-form-item, which is for the number of times a user must click the exit fullscreen button before that mode is deactivated. 
+
 ## v4.1.1
 - Fix tangy-select test regression and work on EFTouch transition sound plays only on auto-progress [#137](https://github.com/Tangerine-Community/Tangerine/issues/1371)
 
