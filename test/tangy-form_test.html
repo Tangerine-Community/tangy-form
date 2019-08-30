@@ -767,6 +767,7 @@
 
         test('should try to launch in fullscreen', function() {
           let element = fixture('HelloWorldWithFullScreenFixture')
+          element.newResponse()
           const fullscreenEl = element.querySelector('#item1').$.card.querySelector('#enable-fullscreen')
           fullscreenEl.click()
           const  isFullScreenEnabled = element.querySelector('#item1').fullscreenEnabled
