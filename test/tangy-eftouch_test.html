@@ -439,7 +439,6 @@
           const element = fixture('EFTouchTransitionSoundFixture')
           let eventDidFire = false
           element.addEventListener('manual-next', () => {
-            debugger;
             eventDidFire = true
             assert.equal(element.transitionSoundTriggered, true)
           })

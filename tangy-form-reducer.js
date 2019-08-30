@@ -301,8 +301,9 @@ const tangyFormReducer = function (state = initialState, action) {
       return {
         ...state,
         fullscreenEnabled: true,
+        exitClicks:state.form.exitClicks,
         items: state.items.map(item => {
-          return { ...item, fullscreenEnabled: true}
+          return { ...item, fullscreenEnabled: true, exitClicks: state.form.exitClicks}
         })
       }
 

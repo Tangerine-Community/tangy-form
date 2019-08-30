@@ -339,6 +339,15 @@ export class TangyForm extends PolymerElement {
         type: Boolean,
         value: false,
         reflectToAttribute: true
+      },
+      fullScreenGranted: {
+        type: Boolean,
+        value: false,
+      },
+      exitClicks: {
+        type: Number,
+        value: undefined,
+        reflectToAttribute: true
       }
     }
   }
@@ -550,7 +559,7 @@ export class TangyForm extends PolymerElement {
       this.dispatchEvent(new CustomEvent('ALL_ITEMS_CLOSED'))
     }
 
-    if (state.form.fullscreen) {
+    if (state.form && state.form.fullscreen) {
       if (!this.previousState.fullscreenEnabled && state.fullscreenEnabled) {
         this.enableFullscreen()
       }
@@ -642,15 +651,24 @@ export class TangyForm extends PolymerElement {
   }
 
   enableFullscreen() {
-    if(this.requestFullscreen) {
-      this.requestFullscreen();
-    } else if(this.mozRequestFullScreen) {
-      this.mozRequestFullScreen();
-    } else if(this.webkitRequestFullscreen) {
-      this.webkitRequestFullscreen();
-    } else if(this.msRequestFullscreen) {
-      this.msRequestFullscreen();
-    }
+      if(this.requestFullscreen) {
+        this.requestFullscreen()
+            .then(message => {
+              this.fullScreenGranted = true;
+            })
+            .catch(err => {
+              console.log(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+              this.fullScreenGranted = false;
+              this.dispatchEvent(new CustomEvent('fullscreen-rejected'))
+            });
+      } else if(this.mozRequestFullScreen) {
+        this.mozRequestFullScreen();
+      } else if(this.webkitRequestFullscreen) {
+        this.webkitRequestFullscreen();
+      } else if(this.msRequestFullscreen) {
+        this.msRequestFullscreen();
+      }
+
   }
 
 }
