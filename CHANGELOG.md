@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## v4.3.0
+- Fix data collector reviews completed fullscreen form [#75](https://github.com/Tangerine-Community/tangy-form/pull/75)
 
 ## v4.2.0
 - Added the exit-clicks attribute to tangy-form and tangy-form-item, which is for the number of times a user must click the exit fullscreen button before that mode is deactivated. 
