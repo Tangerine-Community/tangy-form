@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## v4.3.0
+
 ## v4.2.0
 - Added the exit-clicks attribute to tangy-form and tangy-form-item, which is for the number of times a user must click the exit fullscreen button before that mode is deactivated. 
 
