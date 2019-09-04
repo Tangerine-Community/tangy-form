@@ -64,6 +64,7 @@ const tangyFormReducer = function (state = initialState, action) {
             hidden: action.type === 'FORM_LOCK' || firstNotDisabled === i ? false : true,
             //hidden: false,
             open: action.type === 'FORM_LOCK' ? false : i === 0 ? true : false,
+            locked: action.type === 'FORM_LOCK' ? true : false,
             hideButtons: action.type === 'FORM_LOCK' ? false : true,
             hideBackButton: action.type === 'FORM_LOCK' || firstNotDisabled === i ? true : false,
             hideNextButton: action.type === 'FORM_LOCK' || i === state.items.length-1 ? true : false,
