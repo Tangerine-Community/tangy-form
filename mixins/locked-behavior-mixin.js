@@ -24,7 +24,6 @@ export const LockedBehaviorMixin = (superClass) => class extends superClass {
   }
 
   _lockedChanged(value) { 
-    console.log('locked changed')
     if (value === true) {
       const lockScreenEl = document.createElement('div')
       lockScreenEl.setAttribute('style', 'position: relative;')
