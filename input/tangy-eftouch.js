@@ -362,30 +362,30 @@ export class TangyEftouch extends PolymerElement {
       this.render()
     }
     this.dispatchEvent(new Event('change'))
-    if (this.canTransition) this.startTransition()
+    if (this.canTransition) this.transition()
   }
 
   get canTransition() {
     return this.validate() && (this.transitionMessage || this.autoProgress || this.timeLimit)
   }
 
-  startTransition() {
+  transition() {
+    if (this.hasAttribute('transition-triggered')) return
     this.setAttribute('transition-triggered', true)
-    if (this.transitionDelay > 0) {
+    const finishTransition = () => {
+      if (this.transitionSound) {
+        new Audio(this.transitionSound).play()
+        this.transitionSoundTriggered = true
+      }
+      if (this.autoProgress) this.dispatchEvent(new CustomEvent('next'))
+    }
+   if (this.transitionDelay > 0) {
       setTimeout(() => {
-        this.transition()
+        finishTransition()
       }, this.transitionDelay)
     } else {
-      this.transition()
+      finishTransition()
     }
-  }
-
-  transition() {
-    if (this.transitionSound) {
-      new Audio(this.transitionSound).play()
-      this.transitionSoundTriggered = true
-    }
-    if (this.autoProgress) this.dispatchEvent(new CustomEvent('next'))
   }
 
   fitIt() {
