@@ -292,7 +292,8 @@ export class TangyForm extends PolymerElement {
     return {
       fullscreen: {
         type: Boolean,
-        value: false
+        value: false,
+        reflectToAttribute: true
       },
       title: {
         type: String,
@@ -368,9 +369,6 @@ export class TangyForm extends PolymerElement {
 
   ready() {
     super.ready()
-    if (this.fullscreen) {
-      this.addEventListener('click', this.enableFullscreen, true)
-    }
     // Pass events of items to the reducer.
     this.hasLazyItems = false
     this.querySelectorAll('tangy-form-item').forEach((item) => {
@@ -560,12 +558,14 @@ export class TangyForm extends PolymerElement {
     }
 
     if (state.form && state.form.fullscreen) {
-      if (!this.previousState.fullscreenEnabled && state.fullscreenEnabled) {
+      if (!this.previousState.form.fullscreenEnabled && state.form.fullscreenEnabled) {
         this.enableFullscreen()
       }
-      else if (this.previousState.fullscreenEnabled && !state.fullscreenEnabled) {
+      else if (this.previousState.form.fullscreenEnabled && !state.form.fullscreenEnabled) {
         this.disableFullscreen()
       }
+    } else if (this.previousState.form.fullscreen && !state.form.fullscreen) {
+      this.disableFullscreen()
     }
 
     // Stash as previous state.
