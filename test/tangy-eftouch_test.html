@@ -415,6 +415,23 @@
           assert.equal(eventDidFire, false)
         });
 
+        test('should auto-progress from selection not also from time limit', (done) => { 
+          const element = fixture('EFTouchTimeLimitAutoProgressFixture')
+          let eventDidFire = false
+          let eventDidFireTwice = false
+          element.addEventListener('next', () => {
+            eventDidFireTwice = eventDidFire === true ? true : false
+            eventDidFire = true
+          })
+          setTimeout(() => {
+            assert.equal(eventDidFire, true)
+            assert.equal(eventDidFireTwice, false)
+            done()
+          }, 105)
+          assert.equal(eventDidFire, false)
+          element.shadowRoot.querySelector('img').click()
+        });
+
         // TODO: new attribute: auto-progress-at-timelimit
         test('should transition automatically at time-limit but not on user input');
 
