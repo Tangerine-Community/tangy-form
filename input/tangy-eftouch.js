@@ -175,7 +175,8 @@ export class TangyEftouch extends PolymerElement {
         this.transition()
       }, this.timeLimit)
     }
-    //this.fitIt()
+    this.fitItInterval = setInterval(this.fitIt.bind(this), Math.floor(1000/30))
+    this.fitIt()
   }
 
   disconnectedCallback () {
@@ -199,9 +200,6 @@ export class TangyEftouch extends PolymerElement {
     this.shadowRoot.innerHTML = `
       <style>
         :host {
-          position: fixed;
-          top: ${this.fromTopOfScreen}px;
-          left: 0px;
           width: 100%
         }
         :host tangy-radio-buttons {
@@ -277,10 +275,12 @@ export class TangyEftouch extends PolymerElement {
           </div>
         ` : ''}
       </div>
-      <div id="options-box">
+      <div id="options-box" style="opacity: 0">
       ${options.map(option => `
         <span 
           id="cell"
+          ef-width="${option.getAttribute('width')}"
+          ef-height="${option.getAttribute('height')}"
           ${option.hasAttribute('correct') ? 'correct' : ''}
           ${
             this.hasAttribute('multi-select')
@@ -389,20 +389,21 @@ export class TangyEftouch extends PolymerElement {
   }
 
   fitIt() {
-    this.fitItInterval = setInterval(() => {
-      // Protect against not having a shadow yet.
-      if (!this.radioButtonsEl) return
-      // Protect against when the element has not yet grown up.
-      if (this.radioButtonsEl.offsetHeight / this.radioButtonsEl.offsetWidth === NaN) return 
-      // Protect from doing this over and over.
-      if (this.hasAttribute('fullscreen-size-complete')) return
-      const topMargin = 100
-      const targetHeight = window.visualViewport.height - topMargin
-      const actualHeight = this.radioButtonsEl.offsetHeight
-      let targetWidth = Math.floor(this.radioButtonsEl.offsetHeight / this.radioButtonsEl.offsetWidth * targetHeight)
-      this.radioButtonsEl.style.width = `${targetWidth}px`
-      this.setAttribute('fullscreen-size-complete', '')
-    }, 100)
+    const optionsBoxEl = this.shadowRoot.querySelector('#options-box')
+    const messageBoxHeight = 60
+    const totalHeight = window.innerHeight - optionsBoxEl.offsetTop - messageBoxHeight
+    const cellBorder = 10
+    const totalWidth = optionsBoxEl.clientWidth
+    if (totalWidth > 0) optionsBoxEl.style.opacity = '1'
+    // Because browsers don't render so good. Need extra room so it doesn't throw in an eager line break.
+    const extraSideRoom = 10
+    optionsBoxEl.querySelectorAll('#cell').forEach(cellEl => {
+      cellEl.setAttribute('style', `
+        display: inline-block;
+        width:${Math.floor((cellEl.getAttribute('ef-width')/100)*totalWidth) - cellBorder - extraSideRoom}px;
+        height:${Math.floor((cellEl.getAttribute('ef-height')/100)*(totalHeight)) - cellBorder}px;
+      `)
+    })
   }
 
   validate() {
