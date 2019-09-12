@@ -247,7 +247,7 @@ export class TangyEftouch extends PolymerElement {
           border: #FFF solid 5px;
         }
         #cell[selected] img {
-          border: red solid 5px;
+          border: green solid 5px;
         }
         #cell {
           padding: 5px;
