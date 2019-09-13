@@ -41,7 +41,12 @@ export class TangyEftouch extends PolymerElement {
         reflectToAttribute: true,
         observer: 'render'
       },
-      autoProgress: {
+      goNextOnTimeLimit: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      goNextOnSelection: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
@@ -182,7 +187,7 @@ export class TangyEftouch extends PolymerElement {
     if (this.timeLimit) {
       this.timeLimitTimeout = setTimeout(() => {
         this.disabled = true
-        this.transition()
+        this.transition(this.hasAttribute('go-next-on-time-limit'))
       }, this.timeLimit)
     }
     this.fitItInterval = setInterval(this.fitIt.bind(this), Math.floor(1000/30))
@@ -379,14 +384,10 @@ export class TangyEftouch extends PolymerElement {
     }
     this.render()
     this.dispatchEvent(new Event('change'))
-    if (this.canTransition) this.transition()
+    if (this.hasAttribute('go-next-on-selection') && this.validate()) this.transition(true)
   }
 
-  get canTransition() {
-    return this.validate() && (this.transitionMessage || this.autoProgress || this.timeLimit)
-  }
-
-  transition() {
+  transition(goNext = false) {
     if (this.hasAttribute('transition-triggered')) return
     this.setAttribute('transition-triggered', true)
     const finishTransition = () => {
@@ -394,7 +395,7 @@ export class TangyEftouch extends PolymerElement {
         new Audio(this.transitionSound).play()
         this.transitionSoundTriggered = true
       }
-      if (this.autoProgress) this.dispatchEvent(new CustomEvent('next'))
+      if (goNext) this.dispatchEvent(new CustomEvent('next'))
     }
    if (this.transitionDelay > 0) {
       setTimeout(() => {

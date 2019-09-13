@@ -67,7 +67,7 @@
 
     <test-fixture id="EFTouchAutoProgressFixture">
       <template>
-        <tangy-eftouch auto-progress value="fruit_selection" label="What is your favorite fruit?">
+        <tangy-eftouch go-next-on-selection value="fruit_selection" label="What is your favorite fruit?">
           <option value="orange" src="assets/images/cat.png"></option>
           <option value="banana" src="assets/images/cat.png"></option>
           <option value="tangerine" src="assets/images/cat.png"></option>
@@ -80,7 +80,7 @@
 
     <test-fixture id="EFTouchImagesFixture">
       <template>
-        <tangy-eftouch auto-progress value="fruit_selection" label="What is your favorite fruit?">
+        <tangy-eftouch value="fruit_selection" label="What is your favorite fruit?">
           <option value="orange" src="assets/images/cat.png"></option>
           <option value="banana" src="assets/images/cat.png"></option>
           <option value="tangerine" src="assets/images/cat.png"></option>
@@ -98,7 +98,7 @@
           transition-sound="assets/sounds/swish.mp3"
           transition-delay=100 
           transition-message="You are being transerred to the next item."
-          auto-progress
+          go-next-on-selection
           name="fruit_selection"
           label="What is your favorite fruit?"
           >
@@ -162,7 +162,7 @@
 
     <test-fixture id="EFTouchTimeLimitAutoProgressFixture">
       <template>
-        <tangy-eftouch time-limit=100 auto-progress value="fruit_selection" label="What is your favorite fruit?">
+        <tangy-eftouch time-limit=100 go-next-on-time-limit value="fruit_selection" label="What is your favorite fruit?">
           <option value="cherry" src="assets/images/cat.png"></option>
           <option value="kiwi" src="assets/images/cat.png"></option>
         </tangy-eftouch>
@@ -172,7 +172,7 @@
     <test-fixture id="EFTouchTimeLimitAutoProgressTransitionSoundFixture">
       <template>
         <tangy-eftouch time-limit=100
-                       auto-progress
+                       go-next-on-time-limit
                        value="fruit_selection"
                        label="What is your favorite fruit?"
                        transition-sound="assets/sounds/swish.mp3">
