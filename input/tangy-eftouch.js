@@ -36,6 +36,11 @@ export class TangyEftouch extends PolymerElement {
         value: '',
         reflectToAttribute: true
       },
+      errorMessage: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       width: {
         type: Number,
         reflectToAttribute: true,
@@ -138,6 +143,7 @@ export class TangyEftouch extends PolymerElement {
       invalid: {
         type: Boolean,
         value: false,
+        observer: 'render',
         reflectToAttribute: true
       },
       incomplete: {
@@ -292,6 +298,11 @@ export class TangyEftouch extends PolymerElement {
         ${this.correct && this.hasAttribute('correct-message') ? `
           <div id="correct">
             ${this.getAttribute('correct-message')}
+          </div>
+        ` : ''}
+        ${this.invalid && this.hasAttribute('error-message') ? `
+          <div id="error-message">
+            ${this.getAttribute('error-message')}
           </div>
         ` : ''}
       </div>
