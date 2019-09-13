@@ -46,6 +46,16 @@ export class TangyEftouch extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      correct: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      incorrect: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
       transitionMessage: {
         type: String,
         value: '',
@@ -269,9 +279,14 @@ export class TangyEftouch extends PolymerElement {
             ${this.warningMessage}
           </div>
         ` : ''}
-        ${this.incorrectMessage ? `
+        ${this.incorrect && this.hasAttribute('incorrect-message') ? `
           <div id="incorrect">
-            ${this.incorrectMessage}
+            ${this.getAttribute('incorrect-message')}
+          </div>
+        ` : ''}
+        ${this.correct && this.hasAttribute('incorrect-message') ? `
+          <div id="correct">
+            ${this.getAttribute('correct-message')}
           </div>
         ` : ''}
       </div>
@@ -335,6 +350,7 @@ export class TangyEftouch extends PolymerElement {
         : target.getAttribute('value'),
       selectionTime: new Date().getTime()
     })
+
     if (this.querySelectorAll('[correct]').length > 0) {
       const correctSelections = [...this.querySelectorAll('[correct]')].map(optionEl => optionEl.getAttribute('value'))
       this.value = {
@@ -348,19 +364,20 @@ export class TangyEftouch extends PolymerElement {
             : correctSelections.includes(this.value.selection)
         }
       }     
+      if (this.value.correct) {
+        this.correct = true
+        this.incorrect = false
+      } else {
+        this.correct = false
+        this.incorrect = true
+      }
     }
-    if (this.hasAttribute('if-incorrect-then-highlight-correct') && this.value.correct === false) {
+    if (this.hasAttribute('if-incorrect-then-highlight-correct') && this.incorrect === true) {
       this.setAttribute('highlight-correct', '')
-    } else if (this.hasAttribute('if-incorrect-then-highlight-correct') && this.value.correct === true) {
+    } else if (this.hasAttribute('if-incorrect-then-highlight-correct') && this.correct === true) {
       this.removeAttribute('highlight-correct')
     }
-    if (this.hasAttribute('incorrect-message') && this.value.correct === false) {
-      this.incorrectMessage = this.getAttribute('incorrect-message')
-      this.render()
-    } else if (this.hasAttribute('incorrect-message') && this.value.correct === true) {
-      this.incorrectMessage = '' 
-      this.render()
-    }
+    this.render()
     this.dispatchEvent(new Event('change'))
     if (this.canTransition) this.transition()
   }

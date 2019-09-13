@@ -268,6 +268,7 @@
           name="animal_selection" 
           label="Which animal can breath under water?"
           incorrect-message="You chose the wrong option. Try again."
+          correct-message="Well done! That is correct."
           >
             <option width=30 height=50 src="assets/images/fish.png" value="fish" correct></option>
             <option width=30 height=50 src="assets/images/pig.png" value="pig"></option>
@@ -500,12 +501,14 @@
           assert.equal(element.hasAttribute('highlight-correct'), true)
         })
 
-        test('should show message when incorrect', () => {
+        test('should show message when incorrect and message when correct', () => {
           const element = fixture('EFTouchIncorrectMessageFixture');
           element.shadowRoot.querySelectorAll('img')[1].click()
           assert.equal(!!element.shadowRoot.querySelector('#incorrect'), true)
+          assert.equal(!!element.shadowRoot.querySelector('#correct'), false)
           element.shadowRoot.querySelectorAll('img')[0].click()
           assert.equal(!!element.shadowRoot.querySelector('#incorrect'), false)
+          assert.equal(!!element.shadowRoot.querySelector('#correct'), true)
         })
 
         test('should not allow correction', () => {
