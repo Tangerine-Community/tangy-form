@@ -295,26 +295,6 @@
 
       suite('tangy-eftouch', () => {
 
-        test('should have a default width of the width of the screen', () => { 
-          const element = fixture('UnusualLayoutFixture')
-          assert.equal(element.offsetWidth, document.documentElement.offsetWidth)
-        })
-
-        test('should have a set width', () => { 
-          const element = fixture('FixedLayoutFixture')
-          assert.equal(element.offsetWidth, 100)
-        })
-
-        test('should have a default height', () => { 
-          const element = fixture('UnusualLayoutFixture')
-          assert.equal(element.offsetHeight, 400)
-        })
-
-        test('should have a set height', () => { 
-          const element = fixture('FixedLayoutFixture')
-          assert.equal(element.offsetHeight, 100)
-        })
-
         test('should have value and highlight after selection', () => { 
           const element = fixture('EFTouchFixture');
           // @TODO Should be 'orange'. There is a bug deeper down causing radio button labels to be names.
