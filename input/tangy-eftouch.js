@@ -289,7 +289,7 @@ export class TangyEftouch extends PolymerElement {
             ${this.getAttribute('incorrect-message')}
           </div>
         ` : ''}
-        ${this.correct && this.hasAttribute('incorrect-message') ? `
+        ${this.correct && this.hasAttribute('correct-message') ? `
           <div id="correct">
             ${this.getAttribute('correct-message')}
           </div>
