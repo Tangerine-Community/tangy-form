@@ -187,7 +187,7 @@ export class TangyEftouch extends PolymerElement {
     if (this.timeLimit) {
       this.timeLimitTimeout = setTimeout(() => {
         this.disabled = true
-        this.transition(this.hasAttribute('go-next-on-time-limit'))
+        if (this.hasAttribute('go-next-on-time-limit')) this.transition(true)
       }, this.timeLimit)
     }
     this.fitItInterval = setInterval(this.fitIt.bind(this), Math.floor(1000/30))
