@@ -306,7 +306,7 @@ export class TangyEftouch extends PolymerElement {
           </div>
         ` : ''}
       </div>
-      <div id="options-box" style="opacity: 0">
+      <div id="options-box" style="opacity: 0; display: flex; flex-wrap: wrap;">
       ${options.map(option => `
         <span 
           id="cell"
@@ -319,7 +319,7 @@ export class TangyEftouch extends PolymerElement {
               : !option.hasAttribute('disabled') && this.value.selection === option.value ? `selected` : ``
           }
           style="
-            display: inline-block;
+            display: block;
             width:${Math.floor((option.getAttribute('width')/100)*this.width)}px;
             height:${Math.floor((option.getAttribute('height')/100)*(this.height-60))}px;
           ">
