@@ -246,6 +246,14 @@
           assert.equal(element.querySelector('tangy-form-item').innerText, 'Hello world.');
         });
 
+        test('should give meta data', () => {
+          const element = fixture('SimpleTestFixture');
+          const meta = element.getMeta()
+          assert(meta.form.id, 'test')
+          assert(meta.items.length, 3)
+          assert(meta.items[0].inputs.length, 1)
+        });
+
         test('should submit and be able to review an item', function() {
           let element = fixture('HelloWorldWithInputFixture')
           element.newResponse()

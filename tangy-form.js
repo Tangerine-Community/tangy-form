@@ -39,6 +39,18 @@ export class TangyForm extends PolymerElement {
    * Public API
    */
 
+   getMeta() {
+     return {
+        form: this.getProps(),
+        items: [...this.querySelectorAll('tangy-form-item')].map(itemEl => {
+          return {
+            ...itemEl.getProps(),
+            inputs: itemEl.getInputsMeta()
+          }
+        })
+      }
+    }
+
   // For creating a new response. Call it directly to force a new response when working programatically otherwise
   // this will get called later if no response has been assigned by the time afterNextRender is called.
   newResponse() {
