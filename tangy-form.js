@@ -39,6 +39,18 @@ export class TangyForm extends PolymerElement {
    * Public API
    */
 
+   getMeta() {
+     return {
+        form: this.getProps(),
+        items: [...this.querySelectorAll('tangy-form-item')].map(itemEl => {
+          return {
+            ...itemEl.getProps(),
+            inputs: itemEl.getInputsMeta()
+          }
+        })
+      }
+    }
+
   // For creating a new response. Call it directly to force a new response when working programatically otherwise
   // this will get called later if no response has been assigned by the time afterNextRender is called.
   newResponse() {
@@ -292,7 +304,8 @@ export class TangyForm extends PolymerElement {
     return {
       fullscreen: {
         type: Boolean,
-        value: false
+        value: false,
+        reflectToAttribute: true
       },
       title: {
         type: String,
@@ -339,6 +352,15 @@ export class TangyForm extends PolymerElement {
         type: Boolean,
         value: false,
         reflectToAttribute: true
+      },
+      fullScreenGranted: {
+        type: Boolean,
+        value: false,
+      },
+      exitClicks: {
+        type: Number,
+        value: undefined,
+        reflectToAttribute: true
       }
     }
   }
@@ -359,9 +381,6 @@ export class TangyForm extends PolymerElement {
 
   ready() {
     super.ready()
-    if (this.fullscreen) {
-      this.addEventListener('click', this.enableFullscreen, true)
-    }
     // Pass events of items to the reducer.
     this.hasLazyItems = false
     this.querySelectorAll('tangy-form-item').forEach((item) => {
@@ -550,13 +569,15 @@ export class TangyForm extends PolymerElement {
       this.dispatchEvent(new CustomEvent('ALL_ITEMS_CLOSED'))
     }
 
-    if (state.form.fullscreen) {
-      if (!this.previousState.fullscreenEnabled && state.fullscreenEnabled) {
+    if (state.form && state.form.fullscreen) {
+      if (!this.previousState.form.fullscreenEnabled && state.form.fullscreenEnabled) {
         this.enableFullscreen()
       }
-      else if (this.previousState.fullscreenEnabled && !state.fullscreenEnabled) {
+      else if (this.previousState.form.fullscreenEnabled && !state.form.fullscreenEnabled) {
         this.disableFullscreen()
       }
+    } else if (this.previousState.form.fullscreen && !state.form.fullscreen) {
+      this.disableFullscreen()
     }
 
     // Stash as previous state.
@@ -642,15 +663,24 @@ export class TangyForm extends PolymerElement {
   }
 
   enableFullscreen() {
-    if(this.requestFullscreen) {
-      this.requestFullscreen();
-    } else if(this.mozRequestFullScreen) {
-      this.mozRequestFullScreen();
-    } else if(this.webkitRequestFullscreen) {
-      this.webkitRequestFullscreen();
-    } else if(this.msRequestFullscreen) {
-      this.msRequestFullscreen();
-    }
+      if(this.requestFullscreen) {
+        this.requestFullscreen()
+            .then(message => {
+              this.fullScreenGranted = true;
+            })
+            .catch(err => {
+              console.log(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+              this.fullScreenGranted = false;
+              this.dispatchEvent(new CustomEvent('fullscreen-rejected'))
+            });
+      } else if(this.mozRequestFullScreen) {
+        this.mozRequestFullScreen();
+      } else if(this.webkitRequestFullscreen) {
+        this.webkitRequestFullscreen();
+      } else if(this.msRequestFullscreen) {
+        this.msRequestFullscreen();
+      }
+
   }
 
 }

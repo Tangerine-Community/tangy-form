@@ -198,6 +198,15 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="HelloWorldWithFullScreenFixture">
+      <template>
+        <tangy-form id="field-demo" title="Field Demo" on-change="" fullscreen="true">
+          <tangy-form-item id="item1">
+            <tangy-input name="input1"></tangy-input>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
     
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
@@ -218,7 +227,6 @@
 
       suite('tangy-form', () => {
 
-
         test('hello world without errors', () => {
           const element = fixture('HelloWorldFixture');
           element.newResponse()
@@ -236,6 +244,14 @@
           const element = fixture('HelloWorldFromTemplateFixture');
           element.newResponse()
           assert.equal(element.querySelector('tangy-form-item').innerText, 'Hello world.');
+        });
+
+        test('should give meta data', () => {
+          const element = fixture('SimpleTestFixture');
+          const meta = element.getMeta()
+          assert(meta.form.id, 'test')
+          assert(meta.items.length, 3)
+          assert(meta.items[0].inputs.length, 1)
         });
 
         test('should submit and be able to review an item', function() {
@@ -756,11 +772,25 @@
           assert.equal(element.querySelector('[open=""]').id, 'item-2')
           assert.equal(element.querySelectorAll('[open=""]').length, 1)
         })
-        test('should be fullscreen') 
-        test('should disable fullscreen after submit')
+
+        test('should try to launch in fullscreen', function() {
+          let element = fixture('HelloWorldWithFullScreenFixture')
+          element.newResponse()
+          const fullscreenEl = element.querySelector('#item1').$.card.querySelector('#enable-fullscreen')
+          fullscreenEl.click()
+          const  isFullScreenEnabled = element.querySelector('#item1').fullscreenEnabled
+          // we cannot test fullScreen - it is not permitted in Chrome.
+          // "Failed to execute 'requestFullscreen' on 'Element': API can only be initiated by a user gesture."
+          console.log("isFullScreenEnabled: " + isFullScreenEnabled)
+          // but we can check if fullScreenGranted
+          // must wait til event is fired.
+          element.addEventListener('fullscreen-rejected', () => {
+            const fullScreenGranted = element.fullScreenGranted;
+            console.log("fullScreenGranted: " + fullScreenGranted)
+            assert.equal(fullScreenGranted, false)
+          })
+        })
       });
-
-
 
       window.stub = {
        responseWithTangyCard: {"_id":"94897a00-ea84-46ba-b046-21505dd1a1e9","collection":"TangyFormResponse","form":{"title":"My Form","complete":true,"linearMode":false,"hideClosedItems":false,"hideCompleteFab":false,"tabIndex":1,"showResponse":true,"showSummary":false,"hasSummary":false,"onSubmit":"","id":"tangy-cards-demo","tagName":"TANGY-FORM"},"items":[{"id":"item1","title":"People","summary":false,"hideButtons":false,"hideBackButton":true,"rightToLeft":false,"hideNextButton":true,"showCompleteButton":true,"inputs":[{"name":"person","value":[{"name":"c911e052-bea0-4ee9-b3b0-e93023a025c0","value":[{"name":"first_name","private":false,"label":"First name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"foo","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"name":"last_name","private":false,"label":"Last name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"}],"label":"","disabled":false,"invalid":false,"incomplete":true,"hidden":false},{"name":"9d27d598-a811-4e80-b04d-d18523303c12","value":[{"name":"first_name","private":false,"label":"First name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"name":"last_name","private":false,"label":"Last name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"}],"label":"","disabled":false,"invalid":false,"incomplete":true,"hidden":false},{"name":"fd1a64c6-f52a-4480-9a2d-c4792ca2bb39","value":[{"name":"first_name","private":false,"label":"First name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"},{"name":"last_name","private":false,"label":"Last name","type":"","errorMessage":"","required":false,"disabled":false,"hidden":false,"invalid":false,"incomplete":true,"value":"","allowedPattern":"","min":"","max":"","tagName":"TANGY-INPUT"}],"label":"","disabled":false,"invalid":false,"incomplete":true,"hidden":false}],"label":"","disabled":true,"invalid":false,"incomplete":true,"hidden":false}],"open":false,"incomplete":false,"disabled":false,"hidden":false,"locked":true,"tagName":"TANGY-FORM-ITEM"}],"inputs":[],"complete":true,"focusIndex":0,"nextFocusIndex":1,"previousFocusIndex":-1,"startDatetime":"10/5/2018, 12:45:43 PM","startUnixtime":1538757943292,"uploadDatetime":""}
