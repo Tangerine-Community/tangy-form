@@ -39,10 +39,10 @@
     <script type="module">
       import '../input/tangy-checkboxes.js'
       suite('tangy-checkboxes', () => {
-        // test('should have six options', () => {
-        //   const element = fixture('TangyCheckboxesFixture');
-        //   assert.equal(element.shadowRoot.querySelectorAll('tangy-checkbox').length, 6)
-        // })
+        test('should have six options', () => {
+          const element = fixture('TangyCheckboxesFixture');
+          assert.equal(element.shadowRoot.querySelectorAll('tangy-checkbox').length, 6)
+        })
         test('should have hint text', () => {
           const element = fixture('TangyCheckboxesHintTextFixture');
           debugger
