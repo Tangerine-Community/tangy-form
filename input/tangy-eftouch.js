@@ -51,11 +51,6 @@ export class TangyEftouch extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
-      goNextOnSelection: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
       correct: {
         type: Boolean,
         value: false,
@@ -395,7 +390,9 @@ export class TangyEftouch extends PolymerElement {
     }
     this.render()
     this.dispatchEvent(new Event('change'))
-    if (this.hasAttribute('go-next-on-selection') && this.validate()) this.transition(true)
+    if (this.hasAttribute('go-next-on-selection') && this.value && this.value.selection && this.value.selection.length >= parseInt(this.getAttribute('go-next-on-selection')) && this.validate()) {
+      this.transition(true)
+    }
   }
 
   transition(goNext = false) {
