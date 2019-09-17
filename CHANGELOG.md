@@ -2,6 +2,10 @@
 
 ## v4.3.0
 - Fix data collector reviews completed fullscreen form [#75](https://github.com/Tangerine-Community/tangy-form/pull/75)
+- `<tangy-eftouch auto-progress>` now distinguishes between going next on the time limit and going next on a number of selections. The API is now `<tangy-eftouch go-next-on-selection=2>` for going next on 2 selection and `<tangy-eftouch go-next-on-time-limit>` for going next on the time limit. https://github.com/Tangerine-Community/tangy-form/pull/84
+- `<tangy-eftouch>` content is now more likely to fit above the fold, not overlap with content above it, be more consistent on smaller screens, and also adapt to screen size changes. https://github.com/Tangerine-Community/tangy-form/pull/79
+- `<tangy-eftouch>` suffered from going to next item twice due to time limit and selection being made at in a close window. This is now fixed. https://github.com/Tangerine-Community/tangy-form/pull/76
+- Add configurable labels and/or icons on item navigation with `<tangy-form-item hide-nav-icons>` and `<tangy-form-item hide-nav-labels>`. https://github.com/Tangerine-Community/tangy-form/pull/73
 
 ## v4.2.0
 - Added the exit-clicks attribute to tangy-form and tangy-form-item, which is for the number of times a user must click the exit fullscreen button before that mode is deactivated. 
