@@ -67,7 +67,7 @@
 
     <test-fixture id="EFTouchAutoProgressFixture">
       <template>
-        <tangy-eftouch go-next-on-selection value="fruit_selection" label="What is your favorite fruit?">
+        <tangy-eftouch go-next-on-selection=1 label="What is your favorite fruit?">
           <option value="orange" src="assets/images/cat.png"></option>
           <option value="banana" src="assets/images/cat.png"></option>
           <option value="tangerine" src="assets/images/cat.png"></option>
@@ -77,6 +77,20 @@
         </tangy-eftouch>
       </template>
     </test-fixture>
+
+    <test-fixture id="EFTouchGoNextAfter2SelectionsFixture">
+      <template>
+        <tangy-eftouch multi-select go-next-on-selection="2" label="What is your favorite fruit?">
+          <option value="orange" src="assets/images/cat.png"></option>
+          <option value="banana" src="assets/images/cat.png"></option>
+          <option value="tangerine" src="assets/images/cat.png"></option>
+          <option value="cantalope" src="assets/images/cat.png"></option>
+          <option value="cherry" src="assets/images/cat.png"></option>
+          <option value="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
 
     <test-fixture id="EFTouchImagesFixture">
       <template>
@@ -98,7 +112,7 @@
           transition-sound="assets/sounds/swish.mp3"
           transition-delay=100 
           transition-message="You are being transerred to the next item."
-          go-next-on-selection
+          go-next-on-selection=1
           name="fruit_selection"
           label="What is your favorite fruit?"
           >
@@ -339,6 +353,18 @@
             eventDidFire = true
           })
           element.shadowRoot.querySelector('img').click()
+          assert.equal(eventDidFire, true)
+        });
+
+        test('should go next after 2 selections', () => {
+          const element = fixture('EFTouchGoNextAfter2SelectionsFixture');
+          let eventDidFire = false
+          element.addEventListener('next', _ => {
+            eventDidFire = true
+          })
+          element.shadowRoot.querySelector('img').click()
+          assert.equal(eventDidFire, false)
+          element.shadowRoot.querySelectorAll('img')[1].click()
           assert.equal(eventDidFire, true)
         });
 
