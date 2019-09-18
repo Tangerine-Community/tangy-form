@@ -443,7 +443,6 @@ class TangyLocation extends PolymerElement {
   /* End of Materialize Select Styles */
       </style>
       <div id="container"></div>
-      <label id="hint-text"></label>
 `;
   }
 
@@ -454,6 +453,10 @@ class TangyLocation extends PolymerElement {
         value: 'location'
       },
       hintText: {
+        type: String,
+        value: ''
+      },
+      errorText: {
         type: String,
         value: ''
       },
@@ -554,8 +557,6 @@ class TangyLocation extends PolymerElement {
 
     if (!this.locationList) return this.$.container.innerHTML = t('loading')
 
-    this.$['hint-text'].innerHTML = this.hintText
-
     // Get levels configured on this.showLevels.
     let levels = []
     if (this.showLevels !== '') {
@@ -619,6 +620,12 @@ class TangyLocation extends PolymerElement {
     <br />
 
       `).join('')}
+      ${this.hintText ? `<label id="hint-text">${this.hintText}</label>` : ``}
+      ${this.invalid ? `
+        <div id="error-text">
+          <iron-icon icon="error"></iron-icon> <div> ${this.errorText} </div>
+        </div>
+      `: ``}
     `
 
   }
