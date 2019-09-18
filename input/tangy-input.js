@@ -91,11 +91,7 @@ export class TangyInput extends PolymerElement {
         observer: 'reflect',
         value: ''
       },
-      errorMessage: {
-        type: String,
-        observer: 'reflect',
-        value: ''
-      },
+
       required: {
         type: Boolean,
         value: false,
@@ -130,12 +126,6 @@ export class TangyInput extends PolymerElement {
         observer: 'reflect',
         reflectToAttribute: true
       },
-      allowedPattern: {
-        type: String,
-        value: '',
-        observer: 'reflect',
-        reflectToAttribute: true
-      },
       min: {
         type: String,
         value: '',
@@ -159,6 +149,18 @@ export class TangyInput extends PolymerElement {
         value: '',
         observer: 'reflect',
         reflectToAttribute: true
+      },
+      // allowedPattern and errorMessage are for passing down to paper-input's API of the same name. We are probably going to drop this usage in favor of the tangy API of valid-if and error-text. Consider these items deprecated.
+      allowedPattern: {
+        type: String,
+        value: '',
+        observer: 'reflect',
+        reflectToAttribute: true
+      },
+      errorMessage: {
+        type: String,
+        observer: 'reflect',
+        value: ''
       }
     }
   }
