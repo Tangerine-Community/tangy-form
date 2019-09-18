@@ -25,6 +25,7 @@ export class TangyCheckbox extends PolymerElement {
           [[hintText]]
         </label>
       </paper-checkbox>
+      <div id="error-text"></div>
       
     `
   }
@@ -85,6 +86,11 @@ export class TangyCheckbox extends PolymerElement {
         value: '',
         observer: 'applyHintText',
         reflectToAttribute: true
+      },
+      errorText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
       }
     }
   }
@@ -128,11 +134,13 @@ export class TangyCheckbox extends PolymerElement {
     }
   }
 
-  onInvalidChange (value) {
+  onInvalidChange(value) {
     if (value === false) {
-      this.$.checkbox.removeAttribute('invalid')
+      this.shadowRoot.querySelector('#error-text').innerHTML = ""
     } else {
-      this.$.checkbox.setAttribute('invalid', true)
+      this.shadowRoot.querySelector('#error-text').innerHTML = `
+        <iron-icon icon="error"></iron-icon> <div> ${this.errorText} </div>
+      `
     }
   }
 
