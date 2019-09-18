@@ -61,8 +61,10 @@ class TangyConsent extends PolymerElement {
       <paper-card>
         <div class="card-content">
           <div id="container">
-            [[prompt]]
+            <span id="prompt"></span>
             <div id="statusMessage"> [[statusMessage]] </div>
+            <label class="hint-text">
+            </label>
           </div>
         </div>
         <div class="card-actions">
@@ -70,6 +72,7 @@ class TangyConsent extends PolymerElement {
             <paper-button id="consentNoButton" on-click="clickedConsentNo">{{t.consent_no}}</paper-button>
         </div>
       </paper-card>
+      <div id="error-text"></div>
   `;
   }
 
@@ -92,11 +95,34 @@ class TangyConsent extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      required: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
       prompt: {
         type: String,
         value: 'Does the child consent?',
+        observer: 'onPromptChange',
         reflectToAttribute: true
       },
+      invalid: {
+        type: Boolean,
+        value: false,
+        observer: 'onInvalidChange',
+        reflectToAttribute: true
+      },
+      hintText: {
+        type: String,
+        value: '',
+        observer: 'onHintTextChange',
+        reflectToAttribute: true
+      },
+      errorText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      }
     };
   }
 
@@ -110,6 +136,25 @@ class TangyConsent extends PolymerElement {
       'message_no': t('You marked No')
     }
     // this.addEventListener('click', this.inputPressed.bind(this))
+  }
+
+
+  onHintTextChange(value) {
+    this.shadowRoot.querySelector('.hint-text').innerHTML = value ? value : ''
+  }
+
+  onPromptChange(value) {
+    this.shadowRoot.querySelector('#prompt').innerHTML = value ? value : ''
+  }
+
+  onInvalidChange(value) {
+    if (value === false) {
+      this.shadowRoot.querySelector('#error-text').innerHTML = ""
+    } else {
+      this.shadowRoot.querySelector('#error-text').innerHTML = `
+        <iron-icon icon="error"></iron-icon> <div> ${this.errorText} </div>
+      `
+    }
   }
 
   clickedConsentYes() {
@@ -146,6 +191,18 @@ class TangyConsent extends PolymerElement {
         break
     }
   }
+
+  validate() {
+    if (this.required && !this.value) {
+      this.setAttribute('invalid', '')
+      return false
+    } else {
+      this.removeAttribute('invalid')
+      return true
+    }
+  }
+
+
 }
 
 window.customElements.define(TangyConsent.is, TangyConsent);
