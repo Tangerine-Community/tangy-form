@@ -109,7 +109,6 @@ class TangyGps extends PolymerElement {
         <br> 
         <span class="label">[[t.disanceFromReference]]:</span> [[currentDelta]] meters
       </template>
-      <label id="hint-text"></label>
     </div>
 
     <div>
@@ -120,6 +119,8 @@ class TangyGps extends PolymerElement {
         <div class="geofence-message"> [[geofenceMessage]]</div>
       </div>
     </div>
+    <label class="hint-text"></label>
+    <div id="error-text"></div>
 
   `;
   }
@@ -143,6 +144,7 @@ class TangyGps extends PolymerElement {
       hintText: {
         type: String,
         value: '',
+        observer: 'onHintTextChange',
         reflectToAttribute: true
       },
       required: {
@@ -181,11 +183,6 @@ class TangyGps extends PolymerElement {
         observer: 'saveCurrentPosition',
         value: undefined 
       },
-      invalid: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
       inGeofence: {
         type: Boolean,
         value: false,
@@ -194,6 +191,23 @@ class TangyGps extends PolymerElement {
       validMaxDelta: {
         type: Number,
         value: undefined
+      },
+      invalid: {
+        type: Boolean,
+        value: false,
+        observer: 'onInvalidChange',
+        reflectToAttribute: true
+      },
+      hintText: {
+        type: String,
+        value: '',
+        observer: 'onHintTextChange',
+        reflectToAttribute: true
+      },
+      errorText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
       }
     };
   }
@@ -201,7 +215,6 @@ class TangyGps extends PolymerElement {
   ready() {
     this.hasDelta = false
     super.ready();
-    this.$['hint-text'].innerHTML = this.hintText
     this.active = true
     this.getGeolocationPosition()
     this.currentAccuracy = '...'
@@ -218,6 +231,21 @@ class TangyGps extends PolymerElement {
     this.recordedLongitude = this.value.recordedLongitude
     this.recordedAccuracy = this.value.recordedAccuracy
   }
+
+  onHintTextChange(value) {
+    this.shadowRoot.querySelector('.hint-text').innerHTML = value ? value : ''
+  }
+
+  onInvalidChange(value) {
+    if (value === false) {
+      this.shadowRoot.querySelector('#error-text').innerHTML = ""
+    } else {
+      this.shadowRoot.querySelector('#error-text').innerHTML = `
+        <iron-icon icon="error"></iron-icon> <div> ${this.errorText} </div>
+      `
+    }
+  }
+
   getGeolocationPosition() {
     const options = {
       enableHighAccuracy: true
@@ -304,8 +332,10 @@ class TangyGps extends PolymerElement {
   validate() {
     if (!this.required) return true
     if (this.value.latitude && this.value.longitude && this.value.accuracy) {
+      this.removeAttribute('invalid')
       return true
     } else {
+      this.setAttribute('invalid', '')
       return false
     }
   }
