@@ -29,7 +29,8 @@ export class TangyPhotoCapture extends PolymerElement {
     </style>
     <img id="image"/>
     <paper-button on-click="capturePhoto"><iron-icon icon="camera-enhance"></iron-icon> capture photo </paper-button>
-    <label class="hint-text">[[hintText]]</label>
+    <label class="hint-text"></label>
+    <div id="error-text"></div>
     `
   }
 
@@ -44,6 +45,11 @@ export class TangyPhotoCapture extends PolymerElement {
         value: ''
       },
       hintText: {
+        type: String,
+        observer: 'onHintTextChange',
+        value: ''
+      },
+      errorText: {
         type: String,
         value: ''
       },
@@ -85,6 +91,27 @@ export class TangyPhotoCapture extends PolymerElement {
     navigator.mediaDevices.getUserMedia({video: true})
       .then(mediaStream => this.gotMedia(mediaStream))
       .catch(error => console.error('getUserMedia() error:', error));
+  }
+
+  onHintTextChange(value) {
+    this.shadowRoot.querySelector('.hint-text').innerHTML = value
+  }
+
+  onInvalidChange(value) {
+    this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid 
+      ? `<iron-icon icon="error"></iron-icon> <div> ${this.errorText} </div>`
+      : ''
+  }
+
+  validate() {
+      debugger
+    if (this.hasAttribute('required') && !this.value) {
+      this.invalid = true
+      return false
+    } else {
+      this.invalid = false
+      return true
+    }
   }
   
   gotMedia(mediaStream) {
