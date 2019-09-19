@@ -104,7 +104,6 @@ export class TangyPhotoCapture extends PolymerElement {
   }
 
   validate() {
-      debugger
     if (this.hasAttribute('required') && !this.value) {
       this.invalid = true
       return false
