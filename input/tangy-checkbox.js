@@ -80,12 +80,6 @@ export class TangyCheckbox extends PolymerElement {
         observer: 'onValueChange',
         reflectToAttribute: true
       },
-      hintText: {
-        type: String,
-        value: '',
-        observer: 'onHintTextChange',
-        reflectToAttribute: true
-      },
       errorText: {
         type: String,
         value: '',
@@ -115,14 +109,13 @@ export class TangyCheckbox extends PolymerElement {
         }
       }))
     })
+    this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text') 
+      ? this.getAttribute('hint-text') 
+      : ''
   }
 
   applyLabel(label) {
     this.$.checkbox.children['checkbox-text'].innerHTML = this.label 
-  }
-
-  onHintTextChange(value) {
-    this.shadowRoot.querySelector('.hint-text').innerHTML = value ? value : ''
   }
 
   onRequiredChange (value) {
