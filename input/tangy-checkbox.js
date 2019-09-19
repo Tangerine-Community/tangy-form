@@ -17,15 +17,18 @@ export class TangyCheckbox extends PolymerElement {
     return html`
     <style include="tangy-common-styles"></style>
     <style include="tangy-element-styles"></style>
-
-      <paper-checkbox id="checkbox" id="checkbox">
-        <div id="checkbox-text">
-        </div>
-        <label class="hint-text">
-        </label>
-      </paper-checkbox>
-      <div id="error-text"></div>
-      
+    <div class="flex-container m-y-25">
+      <div id="qnum"></div>
+      <div id="container">
+        <paper-checkbox id="checkbox" id="checkbox">
+          <div id="checkbox-text">
+          </div>
+          <label class="hint-text">
+          </label>
+        </paper-checkbox>
+        <div id="error-text"></div>
+      </div>
+    </div>
     `
   }
 
@@ -112,6 +115,10 @@ export class TangyCheckbox extends PolymerElement {
     this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text') 
       ? this.getAttribute('hint-text') 
       : ''
+    this.shadowRoot.querySelector('#qnum').innerHTML = this.hasAttribute('question-number') 
+      ? `<label>${this.getAttribute('question-number')}</label>`
+      : ''
+    
   }
 
   applyLabel(label) {
