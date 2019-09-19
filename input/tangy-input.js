@@ -45,10 +45,11 @@ export class TangyInput extends PolymerElement {
         font-weight: lighter;
       }
     </style>
-
     <div class="flex-container m-y-25">
-      <div id="qnum"></div>
-      <div id="container"></div>
+      <div id="qnum-number"></div>
+      <div id="qnum-content">
+        <div id="container"></div>
+      </div>
     </div>
 
   `
@@ -91,11 +92,7 @@ export class TangyInput extends PolymerElement {
         observer: 'reflect',
         value: ''
       },
-      errorMessage: {
-        type: String,
-        observer: 'reflect',
-        value: ''
-      },
+
       required: {
         type: Boolean,
         value: false,
@@ -130,12 +127,6 @@ export class TangyInput extends PolymerElement {
         observer: 'reflect',
         reflectToAttribute: true
       },
-      allowedPattern: {
-        type: String,
-        value: '',
-        observer: 'reflect',
-        reflectToAttribute: true
-      },
       min: {
         type: String,
         value: '',
@@ -159,6 +150,18 @@ export class TangyInput extends PolymerElement {
         value: '',
         observer: 'reflect',
         reflectToAttribute: true
+      },
+      // allowedPattern and errorMessage are for passing down to paper-input's API of the same name. We are probably going to drop this usage in favor of the tangy API of valid-if and error-text. Consider these items deprecated.
+      allowedPattern: {
+        type: String,
+        value: '',
+        observer: 'reflect',
+        reflectToAttribute: true
+      },
+      errorMessage: {
+        type: String,
+        observer: 'reflect',
+        value: ''
       }
     }
   }
@@ -212,7 +215,7 @@ export class TangyInput extends PolymerElement {
     // Reflect data into DOM.
 
 
-    this.$.qnum.innerHTML = `<label>${this.questionNumber}</label>`;
+    this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
     this.shadowRoot.querySelector('#hintText').innerHTML = this.hintText
     this.shadowRoot.querySelector('#label').innerHTML = this.label
     this.shadowRoot.querySelector('#input').placeholder = combTranslations(this.placeholder)

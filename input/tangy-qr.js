@@ -52,23 +52,31 @@ class TangyQr extends PolymerElement {
           height: 100%;
         }
       </style>
-      <label>[[label]]</label>
-      <paper-card>
-        <div class="card-content">
-          <div id="container">
-            <iron-icon id="scan-icon" icon="image:center-focus-weak"></iron-icon>
-          </div>
-          <paper-textarea value="[[value]]" placeholder="[[statusMessage]]" id="output" readonly></paper-textarea>
-        </div>
-        <div class="card-actions">
-          <template is="dom-if" if="{{notScanning}}">
-            <paper-button id="start-scan-button" on-click="startScanning">{{t.scan}}</paper-button>
-          </template>
-          <template is="dom-if" if="{{isScanning}}">
-            <paper-button id="stop-scan-button" on-click="stopScanning">{{t.cancel}}</paper-button>
-          </template>
-        </div>
-      </paper-card>
+    <div class="flex-container m-y-25">
+      <div id="qnum-number"></div>
+      <div id="qnum-content">
+    
+        <label id="label"></label>
+        <paper-card>
+            <div class="card-content">
+            <div id="container">
+                <iron-icon id="scan-icon" icon="image:center-focus-weak"></iron-icon>
+            </div>
+            <paper-textarea value="[[value]]" placeholder="[[statusMessage]]" id="output" readonly></paper-textarea>
+            </div>
+            <div class="card-actions">
+            <template is="dom-if" if="{{notScanning}}">
+                <paper-button id="start-scan-button" on-click="startScanning">{{t.scan}}</paper-button>
+            </template>
+            <template is="dom-if" if="{{isScanning}}">
+                <paper-button id="stop-scan-button" on-click="stopScanning">{{t.cancel}}</paper-button>
+            </template>
+            </div>
+        </paper-card>
+        <label class="hint-text"></label>
+        <div id="error-text"></div>
+      </div>
+    </div>
     `;
   }
   static get properties() {
@@ -105,6 +113,7 @@ class TangyQr extends PolymerElement {
       invalid: {
         type: Boolean,
         value: false,
+        observer: 'onInvalidChange',
         reflectToAttribute: true
       },
       disabled: {
@@ -138,6 +147,21 @@ class TangyQr extends PolymerElement {
       'cancel': t('cancel')
 
     }
+    this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text')
+        ? this.getAttribute('hint-text')
+        : ''
+    this.shadowRoot.querySelector('#label').innerHTML = this.hasAttribute('label')
+        ? this.getAttribute('label')
+        : ''
+    this.shadowRoot.querySelector('#qnum-number').innerHTML = this.hasAttribute('question-number') 
+      ? `<label>${this.getAttribute('question-number')}</label>`
+      : ''
+  }
+
+  onInvalidChange(value) {
+    this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid && this.hasAttribute('error-text')
+      ? `<iron-icon icon="error"></iron-icon> <div> ${this.getAttribute('error-text')} </div>`
+      : ''
   }
 
   stopScanning() {
@@ -210,7 +234,7 @@ class TangyQr extends PolymerElement {
   }
 
   validate() {
-    if (this.required && this.value) {
+    if (this.required && !this.value) {
       this.invalid = true
       return false
     } else {
