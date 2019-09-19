@@ -71,15 +71,15 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
       .flex-container {
         display: flex;
       }
-      .flex-container > #container {
+      .flex-container > #qnum-content {
         width: 100%;
         padding-right: 2em;
       }
-      #qnum > label {
+      #qnum-number > label {
         margin-right: 0.5rem;
         min-width: 2em;
       }
-      #qnum > label:empty {
+      #qnum-number > label:empty {
         margin: 0;
         min-width: 0;
       }

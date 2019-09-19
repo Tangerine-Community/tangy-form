@@ -27,10 +27,15 @@ export class TangyPhotoCapture extends PolymerElement {
         margin-left:4px;
       }
     </style>
-    <img id="image"/>
-    <paper-button on-click="capturePhoto"><iron-icon icon="camera-enhance"></iron-icon> capture photo </paper-button>
-    <label class="hint-text"></label>
-    <div id="error-text"></div>
+    <div class="flex-container m-y-25">
+      <div id="qnum-number"></div>
+      <div id="qnum-content">
+        <img id="image"/>
+        <paper-button on-click="capturePhoto"><iron-icon icon="camera-enhance"></iron-icon> capture photo </paper-button>
+        <label class="hint-text"></label>
+        <div id="error-text"></div>
+      </div>
+    </div>
     `
   }
 
@@ -91,6 +96,9 @@ export class TangyPhotoCapture extends PolymerElement {
     navigator.mediaDevices.getUserMedia({video: true})
       .then(mediaStream => this.gotMedia(mediaStream))
       .catch(error => console.error('getUserMedia() error:', error));
+    this.shadowRoot.querySelector('#qnum-number').innerHTML = this.hasAttribute('question-number') 
+      ? `<label>${this.getAttribute('question-number')}</label>`
+      : ''
   }
 
   onHintTextChange(value) {

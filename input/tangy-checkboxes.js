@@ -54,8 +54,8 @@ class TangyCheckboxes extends PolymerElement {
       </style>
 
       <div class="flex-container m-y-25">
-        <div id="qnum"></div>
-        <div id="container">
+        <div id="qnum-number"></div>
+        <div id="qnum-content">
           <label id="label" for="group"></label>
           <label id="hint-text" class="hint-text"></label>
           <div id="checkboxes"></div>
@@ -158,7 +158,7 @@ class TangyCheckboxes extends PolymerElement {
   }
 
   render() {
-    this.$.qnum.innerHTML = `<label>${this.questionNumber}</label>`;
+    this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
     this.$.label.innerHTML = this.label
     this.$['hint-text'].innerHTML = this.hintText
     this.$.checkboxes.innerHTML = ''

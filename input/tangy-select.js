@@ -38,10 +38,11 @@ class TangySelect extends PolymerElement {
     </style>
 
     <div class="flex-container m-y-25">
-      <div id="qnum"></div>
-      <div id="container">
+      <div id="qnum-number"></div>
+      <div id="qnum-content">
+        <div id="container">
+      </div>
     </div>
-  </div>
     `;
   }
 
@@ -121,7 +122,7 @@ class TangySelect extends PolymerElement {
   }
   
   render() {
-    this.$.qnum.innerHTML = `<label>${this.questionNumber}</label>`;
+    this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
     
     this.$.container.innerHTML = ''
     let options = []

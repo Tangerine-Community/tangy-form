@@ -59,8 +59,10 @@ class TangyPartialDate extends PolymerElement {
     }
     </style>
     <div class="flex-container m-y-25">
-      <div id="qnum"></div>
-      <div id="container"></div>
+      <div id="qnum-number"></div>
+      <div id="qnum-content">
+        <div id="container"></div>
+      </div>
     </div>
     `;
   }
@@ -215,7 +217,7 @@ class TangyPartialDate extends PolymerElement {
     this.allowUnknownMonth && months.push(unknownText);
     this.allowUnknownYear && years.push(9999);
 
-    this.$.qnum.innerHTML = `<label>${this.questionNumber}</label>`;
+    this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
     this.$.container.innerHTML = `
       <label for="group">${this.label}</label>
       <label class="hint-text">${this.hintText}</label>

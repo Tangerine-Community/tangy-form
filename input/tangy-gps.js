@@ -89,39 +89,42 @@ class TangyGps extends PolymerElement {
         margin-top:6px;
       }
     </style>
+    <div class="flex-container m-y-25">
+      <div id="qnum-number"></div>
+      <div id="qnum-content">
+        <div class="coordinates">
+          <div id="lat-long">
+            <span class="label">[[t.latitude]]:</span> [[currentLatitude]] <br>
+            <span class="label">[[t.longitude]]:</span> [[currentLongitude]] <br>
+          </div>
 
-    <div class="coordinates">
-      <div id="lat-long">
-        <span class="label">[[t.latitude]]:</span> [[currentLatitude]] <br>
-        <span class="label">[[t.longitude]]:</span> [[currentLongitude]] <br>
-      </div>
+          <template is="dom-if" if="[[currentLatitude]]">
+            <div id="accuracy-distance">
+              <span class="label">[[t.accuracy]]:</span> [[currentAccuracy]] meters<br>
+            </div>
+            <div id="accuracy-level">
+              <span class="label">[[t.accuracyLevel]]:</span> [[accuracyLevel]]
+            </div>
+          </template> 
 
-      <template is="dom-if" if="[[currentLatitude]]">
-        <div id="accuracy-distance">
-          <span class="label">[[t.accuracy]]:</span> [[currentAccuracy]] meters<br>
+          <template is="dom-if" if="{{hasDelta}}">
+            <br> 
+            <span class="label">[[t.disanceFromReference]]:</span> [[currentDelta]] meters
+          </template>
         </div>
-        <div id="accuracy-level">
-          <span class="label">[[t.accuracyLevel]]:</span> [[accuracyLevel]]
+
+        <div>
+          <template is="dom-if" if="[[!currentLatitude]]">
+              [[t.searching]]...
+          </template>
+          <div class="geofence-message-container"> 
+            <div class="geofence-message"> [[geofenceMessage]]</div>
+          </div>
         </div>
-      </template> 
-
-      <template is="dom-if" if="{{hasDelta}}">
-        <br> 
-        <span class="label">[[t.disanceFromReference]]:</span> [[currentDelta]] meters
-      </template>
-    </div>
-
-    <div>
-      <template is="dom-if" if="[[!currentLatitude]]">
-          [[t.searching]]...
-      </template>
-      <div class="geofence-message-container"> 
-        <div class="geofence-message"> [[geofenceMessage]]</div>
+        <label class="hint-text"></label>
+        <div id="error-text"></div>
       </div>
     </div>
-    <label class="hint-text"></label>
-    <div id="error-text"></div>
-
   `;
   }
 
@@ -219,6 +222,9 @@ class TangyGps extends PolymerElement {
     this.getGeolocationPosition()
     this.currentAccuracy = '...'
     this.accuracyLevel = '...'
+    this.shadowRoot.querySelector('#qnum-number').innerHTML = this.hasAttribute('question-number') 
+      ? `<label>${this.getAttribute('question-number')}</label>`
+      : ''
   }
 
   disconnectedCallback() {

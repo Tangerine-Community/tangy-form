@@ -58,21 +58,26 @@ class TangyConsent extends PolymerElement {
           color: red;
         }
       </style>
-      <paper-card>
-        <div class="card-content">
-          <div id="container">
-            <span id="prompt"></span>
-            <div id="statusMessage"> [[statusMessage]] </div>
-            <label class="hint-text">
-            </label>
-          </div>
+      <div class="flex-container m-y-25">
+        <div id="qnum-number"></div>
+        <div id="qnum-content">
+          <paper-card>
+            <div class="card-content">
+              <div id="container">
+                <span id="prompt"></span>
+                <div id="statusMessage"> [[statusMessage]] </div>
+                <label class="hint-text">
+                </label>
+              </div>
+            </div>
+            <div class="card-actions">
+                <paper-button id="consentYesButton" on-click="clickedConsentYes">{{t.consent_yes}}</paper-button>
+                <paper-button id="consentNoButton" on-click="clickedConsentNo">{{t.consent_no}}</paper-button>
+            </div>
+          </paper-card>
+          <div id="error-text"></div>
         </div>
-        <div class="card-actions">
-            <paper-button id="consentYesButton" on-click="clickedConsentYes">{{t.consent_yes}}</paper-button>
-            <paper-button id="consentNoButton" on-click="clickedConsentNo">{{t.consent_no}}</paper-button>
-        </div>
-      </paper-card>
-      <div id="error-text"></div>
+      </div>
   `;
   }
 
@@ -136,6 +141,9 @@ class TangyConsent extends PolymerElement {
       'message_no': t('You marked No')
     }
     // this.addEventListener('click', this.inputPressed.bind(this))
+    this.shadowRoot.querySelector('#qnum-number').innerHTML = this.hasAttribute('question-number') 
+      ? `<label>${this.getAttribute('question-number')}</label>`
+      : ''
   }
 
 

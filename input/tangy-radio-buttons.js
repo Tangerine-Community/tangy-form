@@ -68,16 +68,14 @@ class TangyRadioButtons extends PolymerElement {
       </style>
       
       <div class="flex-container m-y-25">
-        <div id="qnum"></div>
-        <div class="container">
+        <div id="qnum-number"></div>
+        <div id="qnum-content">
           <label id="label" for="group"></label>
           <label class="hint-text"></label>
           <div id="container"></div>
+          <label id="error-text"></label>
         </div>
       </div>
-      <label id="error-text"></label>
-    
-     
     `;
   }
 
@@ -178,7 +176,7 @@ class TangyRadioButtons extends PolymerElement {
   }
 
   render() {
-    this.$.qnum.innerHTML = `<label>${this.questionNumber}</label>`;
+    this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
     this.$.container.innerHTML = ''
     // Populate options as tangy-radio-button elements
     let options = this.querySelectorAll('option')

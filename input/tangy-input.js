@@ -45,10 +45,11 @@ export class TangyInput extends PolymerElement {
         font-weight: lighter;
       }
     </style>
-
     <div class="flex-container m-y-25">
-      <div id="qnum"></div>
-      <div id="container"></div>
+      <div id="qnum-number"></div>
+      <div id="qnum-content">
+        <div id="container"></div>
+      </div>
     </div>
 
   `
@@ -214,7 +215,7 @@ export class TangyInput extends PolymerElement {
     // Reflect data into DOM.
 
 
-    this.$.qnum.innerHTML = `<label>${this.questionNumber}</label>`;
+    this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
     this.shadowRoot.querySelector('#hintText').innerHTML = this.hintText
     this.shadowRoot.querySelector('#label').innerHTML = this.label
     this.shadowRoot.querySelector('#input').placeholder = combTranslations(this.placeholder)

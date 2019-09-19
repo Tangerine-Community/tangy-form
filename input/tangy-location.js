@@ -579,6 +579,10 @@ class TangyLocation extends PolymerElement {
     // Render template and assign to the container.
     this.$.container.innerHTML = `
 
+    <div class="flex-container m-y-25">
+      <div id="qnum-number">${this.hasAttribute('question-number') ? `<label>${this.getAttribute('question-number')}</label>` : ''}</div>
+      <div id="qnum-content">
+ 
   ${selections.map((selection, i) => `
     
     <div class="mdc-select">
@@ -626,6 +630,8 @@ class TangyLocation extends PolymerElement {
           <iron-icon icon="error"></iron-icon> <div> ${this.errorText} </div>
         </div>
       `: ``}
+      </div>
+    </div>
     `
 
   }
