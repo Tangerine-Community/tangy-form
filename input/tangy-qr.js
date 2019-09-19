@@ -52,7 +52,7 @@ class TangyQr extends PolymerElement {
           height: 100%;
         }
       </style>
-      <label>[[label]]</label>
+      <label id="label"></label>
       <paper-card>
         <div class="card-content">
           <div id="container">
@@ -69,6 +69,8 @@ class TangyQr extends PolymerElement {
           </template>
         </div>
       </paper-card>
+      <label class="hint-text"></label>
+      <div id="error-text"></div>
     `;
   }
   static get properties() {
@@ -105,6 +107,7 @@ class TangyQr extends PolymerElement {
       invalid: {
         type: Boolean,
         value: false,
+        observer: 'onInvalidChange',
         reflectToAttribute: true
       },
       disabled: {
@@ -138,6 +141,18 @@ class TangyQr extends PolymerElement {
       'cancel': t('cancel')
 
     }
+    this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text')
+        ? this.getAttribute('hint-text')
+        : ''
+    this.shadowRoot.querySelector('#label').innerHTML = this.hasAttribute('label')
+        ? this.getAttribute('label')
+        : ''
+  }
+
+  onInvalidChange(value) {
+    this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid && this.hasAttribute('error-text')
+      ? `<iron-icon icon="error"></iron-icon> <div> ${this.getAttribute('error-text')} </div>`
+      : ''
   }
 
   stopScanning() {
@@ -210,7 +225,7 @@ class TangyQr extends PolymerElement {
   }
 
   validate() {
-    if (this.required && this.value) {
+    if (this.required && !this.value) {
       this.invalid = true
       return false
     } else {
