@@ -166,6 +166,9 @@ class TangyCheckboxes extends PolymerElement {
     let options = this.querySelectorAll('option')
     for (let option of options) {
       let checkbox = document.createElement('tangy-checkbox')
+      if (option.hasAttribute('hint-text')) {
+        checkbox.setAttribute('hint-text', option.getAttribute('hint-text'))
+      }
       checkbox.name = option.value
       checkbox.innerHTML = option.innerHTML
       checkbox.hintText = option.getAttribute('hint-text')
