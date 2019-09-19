@@ -71,11 +71,11 @@ class TangyRadioButtons extends PolymerElement {
         <div id="qnum"></div>
         <div class="container">
           <label id="label" for="group"></label>
-          <label id="hint-text"></label>
+          <label class="hint-text"></label>
           <div id="container"></div>
-          <label id="error-text"></label>
         </div>
       </div>
+      <label id="error-text"></label>
     
      
     `;
@@ -105,10 +105,6 @@ class TangyRadioButtons extends PolymerElement {
         observer: 'reflect',
         reflectToAttribute: true
       },
-      hintText: {
-        type: String,
-        value: ''
-      },
       required: {
         type: Boolean,
         value: false,
@@ -121,12 +117,6 @@ class TangyRadioButtons extends PolymerElement {
         observer: 'reflect',
         reflectToAttribute: true
       },
-      label: {
-        type: String,
-        value: '',
-        observer: 'reflect',
-        reflectToAttribute: true
-      },
       hidden: {
         type: Boolean,
         value: false,
@@ -136,14 +126,14 @@ class TangyRadioButtons extends PolymerElement {
       invalid: {
         type: Boolean,
         value: false,
-        observer: 'reflect',
+        observer: 'onInvalidChange',
         reflectToAttribute: true
       },
       incomplete: {
         type: Boolean,
         value: true,
         observer: 'reflect',
-        reflecttoattribute: true
+        reflectToAttribute: true
       },
       columns: {
         type: Number,
@@ -155,15 +145,9 @@ class TangyRadioButtons extends PolymerElement {
         type: Boolean,
         value: false,
         observer: 'reflect',
-        reflecttoattribute: true
-      },
-      questionNumber: {
-        type: String,
-        value: '',
-        observer: 'reflect',
         reflectToAttribute: true
       },
-      errorText: {
+      questionNumber: {
         type: String,
         value: '',
         observer: 'reflect',
@@ -176,6 +160,12 @@ class TangyRadioButtons extends PolymerElement {
     super.connectedCallback()
     this.render()
     this.reflect()
+    this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text')
+        ? this.getAttribute('hint-text')
+        : ''
+    this.shadowRoot.querySelector('#label').innerHTML = this.hasAttribute('label')
+        ? this.getAttribute('label')
+        : ''
   }
 
   reflect() {
@@ -188,10 +178,7 @@ class TangyRadioButtons extends PolymerElement {
   }
 
   render() {
-
     this.$.qnum.innerHTML = `<label>${this.questionNumber}</label>`;
-    this.$.label.innerHTML = this.label
-    this.$['hint-text'].innerHTML = this.hintText
     this.$.container.innerHTML = ''
     // Populate options as tangy-radio-button elements
     let options = this.querySelectorAll('option')
@@ -200,6 +187,9 @@ class TangyRadioButtons extends PolymerElement {
     let tr = document.createElement('tr')
     for (let option of options) {
       let button = document.createElement('tangy-radio-button')
+      if (option.hasAttribute('hint-text')) {
+        button.setAttribute('hint-text', option.getAttribute('hint-text'))
+      }
       button.hideButton = this.hideButtons ? true : false
       button.name = option.value
       button.innerHTML = option.innerHTML
@@ -220,9 +210,6 @@ class TangyRadioButtons extends PolymerElement {
         this.$.container.appendChild(button)
       }
     }
-
-
-
     let newValue = []
     this
       .shadowRoot
@@ -235,6 +222,12 @@ class TangyRadioButtons extends PolymerElement {
       this.value = newValue
     }
 
+  }
+
+  onInvalidChange(value) {
+    this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid && this.hasAttribute('error-text')
+      ? `<iron-icon icon="error"></iron-icon> <div> ${this.getAttribute('error-text')} </div>`
+      : ''
   }
 
   onRadioButtonChange(event) {
@@ -267,14 +260,8 @@ class TangyRadioButtons extends PolymerElement {
     })
     if (this.required && !this.hidden && !this.disabled && !foundOne) {
       this.invalid = true
-      this.$['error-text'].innerHTML =  `
-      ${(this.errorText !== "" ? `<iron-icon icon="error""></iron-icon><div>` : '')}
-      ${this.errorText}</div>`
-
-
       return false
     } else {
-      this.$['error-text'].innerHTML = ""
       this.invalid = false
       return true
     }
