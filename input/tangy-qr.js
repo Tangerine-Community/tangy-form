@@ -1,4 +1,5 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
+// Note this is a custom build and publish because what the maintainer of this library was publishing didn't work for a Polymer project. See issue for updates https://github.com/zxing-js/library/issues/139
 import { BrowserMultiFormatReader } from 'zxing-js-es6/es6';
 import '@polymer/paper-input/paper-textarea.js'
 import '@polymer/polymer/lib/elements/dom-if.js';
