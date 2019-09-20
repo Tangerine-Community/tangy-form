@@ -489,8 +489,8 @@ export class TangyForm extends PolymerElement {
       type: 'ITEM_SAVE',
       item: event.target.getProps()
     })
-    this.focusOnNextItem()
     this.fireHook('on-change')
+    this.focusOnNextItem()
   }
 
   onItemBack(event) {
@@ -498,8 +498,8 @@ export class TangyForm extends PolymerElement {
       type: 'ITEM_SAVE',
       item: event.target.getProps()
     })
-    this.focusOnPreviousItem()
     this.fireHook('on-change')
+    this.focusOnPreviousItem()
   }
 
   onItemOpened(event) {
@@ -581,8 +581,6 @@ export class TangyForm extends PolymerElement {
 
     // Stash as previous state.
     this.previousState = Object.assign({}, state)
-
-    if (!this.complete) this.fireHook('on-change')
 
   }
 
