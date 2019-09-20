@@ -46,10 +46,13 @@ class TangyQr extends PolymerElement {
           color: var(--primary-text-color);
           margin-bottom: 15px;
         }
-        #scan-icon, #container, #canvans {
+        #scan-icon, #container, #canvas {
           display: inline-block;
           width: 100%;
           height: 100%;
+        }
+        paper-card {
+          margin-bottom: 15px;
         }
       </style>
     <div class="flex-container m-y-25">

@@ -39,11 +39,6 @@ export class TangyInput extends PolymerElement {
         color: var(--error-color);
       }
 
-      label.hint-text {
-        color: gray;
-        font-size: 1em;
-        font-weight: lighter;
-      }
     </style>
     <div class="flex-container m-y-25">
       <div id="qnum-number"></div>

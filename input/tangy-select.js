@@ -28,12 +28,6 @@ class TangySelect extends PolymerElement {
       font-weight: bold;
       color: var(--error-color);
     }
-
-    label.hint-text {
-      color: gray;
-      font-size: 1em;
-      font-weight: lighter;
-    }
  
     </style>
 

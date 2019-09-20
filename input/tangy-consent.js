@@ -57,6 +57,9 @@ class TangyConsent extends PolymerElement {
           font-weight: bold;
           color: red;
         }
+        paper-card {
+          margin-bottom: 10px;
+        }
       </style>
       <div class="flex-container m-y-25">
         <div id="qnum-number"></div>

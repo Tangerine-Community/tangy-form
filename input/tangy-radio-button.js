@@ -88,7 +88,7 @@ export class TangyRadioButton extends PolymerElement {
       <style>
         .hint-text {
             color: gray;
-            font-size: small;
+            font-size: 0.8rem;
             font-weight: lighter;
         }
       </style>
