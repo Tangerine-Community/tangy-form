@@ -88,6 +88,10 @@ class TangyGps extends PolymerElement {
       #hint-text{
         margin-top:6px;
       }
+      .hint-text {
+        margin-left: 15px;
+        margin-right: 15px;
+      }
     </style>
     <div class="flex-container m-y-25">
       <div id="qnum-number"></div>

@@ -39,13 +39,6 @@ class TangyCheckboxes extends PolymerElement {
           position: relative;
           top: 5px;
         }
-  
-
-          label.hint-text {
-            color: gray;
-            font-size: 1em;
-            font-weight: lighter;
-          }
 
           tangy-checkbox {
             margin: 10px 0 15px;

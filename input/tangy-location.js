@@ -624,7 +624,7 @@ class TangyLocation extends PolymerElement {
     <br />
 
       `).join('')}
-      ${this.hintText ? `<label id="hint-text">${this.hintText}</label>` : ``}
+      ${this.hintText ? `<label id="hint-text" class="hint-text">${this.hintText}</label>` : ``}
       ${this.invalid ? `
         <div id="error-text">
           <iron-icon icon="error"></iron-icon> <div> ${this.errorText} </div>

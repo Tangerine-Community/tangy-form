@@ -85,6 +85,7 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
       }
 
       label {
+        font-family: var(--paper-font-common-base_-_font-family);
         display: block;
         font-size: 1.2rem;
         color: var(--primary-text-color);
@@ -92,6 +93,7 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
       }
 
       #error-text, #errorText {
+        font-family: var(--paper-font-common-base_-_font-family);
         font-size: medium;
         font-weight: bold;
         color: var(--error-color);

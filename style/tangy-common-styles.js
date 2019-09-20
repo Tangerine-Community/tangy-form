@@ -44,10 +44,11 @@ $_documentStyleContainer.innerHTML = `
         --paper-radio-button-checked-color: var(--primary-color);
       }
       label.hint-text {
+        font-family: var(--paper-font-common-base_-_font-family);
         color: gray;
-        font-size: small;
+        font-size: 0.8rem;
         font-weight: lighter;
-    }
+      }
 
     .b-b-2 {
       border-bottom: 2px solid #efefef;
