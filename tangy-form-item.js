@@ -543,7 +543,6 @@ export class TangyFormItem extends PolymerElement {
       .forEach(input => {
         input.addEventListener('next', () => this.next())
         input.addEventListener('change', _ => {
-          _.stopImmediatePropagation()
           this.fireHook('on-change', _)
         })
       })

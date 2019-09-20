@@ -482,7 +482,6 @@ export class TangyForm extends PolymerElement {
       type: 'ITEM_CHANGE',
       itemId: event.target.id
     })
-    this.fireHook('on-change')
   }
 
   onItemNext(event) {
