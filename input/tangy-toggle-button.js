@@ -38,6 +38,9 @@ class TangyToggleButton extends PolymerElement {
       :host([highlighted]) {
         border-color: var(--accent-color);
       }
+      :host([captured]){
+        border-color: var(--error-color);
+      }
       :host([required]:not([disabled])) label::before  { 
         content: "*"; 
         color: red; 
@@ -91,6 +94,11 @@ class TangyToggleButton extends PolymerElement {
         reflectToAttribute: true
       },
       highlighted: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      captured: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
