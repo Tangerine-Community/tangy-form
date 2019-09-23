@@ -38,7 +38,7 @@ export class TangySignature extends PolymerElement {
     }
 
     static get is() {
-        return 'tangy-signature-capture'
+        return 'tangy-signature'
     }
 
     static get properties() {
