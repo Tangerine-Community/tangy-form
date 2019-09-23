@@ -489,7 +489,6 @@ class TangyTimed extends PolymerElement {
         if (this.isItemCaptured) {
           clearInterval(this.timer)
           this.timer2 = setInterval(() => {
-            this;
             let timeSpent = Math.floor((Date.now() - this.startTime) / 1000)
             this.timeRemaining = this.duration - timeSpent
             if (this.timeRemaining <= 0) {
