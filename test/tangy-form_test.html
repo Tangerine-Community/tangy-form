@@ -248,12 +248,6 @@
 
       suite('tangy-form', () => {
 
-        test('should goTo', (done) => {
-          const element = fixture('GoToFixture');
-          element.newResponse()
-          element.querySelector('#item1').querySelector('[name=input1]').click()
-        }).timeout(987654321);
-
         test('hello world without errors', () => {
           const element = fixture('HelloWorldFixture');
           element.newResponse()
@@ -817,6 +811,15 @@
             assert.equal(fullScreenGranted, false)
           })
         })
+
+        test('should goTo', () => {
+          const element = fixture('GoToFixture');
+          element.newResponse()
+          element.querySelector('#item1').querySelector('[name=input1]').value = 'on'
+          element.querySelector('#item1').querySelector('[name=input1]').dispatchEvent(new Event('change'))
+          assert.equal(element.querySelector('#item3').open, true)
+        });
+
       });
 
       window.stub = {
