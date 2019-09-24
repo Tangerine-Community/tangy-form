@@ -32,26 +32,30 @@ class TangyCheckboxes extends PolymerElement {
 
         :host {
           @apply --tangy-font-common-base;
+          /*--tangy-element-margin: 15px 25px 10px 10px;*/
         }
         
-        tangy-checkbox {
-          margin-top: 15px;
-          margin-right: 25px;
+        :host([invalid]) #hintText {
+          position: relative;
+          top: 5px;
         }
-        span {
-          font-size: .75em;
-          display: block;
-        }
-        
-        
+
+          tangy-checkbox {
+            margin: 10px 0 15px;
+          }
+
       </style>
-      <div class="container">
-        <label id="label" for="group"></label>
-        <label id="hint-text"></label>
-        <span class="secondary_color">[[t.selectOneOrMore]]</span>
-        <div id="checkboxes">
+
+      <div class="flex-container m-y-25">
+        <div id="qnum-number"></div>
+        <div id="qnum-content">
+          <label id="label" for="group"></label>
+          <label id="hint-text" class="hint-text"></label>
+          <div id="checkboxes"></div>
+          <label id="error-text" class="error-text"></label>
         </div>
       </div>
+
     `;
   }
 
@@ -72,6 +76,7 @@ class TangyCheckboxes extends PolymerElement {
       hintText: {
         type: String,
         value: '',
+        observer: 'reflect',
         reflectToAttribute: true
       },
       atLeast: {
@@ -114,6 +119,18 @@ class TangyCheckboxes extends PolymerElement {
         value: false,
         observer: 'reflect',
         reflectToAttribute: true
+      },
+      errorText: {
+        type: String,
+        value: '',
+        observer: 'reflect',
+        reflectToAttribute: true
+      },
+      questionNumber: {
+        type: String,
+        value: '',
+        observer: 'reflect',
+        reflectToAttribute: true
       }
     }
   }
@@ -134,18 +151,23 @@ class TangyCheckboxes extends PolymerElement {
   }
 
   render() {
+    this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
     this.$.label.innerHTML = this.label
     this.$['hint-text'].innerHTML = this.hintText
     this.$.checkboxes.innerHTML = ''
-    // Populate options as tangy-radio-button elements
+    // Populate options as tangy-check-box elements
     let options = this.querySelectorAll('option')
     for (let option of options) {
       let checkbox = document.createElement('tangy-checkbox')
+      if (option.hasAttribute('hint-text')) {
+        checkbox.setAttribute('hint-text', option.getAttribute('hint-text'))
+      }
       checkbox.name = option.value
       checkbox.innerHTML = option.innerHTML
+      checkbox.hintText = option.getAttribute('hint-text')
       this.$.checkboxes.appendChild(checkbox)
     }
-
+ 
     let newValue = []
     this
       .shadowRoot
@@ -157,7 +179,6 @@ class TangyCheckboxes extends PolymerElement {
     if (!this.value || (typeof this.value === 'object' && this.value.length < newValue.length)) {
       this.value = newValue
     }
-
   }
 
   onCheckboxClick(event) {
@@ -176,9 +197,15 @@ class TangyCheckboxes extends PolymerElement {
     })
     if (this.required && !this.hidden && !this.disabled && !foundOne) {
       this.invalid = true
+
+      this.$['error-text'].innerHTML =  `
+      ${(this.errorText !== "" ? `<iron-icon icon="error"></iron-icon><div>` : '')}
+      ${this.errorText}</div>`
+
       return false
     } else {
       this.invalid = false
+      this.$['error-text'].innerHTML = '';
       return true
     }
   }

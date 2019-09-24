@@ -52,8 +52,9 @@ const tangyFormReducer = function (state = initialState, action) {
         form: Object.assign({}, state.form, {
           complete: true,
           linearMode: false,
+          hideClosedItems: false,
           fullscreen: false,
-          hideClosedItems: false
+          fullscreenEnabled: false
         }),
         items: state.items.map(item => {
           let props = {}
@@ -73,6 +74,7 @@ const tangyFormReducer = function (state = initialState, action) {
           props.hideBackButton = true
           props.hideNextButton = true
           props.fullscreen = false
+          props.fullscreenEnabled = false
           props.inputs = item.inputs.map(input => {
             if (input.tagName === 'TANGY-TIMED') {
               return Object.assign({}, input, {disabled: true, mode: 'TANGY_TIMED_MODE_DISABLED'})
@@ -312,8 +314,11 @@ const tangyFormReducer = function (state = initialState, action) {
     case 'ENTER_FULLSCREEN':
       return {
         ...state,
-        fullscreenEnabled: true,
-        exitClicks:state.form.exitClicks,
+        form: {
+          ...state.form,
+          fullscreenEnabled: true,
+          exitClicks: state.form.exitClicks
+        },
         items: state.items.map(item => {
           return { ...item, fullscreenEnabled: true, exitClicks: state.form.exitClicks}
         })
@@ -322,7 +327,10 @@ const tangyFormReducer = function (state = initialState, action) {
     case 'EXIT_FULLSCREEN':
       return {
         ...state,
-        fullscreenEnabled: false,
+        form: {
+          ...state.form,
+          fullscreenEnabled: false,
+        },
         items: state.items.map(item => {
           return { ...item, fullscreenEnabled: false}
         })

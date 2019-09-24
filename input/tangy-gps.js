@@ -88,39 +88,47 @@ class TangyGps extends PolymerElement {
       #hint-text{
         margin-top:6px;
       }
+      .hint-text {
+        margin-left: 15px;
+        margin-right: 15px;
+      }
     </style>
+    <div class="flex-container m-y-25">
+      <div id="qnum-number"></div>
+      <div id="qnum-content">
+        <div class="coordinates">
+          <div id="lat-long">
+            <span class="label">[[t.latitude]]:</span> [[currentLatitude]] <br>
+            <span class="label">[[t.longitude]]:</span> [[currentLongitude]] <br>
+          </div>
 
-    <div class="coordinates">
-      <div id="lat-long">
-        <span class="label">[[t.latitude]]:</span> [[currentLatitude]] <br>
-        <span class="label">[[t.longitude]]:</span> [[currentLongitude]] <br>
-      </div>
+          <template is="dom-if" if="[[currentLatitude]]">
+            <div id="accuracy-distance">
+              <span class="label">[[t.accuracy]]:</span> [[currentAccuracy]] meters<br>
+            </div>
+            <div id="accuracy-level">
+              <span class="label">[[t.accuracyLevel]]:</span> [[accuracyLevel]]
+            </div>
+          </template> 
 
-      <template is="dom-if" if="[[currentLatitude]]">
-        <div id="accuracy-distance">
-          <span class="label">[[t.accuracy]]:</span> [[currentAccuracy]] meters<br>
+          <template is="dom-if" if="{{hasDelta}}">
+            <br> 
+            <span class="label">[[t.disanceFromReference]]:</span> [[currentDelta]] meters
+          </template>
         </div>
-        <div id="accuracy-level">
-          <span class="label">[[t.accuracyLevel]]:</span> [[accuracyLevel]]
+
+        <div>
+          <template is="dom-if" if="[[!currentLatitude]]">
+              [[t.searching]]...
+          </template>
+          <div class="geofence-message-container"> 
+            <div class="geofence-message"> [[geofenceMessage]]</div>
+          </div>
         </div>
-      </template> 
-
-      <template is="dom-if" if="{{hasDelta}}">
-        <br> 
-        <span class="label">[[t.disanceFromReference]]:</span> [[currentDelta]] meters
-      </template>
-      <label id="hint-text"></label>
-    </div>
-
-    <div>
-      <template is="dom-if" if="[[!currentLatitude]]">
-          [[t.searching]]...
-      </template>
-      <div class="geofence-message-container"> 
-        <div class="geofence-message"> [[geofenceMessage]]</div>
+        <label class="hint-text"></label>
+        <div id="error-text"></div>
       </div>
     </div>
-
   `;
   }
 
@@ -143,6 +151,7 @@ class TangyGps extends PolymerElement {
       hintText: {
         type: String,
         value: '',
+        observer: 'onHintTextChange',
         reflectToAttribute: true
       },
       required: {
@@ -181,11 +190,6 @@ class TangyGps extends PolymerElement {
         observer: 'saveCurrentPosition',
         value: undefined 
       },
-      invalid: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
       inGeofence: {
         type: Boolean,
         value: false,
@@ -194,6 +198,23 @@ class TangyGps extends PolymerElement {
       validMaxDelta: {
         type: Number,
         value: undefined
+      },
+      invalid: {
+        type: Boolean,
+        value: false,
+        observer: 'onInvalidChange',
+        reflectToAttribute: true
+      },
+      hintText: {
+        type: String,
+        value: '',
+        observer: 'onHintTextChange',
+        reflectToAttribute: true
+      },
+      errorText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
       }
     };
   }
@@ -201,11 +222,13 @@ class TangyGps extends PolymerElement {
   ready() {
     this.hasDelta = false
     super.ready();
-    this.$['hint-text'].innerHTML = this.hintText
     this.active = true
     this.getGeolocationPosition()
     this.currentAccuracy = '...'
     this.accuracyLevel = '...'
+    this.shadowRoot.querySelector('#qnum-number').innerHTML = this.hasAttribute('question-number') 
+      ? `<label>${this.getAttribute('question-number')}</label>`
+      : ''
   }
 
   disconnectedCallback() {
@@ -218,6 +241,21 @@ class TangyGps extends PolymerElement {
     this.recordedLongitude = this.value.recordedLongitude
     this.recordedAccuracy = this.value.recordedAccuracy
   }
+
+  onHintTextChange(value) {
+    this.shadowRoot.querySelector('.hint-text').innerHTML = value ? value : ''
+  }
+
+  onInvalidChange(value) {
+    if (value === false) {
+      this.shadowRoot.querySelector('#error-text').innerHTML = ""
+    } else {
+      this.shadowRoot.querySelector('#error-text').innerHTML = `
+        <iron-icon icon="error"></iron-icon> <div> ${this.errorText} </div>
+      `
+    }
+  }
+
   getGeolocationPosition() {
     const options = {
       enableHighAccuracy: true
@@ -304,8 +342,10 @@ class TangyGps extends PolymerElement {
   validate() {
     if (!this.required) return true
     if (this.value.latitude && this.value.longitude && this.value.accuracy) {
+      this.removeAttribute('invalid')
       return true
     } else {
+      this.setAttribute('invalid', '')
       return false
     }
   }

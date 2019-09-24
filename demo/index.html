@@ -122,6 +122,7 @@
                 label="What is your <b>second favorite</b> fruit?"
                 hint-text="This is <b>hint text</b>."
                 required>
+                <option name=""></option>
                 <option name="orange">Orange</option>
                 <option name="banana">Banana</option>
                 <option name="tangerine"><b>Tangerine</b></option>
@@ -380,6 +381,20 @@
                         options-list-exclude-by="id">
                 </tangy-checkboxes-dynamic>
               </template>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+      
+      <h3>Hiding navigation labels and icons</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="my-form" title="My Form">
+            <tangy-form-item id="item1" hide-nav-labels>
+              <tangy-input name="input1" label="What is your first name?"required></tangy-input>
+            </tangy-form-item>
+            <tangy-form-item id="item2" hide-nav-icons>
+              <tangy-input name="input2" label="What is your last name?" required></tangy-input>
             </tangy-form-item>
           </tangy-form>
         </template>

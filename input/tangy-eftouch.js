@@ -36,12 +36,27 @@ export class TangyEftouch extends PolymerElement {
         value: '',
         reflectToAttribute: true
       },
+      errorMessage: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       width: {
         type: Number,
         reflectToAttribute: true,
         observer: 'render'
       },
-      autoProgress: {
+      goNextOnTimeLimit: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      correct: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      incorrect: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
@@ -123,6 +138,7 @@ export class TangyEftouch extends PolymerElement {
       invalid: {
         type: Boolean,
         value: false,
+        observer: 'render',
         reflectToAttribute: true
       },
       incomplete: {
@@ -172,10 +188,11 @@ export class TangyEftouch extends PolymerElement {
     if (this.timeLimit) {
       this.timeLimitTimeout = setTimeout(() => {
         this.disabled = true
-        this.transition()
+        if (this.hasAttribute('go-next-on-time-limit')) this.transition(true)
       }, this.timeLimit)
     }
-    //this.fitIt()
+    this.fitItInterval = setInterval(this.fitIt.bind(this), Math.floor(1000/30))
+    this.fitIt()
   }
 
   disconnectedCallback () {
@@ -199,9 +216,6 @@ export class TangyEftouch extends PolymerElement {
     this.shadowRoot.innerHTML = `
       <style>
         :host {
-          position: fixed;
-          top: ${this.fromTopOfScreen}px;
-          left: 0px;
           width: 100%
         }
         :host tangy-radio-buttons {
@@ -249,7 +263,7 @@ export class TangyEftouch extends PolymerElement {
           border: #FFF solid 5px;
         }
         #cell[selected] img {
-          border: red solid 5px;
+          border: green solid 5px;
         }
         #cell {
           padding: 5px;
@@ -271,16 +285,28 @@ export class TangyEftouch extends PolymerElement {
             ${this.warningMessage}
           </div>
         ` : ''}
-        ${this.incorrectMessage ? `
+        ${this.incorrect && this.hasAttribute('incorrect-message') ? `
           <div id="incorrect">
-            ${this.incorrectMessage}
+            ${this.getAttribute('incorrect-message')}
+          </div>
+        ` : ''}
+        ${this.correct && this.hasAttribute('correct-message') ? `
+          <div id="correct">
+            ${this.getAttribute('correct-message')}
+          </div>
+        ` : ''}
+        ${this.invalid && this.hasAttribute('error-message') ? `
+          <div id="error-message">
+            ${this.getAttribute('error-message')}
           </div>
         ` : ''}
       </div>
-      <div id="options-box">
+      <div id="options-box" style="opacity: 0; display: flex; flex-wrap: wrap;">
       ${options.map(option => `
         <span 
           id="cell"
+          ef-width="${option.getAttribute('width')}"
+          ef-height="${option.getAttribute('height')}"
           ${option.hasAttribute('correct') ? 'correct' : ''}
           ${
             this.hasAttribute('multi-select')
@@ -288,7 +314,7 @@ export class TangyEftouch extends PolymerElement {
               : !option.hasAttribute('disabled') && this.value.selection === option.value ? `selected` : ``
           }
           style="
-            display: inline-block;
+            display: block;
             width:${Math.floor((option.getAttribute('width')/100)*this.width)}px;
             height:${Math.floor((option.getAttribute('height')/100)*(this.height-60))}px;
           ">
@@ -335,6 +361,7 @@ export class TangyEftouch extends PolymerElement {
         : target.getAttribute('value'),
       selectionTime: new Date().getTime()
     })
+
     if (this.querySelectorAll('[correct]').length > 0) {
       const correctSelections = [...this.querySelectorAll('[correct]')].map(optionEl => optionEl.getAttribute('value'))
       this.value = {
@@ -348,61 +375,61 @@ export class TangyEftouch extends PolymerElement {
             : correctSelections.includes(this.value.selection)
         }
       }     
+      if (this.value.correct) {
+        this.correct = true
+        this.incorrect = false
+      } else {
+        this.correct = false
+        this.incorrect = true
+      }
     }
-    if (this.hasAttribute('if-incorrect-then-highlight-correct') && this.value.correct === false) {
+    if (this.hasAttribute('if-incorrect-then-highlight-correct') && this.incorrect === true) {
       this.setAttribute('highlight-correct', '')
-    } else if (this.hasAttribute('if-incorrect-then-highlight-correct') && this.value.correct === true) {
+    } else if (this.hasAttribute('if-incorrect-then-highlight-correct') && this.correct === true) {
       this.removeAttribute('highlight-correct')
     }
-    if (this.hasAttribute('incorrect-message') && this.value.correct === false) {
-      this.incorrectMessage = this.getAttribute('incorrect-message')
-      this.render()
-    } else if (this.hasAttribute('incorrect-message') && this.value.correct === true) {
-      this.incorrectMessage = '' 
-      this.render()
-    }
+    this.render()
     this.dispatchEvent(new Event('change'))
-    if (this.canTransition) this.startTransition()
+    if (this.hasAttribute('go-next-on-selection') && this.value && this.value.selection && this.value.selection.length >= parseInt(this.getAttribute('go-next-on-selection')) && this.validate()) {
+      this.transition(true)
+    }
   }
 
-  get canTransition() {
-    return this.validate() && (this.transitionMessage || this.autoProgress || this.timeLimit)
-  }
-
-  startTransition() {
+  transition(goNext = false) {
+    if (this.hasAttribute('transition-triggered')) return
     this.setAttribute('transition-triggered', true)
-    if (this.transitionDelay > 0) {
+    const finishTransition = () => {
+      if (this.transitionSound) {
+        new Audio(this.transitionSound).play()
+        this.transitionSoundTriggered = true
+      }
+      if (goNext) this.dispatchEvent(new CustomEvent('next'))
+    }
+   if (this.transitionDelay > 0) {
       setTimeout(() => {
-        this.transition()
+        finishTransition()
       }, this.transitionDelay)
     } else {
-      this.transition()
+      finishTransition()
     }
-  }
-
-  transition() {
-    if (this.transitionSound) {
-      new Audio(this.transitionSound).play()
-      this.transitionSoundTriggered = true
-    }
-    if (this.autoProgress) this.dispatchEvent(new CustomEvent('next'))
   }
 
   fitIt() {
-    this.fitItInterval = setInterval(() => {
-      // Protect against not having a shadow yet.
-      if (!this.radioButtonsEl) return
-      // Protect against when the element has not yet grown up.
-      if (this.radioButtonsEl.offsetHeight / this.radioButtonsEl.offsetWidth === NaN) return 
-      // Protect from doing this over and over.
-      if (this.hasAttribute('fullscreen-size-complete')) return
-      const topMargin = 100
-      const targetHeight = window.visualViewport.height - topMargin
-      const actualHeight = this.radioButtonsEl.offsetHeight
-      let targetWidth = Math.floor(this.radioButtonsEl.offsetHeight / this.radioButtonsEl.offsetWidth * targetHeight)
-      this.radioButtonsEl.style.width = `${targetWidth}px`
-      this.setAttribute('fullscreen-size-complete', '')
-    }, 100)
+    const optionsBoxEl = this.shadowRoot.querySelector('#options-box')
+    const messageBoxHeight = 60
+    const totalHeight = window.innerHeight - optionsBoxEl.offsetTop - messageBoxHeight
+    const cellBorder = 10
+    const totalWidth = optionsBoxEl.clientWidth
+    if (totalWidth > 0) optionsBoxEl.style.opacity = '1'
+    // Because browsers don't render so good. Need extra room so it doesn't throw in an eager line break.
+    const extraSideRoom = 10
+    optionsBoxEl.querySelectorAll('#cell').forEach(cellEl => {
+      cellEl.setAttribute('style', `
+        display: inline-block;
+        width:${Math.floor((cellEl.getAttribute('ef-width')/100)*totalWidth) - cellBorder - extraSideRoom}px;
+        height:${Math.floor((cellEl.getAttribute('ef-height')/100)*(totalHeight)) - cellBorder}px;
+      `)
+    })
   }
 
   validate() {
