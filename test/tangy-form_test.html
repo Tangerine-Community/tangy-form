@@ -207,7 +207,28 @@
         </tangy-form>
       </template>
     </test-fixture>
-    
+
+    <test-fixture id="GoToFixture">
+      <template>
+        <tangy-form id="my-form">
+          <tangy-form-item id="item1" on-change="
+            if (!!inputs.input1.value) {
+              goTo('item3')
+            }
+          ">
+            <tangy-checkbox name="input1">Would you like to go to the last section?</tangy-checkbox>
+          </tangy-form-item>
+          <tangy-form-item id="item2">
+            Item 2...
+          </tangy-form-item>
+          <tangy-form-item id="item3">
+            Item 3...
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import stub from './stub.js' 
@@ -226,6 +247,12 @@
       })
 
       suite('tangy-form', () => {
+
+        test('should goTo', (done) => {
+          const element = fixture('GoToFixture');
+          element.newResponse()
+          element.querySelector('#item1').querySelector('[name=input1]').click()
+        }).timeout(987654321);
 
         test('hello world without errors', () => {
           const element = fixture('HelloWorldFixture');

@@ -8,6 +8,10 @@ export class TangyFormItemHelpers {
     }
   }
 
+  goTo(itemId, skipValidation = false) {
+    this.element.goTo(itemId, skipValidation)
+  }
+
   getValue(name) {
     let value = ''
     let foundInput = undefined

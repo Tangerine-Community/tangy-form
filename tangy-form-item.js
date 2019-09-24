@@ -439,7 +439,7 @@ export class TangyFormItem extends PolymerElement {
     // Declare namespaces for helper functions for the eval context in form.on-change.
     // We have to do this because bundlers modify the names of things that are imported
     // but do not update the evaled code because it knows not of it.
-    let {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold} = this.exposeHelperFunctions()
+    let {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold, goTo} = this.exposeHelperFunctions()
     try {
       const result = eval(code)
       return result
@@ -472,7 +472,8 @@ export class TangyFormItem extends PolymerElement {
     let numberOfIncorrectItems = (input) => helpers.numberOfIncorrectItems(input)
     let gridAutoStopped = (input) => helpers.gridAutoStopped(input)
     let hideInputsUponThreshhold = (input) => helpers.hideInputsUponThreshhold(input)
-    return {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold};
+    let goTo = (itemId, skipValidation = false) => helpers.goTo(itemId, skipValidation)
+    return {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold, goTo};
   }
 
   onOpenButtonPress() {
@@ -613,6 +614,14 @@ export class TangyFormItem extends PolymerElement {
     this.submit()
     this.dispatchEvent(new CustomEvent('ITEM_BACK'))
   }
+
+  goTo(itemId, skipValidation = false) {
+    if (!skipValidation || this.validate()) {
+      this.submit()
+      this.dispatchEvent(new CustomEvent('go-to', {detail: itemId}))
+    }
+  }
+
 
   clickedComplete() {
     if (this.validate()) {
