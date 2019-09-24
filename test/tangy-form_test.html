@@ -218,8 +218,13 @@
           ">
             <tangy-checkbox name="input1">Would you like to go to the last section?</tangy-checkbox>
           </tangy-form-item>
-          <tangy-form-item id="item2">
-            Item 2...
+          <tangy-form-item id="item2" on-change="
+            if (!!inputs.input2.value) {
+              goToEnd()
+            }
+           " 
+          >
+            <tangy-checkbox name="input2">Would you like to go to the last section?</tangy-checkbox>
           </tangy-form-item>
           <tangy-form-item id="item3">
             Item 3...
@@ -812,11 +817,15 @@
           })
         })
 
-        test('should goTo', () => {
+        test('should goTo and goToEnd', () => {
           const element = fixture('GoToFixture');
           element.newResponse()
           element.querySelector('#item1').querySelector('[name=input1]').value = 'on'
           element.querySelector('#item1').querySelector('[name=input1]').dispatchEvent(new Event('change'))
+          assert.equal(element.querySelector('#item3').open, true)
+          element.querySelector('#item3').back()
+          element.querySelector('#item2').querySelector('[name=input2]').value = 'on'
+          element.querySelector('#item2').querySelector('[name=input2]').dispatchEvent(new Event('change'))
           assert.equal(element.querySelector('#item3').open, true)
         });
 

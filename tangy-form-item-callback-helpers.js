@@ -12,6 +12,10 @@ export class TangyFormItemHelpers {
     this.element.goTo(itemId, skipValidation)
   }
 
+  goToEnd(skipValidation = false) {
+    this.element.goTo([...this.element.parentElement.querySelectorAll('tangy-form-item')].pop().id, skipValidation)
+  }
+
   getValue(name) {
     let value = ''
     let foundInput = undefined
