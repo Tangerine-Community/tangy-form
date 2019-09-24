@@ -33,7 +33,7 @@ export class TangySignature extends PolymerElement {
 
     <paper-button on-click="captureSignature"><iron-icon icon="done"></iron-icon> Accept Signature </paper-button>
     <paper-button on-click="clearSignature"><iron-icon icon="delete"></iron-icon> Clear </paper-button>
-    <label class="hint-text">[[hintText]]</label>
+    <label class="hint-text"></label>
     `
     }
 
@@ -85,24 +85,29 @@ export class TangySignature extends PolymerElement {
     }
 
     connectedCallback() {
-        super.connectedCallback()
+      super.connectedCallback()
     }
+
     ready() {
-        super.ready();
-        const canvas = this.shadowRoot.querySelector("#signature-pad");
-        this.signaturePad = new SignaturePad(canvas, {
-            backgroundColor: 'rgb(255, 255, 255)'
-        });
+      super.ready();
+      const canvas = this.shadowRoot.querySelector("#signature-pad");
+      this.signaturePad = new SignaturePad(canvas, {
+          backgroundColor: 'rgb(255, 255, 255)'
+      });
+      this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text') 
+        ? this.getAttribute('hint-text')
+        : ''
     }
+
     captureSignature() {
-        if (this.signaturePad.isEmpty()) {
-            return alert(t('Please provide a signature first.'));
-        }
-        this.value = this.signaturePad.toDataURL('image/jpeg');
+      if (this.signaturePad.isEmpty()) {
+          return alert(t('Please provide a signature first.'));
+      }
+      this.value = this.signaturePad.toDataURL('image/jpeg');
     }
 
     clearSignature() {
-        this.signaturePad.clear()
+      this.signaturePad.clear()
     }
 
 

@@ -207,7 +207,33 @@
         </tangy-form>
       </template>
     </test-fixture>
-    
+
+    <test-fixture id="GoToFixture">
+      <template>
+        <tangy-form id="my-form">
+          <tangy-form-item id="item1" on-change="
+            if (!!inputs.input1.value) {
+              goTo('item3')
+            }
+          ">
+            <tangy-checkbox name="input1">Would you like to go to the last section?</tangy-checkbox>
+          </tangy-form-item>
+          <tangy-form-item id="item2" on-change="
+            if (!!inputs.input2.value) {
+              goToEnd()
+            }
+           " 
+          >
+            <tangy-checkbox name="input2">Would you like to go to the last section?</tangy-checkbox>
+          </tangy-form-item>
+          <tangy-form-item id="item3">
+            Item 3...
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import stub from './stub.js' 
@@ -790,6 +816,19 @@
             assert.equal(fullScreenGranted, false)
           })
         })
+
+        test('should goTo and goToEnd', () => {
+          const element = fixture('GoToFixture');
+          element.newResponse()
+          element.querySelector('#item1').querySelector('[name=input1]').value = 'on'
+          element.querySelector('#item1').querySelector('[name=input1]').dispatchEvent(new Event('change'))
+          assert.equal(element.querySelector('#item3').open, true)
+          element.querySelector('#item3').back()
+          element.querySelector('#item2').querySelector('[name=input2]').value = 'on'
+          element.querySelector('#item2').querySelector('[name=input2]').dispatchEvent(new Event('change'))
+          assert.equal(element.querySelector('#item3').open, true)
+        });
+
       });
 
       window.stub = {

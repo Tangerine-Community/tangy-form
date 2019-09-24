@@ -396,6 +396,7 @@ export class TangyForm extends PolymerElement {
       item.addEventListener('FORM_RESPONSE_COMPLETE', this.onFormResponseComplete.bind(this))
       item.addEventListener('FORM_RESPONSE_NO_CONSENT', this.onFormResponseNoConsent.bind(this))
       item.addEventListener('logic-error', this.onItemError.bind(this))
+      item.addEventListener('go-to', event => this.onItemGoTo(event))
     })
 
     // Subscribe to the store to reflect changes.
@@ -502,6 +503,17 @@ export class TangyForm extends PolymerElement {
     this.focusOnPreviousItem()
   }
 
+  onItemGoTo(event) {
+    this.store.dispatch({
+      type: 'ITEM_SAVE',
+      item: event.target.getProps()
+    })
+    this.fireHook('on-change')
+    this.store.dispatch({
+      type: 'ITEM_GO_TO',
+      itemId: event.detail
+    })
+  }
   onItemOpened(event) {
     this.store.dispatch({
       type: 'ITEM_SAVE',

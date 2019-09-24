@@ -163,6 +163,18 @@ const tangyFormReducer = function (state = initialState, action) {
       Object.assign(newState, calculateTargets(newState))
       return newState
 
+    case 'ITEM_GO_TO':
+      return calculateTargets({
+        ...state,
+        items: state.items.map(item => {
+          return {
+            ...item,
+            open: item.id === action.itemId ? true : false,
+            hidden: item.id === action.itemId ? false : true
+          }
+        })
+      })
+      break
     case 'ITEM_BACK':
     case 'ITEM_NEXT':
       tmp.itemIndex = state.items.findIndex(item => item.id === action.itemId)
