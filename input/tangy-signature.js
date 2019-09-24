@@ -16,100 +16,181 @@ import '@polymer/paper-button/paper-button.js'
  * @demo demo/index.html
  */
 export class TangySignature extends PolymerElement {
-    static get template() {
-        return html`
-    <style include="tangy-common-styles"></style>
-    <style include="tangy-element-styles"></style>
-    <style>
-      img {
-        width: 100%;
+  static get template() {
+    return html`
+  <style include="tangy-common-styles"></style>
+  <style include="tangy-element-styles"></style>
+  <style>
+   img {
+    width: 100%;
+   }
+   .hint-text{ s
+    margin-top:6px;
+    margin-left:4px;
+   }
+
+   #signature-pad {
+     border-color: #CCC;
+     border-width: 15px;
+     border-radius: 5px;
+     border-style: dashed;
+     width: 600px;
+     height: 300px;
+   }
+
+  :host(:not([show-pad])) #signature-pad {
+     display:none; 
+   }
+ 
+   :host([show-pad]) #signature-pad {
+     display: block;
+   }
+   #signature-rendered {
+     border-color: #CCC;
+     border-width: 15px;
+     border-radius: 5px;
+     border-style: solid;
+     width: 600px;
+     height: 300px;
+      display: none;
+    }
+    :host(show-pad) #signature-rendered {
+      display: none !important;
+    }
+    :host(:not([show-pad])) #signature-rendered {
+      display: inline;
+    }
+    #buttons {
+      margin: 15px 0px;
+    }
+    paper-button {
+      background-color: var(--accent-color, #CCC);
+    }
+    paper-button[disabled] {
+      opacity: .2;
+    }
+  </style>
+  <span id="signature-pad">
+    <canvas id="signature-pad-canvas" width=600 height=300></canvas>
+  </span>
+  <img src="[[value]]" id="signature-rendered">
+  <div id="buttons">
+    <paper-button id="accept-button" on-click="captureSignature"><iron-icon icon="done"></iron-icon> [[t.accept]] </paper-button>
+    <paper-button id="clear-button" on-click="clearSignature"><iron-icon icon="delete"></iron-icon> [[t.clear]] </paper-button>
+  </div>
+  <label class="hint-text"></label>
+  <label id="error-text"></label>
+  `
+  }
+
+  static get is() {
+    return 'tangy-signature'
+  }
+
+  static get properties() {
+    return {
+      name: {
+        type: String,
+        value: ''
+      },
+      hintText: {
+        type: String,
+        value: ''
+      },
+      errorText: {
+        type: String,
+        value: ''
+      },
+      private: {
+        type: Boolean,
+        value: false
+      },
+      disabled: {
+        type: Boolean,
+        value: false,
+        observer: 'onDisabledChange',
+        reflectToAttribute: true
+      },
+      hidden: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      invalid: {
+        type: Boolean,
+        value: false,
+        observer: 'onInvalidChange',
+        reflectToAttribute: true
+      },
+      incomplete: {
+        type: Boolean,
+        value: true,
+        reflectToAttribute: true
+      },
+      value: {
+        type: String,
+        value: '',
+        observer: 'onValueChange'
       }
-      .hint-text{
-        margin-top:6px;
-        margin-left:4px;
-      }
-    </style>
-    <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
-
-    <paper-button on-click="captureSignature"><iron-icon icon="done"></iron-icon> Accept Signature </paper-button>
-    <paper-button on-click="clearSignature"><iron-icon icon="delete"></iron-icon> Clear </paper-button>
-    <label class="hint-text"></label>
-    `
     }
+  }
 
-    static get is() {
-        return 'tangy-signature'
+  connectedCallback() {
+   super.connectedCallback()
+  }
+
+  ready() {
+   super.ready();
+   this.t = {
+     accept: t('accept'),
+     clear: t('clear')
+   }
+   const canvas = this.shadowRoot.querySelector("#signature-pad-canvas");
+   this.signaturePad = new SignaturePad(canvas, {
+     backgroundColor: 'rgb(255, 255, 255)'
+   });
+   this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text') 
+    ? this.getAttribute('hint-text')
+    : ''
+  }
+
+  captureSignature() {
+    if (this.signaturePad.isEmpty() && !this.hasAttribute('allow-blank')) {
+      return alert(t('Please provide a signature first.'));
     }
+    this.value = this.signaturePad.toDataURL('image/jpeg');
+  }
 
-    static get properties() {
-        return {
-            name: {
-                type: String,
-                value: ''
-            },
-            hintText: {
-                type: String,
-                value: ''
-            },
-            private: {
-                type: Boolean,
-                value: false
-            },
-            disabled: {
-                type: Boolean,
-                value: false,
-                observer: 'onDisabledChange',
-                reflectToAttribute: true
-            },
-            hidden: {
-                type: Boolean,
-                value: false,
-                reflectToAttribute: true
-            },
-            invalid: {
-                type: Boolean,
-                value: false,
-                observer: 'onInvalidChange',
-                reflectToAttribute: true
-            },
-            incomplete: {
-                type: Boolean,
-                value: true,
-                reflectToAttribute: true
-            },
-            value: {
-                type: String,
-                value: ''
-            }
-        }
+  clearSignature() {
+    this.value = ''
+    this.signaturePad.clear()
+  }
+
+  onValueChange() {
+    if (this.value) {
+      this.removeAttribute('show-pad')
+      this.shadowRoot.querySelector('#accept-button').setAttribute('disabled', '')
+    } else {
+      this.setAttribute('show-pad', '')
+      this.shadowRoot.querySelector('#accept-button').removeAttribute('disabled')
     }
+  }
 
-    connectedCallback() {
-      super.connectedCallback()
+  onInvalidChange(value) {
+    this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid && this.hasAttribute('error-text')
+      ? `<iron-icon icon="error"></iron-icon> <div> ${this.getAttribute('error-text')} </div>`
+      : ''
+  }
+
+  validate() {
+    if (this.hasAttribute('required') && !this.value) {
+      this.setAttribute('invalid', '')
+      return false
+    } else {
+      this.removeAttribute('invalid')
+      return true
     }
-
-    ready() {
-      super.ready();
-      const canvas = this.shadowRoot.querySelector("#signature-pad");
-      this.signaturePad = new SignaturePad(canvas, {
-          backgroundColor: 'rgb(255, 255, 255)'
-      });
-      this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text') 
-        ? this.getAttribute('hint-text')
-        : ''
-    }
-
-    captureSignature() {
-      if (this.signaturePad.isEmpty()) {
-          return alert(t('Please provide a signature first.'));
-      }
-      this.value = this.signaturePad.toDataURL('image/jpeg');
-    }
-
-    clearSignature() {
-      this.signaturePad.clear()
-    }
-
+  }
 
 }
 window.customElements.define(TangySignature.is, TangySignature)
