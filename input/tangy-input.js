@@ -32,13 +32,6 @@ export class TangyInput extends PolymerElement {
         top: 5px;
       }
 
-      #errorText {
-        padding: 10px 10px 10px 0px;
-        font-size: medium;
-        font-weight: bold;
-        color: var(--error-color);
-      }
-
     </style>
     <div class="flex-container m-y-25">
       <div id="qnum-number"></div>
@@ -176,7 +169,7 @@ export class TangyInput extends PolymerElement {
         ? `<paper-input id="input"></paper-input>`
         : `<paper-textarea id="input"></paper-textarea>`
       }
-      <div id="errorText"></div>    
+      <div id="error-text"></div>    
     
     `
     // Listen for user changes.
@@ -247,12 +240,12 @@ export class TangyInput extends PolymerElement {
     }
     if (this.invalid === false) {
       this.shadowRoot.querySelector('#input').removeAttribute('invalid')
-      this.shadowRoot.querySelector('#errorText').innerHTML = ""
+      this.shadowRoot.querySelector('#error-text').innerHTML = ""
     } else {
       this.shadowRoot.querySelector('#input').setAttribute('invalid', true)
-      this.shadowRoot.querySelector('#errorText').innerHTML = `
-      ${(this.errorText !== "" ? `<iron-icon icon="error"></iron-icon><div>` : '')}
-      ${this.errorText}</div>`
+      this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid && this.hasAttribute('error-text')
+        ? `<iron-icon icon="error"></iron-icon> <div> ${this.getAttribute('error-text')} </div>`
+        : ''
     }
   }
 
