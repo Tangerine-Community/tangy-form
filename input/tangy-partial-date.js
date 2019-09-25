@@ -159,19 +159,19 @@ class TangyPartialDate extends PolymerElement {
       },
       missingDateErrorText: {
         type: String,
-        value: t("The date is missing. Please enter a valid date.La date n'est pas manquante. Veuillez entrer une date valide."),
+        value: t("The date is missing. Please enter a valid date."),
         observer: 'render',
         reflectToAttribute: true
       },
       invalidDateErrorText: {
         type: String,
-        value: t("The date is not valid. Please enter a valid date.La date n'est pas valide. Veuillez entrer une date valide."),
+        value: t("The date is not valid. Please enter a valid date."),
         observer: 'render',
         reflectToAttribute: true
       },
       futureDateErrorText: {
         type: String,
-        value: t("The date cannot be in the future. Please enter a date that is on or before today.<t-lang>La date ne peut pas être dans le futur. S'il vous plaît entrer une date qui est sur ou avant aujourd'hui."),
+        value: t("The date cannot be in the future. Please enter a date that is on or before today."),
         observer: 'render',
         reflectToAttribute: true
       },
