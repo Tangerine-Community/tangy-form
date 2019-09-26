@@ -183,7 +183,7 @@ export class TangyFormItem extends PolymerElement {
       </style>
       <paper-card id="card" class="shrunk">
         <div class="card-content">
-          <label class="heading">[[title]]</label>
+          <label class="heading"></label>
           <slot></slot>
         </div>
         <div class="card-actions">
@@ -384,6 +384,9 @@ export class TangyFormItem extends PolymerElement {
 
   // Apply state in the store to the DOM.
   reflect() {
+    this.shadowRoot.querySelector('.heading').innerHTML = this.hasAttribute('title')
+      ? this.getAttribute('title')
+      : ''
     // Reflect to tangy-input-groups first because they may need to template out some additional inputs.
     this.inputs
       .filter(input => input.tagName === 'TANGY-INPUT-GROUPS')
