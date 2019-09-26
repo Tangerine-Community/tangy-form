@@ -164,6 +164,20 @@ class TangyTimed extends PolymerElement {
       #info {
         padding-top: 70px;
       }
+
+      .blink-green-bg{
+          animation-name: animation;
+          animation-duration: 0.2s;
+          animation-timing-function: steps(5);
+          animation-iteration-count: 3;    
+          animation-play-state: running;
+      }
+      @keyframes animation {
+        0.0%     {background-color:var(--document-background-color);}
+        50.0%  {background-color:green;}
+        100.0%  {background-color:var(--document-background-color);}
+    }
+      
     </style>
     <label class="hint-text">[[hintText]]</label>
     <div id="container">
@@ -496,6 +510,7 @@ class TangyTimed extends PolymerElement {
             }
           }, 200);
         } else {
+          clearInterval(this.timer2)
           this.value = this.value.map(buttonState => {
             return Object.assign({}, buttonState, {
               highlighted: false,
@@ -560,10 +575,10 @@ class TangyTimed extends PolymerElement {
 
       case TANGY_TIMED_CAPTURE_ITEM_AT:
         this.statusMessage = t(`Tap the item at ${this.captureItemAt} seconds`)
-        this.style.background = 'green'
-        setTimeout(() => this.style.background = 'white', 200)
-        setTimeout(() => this.style.background = 'green', 400)
-        setTimeout(() => this.style.background = 'white', 600)
+        this.shadowRoot.querySelector('#container').classList.add('blink-green-bg')
+        setTimeout(() => {
+          this.shadowRoot.querySelector('#container').classList.remove('blink-green-bg')
+        }, 4000);
         break
 
     }
@@ -585,6 +600,7 @@ class TangyTimed extends PolymerElement {
     }
   }
   stopGrid() {
+
     clearInterval(this.timer)
     clearInterval(this.timer2)
     this.isItemCaptured = false
@@ -662,9 +678,12 @@ class TangyTimed extends PolymerElement {
         this.dispatchEvent(new Event('change'))
         break
       case TANGY_TIMED_CAPTURE_ITEM_AT:
-        newValue = this.value.map(buttonState => {
+
+        newValue = this.value.map((buttonState, index) => {
           if (buttonState.name === event.target.name) {
             this.isItemCaptured = true
+            this.gridVarItemAtTime = index + 1
+            this.gridVarTimeIntermediateCaptured = this.duration - this.timeRemaining
             return {
               ...buttonState, captured: true,
               disabled: false
@@ -697,6 +716,7 @@ class TangyTimed extends PolymerElement {
     this.endTime = Date.now()
     clearInterval(this.timer);
     clearInterval(this.timer2);
+    this.isItemCaptured = false;
     // We have to check for typeof string because the event handler on the stop button puts an integer in the second param for some reason.
     // If it's a string, then we know it's an ID of something which should actually be lastItemAttempted.
     if (typeof lastItemAttempted === 'string') {
