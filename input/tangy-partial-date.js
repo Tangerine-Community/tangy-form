@@ -3,7 +3,7 @@ import '../util/html-element-props.js'
 import '../style/tangy-element-styles.js';
 import '../style/tangy-common-styles.js'
 import '../style/mdc-select-style.js'
-import { combTranslations } from 'translation-web-component/util.js'
+import { t } from '../util/t.js'
 /**
  * `tangy-partial-date`
  *
@@ -19,6 +19,10 @@ class TangyPartialDate extends PolymerElement {
     <style include="tangy-common-styles"></style>
     <style include="mdc-select-style"></style>
     <style>
+      :host {
+        --iron-icon-width: 32px;
+        --iron-icon-height: 32px;
+      }
       .partial-date-select {
         background-image: url(data:image/svg+xml,%3Csvg%20width%3D%2210px%22%20height%3D%225px%22%20viewBox%3D%227%2010%2010%205%22%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%0A%20%20%20%20%3Cpolygon%20id%3D%22Shape%22%20stroke%3D%22none%22%20fill%3D%22%230%22%20fill-rule%3D%22evenodd%22%20opacity%3D%220.54%22%20points%3D%227%2010%2012%2015%2017%2010%22%3E%3C%2Fpolygon%3E%0A%3C%2Fsvg%3E);
         background-repeat: no-repeat;
@@ -31,7 +35,7 @@ class TangyPartialDate extends PolymerElement {
         margin-bottom: 20px;
       }
       .partial-date-float {
-        float:left;
+        /*float:left;*/
         margin-right:15px;
       }
       .partial-date-headings {
@@ -48,18 +52,12 @@ class TangyPartialDate extends PolymerElement {
       :host([invalid]) {
         border: none;
       }
-      #container {
-        margin-left:30px;
-      }
-      label.hint-text {
-        color: gray;
-        font-size: 1em;
-        font-weight: lighter;
-    }
     </style>
-    <div>
-      <div id="qnum" style="float:left;"></div>
-      <div id="container"></div>
+    <div class="flex-container m-y-25">
+      <div id="qnum-number"></div>
+      <div id="qnum-content">
+        <div id="container"></div>
+      </div>
     </div>
     `;
   }
@@ -90,7 +88,8 @@ class TangyPartialDate extends PolymerElement {
       disabled: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        observer: 'render'
       },
       label: {
         type: String,
@@ -160,19 +159,19 @@ class TangyPartialDate extends PolymerElement {
       },
       missingDateErrorText: {
         type: String,
-        value: "<t-lang en>The date is missing. Please enter a valid date.</t-lang><t-lang fr>La date n'est pas manquante. Veuillez entrer une date valide.</t-lang>",
+        value: t("The date is missing. Please enter a valid date."),
         observer: 'render',
         reflectToAttribute: true
       },
       invalidDateErrorText: {
         type: String,
-        value: "<t-lang en>The date is not valid. Please enter a valid date.</t-lang><t-lang fr>La date n'est pas valide. Veuillez entrer une date valide.</t-lang>",
+        value: t("The date is not valid. Please enter a valid date."),
         observer: 'render',
         reflectToAttribute: true
       },
       futureDateErrorText: {
         type: String,
-        value: "<t-lang en>The date cannot be in the future. Please enter a date that is on or before today.</t-lang><t-lang>La date ne peut pas être dans le futur. S'il vous plaît entrer une date qui est sur ou avant aujourd'hui.</t-lang>",
+        value: t("The date cannot be in the future. Please enter a date that is on or before today."),
         observer: 'render',
         reflectToAttribute: true
       },
@@ -193,76 +192,84 @@ class TangyPartialDate extends PolymerElement {
   render() {
 
      const months = [
-      "<t-lang en>January</t-lang><t-lang fr>janvier</t-lang>",
-      "<t-lang en>February</t-lang><t-lang fr>fèvrier</t-lang>",
-      "<t-lang en>March</t-lang><t-lang fr>mars</t-lang>",
-      "<t-lang en>April</t-lang><t-lang fr>avril</t-lang>",
-      "<t-lang en>May</t-lang><t-lang fr>mai</t-lang>",
-      "<t-lang en>June</t-lang><t-lang fr>juin</t-lang>",
-      "<t-lang en>July</t-lang><t-lang fr>juillet</t-lang>",
-      "<t-lang en>August</t-lang><t-lang fr>aout</t-lang>",
-      "<t-lang en>September</t-lang><t-lang fr>septembre</t-lang>",
-      "<t-lang en>October</t-lang><t-lang fr>octobre</t-lang>",
-      "<t-lang en>November</t-lang><t-lang fr>novembre</t-lang>",
-      "<t-lang en>December</t-lang><t-lang fr>decembre</t-lang>"
+      t('January'),
+      t('February'),
+      t('March'),
+      t('April'),
+      t('May'),
+      t('June'),
+      t('July'),
+      t('August'),
+      t('September'),
+      t('October'),
+      t('November'),
+      t('December')
     ];
     const days = Array.from({length: 31}, (x,i) => i+1);
     const years = Array.from({length: parseInt(this.maxYear) - parseInt(this.minYear) + 1}, (x,i) => parseInt(this.minYear) + i);
-    const unknownText = combTranslations("<t-lang en>Unknown</t-lang><t-lang fr>inconnu</t-lang>");
+    const unknownText = t("Unknown");
     this.allowUnknownDay && days.push(99);
     this.allowUnknownMonth && months.push(unknownText);
     this.allowUnknownYear && years.push(9999);
 
-    this.$.qnum.innerHTML = `<label>${this.questionNumber}</label>`;
+    this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
     this.$.container.innerHTML = `
       <label for="group">${this.label}</label>
       <label class="hint-text">${this.hintText}</label>
       <div class="mdc-select partial-date-format">
         <div class='partial-date-float'>
-          <label for='day' class='partial-date-headings'><t-lang en>Day:</t-lang><t-lang fr>Journée</t-lang></label>
+          <label for='day' class='partial-date-headings'>${t('Day')}:</label>
           <select class="mdc-select__surface partial-date-select" name="day" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
             <option value="" default selected disabled></option>
             ${days.map((day, i) => `
               <option value="${day}">
-                ${(day === 99 ? combTranslations("<t-lang en>Unknown</t-lang><t-lang fr>inconnu</t-lang>") : day)}
+                ${(day === 99 ? t("Unknown") : day)}
               </option>
             `)}
           </select>
         </div>
         <div class='partial-date-float'>
-          <label for='day' class='partial-date-headings'><t-lang en>Month:</t-lang><t-lang fr>Mois</t-lang></label>
+          <label for='day' class='partial-date-headings'>${t('Month')}:</label>
           <select class="mdc-select__surface partial-date-select" name="month" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
             <option value="" default selected disabled></option>
             ${months.map((month, i) => `
               <option value="${(month === unknownText ? 99 : months.indexOf(month) + 1)}">
-                ${(this.numericMonth ? (month === unknownText ? unknownText : months.indexOf(month) + 1) : (month === unknownText ? unknownText : combTranslations(month)))}
+                ${(this.numericMonth ? (month === unknownText ? unknownText : months.indexOf(month) + 1) : (month === unknownText ? unknownText : month))}
               </option>
             `)}    
           </select>
         </div>
         <div class='partial-date-float'>
-          <label for='year' class='partial-date-headings'><t-lang en>Year:</t-lang><t-lang fr>Année:</t-lang></label>
+          <label for='year' class='partial-date-headings'>${t('Year')}:</label>
             <select class="mdc-select__surface partial-date-select" name="year" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
               <option value="" default selected disabled></option>
               ${years.map((year, i) => `
                 <option value="${year}">
-                ${(year === 9999 ? combTranslations("<t-lang en>Unknown</t-lang><t-lang fr>inconnu</t-lang>") : year)}
+                ${(year === 9999 ? t("Unknown") : year)}
                 </option>
               `)}
             </select>
         </div>  
         ${(this.showTodayButton ? ` 
-          <paper-button style="margin-top:30px; height:40px; text-transform:capitalize" id="today" on-click="setToday">
+          <paper-button style="align-self:flex-end;" id="today" on-click="setToday" ${this.disabled ? 'disabled' : ''}>
             <iron-icon icon="query-builder"></iron-icon>&nbsp;
-            <t-lang en>Today</t-lang><t-lang fr>Aujourd'hui</t-lang>
+            ${t('Today')}
           </paper-button>` : '' 
         )}
       </div>
-      <div id="errorText">
-        ${(this.errorText !== "" ? `<div style="float:left;margin-right:10px;"><iron-icon icon="error""></iron-icon></div><div style="margin-left:35px;">` : '')}
-        ${this.errorText}</div>
-      </div>      
-    `;
+      ${this.invalid && this.errorText && !this.internalErrorText ? `
+        <div id="error-text">
+          <iron-icon icon="error"></iron-icon>
+            <div>${this.errorText}</div>
+        </div>      
+      ` : ''}
+      ${this.invalid && this.internalErrorText ? `
+        <div id="error-text">
+          <iron-icon icon="error"></iron-icon>
+            <div>${this.internalErrorText}</div>
+        </div>      
+      ` : ''}
+    `
     if (this.showTodayButton) {
       this._onClickListener = this
         .shadowRoot
@@ -312,21 +319,21 @@ class TangyPartialDate extends PolymerElement {
 
   validate() {
     if (this.required && !this.hidden && !this.disabled && !this.value) {
+      this.internalErrorText = this.missingDateErrorText;
       this.invalid = true;
-      this.errorText = this.missingDateErrorText;
       return false;
     }    
     if (!this.isValidDate(this.value)) {
+      this.internalErrorText = this.invalidDateErrorText;
       this.invalid = true;
-      this.errorText = this.invalidDateErrorText;
       return false;
     }
     if (this.disallowFutureDate && this.isFutureDate(this.value)) {
+      this.internalErrorText = this.futureDateErrorText;
       this.invalid = true;
-      this.errorText = this.futureDateErrorText;
       return false;
     }
-    this.errorText = "";
+    this.internalErrorText = "";
     this.invalid = false;
     return true;
   }
@@ -345,10 +352,10 @@ class TangyPartialDate extends PolymerElement {
 
   isFutureDate(dateValue) {
     const today = new Date();
-    const enteredDay = this.unpad(dateValue.split("-")[2]);
-    const enteredMonth = this.unpad(dateValue.split("-")[1]);
-    const enteredYear = dateValue.split("-")[0]; 
-    if (enteredDay !== '' && enteredDay !== 99 && enteredMonth !== '' && enteredMonth !== 99) {
+    const enteredDay = parseInt(this.unpad(dateValue.split("-")[2]));
+    const enteredMonth = parseInt(this.unpad(dateValue.split("-")[1]));
+    const enteredYear = parseInt(dateValue.split("-")[0]); 
+    if (enteredDay !== 99 && enteredMonth !== 99 && enteredYear !== 9999) {
       const fullDate = new Date(enteredYear, enteredMonth - 1, enteredDay);
       if (fullDate > today) {
         return true;
@@ -356,7 +363,7 @@ class TangyPartialDate extends PolymerElement {
         return false;
       }
     }
-    if (enteredMonth !== '' && enteredMonth !== 99) {
+    if (enteredMonth !== 99 && enteredYear !== 9999) {
       const imputedDate = new Date(enteredYear, enteredMonth - 1, 1);
       if (imputedDate > today) {
         return true;
@@ -364,12 +371,16 @@ class TangyPartialDate extends PolymerElement {
         return false;
       }
     }
-    const imputedDate = new Date(enteredYear, 0, 1);
+    if (enteredYear !== 9999) {
+      const imputedDate = new Date(enteredYear, 0, 1);
       if (imputedDate > today) {
         return true;
       } else {
         return false;
       }
+    }
+    return false;
+ 
   }
 
   isValidDate(str) {

@@ -20,12 +20,23 @@ class TangySelect extends PolymerElement {
     <style include="tangy-element-styles"></style>
     <style include="tangy-common-styles"></style>
     <style include="mdc-select-style"></style>
+
     <style>
-    .mdc-error {
-        border: solid var(--error-color) 5px;
+    #errorText {
+      padding: 10px 10px 10px 0px;
+      font-size: medium;
+      font-weight: bold;
+      color: var(--error-color);
     }
-</style>
-    <div id="container"></div>
+ 
+    </style>
+
+    <div class="flex-container m-y-25">
+      <div id="qnum-number"></div>
+      <div id="qnum-content">
+        <div id="container">
+      </div>
+    </div>
     `;
   }
 
@@ -83,7 +94,17 @@ class TangySelect extends PolymerElement {
       incomplete: {
         type: Boolean,
         value: true
-      }
+      },
+      questionNumber: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      errorText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
     }
   }
 
@@ -95,6 +116,8 @@ class TangySelect extends PolymerElement {
   }
   
   render() {
+    this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
+    
     this.$.container.innerHTML = ''
     let options = []
     this.querySelectorAll('option').forEach(optionEl => options.push(optionEl))
@@ -114,8 +137,9 @@ class TangySelect extends PolymerElement {
             </option>
           `)}
         </select>
+        <div class="mdc-select__bottom-line"></div>
       </div>
-      <div class="mdc-select__bottom-line"></div>
+      <label id="errorText"></label>
     `
     this._onChangeListener = this
       .shadowRoot
@@ -132,11 +156,13 @@ class TangySelect extends PolymerElement {
   validate() {
     if (this.required && !this.hidden && !this.disabled && !this.value) {
       this.invalid = true
-      this.shadowRoot.querySelector('select').classList.add('mdc-error')
+      this.shadowRoot.querySelector('#errorText').innerHTML = `
+      ${(this.errorText !== "" ? `<iron-icon icon="error""></iron-icon><div>` : '')}
+      ${this.errorText}</div>`
       return false
     } else {
       this.invalid = false
-      this.shadowRoot.querySelector('select').classList.remove('mdc-error')
+      this.shadowRoot.querySelector('#errorText').innerHTML = '';
       return true
     }
   }

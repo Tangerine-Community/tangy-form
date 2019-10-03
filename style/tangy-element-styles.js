@@ -16,9 +16,9 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         color: var(--primary-text-color);
         display: block;
         position: relative;
-        border: solid white 5px;
+        border: var(--tangy-element-border, solid white 5px);
         padding: 0px;
-        margin: 10px;
+        margin: var(--tangy-element-margin, 10px);
       }
 
       :host(:not([hidden])) {
@@ -49,16 +49,18 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         opacity: .7;
       }
 
+      /*
       :host([invalid]) {
         border: solid var(--error-color) 5px;
       }
-
+      */
+     
       :host([required]:not([disabled]))::before  { 
         content: "*"; 
         color: var(--accent-color); 
         position: absolute;
-        top: 8px;
-        left: -20px;
+        top: -2px;
+        left: -18px;
         font-size: 2em;
       }
 
@@ -66,19 +68,60 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         /* color: var(--disabled-color); */
       }
 
+      .flex-container {
+        display: flex;
+      }
+      .flex-container > #qnum-content {
+        width: 100%;
+        padding-right: 2em;
+      }
+      #qnum-number > label {
+        margin-right: 0.5rem;
+        min-width: 2em;
+      }
+      #qnum-number > label:empty {
+        margin: 0;
+        min-width: 0;
+      }
 
       label {
+        font-family: var(--paper-font-common-base_-_font-family);
         display: block;
-        font-size: 1.2em;
-        margin-bottom: 15px;
+        font-size: 1.2rem;
         color: var(--primary-text-color);
         margin-bottom: 5px;
       }
-  
+
+      #error-text, #errorText {
+        font-family: var(--paper-font-common-base_-_font-family);
+        font-size: medium;
+        font-weight: bold;
+        color: var(--error-color);
+        display: flex;
+        margin-bottom: 30px;
+      }
+      #error-text > iron-icon, #errorText > iron-icon {
+        padding-right: 0.8em;
+        height: 24px;
+        width: 24px;
+      }
+      #error-text > div, #errorText > div {
+        line-height: 24px;
+      }
+      #error-text:empty, #errorText:empty {
+        margin-bottom: 0;
+      }
+   
       .secondary_color {
         color: var(--accent-color);
       }
+
+      .m-y-25 {
+        margin: 25px 0;
+      }
    
+      
+     
   
     </style>
     </template>

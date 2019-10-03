@@ -33,8 +33,13 @@ export class TangyInput extends PolymerElement {
       }
 
     </style>
-    <div id="container">
+    <div class="flex-container m-y-25">
+      <div id="qnum-number"></div>
+      <div id="qnum-content">
+        <div id="container"></div>
+      </div>
     </div>
+
   `
   }
 
@@ -75,11 +80,7 @@ export class TangyInput extends PolymerElement {
         observer: 'reflect',
         value: ''
       },
-      errorMessage: {
-        type: String,
-        observer: 'reflect',
-        value: ''
-      },
+
       required: {
         type: Boolean,
         value: false,
@@ -114,12 +115,6 @@ export class TangyInput extends PolymerElement {
         observer: 'reflect',
         reflectToAttribute: true
       },
-      allowedPattern: {
-        type: String,
-        value: '',
-        observer: 'reflect',
-        reflectToAttribute: true
-      },
       min: {
         type: String,
         value: '',
@@ -131,6 +126,30 @@ export class TangyInput extends PolymerElement {
         value: '',
         observer: 'reflect',
         reflectToAttribute: true
+      },
+      questionNumber: {
+        type: String,
+        value: '',
+        observer: 'reflect',
+        reflectToAttribute: true
+      },
+      errorText: {
+        type: String,
+        value: '',
+        observer: 'reflect',
+        reflectToAttribute: true
+      },
+      // allowedPattern and errorMessage are for passing down to paper-input's API of the same name. We are probably going to drop this usage in favor of the tangy API of valid-if and error-text. Consider these items deprecated.
+      allowedPattern: {
+        type: String,
+        value: '',
+        observer: 'reflect',
+        reflectToAttribute: true
+      },
+      errorMessage: {
+        type: String,
+        observer: 'reflect',
+        value: ''
       }
     }
   }
@@ -138,8 +157,9 @@ export class TangyInput extends PolymerElement {
   connectedCallback() {
     super.connectedCallback()
     // Template.
-    this.$.container.innerHTML = `      
+    this.$.container.innerHTML = `   
       <label id="label"></label>
+      <label id="hintText" class="hint-text"></label>
       ${
         this.getAttribute('type') === 'email' ||
         this.getAttribute('type') === 'number' ||
@@ -149,7 +169,8 @@ export class TangyInput extends PolymerElement {
         ? `<paper-input id="input"></paper-input>`
         : `<paper-textarea id="input"></paper-textarea>`
       }
-      <label id="hintText"></label>
+      <div id="error-text"></div>    
+    
     `
     // Listen for user changes.
     this.shadowRoot.querySelector('#input').addEventListener('value-changed', (event) => {
@@ -173,12 +194,16 @@ export class TangyInput extends PolymerElement {
     })
     this.ready = true
     this.reflect()
+
   }
 
   reflect() {
     if (!this.ready) return
     if (!this.shadowRoot.querySelector('#input')) return
     // Reflect data into DOM.
+
+
+    this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
     this.shadowRoot.querySelector('#hintText').innerHTML = this.hintText
     this.shadowRoot.querySelector('#label').innerHTML = this.label
     this.shadowRoot.querySelector('#input').placeholder = combTranslations(this.placeholder)
@@ -186,6 +211,7 @@ export class TangyInput extends PolymerElement {
       ? t('Enter your response to above question here') 
       : combTranslations(this.innerLabel)
     this.shadowRoot.querySelector('#input').errorMessage = combTranslations(this.errorMessage)
+
     this.shadowRoot.querySelector('#input').allowedPattern = this.allowedPattern
     this.shadowRoot.querySelector('#input').setAttribute('type', this.type ? this.type : 'text')
     // When comparing the values, make sure they are always strings as opposed to different kinds of untruthiness.
@@ -214,8 +240,12 @@ export class TangyInput extends PolymerElement {
     }
     if (this.invalid === false) {
       this.shadowRoot.querySelector('#input').removeAttribute('invalid')
+      this.shadowRoot.querySelector('#error-text').innerHTML = ""
     } else {
       this.shadowRoot.querySelector('#input').setAttribute('invalid', true)
+      this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid && this.hasAttribute('error-text')
+        ? `<iron-icon icon="error"></iron-icon> <div> ${this.getAttribute('error-text')} </div>`
+        : ''
     }
   }
 

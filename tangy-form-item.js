@@ -27,6 +27,8 @@ export class TangyFormItem extends PolymerElement {
     this.innerHTML = ''
     super.connectedCallback()
     this.t = {
+      back: t('back'),
+      next: t('next'),
       open: t('open'),
       close: t('close'),
       save: t('save'),
@@ -171,17 +173,17 @@ export class TangyFormItem extends PolymerElement {
           width: 84px;
         }
         #back iron-icon {
-          margin: 0px 0px 0px 21px;
+          margin: 0 21px 0 0;
         }
 
         .card-actions paper-button {
-          font-size: .8em;
-          line-height: 1em;
+          font-size: 1.2rem;
+          line-height: 1rem;
         }
       </style>
       <paper-card id="card" class="shrunk">
         <div class="card-content">
-          <label class="heading">[[title]]</label>
+          <label class="heading"></label>
           <slot></slot>
         </div>
         <div class="card-actions">
@@ -209,24 +211,44 @@ export class TangyFormItem extends PolymerElement {
               </template>
               <template is="dom-if" if="{{!hideNextButton}}">
                 <paper-button id="back" on-click="next" >
-                  <iron-icon icon="arrow-back"></iron-icon>
+                  <template is="dom-if" if="{{!hideNavIcons}}">
+                    <iron-icon icon="arrow-back"></iron-icon>
+                  </template>
+                  <template is="dom-if" if="{{!hideNavLabels}}">
+                    [[t.next]]
+                  </template>
                 </paper-button>
               </template>
               <template is="dom-if" if="{{!hideBackButton}}">
                 <paper-button id="next" on-click="back" >
-                  <iron-icon icon="arrow-forward"></iron-icon>
+                 <template is="dom-if" if="{{!hideNavLabels}}">
+                    [[t.back]]
+                  </template>
+                  <template is="dom-if" if="{{!hideNavIcons}}">
+                    <iron-icon icon="arrow-forward"></iron-icon>
+                  </template>
                 </paper-button>
               </template>
             </template>
             <template is="dom-if" if="{{!rightToLeft}}">
               <template is="dom-if" if="{{!hideBackButton}}">
                 <paper-button id="back" on-click="back" >
-                  <iron-icon icon="arrow-back"></iron-icon>
+                  <template is="dom-if" if="{{!hideNavIcons}}">
+                    <iron-icon icon="arrow-back"></iron-icon>
+                  </template>
+                  <template is="dom-if" if="{{!hideNavLabels}}">
+                    [[t.back]]
+                  </template>
                 </paper-button>
               </template>
               <template is="dom-if" if="{{!hideNextButton}}">
                 <paper-button id="next" on-click="next" >
-                  <iron-icon icon="arrow-forward"></iron-icon>
+                 <template is="dom-if" if="{{!hideNavLabels}}">
+                    [[t.next]]
+                  </template>
+                  <template is="dom-if" if="{{!hideNavIcons}}">
+                    <iron-icon icon="arrow-forward"></iron-icon>
+                  </template>
                 </paper-button>
               </template>
               <template is="dom-if" if="{{showCompleteButton}}">
@@ -280,6 +302,16 @@ export class TangyFormItem extends PolymerElement {
         reflectToAttribute: true
       },
       hideBackButton: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      hideNavIcons: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      hideNavLabels: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
@@ -352,6 +384,9 @@ export class TangyFormItem extends PolymerElement {
 
   // Apply state in the store to the DOM.
   reflect() {
+    this.shadowRoot.querySelector('.heading').innerHTML = this.hasAttribute('title')
+      ? this.getAttribute('title')
+      : ''
     // Reflect to tangy-input-groups first because they may need to template out some additional inputs.
     this.inputs
       .filter(input => input.tagName === 'TANGY-INPUT-GROUPS')
@@ -439,7 +474,7 @@ export class TangyFormItem extends PolymerElement {
     // Declare namespaces for helper functions for the eval context in form.on-change.
     // We have to do this because bundlers modify the names of things that are imported
     // but do not update the evaled code because it knows not of it.
-    let {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold} = this.exposeHelperFunctions()
+    let {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold, goTo, goToEnd} = this.exposeHelperFunctions()
     try {
       const result = eval(code)
       return result
@@ -472,7 +507,9 @@ export class TangyFormItem extends PolymerElement {
     let numberOfIncorrectItems = (input) => helpers.numberOfIncorrectItems(input)
     let gridAutoStopped = (input) => helpers.gridAutoStopped(input)
     let hideInputsUponThreshhold = (input) => helpers.hideInputsUponThreshhold(input)
-    return {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold};
+    let goTo = (itemId, skipValidation = false) => helpers.goTo(itemId, skipValidation)
+    let goToEnd = (skipValidation = false) => helpers.goToEnd(skipValidation)
+    return {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold, goTo, goToEnd};
   }
 
   onOpenButtonPress() {
@@ -511,7 +548,6 @@ export class TangyFormItem extends PolymerElement {
       .forEach(input => {
         input.addEventListener('next', () => this.next())
         input.addEventListener('change', _ => {
-          this.dispatchEvent(new Event('change', {details: _.target}))
           this.fireHook('on-change', _)
         })
       })
@@ -614,6 +650,14 @@ export class TangyFormItem extends PolymerElement {
     this.dispatchEvent(new CustomEvent('ITEM_BACK'))
   }
 
+  goTo(itemId, skipValidation = false) {
+    if (!skipValidation || this.validate()) {
+      this.submit()
+      this.dispatchEvent(new CustomEvent('go-to', {detail: itemId}))
+    }
+  }
+
+
   clickedComplete() {
     if (this.validate()) {
       this.submit()
@@ -626,6 +670,30 @@ export class TangyFormItem extends PolymerElement {
       this.submit()
       this.dispatchEvent(new CustomEvent('FORM_RESPONSE_NO_CONSENT', {bubbles: true}))
     }
+  }
+
+  getInputsMeta() {
+    const container = document.createElement('div')
+    container.innerHTML = this.template
+    return [...container.querySelectorAll('[name]')]
+      .map(el => {
+        const propsData = el.getProps()
+        const optionsData = [...el.querySelectorAll('option')].map(optionEl => {
+          return {
+            label: optionEl.innerHTML,
+            value: optionEl.hasAttribute('name') ? optionEl.getAttribute('name') : optionEl.getAttribute('value')
+          }
+        })
+        return {
+          ...propsData,
+          value: optionsData.length > 0 ? optionsData : propsData.value 
+        }
+      })
+      .reduce((elementsThatAreNotOptions, element) => {
+        return element.tagName === 'OPTION'
+          ? elementsThatAreNotOptions 
+          : [...elementsThatAreNotOptions, element]
+      }, [])
   }
 
 }

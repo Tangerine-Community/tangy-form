@@ -17,8 +17,18 @@ export class TangyCheckbox extends PolymerElement {
     return html`
     <style include="tangy-common-styles"></style>
     <style include="tangy-element-styles"></style>
-
-      <paper-checkbox id="checkbox" id="checkbox"></paper-checkbox>
+    <div class="flex-container m-y-25">
+      <div id="qnum-number"></div>
+      <div id="qnum-content">
+        <paper-checkbox id="checkbox" id="checkbox">
+          <div id="checkbox-text">
+          </div>
+          <label class="hint-text">
+          </label>
+        </paper-checkbox>
+        <div id="error-text"></div>
+      </div>
+    </div>
     `
   }
 
@@ -72,8 +82,12 @@ export class TangyCheckbox extends PolymerElement {
         value: '',
         observer: 'onValueChange',
         reflectToAttribute: true
+      },
+      errorText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
       }
-
     }
   }
 
@@ -81,7 +95,7 @@ export class TangyCheckbox extends PolymerElement {
     super.connectedCallback()
     if (this.value) this.$.checkbox.checked = true
     if (this.label == '' && this.innerHTML !== '') {
-      this.label = this.innerHTML
+     this.label = this.innerHTML
     }
     this.$.checkbox.addEventListener('change', (e) => {
       e.stopPropagation()
@@ -98,10 +112,17 @@ export class TangyCheckbox extends PolymerElement {
         }
       }))
     })
+    this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text') 
+      ? this.getAttribute('hint-text') 
+      : ''
+    this.shadowRoot.querySelector('#qnum-number').innerHTML = this.hasAttribute('question-number') 
+      ? `<label>${this.getAttribute('question-number')}</label>`
+      : ''
+    
   }
 
   applyLabel(label) {
-    this.$.checkbox.innerHTML = label
+    this.$.checkbox.children['checkbox-text'].innerHTML = this.label 
   }
 
   onRequiredChange (value) {
@@ -112,11 +133,13 @@ export class TangyCheckbox extends PolymerElement {
     }
   }
 
-  onInvalidChange (value) {
+  onInvalidChange(value) {
     if (value === false) {
-      this.$.checkbox.removeAttribute('invalid')
+      this.shadowRoot.querySelector('#error-text').innerHTML = ""
     } else {
-      this.$.checkbox.setAttribute('invalid', true)
+      this.shadowRoot.querySelector('#error-text').innerHTML = `
+        <iron-icon icon="error"></iron-icon> <div> ${this.errorText} </div>
+      `
     }
   }
 

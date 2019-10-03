@@ -39,6 +39,18 @@ export class TangyForm extends PolymerElement {
    * Public API
    */
 
+   getMeta() {
+     return {
+        form: this.getProps(),
+        items: [...this.querySelectorAll('tangy-form-item')].map(itemEl => {
+          return {
+            ...itemEl.getProps(),
+            inputs: itemEl.getInputsMeta()
+          }
+        })
+      }
+    }
+
   // For creating a new response. Call it directly to force a new response when working programatically otherwise
   // this will get called later if no response has been assigned by the time afterNextRender is called.
   newResponse() {
@@ -292,7 +304,8 @@ export class TangyForm extends PolymerElement {
     return {
       fullscreen: {
         type: Boolean,
-        value: false
+        value: false,
+        reflectToAttribute: true
       },
       title: {
         type: String,
@@ -368,9 +381,6 @@ export class TangyForm extends PolymerElement {
 
   ready() {
     super.ready()
-    if (this.fullscreen) {
-      this.addEventListener('click', this.enableFullscreen, true)
-    }
     // Pass events of items to the reducer.
     this.hasLazyItems = false
     this.querySelectorAll('tangy-form-item').forEach((item) => {
@@ -386,6 +396,7 @@ export class TangyForm extends PolymerElement {
       item.addEventListener('FORM_RESPONSE_COMPLETE', this.onFormResponseComplete.bind(this))
       item.addEventListener('FORM_RESPONSE_NO_CONSENT', this.onFormResponseNoConsent.bind(this))
       item.addEventListener('logic-error', this.onItemError.bind(this))
+      item.addEventListener('go-to', event => this.onItemGoTo(event))
     })
 
     // Subscribe to the store to reflect changes.
@@ -472,7 +483,6 @@ export class TangyForm extends PolymerElement {
       type: 'ITEM_CHANGE',
       itemId: event.target.id
     })
-    this.fireHook('on-change')
   }
 
   onItemNext(event) {
@@ -480,8 +490,8 @@ export class TangyForm extends PolymerElement {
       type: 'ITEM_SAVE',
       item: event.target.getProps()
     })
-    this.focusOnNextItem()
     this.fireHook('on-change')
+    this.focusOnNextItem()
   }
 
   onItemBack(event) {
@@ -489,10 +499,21 @@ export class TangyForm extends PolymerElement {
       type: 'ITEM_SAVE',
       item: event.target.getProps()
     })
-    this.focusOnPreviousItem()
     this.fireHook('on-change')
+    this.focusOnPreviousItem()
   }
 
+  onItemGoTo(event) {
+    this.store.dispatch({
+      type: 'ITEM_SAVE',
+      item: event.target.getProps()
+    })
+    this.fireHook('on-change')
+    this.store.dispatch({
+      type: 'ITEM_GO_TO',
+      itemId: event.detail
+    })
+  }
   onItemOpened(event) {
     this.store.dispatch({
       type: 'ITEM_SAVE',
@@ -560,18 +581,18 @@ export class TangyForm extends PolymerElement {
     }
 
     if (state.form && state.form.fullscreen) {
-      if (!this.previousState.fullscreenEnabled && state.fullscreenEnabled) {
+      if (!this.previousState.form.fullscreenEnabled && state.form.fullscreenEnabled) {
         this.enableFullscreen()
       }
-      else if (this.previousState.fullscreenEnabled && !state.fullscreenEnabled) {
+      else if (this.previousState.form.fullscreenEnabled && !state.form.fullscreenEnabled) {
         this.disableFullscreen()
       }
+    } else if (this.previousState.form.fullscreen && !state.form.fullscreen) {
+      this.disableFullscreen()
     }
 
     // Stash as previous state.
     this.previousState = Object.assign({}, state)
-
-    if (!this.complete) this.fireHook('on-change')
 
   }
 

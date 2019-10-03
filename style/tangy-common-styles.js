@@ -26,19 +26,32 @@ $_documentStyleContainer.innerHTML = `
            button position. There is probably a better way to do this. */
         display: inline-flex;
         min-width: 1em;
+        height:40px; 
+        text-transform:capitalize;
+        font-size: 1.2rem;
+      }
+
+      .card-actions paper-button {
+        font-size: 1.2rem;
       }
       paper-checkbox {
         --paper-checkbox-size: 1.25em;
         --paper-checkbox-checked-color: var(--primary-color);
+        --paper-checkbox-vertical-align: top;
       }
       paper-radio-button {
         --paper-radio-button-size: 1.5em;
         --paper-radio-button-checked-color: var(--primary-color);
       }
       label.hint-text {
+        font-family: var(--paper-font-common-base_-_font-family);
         color: gray;
-        font-size: small;
+        font-size: 0.8rem;
         font-weight: lighter;
+      }
+
+    .b-b-2 {
+      border-bottom: 2px solid #efefef;
     }
   </style>
   </template>

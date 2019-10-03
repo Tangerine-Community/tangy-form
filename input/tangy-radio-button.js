@@ -85,6 +85,13 @@ export class TangyRadioButton extends PolymerElement {
     this.shadowRoot.innerHTML = `    
       <style include="tangy-common-styles"></style>
       <style include="tangy-element-styles"></style>
+      <style>
+        .hint-text {
+            color: gray;
+            font-size: 0.8rem;
+            font-weight: lighter;
+        }
+      </style>
       <paper-radio-button
         ${this.required ? 'required' : ''}
         ${this.invalid ? 'invalid' : ''}
@@ -92,7 +99,14 @@ export class TangyRadioButton extends PolymerElement {
         ${this.hidden ? 'hidden' : ''}
         ${this.value ? 'checked' : ''}
         >
-        ${this.label ? this.label : this.innerHTML}
+        <div>
+          ${this.label ? this.label : this.innerHTML}
+        </div>
+        ${this.hasAttribute('hint-text') ? `
+          <label class="hint-text">
+            ${this.getAttribute('hint-text')}
+          </label>
+        ` : ''}
       </paper-radio-button>
     `
     if (this.hideButton) this.shadowRoot.querySelector('paper-radio-button').shadowRoot.querySelector('#radioContainer').style.display = 'none'
