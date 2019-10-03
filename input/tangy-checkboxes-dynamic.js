@@ -192,7 +192,7 @@ class TangyCheckboxesDynamic extends PolymerElement {
     let newValue = []
     let el = this.shadowRoot.querySelector('tangy-checkboxes')
     newValue = el.getProps()
-    this.value = newValue
+    this.value = newValue.value
     this.dispatchEvent(new CustomEvent('change'))
   }
 
