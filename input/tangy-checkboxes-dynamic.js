@@ -179,7 +179,21 @@ class TangyCheckboxesDynamic extends PolymerElement {
         console.log("e: " + e)
       }
     }
+    let newValue = []
+    checkboxesEl.addEventListener('change', this.onCheckboxesClick.bind(this))
+    newValue = checkboxesEl.getProps()
+    if (!this.value || (typeof this.value === 'object' && this.value.length < newValue.length)) {
+      this.value = newValue
+    }
     containerEl.appendChild(checkboxesEl)
+  }
+
+  onCheckboxesClick(event) {
+    let newValue = []
+    let el = this.shadowRoot.querySelector('tangy-checkboxes')
+    newValue = el.getProps()
+    this.value = newValue
+    this.dispatchEvent(new CustomEvent('change'))
   }
 
 
