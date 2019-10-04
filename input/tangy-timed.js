@@ -276,7 +276,7 @@ class TangyTimed extends PolymerElement {
       },
       captureItemAt: {
         type: Number,
-        value: 5,
+        value: undefined,
         reflectToAttribute: true
       },
       // Number of columns to show items, calibrated for a Nexus 7 in landscape mode.
@@ -706,9 +706,11 @@ class TangyTimed extends PolymerElement {
   onStartClick() {
     this.reset()
     this.mode = TANGY_TIMED_MODE_RUN
-    setTimeout(() => {
-      this.mode = TANGY_TIMED_CAPTURE_ITEM_AT
-    }, this.captureItemAt * 1000);
+    if (this.captureItemAt) {
+      setTimeout(() => {
+        this.mode = TANGY_TIMED_CAPTURE_ITEM_AT
+      }, this.captureItemAt * 1000);
+    }
 
   }
 
