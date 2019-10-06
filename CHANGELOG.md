@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v4.3.1
+- Fix font setting for tangy-toggle-button font sizes in tangy-timed
+- Check if captureItemAt is defined in tangy-timed.
+- Fix use of no-correction on tangy-eftouch to not allow any selection after first.
+
 ## v4.3.0
 - Fix data collector reviews completed fullscreen form [#75](https://github.com/Tangerine-Community/tangy-form/pull/75)
 - `<tangy-eftouch auto-progress>` now distinguishes between going next on the time limit and going next on a number of selections. The API is now `<tangy-eftouch go-next-on-selection=2>` for going next on 2 selection and `<tangy-eftouch go-next-on-time-limit>` for going next on the time limit. https://github.com/Tangerine-Community/tangy-form/pull/84
