@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v4.3.1
+- Fix font setting for tangy-toggle-button font sizes in tangy-timed
+- Check if captureItemAt is defined in tangy-timed.
+- Fix use of no-correction on tangy-eftouch to not allow any selection after first.
+
 ## v4.3.0
 - Features
   - Improvements and support on all inputs for `error-text`, `hint-text`, `question-number`, and  content translations.

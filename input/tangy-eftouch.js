@@ -345,7 +345,7 @@ export class TangyEftouch extends PolymerElement {
 
   onSelection(target) {
     if (this.disabled === true || target.hasAttribute('disabled')) return
-    if (this.hasAttribute('no-corrections') && this.value && this.value.correct === false) {
+    if (this.hasAttribute('no-corrections') && this.value && this.value.selection) {
       // Do nothing.
       return
     }
