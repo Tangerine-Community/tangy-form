@@ -146,7 +146,7 @@ class TangyCheckboxesDynamic extends PolymerElement {
             }
             if (!excludeOption) {
               let option = {
-                value: item[name],
+                name: item[name],
                 innerHTML: item[innerHTML]
               }
               that.optionsList.push(option)
@@ -170,11 +170,12 @@ class TangyCheckboxesDynamic extends PolymerElement {
     let containerEl = this.shadowRoot.querySelector('.container')
     let checkboxesEl = document.createElement('tangy-checkboxes')
     for (let option of this.optionsList) {
-      let checkbox = document.createElement('option')
-      checkbox.name = option.value
-      checkbox.innerHTML = option.innerHTML
+      let optionEl = document.createElement('option')
+      optionEl.name = option.name
+      optionEl.value = option.name
+      optionEl.innerHTML = option.innerHTML
       try {
-        checkboxesEl.appendChild(checkbox)
+        checkboxesEl.appendChild(optionEl)
       } catch (e) {
         console.log("e: " + e)
       }
