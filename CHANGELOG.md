@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.3.3
+- Vertical center for tangy-toggle-button contents / tangy-timed items.
+
 ## v4.3.2
 - Make oversized tangy-timed grids gracefully handle overflow with overflow scroll setting.
 
