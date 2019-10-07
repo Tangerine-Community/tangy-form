@@ -56,6 +56,18 @@ class TangyTimed extends PolymerElement {
         height:60px;
         --tangy-toggle-button-font-size:5em;
       }
+
+      #grid {
+        /*
+        display: flex;
+        flex-wrap: wrap;
+        */
+      }
+
+      .col {
+        display: inline-flex;
+      }
+
       table{
         width: 100%;
         border-collapse:collapse;
@@ -225,8 +237,8 @@ class TangyTimed extends PolymerElement {
 
       
 
-      <table id="grid">
-      </table>
+      <div id="grid">
+      </div>
 
     </div>
 `;
@@ -394,12 +406,15 @@ class TangyTimed extends PolymerElement {
     // Set our countdown to the desired duration.
     this.timeRemaining = (this.timeRemaining === undefined) ? this.duration : this.timeRemaining
 
-    const rows = [document.createElement('tr')]
+    let row = document.createElement('div')
+    row.classList.add('row')
+    const rows = [row]
     let currentRow = 0
     let currentColumn = 1
     this.querySelectorAll('option').forEach((option, i) => {
       // Create the tangy toggle button.
-      let column = document.createElement('td')
+      let column = document.createElement('span')
+      column.classList.add('col')
       column.style.width = `${Math.floor(100/this.columns)}%` 
       let tangyToggleButton = document.createElement('tangy-toggle-button')
       tangyToggleButton.setAttribute('name', option.value)
@@ -409,10 +424,13 @@ class TangyTimed extends PolymerElement {
       if (this.disabled) tangyToggleButton.disabled = true
       column.appendChild(tangyToggleButton)
       if ( currentColumn !== 0 && currentColumn % this.columns === 0) {
-        rows.push(document.createElement('tr'))
+        let row = document.createElement('div')
+        row.classList.add('row')
+        rows.push(row)
         rows[currentRow].appendChild(column)
         if (this.rowMarkers) {
-          const rowMarkerEl = document.createElement('td')
+          const rowMarkerEl = document.createElement('div')
+          rowMarkerEl.classList.add('col')
           rowMarkerEl.setAttribute('class', 'row-marker')
           rowMarkerEl.rowNumber = currentRow
           rowMarkerEl.addEventListener('click', (event) => {
