@@ -251,6 +251,14 @@ class TangyTimed extends PolymerElement {
         value: undefined,
         reflectToAttribute: true
       },
+      gridVarItemAtTime: {
+        type: Number,
+        reflectToAttribute: true,
+      },
+      gridVarTimeIntermediateCaptured: {
+        type: Number,
+        reflectToAttribute: true,
+      },
       gridAutoStopped: {
         type: Boolean,
         value: undefined,
