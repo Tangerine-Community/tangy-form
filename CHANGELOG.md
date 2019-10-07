@@ -1,7 +1,8 @@
 # CHANGELOG
 
 ## v4.3.3
-- Vertical center for tangy-toggle-button contents / tangy-timed items.
+- Vertical center for tangy-toggle-button contents / tangy-timed items. https://github.com/Tangerine-Community/tangy-form/commit/c677ffb2620343fa993509d875e6418ea6757205
+- Fixes for saving and resuming `<tangy-checkboxes-dynamic>`. https://github.com/Tangerine-Community/tangy-form/pull/98
 
 ## v4.3.2
 - Make oversized tangy-timed grids gracefully handle overflow with overflow scroll setting.
