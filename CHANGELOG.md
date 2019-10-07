@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.3.5
+- In tangy-timed, ensure gitVarItemAtTime and gridVarTimeIntermediateCaptured is saved into the form response.
+
 ## v4.3.4
 - Roll back rem setting in tangy-timed to em for button font size. 
 
