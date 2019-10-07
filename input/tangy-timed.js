@@ -75,6 +75,7 @@ class TangyTimed extends PolymerElement {
           border: none;
       }
       #container {
+        overflow: scroll;
         width: 100%;
         position: relative;
       }
