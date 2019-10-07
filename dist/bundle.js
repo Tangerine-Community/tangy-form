@@ -4898,6 +4898,7 @@ const _=s.a`<iron-iconset-svg name="editor" size="24">
           border: none;
       }
       #container {
+        overflow: scroll;
         width: 100%;
         position: relative;
       }

@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.3.2
+- Make oversized tangy-timed grids gracefully handle overflow with overflow scroll setting.
+
 ## v4.3.1
 - Fix font setting for tangy-toggle-button font sizes in tangy-timed
 - Check if captureItemAt is defined in tangy-timed.
