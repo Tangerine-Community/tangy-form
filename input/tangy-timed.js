@@ -358,7 +358,7 @@ class TangyTimed extends PolymerElement {
     super.ready();
     const styleEl = document.createElement("style")
     styleEl.innerHTML = `tangy-toggle-button { 
-        --tangy-toggle-button-font-size:${this.optionFontSize}rem;
+        --tangy-toggle-button-font-size:${this.optionFontSize}em;
       }`
     this.shadowRoot.appendChild(styleEl)
     setTimeout(() => {
