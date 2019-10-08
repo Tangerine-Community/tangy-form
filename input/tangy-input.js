@@ -101,7 +101,7 @@ export class TangyInput extends PolymerElement {
       invalid: {
         type: Boolean,
         value: false,
-        observer: 'reflect',
+        observer: 'onInvalidChange',
         reflectToAttribute: true
       },
       incomplete: {
@@ -238,13 +238,12 @@ export class TangyInput extends PolymerElement {
     } else {
       this.shadowRoot.querySelector('#input').setAttribute('disabled', true)
     }
-    if (this.invalid === false) {
-      this.shadowRoot.querySelector('#input').removeAttribute('invalid')
-      this.shadowRoot.querySelector('#error-text').innerHTML = ""
-    } else {
-      this.shadowRoot.querySelector('#input').setAttribute('invalid', true)
-      this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid && this.hasAttribute('error-text')
-        ? `<iron-icon icon="error"></iron-icon> <div> ${this.getAttribute('error-text')} </div>`
+  }
+
+  onInvalidChange(value) {
+    if (this.shadowRoot.querySelector('#error-text')) {
+      this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
+        ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
         : ''
     }
   }

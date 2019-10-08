@@ -89,7 +89,9 @@ class TangySelect extends PolymerElement {
       },
       invalid: {
         type: Boolean,
-        value: false
+        observer: 'onInvalidChange',
+        value: false,
+        reflectToAttribute: true
       },
       incomplete: {
         type: Boolean,
@@ -103,6 +105,7 @@ class TangySelect extends PolymerElement {
       errorText: {
         type: String,
         value: '',
+        observer: 'onInvalidChange',
         reflectToAttribute: true
       },
     }
@@ -139,13 +142,28 @@ class TangySelect extends PolymerElement {
         </select>
         <div class="mdc-select__bottom-line"></div>
       </div>
-      <label id="errorText"></label>
+      <label id="error-text">
+        ${
+          this.invalid
+            ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
+            : ''
+        }
+      </label>
     `
     this._onChangeListener = this
       .shadowRoot
       .querySelector('select')
       .addEventListener('change', this.onChange.bind(this))
     this.dispatchEvent(new CustomEvent('render'))
+  }
+
+  onInvalidChange(value) {
+    // @TODO I'm not sure this hook is what ends up causing the error message to be displayed.
+    if (this.shadowRoot.querySelector('#error-text')) {
+      this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
+        ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
+        : ''
+    }
   }
 
   onChange(event) {
@@ -156,13 +174,9 @@ class TangySelect extends PolymerElement {
   validate() {
     if (this.required && !this.hidden && !this.disabled && !this.value) {
       this.invalid = true
-      this.shadowRoot.querySelector('#errorText').innerHTML = `
-      ${(this.errorText !== "" ? `<iron-icon icon="error""></iron-icon><div>` : '')}
-      ${this.errorText}</div>`
       return false
     } else {
       this.invalid = false
-      this.shadowRoot.querySelector('#errorText').innerHTML = '';
       return true
     }
   }

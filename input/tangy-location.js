@@ -475,7 +475,7 @@ class TangyLocation extends PolymerElement {
         type: Boolean,
         value: false,
         reflectToAttribute: true,
-        observer: 'render'
+        observer: 'onInvalidChange'
       },
       showMetaData: {
         type: Boolean,
@@ -624,16 +624,21 @@ class TangyLocation extends PolymerElement {
     <br />
 
       `).join('')}
-      ${this.hintText ? `<label id="hint-text" class="hint-text">${this.hintText}</label>` : ``}
-      ${this.invalid ? `
+        ${this.hintText ? `<label id="hint-text" class="hint-text">${this.hintText}</label>` : ``}
         <div id="error-text">
-          <iron-icon icon="error"></iron-icon> <div> ${this.errorText} </div>
         </div>
-      `: ``}
       </div>
     </div>
     `
 
+  }
+
+  onInvalidChange(value) {
+    if (this.shadowRoot.querySelector('#error-text')) {
+      this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
+        ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
+        : ''
+    }
   }
 
   calculateLevelOptions(selections, levels) {

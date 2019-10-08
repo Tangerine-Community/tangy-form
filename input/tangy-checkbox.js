@@ -134,13 +134,9 @@ export class TangyCheckbox extends PolymerElement {
   }
 
   onInvalidChange(value) {
-    if (value === false) {
-      this.shadowRoot.querySelector('#error-text').innerHTML = ""
-    } else {
-      this.shadowRoot.querySelector('#error-text').innerHTML = `
-        <iron-icon icon="error"></iron-icon> <div> ${this.errorText} </div>
-      `
-    }
+    this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
+      ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
+      : ''
   }
 
   onDisabledChange (value) {

@@ -106,8 +106,8 @@ export class TangyPhotoCapture extends PolymerElement {
   }
 
   onInvalidChange(value) {
-    this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid 
-      ? `<iron-icon icon="error"></iron-icon> <div> ${this.errorText} </div>`
+    this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
+      ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
       : ''
   }
 

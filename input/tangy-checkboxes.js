@@ -117,7 +117,7 @@ class TangyCheckboxes extends PolymerElement {
       invalid: {
         type: Boolean,
         value: false,
-        observer: 'reflect',
+        observer: 'onInvalidChange',
         reflectToAttribute: true
       },
       errorText: {
@@ -197,17 +197,18 @@ class TangyCheckboxes extends PolymerElement {
     })
     if (this.required && !this.hidden && !this.disabled && !foundOne) {
       this.invalid = true
-
-      this.$['error-text'].innerHTML =  `
-      ${(this.errorText !== "" ? `<iron-icon icon="error"></iron-icon><div>` : '')}
-      ${this.errorText}</div>`
-
       return false
     } else {
       this.invalid = false
       this.$['error-text'].innerHTML = '';
       return true
     }
+  }
+
+  onInvalidChange(value) {
+    this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
+      ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
+      : ''
   }
 
 }
