@@ -475,6 +475,9 @@ export class TangyFormItem extends PolymerElement {
     // We have to do this because bundlers modify the names of things that are imported
     // but do not update the evaled code because it knows not of it.
     let {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold, goTo, goToEnd} = this.exposeHelperFunctions()
+    if (this.hasAttribute("incorrect-threshold")) {
+      hideInputsUponThreshhold(this)
+    }
     try {
       const result = eval(code)
       return result
