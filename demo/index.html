@@ -520,7 +520,21 @@
       <demo-snippet>
         <template>
           <tangy-form id="autostop-radio" title="autostop radio">
-            <tangy-form-item id="item1" incorrect-threshold="2" on-change="hideInputsUponThreshhold(this)">
+            <tangy-form-item id="item1" incorrect-threshold="2">
+              <tangy-box name="RC_helpENG" class="" style="">
+                <p>Only the responses provided (under each question) or responses with a meaning similar to those provided should be marked correct. If a child says “I don't know,” mark as “Incorrect.” </p>
+                <div style="background:lightgray;color:black;padding:15px;">
+                  <p><b>Now I am going to ask you a few questions about the story you just read. Try to answer the questions as well as you can. You can answer the questions in whichever Arabic dialect you prefer.</b></p>
+                </div></tangy-box>
+              <tangy-box name="RC_enumhelp" class="" style="">
+                <div style="font-size:20px;text-align:right">
+                  <p>Test 123</p>
+                  <p>Test 4</p>
+                </div>
+                <div style="background:lightgray;color:black;padding:15px;font-size:20px;text-align:right">
+                  <p><b>Look!</b></p>
+                </div>
+              </tangy-box>
               <tangy-radio-buttons name="fruit_selection1" label="What is your favorite fruit?">
                 <option name="tangerine">Tangerine</option>
                 <option name="cantalope">Cantalope</option>

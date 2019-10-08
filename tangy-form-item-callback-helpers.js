@@ -127,7 +127,7 @@ export class TangyFormItemHelpers {
     let shouldDisable = false
     const correctEls = el.querySelectorAll('[correct]')
     if (correctEls.length > 0) {
-      let inputEls = [...el.children].filter(el => el.hasAttribute("name"))
+      let inputEls = [...el.children].filter(el => el.tagName === 'TANGY-RADIO-BUTTONS')
       let selectedIndex = [];
       let concurrentIncorrectCount = 0
       let previousIncorrect = 0;
