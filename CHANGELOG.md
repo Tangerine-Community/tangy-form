@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v4.3.6
+- Fixed auto-stop for radio buttons bug bug. Limit hideInputsUponThreshhold to tangy-radio-buttons inputs. No longer need to call hideInputsUponThreshhold in on-change event when using incorrect-threshold in tangy-radio-buttons.
+ - Issue: https://github.com/Tangerine-Community/Tangerine/issues/1519
+ - PR: https://github.com/Tangerine-Community/tangy-form/pull/100
+
 ## v4.3.5
 - In tangy-timed, ensure gitVarItemAtTime and gridVarTimeIntermediateCaptured is saved into the form response.
 
