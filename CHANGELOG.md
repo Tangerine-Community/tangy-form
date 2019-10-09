@@ -2,6 +2,8 @@
 
 ## v4.3.8
 - fix auto-stop to enable revealing of hidden radio buttons when a correction is made.
+    - Issue: https://github.com/Tangerine-Community/Tangerine/issues/1519
+    - PR: https://github.com/Tangerine-Community/tangy-form/pull/102
 
 ## v4.3.7
 - Fix missing indication that required field was not filled out. https://github.com/Tangerine-Community/Tangerine/issues/1701
