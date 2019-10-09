@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.3.8
+- fix auto-stop to enable revealing of hidden radio buttons when a correction is made.
+
 ## v4.3.7
 - Fix missing indication that required field was not filled out. https://github.com/Tangerine-Community/Tangerine/issues/1701
 

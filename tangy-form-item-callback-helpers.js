@@ -153,14 +153,13 @@ export class TangyFormItemHelpers {
       }, [])
       // console.log(" selectedIndex: " + JSON.stringify(selectedIndex) + " concurrentIncorrectCount: " + concurrentIncorrectCount + " previousIncorrect: " + previousIncorrect)
       shouldDisable = concurrentIncorrectCount >= el.incorrectThreshold ? true : false
-      if (shouldDisable === true) {
-        let highest = Math.max(...selectedIndex) + 1
-        // console.log("Making the subsequent inputs hidden starting with " + highest)
-        let inputsToHide = inputEls.slice(highest)
-        inputsToHide.forEach((inputEl, index) => {
-          inputEl.hidden = true
-        })
-      }
+      // console.log("Making the subsequent inputs hidden or visible starting with " + highest)
+      let highest = Math.max(...selectedIndex) + 1
+      let inputsToHide = inputEls.slice(highest)
+      // if shouldDisable, hide subsequent inputs; if not, don't hide, which is necessary when user makes a correction.
+      inputsToHide.forEach((inputEl, index) => {
+        shouldDisable ? inputEl.hidden = true : inputEl.hidden = false
+      })
     }
     return shouldDisable
   }
