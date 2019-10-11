@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.3.9
+- Add the property "value" when the row marker is clicked for each of the buttons - csv reports
+    - PR: https://github.com/Tangerine-Community/tangy-form/pull/103
+
 ## v4.3.8
 - fix auto-stop to enable revealing of hidden radio buttons when a correction is made.
     - Issue: https://github.com/Tangerine-Community/Tangerine/issues/1519
