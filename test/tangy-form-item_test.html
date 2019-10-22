@@ -75,6 +75,19 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="DisableIfFixture">
+      <template>
+        <tangy-form id="my-form" title="My Form">
+          <tangy-form-item id="item1">
+            <tangy-input name="input1" label="I should disable." disable-if="getValue('input2') === 'on'"></tangy-input>
+            <tangy-checkbox name="input2">
+              Click to disable above question. 
+            </tangy-checkbox>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <test-fixture id="TangyFormItemValidIfTangyIfFixture">
       <template>
         <tangy-form id="my-form-2" title="My Form 2">
@@ -180,6 +193,13 @@
       import { TangyFormItemHelpers } from '../tangy-form-item-callback-helpers.js'
       suite('tangy-form-item', () => {
 
+        test('should disable an input from disable-if', () => {
+          const element = fixture('DisableIfFixture');
+          element.newResponse()
+          element.querySelector('tangy-form-item').querySelector('[name=input2]').value = 'on'
+          assert.equal(element.querySelector('tangy-form-item').querySelector('[name=input1]').disabled, true)
+        })
+ 
         test('should go to next item on input "next" event', () => {
           const element = fixture('TangyFormItemFixture');
           element.newResponse()
