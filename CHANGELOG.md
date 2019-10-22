@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v4.4.0
+- Add support for a `disable-if` attribute, similar to `show-if` but for disabling items.
+- Fixes for `<tangy-input>` so that if disabled and required it does not block proceeing on a form. 
+- Error logging functionality designed for editor use was blocking errors from the Javascript Console, this is now fixed.
+
 ## v4.3.9
 - Add the property "value" when the row marker is clicked for each of the buttons - csv reports
     - PR: https://github.com/Tangerine-Community/tangy-form/pull/103
