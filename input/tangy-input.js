@@ -201,8 +201,10 @@ export class TangyInput extends PolymerElement {
     if (!this.ready) return
     if (!this.shadowRoot.querySelector('#input')) return
     // Reflect data into DOM.
-
-
+    if (this.hasAttribute('disabled') && this.hasAttribute('invalid')) {
+      this.removeAttribute('invalid')
+      this.shadowRoot.querySelector('#input').removeAttribute('invalid')
+    } 
     this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
     this.shadowRoot.querySelector('#hintText').innerHTML = this.hintText
     this.shadowRoot.querySelector('#label').innerHTML = this.label
@@ -249,7 +251,18 @@ export class TangyInput extends PolymerElement {
   }
 
   validate() {
-    return this.shadowRoot.querySelector('#input').validate()
+    if (this.hasAttribute('disabled') || this.hasAttribute('hidden')) {
+      this.removeAttribute('invalid')
+      return true
+    } else {
+      if (this.shadowRoot.querySelector('#input').validate()) {
+        this.removeAttribute('invalid')
+        return true
+      } else {
+        this.setAttribute('invalid', '')
+        return false
+      }
+    }
   }
 
 }

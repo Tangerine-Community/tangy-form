@@ -431,6 +431,13 @@ export class TangyFormItem extends PolymerElement {
           inputActionFactories['visible'].falsey(input.name)
         }
       }
+      if (input.hasAttribute('disable-if')) {
+        if (this.eval(input.getAttribute('disable-if'), 'disable-if', input.getAttribute('name'))) {
+          inputActionFactories['editable'].falsey(input.name)
+        } else {
+          inputActionFactories['editable'].truthy(input.name)
+        }
+      }
       if (input.hasAttribute('tangy-if') && input.hasAttribute('tangy-action')) {
         if (this.eval(input.getAttribute('tangy-if'), 'tangy-if', input.getAttribute('name'))) {
           inputActionFactories[input.getAttribute('tangy-action')].truthy(input.name)
