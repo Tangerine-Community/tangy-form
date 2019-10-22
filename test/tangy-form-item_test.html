@@ -197,6 +197,7 @@
           const element = fixture('DisableIfFixture');
           element.newResponse()
           element.querySelector('tangy-form-item').querySelector('[name=input2]').value = 'on'
+          element.querySelector('tangy-form-item').querySelector('[name=input2]').dispatchEvent(new Event('change'))
           assert.equal(element.querySelector('tangy-form-item').querySelector('[name=input1]').disabled, true)
         })
  
