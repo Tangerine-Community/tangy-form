@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.4.1
+- Fix CSS causing icons next/back icons to dissappear and also for next/back translations to overun.
+- Fix translations for `<tangy-partial-date>`'s error message defaults.
+
 ## v4.4.0
 - Add support for a `disable-if` attribute, similar to `show-if` but for disabling items.
 - Fixes for `<tangy-input>` so that if disabled and required it does not block proceeing on a form. 
