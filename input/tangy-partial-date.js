@@ -159,19 +159,19 @@ class TangyPartialDate extends PolymerElement {
       },
       missingDateErrorText: {
         type: String,
-        value: t("The date is missing. Please enter a valid date."),
+        value: '',
         observer: 'render',
         reflectToAttribute: true
       },
       invalidDateErrorText: {
         type: String,
-        value: t("The date is not valid. Please enter a valid date."),
+        value: '',
         observer: 'render',
         reflectToAttribute: true
       },
       futureDateErrorText: {
         type: String,
-        value: t("The date cannot be in the future. Please enter a date that is on or before today."),
+        value: '',
         observer: 'render',
         reflectToAttribute: true
       },
@@ -186,6 +186,9 @@ class TangyPartialDate extends PolymerElement {
 
   connectedCallback() {
     super.connectedCallback()
+    this.missingDateErrorText = this.missingDateErrorText === '' ? t("The date is missing. Please enter a valid date.") : this.missingDateErrorText
+    this.invalidDateErrorText = this.invalidDateErrorText === '' ? t("The date is not valid. Please enter a valid date.") : this.invalidDateErrorText
+    this.futureDateErrorText = this.futureDateErrorText === '' ? t("The date cannot be in the future. Please enter a date that is on or before today.") : this.futureDateErrorText
     this.render()
   }
   
