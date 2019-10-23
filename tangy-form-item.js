@@ -162,18 +162,16 @@ export class TangyFormItem extends PolymerElement {
 
         #next {
           float: right;
-          width: 84px;
         }
         #next iron-icon {
-          margin: 0px 0px 0px 21px;
+          margin: 0px 0px 0px 5px;
         }
 
         #back {
           float: left;
-          width: 84px;
         }
         #back iron-icon {
-          margin: 0 21px 0 0;
+          margin: 0 5px 0 0;
         }
 
         .card-actions paper-button {
