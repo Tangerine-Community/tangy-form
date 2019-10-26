@@ -46,7 +46,7 @@ $_documentStyleContainer.innerHTML = `
       label.hint-text {
         font-family: var(--paper-font-common-base_-_font-family);
         color: gray;
-        font-size: 0.8rem;
+        font-size: 1.2rem;
         font-weight: lighter;
       }
 
