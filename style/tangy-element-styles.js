@@ -59,9 +59,9 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         content: "*"; 
         color: var(--accent-color); 
         position: absolute;
-        top: -2px;
-        left: -18px;
-        font-size: 2em;
+        top: -4px;
+        left: -10px;
+        font-size: 1.2em;
       }
 
       :host([disabled]) label {
