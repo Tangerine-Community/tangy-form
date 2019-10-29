@@ -16,7 +16,7 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         color: var(--primary-text-color);
         display: block;
         position: relative;
-        border: var(--tangy-element-border, solid white 5px);
+        border: var(--tangy-element-border, solid transparent 5px);
         padding: 0px;
         margin: var(--tangy-element-margin, 10px);
       }

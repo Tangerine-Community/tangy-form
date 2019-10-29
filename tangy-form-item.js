@@ -51,6 +51,7 @@ export class TangyFormItem extends PolymerElement {
         * Card
         */
         paper-card {
+          background: var(--tangy-form-item--background-color, #FFF);
           -webkit-transition: .4s;
           -moz-transition: .4s;
           -ms-transition: .4s;
