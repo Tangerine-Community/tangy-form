@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.5.3
+- Fix longstanding bug where nav bar when complete would show if no summary item.
+
 ## v4.5.2
 - Fix 'selected value label' text in tangy-select and tangy-location when in dark mode.
 

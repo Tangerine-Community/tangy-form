@@ -3417,6 +3417,9 @@ var t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__p
         paper-progress {
           width: 100%;
         }
+        :host(:not([has-summary])) #bar {
+          display:none; 
+        }
         #bar {
           width:100%;
           background-color: var(--primary-color);
