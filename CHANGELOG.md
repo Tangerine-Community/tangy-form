@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.5.2
+- Fix 'selected value label' text in tangy-select and tangy-location when in dark mode.
+
 ## v4.5.1
 - Use --primary-text-color variable in TangyPartialDate
 
