@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.5.1
+- Use --primary-text-color variable in TangyPartialDate
+
 ## v4.5.0
 - Add variables: --tangy-hint-text--font-size, --tangy-required-indicator--font-size, --tangy-required-indicator--font-size, --tangy-required-indicator--font-size, --tangy-form-item--background-color and dark-mode.html demo
 
