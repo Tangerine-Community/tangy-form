@@ -74,6 +74,19 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="SimpleSummaryFixture">
+      <template>
+        <tangy-form id="test" title="test">
+          <tangy-form-item id="item-1">
+            <tangy-input label='test1' name='input1'></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item-2" summary>
+            Summary...
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <test-fixture id="Simple2ItemFixture">
       <template>
         <tangy-form id="test" title="test">
@@ -289,6 +302,16 @@
           element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
           element.querySelector('#item1').shadowRoot.querySelector('#open').click()
           assert.equal(element.querySelector('#item1').querySelector('[name="input1"]').value, 'foo')
+        })
+
+        test('should have summary', function() {
+          let element = fixture('SimpleSummaryFixture')
+          element.newResponse()
+          element.querySelector('#item-1').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item-1').querySelector('[name=input1]').value = 'foo'
+          element.querySelector('#item-1').shadowRoot.querySelector('#complete').click()
+          element.querySelector('#item-1').shadowRoot.querySelector('dom-if').render()
+          assert.equal(element.querySelector('#item-2').open, true)
         })
 
         test('should contain location information', (done) => {
