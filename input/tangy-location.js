@@ -88,8 +88,7 @@ class TangyLocation extends PolymerElement {
       text-decoration: inherit;
       text-transform: inherit;
       /* @alternate */
-      color: rgba(0, 0, 0, 0.87);
-      color: var(--mdc-theme-text-primary-on-light, rgba(0, 0, 0, 0.87));
+      color: var(--primary-text-color, rgba(0, 0, 0, 0.87));
       padding-left: 16px;
       padding-right: 26px;
       --mdc-ripple-fg-size: 0;
