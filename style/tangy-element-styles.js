@@ -16,7 +16,7 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         color: var(--primary-text-color);
         display: block;
         position: relative;
-        border: var(--tangy-element-border, solid white 5px);
+        border: var(--tangy-element-border, solid transparent 5px);
         padding: 0px;
         margin: var(--tangy-element-margin, 10px);
       }
@@ -59,9 +59,9 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         content: "*"; 
         color: var(--accent-color); 
         position: absolute;
-        top: -2px;
-        left: -18px;
-        font-size: 2em;
+        top: var(--tangy-required-indicator--font-size, -2px);
+        left: var(--tangy-required-indicator--font-size, -18px);
+        font-size: var(--tangy-required-indicator--font-size, 2rem);
       }
 
       :host([disabled]) label {

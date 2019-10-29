@@ -266,7 +266,7 @@ $_documentStyleContainer.innerHTML = `
       transition: -webkit-transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
       transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
       transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
-      background-color: var(--tangy-select-bottom-line-background-color, rgba(0, 0, 0, 0.5)); }
+      background-color: var(--primary-text-color, rgba(0, 0, 0, 0.5)); }
       .mdc-select__bottom-line::after {
         /* @alternate */
         background-color: var(--primary-color);
