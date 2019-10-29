@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.5.0
+- Add variables: --tangy-hint-text--font-size, --tangy-required-indicator--font-size, --tangy-required-indicator--font-size, --tangy-required-indicator--font-size, --tangy-form-item--background-color and dark-mode.html demo
+
 ## v4.4.1
 - Fix CSS causing icons next/back icons to dissappear and also for next/back translations to overun.
 - Fix translations for `<tangy-partial-date>`'s error message defaults.
