@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.5.4
+- Fix extra white space around checkboxes https://github.com/Tangerine-Community/Tangerine/issues/1690
+
 ## v4.5.3
 - Fix longstanding bug where nav bar when complete would show if no summary item.
 
