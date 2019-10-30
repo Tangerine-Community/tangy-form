@@ -17,7 +17,12 @@ export class TangyCheckbox extends PolymerElement {
     return html`
     <style include="tangy-common-styles"></style>
     <style include="tangy-element-styles"></style>
-    <div class="flex-container m-y-25">
+    <style>
+        :host {
+          --tangy-element-border: 0;
+        }
+      </style>
+    <div class="flex-container">
       <div id="qnum-number"></div>
       <div id="qnum-content">
         <paper-checkbox id="checkbox" id="checkbox">
