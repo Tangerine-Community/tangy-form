@@ -67,7 +67,7 @@
 
     <test-fixture id="EFTouchAutoProgressFixture">
       <template>
-        <tangy-eftouch go-next-on-selection=1 label="What is your favorite fruit?">
+        <tangy-eftouch go-next-on-selection label="What is your favorite fruit?">
           <option value="orange" src="assets/images/cat.png"></option>
           <option value="banana" src="assets/images/cat.png"></option>
           <option value="tangerine" src="assets/images/cat.png"></option>
@@ -80,7 +80,7 @@
 
     <test-fixture id="EFTouchGoNextAfter2SelectionsFixture">
       <template>
-        <tangy-eftouch multi-select go-next-on-selection="2" label="What is your favorite fruit?">
+        <tangy-eftouch multi-select="2" go-next-on-selection label="What is your favorite fruit?">
           <option value="orange" src="assets/images/cat.png"></option>
           <option value="banana" src="assets/images/cat.png"></option>
           <option value="tangerine" src="assets/images/cat.png"></option>
@@ -209,7 +209,7 @@
 
     <test-fixture id="EFTouchMultiSelectFixture">
       <template>
-        <tangy-eftouch name="fruit_selection" multi-select label="What is your favorite fruit?">
+        <tangy-eftouch name="fruit_selection" multi-select="3" label="Pick your top three fruit.">
           <option width=30 height=50 value="orange" src="assets/images/cat.png"></option>
           <option width=30 height=50 value="banana" src="assets/images/cat.png"></option>
           <option width=30 height=50 value="tangerine" src="assets/images/cat.png"></option>
@@ -370,12 +370,12 @@
 
         test('should show images for options', () => { 
           const element = fixture('EFTouchImagesFixture')
-          assert(element.shadowRoot.querySelectorAll('img').length, 6)
+          assert.equal(element.shadowRoot.querySelectorAll('img').length, 6)
         })
 
         test('should make an open sound', () => { 
           const element = fixture('EFTouchOpenSoundFixture')
-          assert(element.openSoundTriggered)
+          assert.equal(element.openSoundTriggered, true)
         })
 
         test('should give warning message after hitting warning time', (done) => { 
@@ -479,16 +479,27 @@
           element.shadowRoot.querySelectorAll('img')[0].click()
         })
 
-        test('should allow multi-select', () => { 
+        test('should allow multi-select but limit number of selections', () => { 
           const element = fixture('EFTouchMultiSelectFixture');
           element.shadowRoot.querySelectorAll('img')[0].click()
-          element.shadowRoot.querySelectorAll('img')[4].click()
-          assert(element.shadowRoot.querySelectorAll('[selected]').length, 2)
-          assert(element.value.selection.length, 2)
-          element.shadowRoot.querySelectorAll('img')[4].click()
-          assert(element.shadowRoot.querySelectorAll('[selected]').length, 1)
-          assert(element.value.selection.length, 1)
-        });
+          element.shadowRoot.querySelectorAll('img')[1].click()
+          assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 2)
+          assert.equal(element.value.selection.length, 2)
+          element.shadowRoot.querySelectorAll('img')[1].click()
+          assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 1)
+          element.shadowRoot.querySelectorAll('img')[1].click()
+          element.shadowRoot.querySelectorAll('img')[2].click()
+          assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 3)
+          // And now click one that should hit the limit.
+          element.shadowRoot.querySelectorAll('img')[3].click()
+          assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 3)
+          // Unselect something so we can pick it.
+          element.shadowRoot.querySelectorAll('img')[2].click()
+          assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 2)
+          element.shadowRoot.querySelectorAll('img')[3].click()
+          assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 3)
+          assert.equal(element.value.selection.length, 3)
+        }).timeout(987654321);
 
         test('should have value of correctness', () => { 
           const element = fixture('EFTouchWithCorrectFixture');

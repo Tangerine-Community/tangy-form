@@ -356,8 +356,10 @@ export class TangyEftouch extends PolymerElement {
     this.value = Object.assign({}, this.value, {
       selection: this.hasAttribute('multi-select')
         ? this.value.selection.includes(target.getAttribute('value'))
-          ? this.value.selection.reduce((selection, value) => value !== target.getAttribute('value') ? [value, ...selection] : selection, [])
-          : [...this.value.selection, target.getAttribute('value')]
+          ? this.value.selection.reduce((reducedSelection, value) => value !== target.getAttribute('value') ? [value, ...reducedSelection] : reducedSelection, [])
+          : parseInt(this.getAttribute('multi-select')) !== this.value.selection.length
+            ? [...this.value.selection, target.getAttribute('value')]
+            : this.value.selection
         : target.getAttribute('value'),
       selectionTime: new Date().getTime()
     })
@@ -390,8 +392,12 @@ export class TangyEftouch extends PolymerElement {
     }
     this.render()
     this.dispatchEvent(new Event('change'))
-    if (this.hasAttribute('go-next-on-selection') && this.value && this.value.selection && this.value.selection.length >= parseInt(this.getAttribute('go-next-on-selection')) && this.validate()) {
-      this.transition(true)
+    if (this.hasAttribute('go-next-on-selection') && this.validate()) {
+      if (this.hasAttribute('multi-select') && parseInt(this.getAttribute('multi-select')) === this.value.selection.length) {
+        this.transition(true)
+      } else if (!this.hasAttribute('multi-select')) {
+        this.transition(true)
+      }
     }
   }
 
