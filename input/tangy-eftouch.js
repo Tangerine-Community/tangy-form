@@ -112,7 +112,7 @@ export class TangyEftouch extends PolymerElement {
       },
       value: {
         type: Object,
-        value: {startTime: 0, selectionTime: 0, selection: ''},
+        value: {startTime: 0, selectionTime: 0, selection: []},
         reflectToAttribute: true,
         observer: 'render'
       },
@@ -168,7 +168,11 @@ export class TangyEftouch extends PolymerElement {
   connectedCallback () {
     super.connectedCallback()
     if (this.openSound) {
-      new Audio(this.openSound).play()
+      try {
+        new Audio(this.openSound).play()
+      } catch (e) {
+        // It's ok. Probaly just tests running.
+      }
       this.openSoundTriggered = true
     }
     if (!this.width) {
@@ -204,7 +208,11 @@ export class TangyEftouch extends PolymerElement {
     // it may have fired due to auto-progress
     // see if a flag has been set when the xistion snd was fired (didTransitionSound fire...)
     if (this.transitionSound && !this.transitionSoundTriggered) {
-      new Audio(this.transitionSound).play()
+      try {
+        new Audio(this.transitionSound).play()
+      } catch (e) {
+        // It's ok, probably just tests running.
+      }
       this.transitionSoundTriggered = true
       this.dispatchEvent(new CustomEvent('manual-next'))
     }
@@ -308,11 +316,7 @@ export class TangyEftouch extends PolymerElement {
           ef-width="${option.getAttribute('width')}"
           ef-height="${option.getAttribute('height')}"
           ${option.hasAttribute('correct') ? 'correct' : ''}
-          ${
-            this.hasAttribute('multi-select')
-              ? !option.hasAttribute('disabled') && this.value.selection.includes(option.value) ? `selected` : ``
-              : !option.hasAttribute('disabled') && this.value.selection === option.value ? `selected` : ``
-          }
+          ${!option.hasAttribute('disabled') && this.value.selection.includes(option.value) ? `selected` : ``}
           style="
             display: block;
             width:${Math.floor((option.getAttribute('width')/100)*this.width)}px;
@@ -344,13 +348,34 @@ export class TangyEftouch extends PolymerElement {
   }
 
   onSelection(target) {
-    if (this.disabled === true || target.hasAttribute('disabled')) return
-    if (this.hasAttribute('no-corrections') && this.value && this.value.selection) {
+    if (
+      (
+        this.disabled === true || 
+        target.hasAttribute('disabled')
+      ) ||
+      (
+        this.hasAttribute('disable-after-selection') && 
+        !this.hasAttribute('multi-select') && 
+        this.value &&
+        this.value.selection.length === 1
+      ) ||
+      (
+        this.hasAttribute('disable-after-selection') && 
+        this.hasAttribute('multi-select') && 
+        this.value &&
+        this.value.selection &&
+        this.value.selection.includes(target.getAttribute('value'))
+      )
+    ) {
       // Do nothing.
       return
     }
     if (this.inputSound) {
-      new Audio(this.inputSound).play()
+      try {
+        new Audio(this.inputSound).play()
+      } catch (e) {
+        // It's ok. Probaly just tests running.
+      }
       this.inputSoundTriggered = true
     }
     this.value = Object.assign({}, this.value, {
@@ -360,7 +385,7 @@ export class TangyEftouch extends PolymerElement {
           : parseInt(this.getAttribute('multi-select')) !== this.value.selection.length
             ? [...this.value.selection, target.getAttribute('value')]
             : this.value.selection
-        : target.getAttribute('value'),
+        : [ target.getAttribute('value') ],
       selectionTime: new Date().getTime()
     })
 
@@ -374,7 +399,7 @@ export class TangyEftouch extends PolymerElement {
               .reduce((allCorrectSelectionsMade, value) => {
                 return allCorrectSelectionsMade === false ? false : this.value.selection.includes(value)
               }, true) 
-            : correctSelections.includes(this.value.selection)
+            : correctSelections.includes(this.value.selection[0])
         }
       }     
       if (this.value.correct) {
@@ -406,7 +431,11 @@ export class TangyEftouch extends PolymerElement {
     this.setAttribute('transition-triggered', true)
     const finishTransition = () => {
       if (this.transitionSound) {
-        new Audio(this.transitionSound).play()
+        try {
+          new Audio(this.transitionSound).play()
+        } catch (e) {
+          // It's ok. Probaly just tests running.
+        }
         this.transitionSoundTriggered = true
       }
       if (goNext) this.dispatchEvent(new CustomEvent('next'))
@@ -441,10 +470,10 @@ export class TangyEftouch extends PolymerElement {
   validate() {
     if (this.hasAttribute('required-correct')) {
       return this.value.correct ? true : false
-    } else if (this.hasAttribute('required') && this.hasAttribute('multi-select')) {
-      return this.value.selection && this.value.selection.length > 0 ? true: false
+    } else if (this.hasAttribute('required-all') && this.hasAttribute('multi-select')) {
+      return this.value.selection && this.value.selection.length === parseInt(this.getAttribute('multi-select')) ? true: false
     } else if (this.hasAttribute('required')) {
-      return this.value.selection ? true: false
+      return this.value.selection && this.value.selection.length > 0 ? true: false
     } else {
       return true
     }

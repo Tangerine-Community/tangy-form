@@ -94,7 +94,7 @@
 
     <test-fixture id="EFTouchImagesFixture">
       <template>
-        <tangy-eftouch value="fruit_selection" label="What is your favorite fruit?">
+        <tangy-eftouch name="fruit_selection" label="What is your favorite fruit?">
           <option value="orange" src="assets/images/cat.png"></option>
           <option value="banana" src="assets/images/cat.png"></option>
           <option value="tangerine" src="assets/images/cat.png"></option>
@@ -154,7 +154,7 @@
 
     <test-fixture id="EFTouchWarningFixture">
       <template>
-        <tangy-eftouch warning-time=100 warning-message="You are running out of time!" value="fruit_selection" label="What is your favorite fruit?">
+        <tangy-eftouch warning-time=100 warning-message="You are running out of time!" name="fruit_selection" label="What is your favorite fruit?">
           <option value="orange" src="assets/images/cat.png"></option>
           <option value="banana" src="assets/images/cat.png"></option>
           <option value="tangerine" src="assets/images/cat.png"></option>
@@ -167,7 +167,7 @@
 
     <test-fixture id="EFTouchTimeLimitFixture">
       <template>
-        <tangy-eftouch time-limit=100 value="fruit_selection" label="What is your favorite fruit?">
+        <tangy-eftouch time-limit=100 name="fruit_selection" label="What is your favorite fruit?">
           <option value="cherry" src="assets/images/cat.png"></option>
           <option value="kiwi" src="assets/images/cat.png"></option>
         </tangy-eftouch>
@@ -176,7 +176,7 @@
 
     <test-fixture id="EFTouchTimeLimitAutoProgressFixture">
       <template>
-        <tangy-eftouch time-limit=100 go-next-on-time-limit value="fruit_selection" label="What is your favorite fruit?">
+        <tangy-eftouch time-limit=100 go-next-on-time-limit name="fruit_selection" label="What is your favorite fruit?">
           <option value="cherry" src="assets/images/cat.png"></option>
           <option value="kiwi" src="assets/images/cat.png"></option>
         </tangy-eftouch>
@@ -187,7 +187,7 @@
       <template>
         <tangy-eftouch time-limit=100
                        go-next-on-time-limit
-                       value="fruit_selection"
+                       name="fruit_selection"
                        label="What is your favorite fruit?"
                        transition-sound="assets/sounds/swish.mp3">
           <option value="cherry" src="assets/images/cat.png"></option>
@@ -198,7 +198,7 @@
 
     <test-fixture id="EFTouchTransitionSoundFixture">
       <template>
-        <tangy-eftouch value="fruit_selection"
+        <tangy-eftouch name="fruit_selection"
                        label="What is your favorite fruit?"
                        transition-sound="assets/sounds/swish.mp3">
           <option value="cherry" src="assets/images/cat.png"></option>
@@ -210,6 +210,32 @@
     <test-fixture id="EFTouchMultiSelectFixture">
       <template>
         <tangy-eftouch name="fruit_selection" multi-select="3" label="Pick your top three fruit.">
+          <option width=30 height=50 value="orange" src="assets/images/cat.png"></option>
+          <option width=30 height=50 value="banana" src="assets/images/cat.png"></option>
+          <option width=30 height=50 value="tangerine" src="assets/images/cat.png"></option>
+          <option width=30 height=50 value="cantalope" src="assets/images/cat.png"></option>
+          <option width=30 height=50 value="cherry" src="assets/images/cat.png"></option>
+          <option width=30 height=50 value="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchDisableAfterSelectionFixture">
+      <template>
+        <tangy-eftouch name="fruit_selection" label="Pick your top three fruit." disable-after-selection>
+          <option width=30 height=50 value="orange" src="assets/images/cat.png"></option>
+          <option width=30 height=50 value="banana" src="assets/images/cat.png"></option>
+          <option width=30 height=50 value="tangerine" src="assets/images/cat.png"></option>
+          <option width=30 height=50 value="cantalope" src="assets/images/cat.png"></option>
+          <option width=30 height=50 value="cherry" src="assets/images/cat.png"></option>
+          <option width=30 height=50 value="kiwi" src="assets/images/cat.png"></option>
+        </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchMultiSelectWithDisableAfterSelectionFixture">
+      <template>
+        <tangy-eftouch name="fruit_selection" multi-select="3" label="Pick your top three fruit." disable-after-selection>
           <option width=30 height=50 value="orange" src="assets/images/cat.png"></option>
           <option width=30 height=50 value="banana" src="assets/images/cat.png"></option>
           <option width=30 height=50 value="tangerine" src="assets/images/cat.png"></option>
@@ -238,7 +264,7 @@
 
     <test-fixture id="EFTouchWithMultipleCorrectFixture">
       <template>
-        <tangy-eftouch multi-select name="animal_selection" label="Which animals can not breath under water?">
+        <tangy-eftouch multi-select="2" name="animal_selection" label="Which animals can not breath under water?">
             <option width=30 height=50 src="assets/images/cow.png" value="cow" correct></option>
             <option width=30 height=50 src="assets/images/dog.png" value="dog" correct></option>
             <option width=30 height=50 src="assets/images/fish.png" value="fish"></option>
@@ -249,6 +275,16 @@
     <test-fixture id="EFTouchRequiredFixture">
       <template>
         <tangy-eftouch name="animal_selection" label="Which animals can not breath under water?" required>
+            <option width=30 height=50 src="assets/images/cow.png" value="cow"></option>
+            <option width=30 height=50 src="assets/images/dog.png" value="dog"></option>
+            <option width=30 height=50 src="assets/images/fish.png" value="fish"></option>
+          </tangy-eftouch>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="EFTouchRequiredAllFixture">
+      <template>
+        <tangy-eftouch name="animal_selection" label="Which animals can not breath under water?" multi-select="2" required-all>
             <option width=30 height=50 src="assets/images/cow.png" value="cow"></option>
             <option width=30 height=50 src="assets/images/dog.png" value="dog"></option>
             <option width=30 height=50 src="assets/images/fish.png" value="fish"></option>
@@ -314,7 +350,7 @@
           const element = fixture('EFTouchFixture');
           // @TODO Should be 'orange'. There is a bug deeper down causing radio button labels to be names.
           element.shadowRoot.querySelector('img').click()
-          assert.equal(element.value.selection, 'bird')
+          assert.equal(element.value.selection.includes('bird'), true)
           assert.equal(element.value.startTime !== 0, true)
           assert.equal(element.value.selectionTime !== 0, true)
         })
@@ -323,10 +359,10 @@
           const element = fixture('EFTouchFixture');
           // @TODO Should be 'orange'. There is a bug deeper down causing radio button labels to be names.
           element.shadowRoot.querySelectorAll('img')[0].click()
-          assert.equal(element.value.selection, 'bird')
+          assert.equal(element.value.selection.includes('bird'), true)
           element.disabled = true
           element.shadowRoot.querySelectorAll('img')[1].click()
-          assert.equal(element.value.selection, 'bird')
+          assert.equal(element.value.selection.includes('bird'), true)
         })
 
         test('should resume', () => {
@@ -334,7 +370,7 @@
           element.value = {
             "startTime": 1562069141106,
             "selectionTime": 1562069146071,
-            "selection": "bird"
+            "selection": ["bird"]
           }
           assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 1)
         })
@@ -343,7 +379,7 @@
           const element = fixture('EFTouchDisabledOptionFixture');
           element.shadowRoot.querySelectorAll('img')[0].click()
           element.shadowRoot.querySelectorAll('img')[1].click()
-          assert.equal(element.value.selection, 'bird')
+          assert.equal(element.value.selection.includes('bird'), true)
         })
 
         test('should auto-progress after selection', () => {
@@ -499,7 +535,44 @@
           element.shadowRoot.querySelectorAll('img')[3].click()
           assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 3)
           assert.equal(element.value.selection.length, 3)
-        }).timeout(987654321);
+        })
+
+        test('should allow multi-select but not allow change of selection', () => { 
+          const element = fixture('EFTouchMultiSelectWithDisableAfterSelectionFixture');
+          element.shadowRoot.querySelectorAll('img')[0].click()
+          element.shadowRoot.querySelectorAll('img')[1].click()
+          assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 2)
+          assert.equal(element.value.selection.length, 2)
+          // Try to unselect, we should not be able to.
+          element.shadowRoot.querySelectorAll('img')[1].click()
+          assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 2)
+          assert.equal(element.value.selection.length, 2)
+          element.shadowRoot.querySelectorAll('img')[2].click()
+          // Select another to hit limit.
+          assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 3)
+          assert.equal(element.value.selection.length, 3)
+          // And now click one that should not work because we've hit the limit.
+          element.shadowRoot.querySelectorAll('img')[3].click()
+          assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 3)
+          assert.equal(element.value.selection.length, 3)
+          // For good measure, try to unselect some items, we should not be able to.
+          element.shadowRoot.querySelectorAll('img')[1].click()
+          assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 3)
+          assert.equal(element.value.selection.length, 3)
+          element.shadowRoot.querySelectorAll('img')[2].click()
+          assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 3)
+          assert.equal(element.value.selection.length, 3)
+        })
+
+        test('should not allow change of selection', () => { 
+          const element = fixture('EFTouchDisableAfterSelectionFixture');
+          element.shadowRoot.querySelectorAll('img')[0].click()
+          element.shadowRoot.querySelectorAll('img')[1].click()
+          assert.equal(element.shadowRoot.querySelectorAll('[selected]').length, 1)
+          assert.equal(element.value.selection.length, 1)
+          assert.equal(element.value.selection.includes(element.shadowRoot.querySelectorAll('img')[0].getAttribute('value')), true)
+          assert.equal(element.value.selection.includes(element.shadowRoot.querySelectorAll('img')[1].getAttribute('value')), false)
+        })
 
         test('should have value of correctness', () => { 
           const element = fixture('EFTouchWithCorrectFixture');
@@ -517,8 +590,17 @@
           assert.equal(element.value.correct, true)
         })
         
-        test('should not allow proceeding without selection when required', () => {
+        test('should not be valid without selection when required', () => {
           const element = fixture('EFTouchRequiredFixture');
+          assert.equal(element.validate(), false)
+          element.shadowRoot.querySelectorAll('img')[1].click()
+          assert.equal(element.validate(), true)
+        })
+
+        test('should not be valid without n multi-select selections when using required-all', () => {
+          const element = fixture('EFTouchRequiredAllFixture');
+          assert.equal(element.validate(), false)
+          element.shadowRoot.querySelectorAll('img')[0].click()
           assert.equal(element.validate(), false)
           element.shadowRoot.querySelectorAll('img')[1].click()
           assert.equal(element.validate(), true)
@@ -546,16 +628,6 @@
           element.shadowRoot.querySelectorAll('img')[0].click()
           assert.equal(!!element.shadowRoot.querySelector('#incorrect'), false)
           assert.equal(!!element.shadowRoot.querySelector('#correct'), true)
-        })
-
-        test('should not allow correction', () => {
-          const element = fixture('EFTouchNoCorrectionFixture');
-          element.shadowRoot.querySelectorAll('img')[0].click()
-          assert.equal(element.value.selection, 'dog')
-          assert.equal(element.value.correct, false)
-          element.shadowRoot.querySelectorAll('img')[1].click()
-          assert.equal(element.value.selection, 'dog')
-          assert.equal(element.value.correct, false)
         })
 
         test('should not show warning message if a selection is made')
