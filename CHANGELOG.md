@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.6.1
+- On `<tangy-timed>` when using auto stop, return the property instead of the instead of the truthfulness of the value which is always false.
+
 ## v4.6.0
 - Refactor for `<tangy-eftouch>`.
   - `<tangy-eftouch multi-select go-next-on-selection="2">` should become `<tangy-eftouch multi-select="2" go-next-on-selection>`. This allows for expanding functionality of being able to use multi-select without go-next-on-selection but still limit the number of choices the user can make minus the transition.
