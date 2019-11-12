@@ -121,7 +121,8 @@ export class TangyFormItemHelpers {
     return input.value.filter(el => el.value).length
   }
   gridAutoStopped(input) {
-    return !!input.value.find(el => el.gridAutoStopped)
+    if (!input) return
+    return input.value.find(el => el.gridAutoStopped)
   }
   hideInputsUponThreshhold(el) {
     let shouldDisable = false
