@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.6.3
+- Fix TangyLocation.value setting from markup.
+
 ## v4.6.2
 - Fix dynamic reassignment of TangyLocation.showLevels to make sure value is reset.
 
