@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.6.2
+- Fix dynamic reassignment of TangyLocation.showLevels to make sure value is reset.
+
 ## v4.6.1
 - On `<tangy-timed>` when using auto stop, return the property instead of the instead of the truthfulness of the value which is always false.
 
