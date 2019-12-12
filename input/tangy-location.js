@@ -554,7 +554,7 @@ class TangyLocation extends PolymerElement {
 
   onShowLevelsChange(newValue, previousValue) {
     // Because levels are changing, we need to reset the value because we can't rely on the value anymore. Note this assignment to value also causes a render.
-    this.value = []
+    if (previousValue !== undefined) this.value = []
   }
 
   render() {

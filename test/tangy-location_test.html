@@ -27,6 +27,13 @@
       </template>
     </test-fixture>
 
+
+    <test-fixture id="TangyLocationWithValueFixture">
+      <template>
+        <tangy-location required show-levels="county,school" location-src="location-list.json" value='[{"level":"county","value":"county1"},{"level":"school","value":"school1"}]'></tangy-location>
+      </template>
+    </test-fixture>
+
     <test-fixture id="TangyLocationShowMetadataFixture">
       <template>
         <tangy-location required show-levels="county,school" location-src="location-list.json" show-meta-data></tangy-location>
@@ -46,6 +53,15 @@
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import '../input/tangy-location.js'
       suite('tangy-location', () => {
+
+        test('should have a value from markup', (done) => {
+          const element = fixture('TangyLocationWithValueFixture')
+          element.addEventListener('location-list-loaded', () => {
+            assert.equal(element.value.length, 2)
+            done()
+          }, {once: true})
+        })
+
         test('required tangy-location should not validate when still loading location list', (done) => {
           const element = fixture('TangyLocationRequiredFixture')
           assert.equal(element.validate(), false)
@@ -58,6 +74,7 @@
             done()
           }, {once: true})
         })
+
         test('should change levels and clear selection when levels are reassigned', (done) => {
           const element = fixture('TangyLocationRequiredFixture')
           assert.equal(element.validate(), false)
