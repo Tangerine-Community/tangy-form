@@ -58,6 +58,20 @@
             done()
           }, {once: true})
         })
+        test('should change levels and clear selection when levels are reassigned', (done) => {
+          const element = fixture('TangyLocationRequiredFixture')
+          assert.equal(element.validate(), false)
+          element.addEventListener('location-list-loaded', () => {
+            element.shadowRoot.querySelectorAll('select')[0].value = 'county2'
+            element.shadowRoot.querySelectorAll('select')[0].dispatchEvent(new Event('change', {bubbles: true}))
+            element.shadowRoot.querySelectorAll('select')[1].value = 'school3'
+            element.shadowRoot.querySelectorAll('select')[1].dispatchEvent(new Event('change', {bubbles: true}))
+            element.setAttribute('show-levels','county')
+            assert.equal(element.shadowRoot.querySelectorAll('select').length, 1)
+            assert.equal(element.value.length, 0)
+            done()
+          }, {once: true})
+        })
         test('should populate select list locations found in filterBy', (done) => {
           const element = fixture('TangyLocationFilterByFixture');
           element.addEventListener('location-list-loaded', () => {

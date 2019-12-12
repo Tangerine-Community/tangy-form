@@ -490,7 +490,7 @@ class TangyLocation extends PolymerElement {
       showLevels: {
         type: String,
         value: '',
-        observer: 'render'
+        observer: 'onShowLevelsChange'
       },
       hidden: {
         type: Boolean,
@@ -550,6 +550,11 @@ class TangyLocation extends PolymerElement {
     request.open('GET', this.locationSrc);
     request.send();
     
+  }
+
+  onShowLevelsChange(newValue, previousValue) {
+    // Because levels are changing, we need to reset the value because we can't rely on the value anymore. Note this assignment to value also causes a render.
+    this.value = []
   }
 
   render() {
