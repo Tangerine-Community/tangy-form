@@ -12,13 +12,26 @@
     
     <test-fixture id="TangyCheckboxesFixture">
       <template>
-        <tangy-checkboxes name="fruit_selection" label="What is your favorite fruit?">
-          <option name="orange">Orange</option>
-          <option name="banana">Banana</option>
-          <option name="tangerine">Tangerine</option>
-          <option name="cantalope">Cantalope</option>
-          <option name="cherry">Cherry</option>
-          <option name="kiwi">Kiwi</option>
+        <tangy-checkboxes value="fruit_selection" label="What is your favorite fruit?">
+          <option value="orange">Orange</option>
+          <option value="banana">Banana</option>
+          <option value="tangerine">Tangerine</option>
+          <option value="cantalope">Cantalope</option>
+          <option value="cherry">Cherry</option>
+          <option value="kiwi">Kiwi</option>
+        </tangy-checkboxes>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="TangyCheckboxesWithValueFixture">
+      <template>
+        <tangy-checkboxes name="fruit_selection" label="What is your favorite fruit?" value='[{"name":"orange","label":"Orange","required":false,"disabled":false,"invalid":false,"incomplete":true,"hidden":false,"value":"","errorText":"","tagName":"TANGY-CHECKBOX"},{"name":"banana","label":"Banana","required":false,"disabled":false,"invalid":false,"incomplete":true,"hidden":false,"value":"on","errorText":"","tagName":"TANGY-CHECKBOX"},{"name":"tangerine","label":"Tangerine","required":false,"disabled":false,"invalid":false,"incomplete":true,"hidden":false,"value":"","errorText":"","tagName":"TANGY-CHECKBOX"},{"name":"cantalope","label":"Cantalope","required":false,"disabled":false,"invalid":false,"incomplete":true,"hidden":false,"value":"on","errorText":"","tagName":"TANGY-CHECKBOX"},{"name":"cherry","label":"Cherry","required":false,"disabled":false,"invalid":false,"incomplete":true,"hidden":false,"value":"","errorText":"","tagName":"TANGY-CHECKBOX"},{"name":"kiwi","label":"Kiwi","required":false,"disabled":false,"invalid":false,"incomplete":true,"hidden":false,"value":"","errorText":"","tagName":"TANGY-CHECKBOX"}]'>
+          <option value="orange">Orange</option>
+          <option value="banana">Banana</option>
+          <option value="tangerine">Tangerine</option>
+          <option value="cantalope">Cantalope</option>
+          <option value="cherry">Cherry</option>
+          <option value="kiwi">Kiwi</option>
         </tangy-checkboxes>
       </template>
     </test-fixture>
@@ -26,12 +39,12 @@
     <test-fixture id="TangyCheckboxesHintTextFixture">
         <template>
           <tangy-checkboxes name="fruit_selection" label="What is your favorite fruit?">
-            <option name="orange" hint-text='Oranges but not tangerines.'>Orange</option>
-            <option name="banana">Banana</option>
-            <option name="tangerine">Tangerine</option>
-            <option name="cantalope">Cantalope</option>
-            <option name="cherry">Cherry</option>
-            <option name="kiwi">Kiwi</option>
+            <option value="orange" hint-text='Oranges but not tangerines.'>Orange</option>
+            <option value="banana">Banana</option>
+            <option value="tangerine">Tangerine</option>
+            <option value="cantalope">Cantalope</option>
+            <option value="cherry">Cherry</option>
+            <option value="kiwi">Kiwi</option>
           </tangy-checkboxes>
         </template>
       </test-fixture>
@@ -39,10 +52,19 @@
     <script type="module">
       import '../input/tangy-checkboxes.js'
       suite('tangy-checkboxes', () => {
+
         test('should have six options', () => {
           const element = fixture('TangyCheckboxesFixture');
           assert.equal(element.shadowRoot.querySelectorAll('tangy-checkbox').length, 6)
         })
+
+        test('should have value set from markup', () => {
+          const element = fixture('TangyCheckboxesWithValueFixture');
+          assert.equal(element.value.find(item => item.name === 'cantalope').value, 'on')
+          assert.equal(element.value.find(item => item.name === 'banana').value, 'on')
+          assert.equal(element.value.find(item => item.name === 'tangerine').value, '')
+        })
+
         test('should have hint text', () => {
           const element = fixture('TangyCheckboxesHintTextFixture');
           assert.equal(element.shadowRoot.querySelector('tangy-checkbox').shadowRoot.innerHTML.includes('Oranges'), true)
