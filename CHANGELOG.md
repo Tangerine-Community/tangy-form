@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.7.0
+- Add support for label attribute on `<tangy-location>`. 
+
 ## v4.6.3
 - Fix TangyLocation.value setting from markup.
 
