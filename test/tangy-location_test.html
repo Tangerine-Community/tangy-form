@@ -27,6 +27,11 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyLocationLabelFixture">
+      <template>
+        <tangy-location required show-levels="county,school" location-src="location-list.json" label="This is a label."></tangy-location>
+      </template>
+    </test-fixture>
 
     <test-fixture id="TangyLocationWithValueFixture">
       <template>
@@ -53,6 +58,14 @@
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import '../input/tangy-location.js'
       suite('tangy-location', () => {
+
+        test('should have a label', (done) => {
+          const element = fixture('TangyLocationLabelFixture')
+          element.addEventListener('location-list-loaded', () => {
+            assert.equal(!!element.shadowRoot.querySelector('#label').innerText, true)
+            done()
+          }, {once: true})
+        })
 
         test('should have a value from markup', (done) => {
           const element = fixture('TangyLocationWithValueFixture')

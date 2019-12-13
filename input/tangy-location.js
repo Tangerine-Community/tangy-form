@@ -441,6 +441,7 @@ class TangyLocation extends PolymerElement {
     }
   /* End of Materialize Select Styles */
       </style>
+      <label id="label" for="group"></label>
       <div id="container"></div>
 `;
   }
@@ -549,7 +550,9 @@ class TangyLocation extends PolymerElement {
     }
     request.open('GET', this.locationSrc);
     request.send();
-    
+    this.shadowRoot.querySelector('#label').innerHTML = this.hasAttribute('label')
+        ? this.getAttribute('label')
+        : ''
   }
 
   onShowLevelsChange(newValue, previousValue) {
