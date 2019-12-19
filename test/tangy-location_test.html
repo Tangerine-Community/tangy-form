@@ -9,6 +9,12 @@
   </head>
   <body>
 
+    <test-fixture id="TangyLocationFixture">
+      <template>
+        <tangy-location name="location" location-src="./location-list.json"></tangy-location>
+      </template>
+    </test-fixture>
+
     <test-fixture id="TangyLocationFilterByFixture">
       <template>
         <tangy-location name="location" show-levels="county,school" filter-by="school1,school4" location-src="./location-list.json"></tangy-location>
@@ -58,6 +64,18 @@
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import '../input/tangy-location.js'
       suite('tangy-location', () => {
+
+        test('should make selection', (done) => {
+          const element = fixture('TangyLocationFixture')
+          element.addEventListener('location-list-loaded', () => {
+            element.shadowRoot.querySelector('select').value = 'county1'
+            element.shadowRoot.querySelector('select').dispatchEvent(new Event('change', {bubbles:true}))
+            assert.equal(element.value.length, 2)
+            assert.equal(element.value[0].value, 'county1')
+            done()
+          }, {once: true})
+        })
+
 
         test('should have a label', (done) => {
           const element = fixture('TangyLocationLabelFixture')

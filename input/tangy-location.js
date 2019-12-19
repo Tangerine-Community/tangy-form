@@ -697,9 +697,13 @@ class TangyLocation extends PolymerElement {
 
   // On selection change event, calculate our new value and dispatch an event.
   onSelectionChange(event) {
-
-    let levels = this.showLevels.split(',')
-
+    // Get levels configured on this.showLevels.
+    let levels = []
+    if (this.showLevels !== '') {
+      this.showLevels.split(',').forEach(level => levels.push(level))
+    } else {
+      this.locationList.locationsLevels.forEach(level => levels.push(level))
+    }
     // Get selections from this.value but scaffold out selections if there is no value.
     let selections = [...this.value]
     if (selections.length === 0) {
@@ -707,7 +711,6 @@ class TangyLocation extends PolymerElement {
         selections = [...selections, ...[{ level, value: '' }]]
       })
     }
-
     // Calculate our new value.
     let newSelections = selections.map(selection => {
       // Modify the selection level associated with the event.
