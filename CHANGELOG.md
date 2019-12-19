@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.7.1
+- Fix bug in tangy-location resulting in bad behavior when not defining show-levels attribute.
+
 ## v4.7.0
 - Add support for label attribute on `<tangy-location>`. 
 
