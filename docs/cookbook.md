@@ -42,8 +42,8 @@ In the following example, we validate user input by number of decimal points.
     <tangy-form id="my-form" title="My Form">
       <tangy-form-item id="item1">
         <tangy-input name="one" label="Valid to one decimal point." valid-if="/^[0-9]+\.[0-9]/.test(input.value)"></tangy-input>
-        <tangy-input name="one" label="Valid to two decimal points." valid-if="/^[0-9]+\.[0-9][0-9]/.test(input.value)"></tangy-input>
-        <tangy-input name="one" label="Valid to two three points." valid-if="/^[0-9]+\.[0-9][0-9][0-9]/.test(input.value)"></tangy-input>
+        <tangy-input name="two" label="Valid to two decimal points." valid-if="/^[0-9]+\.[0-9][0-9]/.test(input.value)"></tangy-input>
+        <tangy-input name="three" label="Valid to two three points." valid-if="/^[0-9]+\.[0-9][0-9][0-9]/.test(input.value)"></tangy-input>
       </tangy-form-item>
     </tangy-form>
 ```
