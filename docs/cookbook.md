@@ -2,8 +2,10 @@
 Examples of different recipes when using Tangy Form.
 
 ## Skip sections based on input
+In the following example, wether or not you answer yes or no to the question, you will end up on a different item.
+
 [Run example](https://codepen.io/rjsteinert/pen/RXxwmP)
-```
+```html
     <tangy-form id="my-form" title="My Form"
       on-change="
         if (getValue('likes_tangerine') === 'yes') {
