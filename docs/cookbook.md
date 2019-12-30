@@ -47,3 +47,17 @@ In the following example, we validate user input by number of decimal points.
       </tangy-form-item>
     </tangy-form>
 ```
+
+
+## Valid if greater or less than other input
+
+[Run Example](https://codepen.io/rjsteinert/pen/jOEGbGK)
+```html
+    <tangy-form id="my-form" title="My Form">
+      <tangy-form-item id="item1">
+        <tangy-input name="lucky_number" label="What is your lucky number?" type="number"></tangy-input>
+        <tangy-input name="question_two" label="What is a number greater than or equal to your lucky number?" valid-if="parseInt(getValue('lucky_number')) <= parseInt(getValue('question_two'))" error-text="Number must be greater than or equal to your lucky number."></tangy-input>
+        <tangy-input name="question_three" label="What is a number less than or equal to your lucky number?" valid-if="parseInt(getValue('lucky_number')) >= parseInt(getValue('question_three'))" error-text="Number must be less than or equal to your lucky number."></tangy-input>
+      </tangy-form-item>
+    </tangy-form>
+```
