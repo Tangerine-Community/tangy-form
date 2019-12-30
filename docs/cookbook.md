@@ -77,3 +77,25 @@ In the following example, we validate user input by number of decimal points.
       </tangy-form-item>
     </tangy-form>
 ```
+
+## Allowed date range based on today
+
+[Run Example](https://codepen.io/rjsteinert/pen/mdyBeLm)
+```html
+    <tangy-form id="my-form" title="My Form">
+      <tangy-form-item 
+        id="item1"
+        on-open="
+          const currentYear = parseInt(new Date().getFullYear())
+          inputs.some_date.setAttribute('min-year', currentYear)
+          inputs.some_date.setAttribute('max-year', currentYear + 1)
+        "
+      >
+        <tangy-partial-date 
+          name="some_date"
+          label ="Some date in this year or next:"
+        >
+        </tangy-partial-date>
+      </tangy-form-item>
+    </tangy-form>
+```
