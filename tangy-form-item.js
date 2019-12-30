@@ -601,7 +601,14 @@ export class TangyFormItem extends PolymerElement {
 
   validate() {
     // Look only 1 level deep for the inputEls because we don't want to validate elements inside a tangy-editor widget.
-    let inputEls = [...this.children].filter(el => el.hasAttribute("name"))
+    // An exception is inputs nested in tangy-input-groups.
+    let inputEls = [
+      ...[...this.children].filter(el => el.hasAttribute("name")),
+      ...[...this.children]
+        .filter(element => element.tagName === "TANGY-INPUT-GROUPS")
+        .reduce((inputGroupCollection, element) => [...inputGroupCollection, ...element.children], [])
+        .reduce((inputEls, group) => [...inputEls, ...group.querySelectorAll('[name]')], [])
+    ]
     const inputs = inputEls.reduce((inputsKeyedByName, input) => {
       return { [input.name]: input, ...inputsKeyedByName }
     }, {})

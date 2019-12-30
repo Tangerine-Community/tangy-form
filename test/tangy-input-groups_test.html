@@ -19,6 +19,19 @@
         </tangy-input-groups>
       </template>
     </test-fixture>
+
+     <test-fixture id="TangyInputGroupsRequiredFixture">
+      <template>
+        <tangy-form id="tangy-input-groups-form">
+          <tangy-form-item id="tangy-input-groups-form--item-1">
+            <tangy-input-groups initial-count="3" name="person">
+              <tangy-input name="first_name" label="First name" valid-if="input.value === 'something'"></tangy-input>
+              <tangy-input name="last_name" label="Last name" required></tangy-input>
+            </tangy-input-groups>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
  
     <test-fixture id="TangyInputGroupsFormFixture">
       <template>
@@ -56,9 +69,22 @@
         });
         test('tangy-input-groups removes an input-group', () => {
           const element = fixture('TangyInputGroupsFixture');
-          element.querySelector('tangy-input-group').shadowRoot.querySelector('#remove').click()
-          assert.equal(element.querySelectorAll('tangy-input-group').length, 2)
-          assert.equal(element.value.length, 2)
+          element.shadowRoot.querySelector('.add-another').click()
+          assert.equal(element.querySelectorAll('tangy-input-group').length, 4)
+        });
+        test('tangy-input-groups validates input-group', () => {
+          const element = fixture('TangyInputGroupsRequiredFixture');
+          element.newResponse()
+          const itemEl = element.querySelector('tangy-form-item')
+          assert.equal(itemEl.validate(), false)
+          for (let group of [...itemEl.querySelectorAll('tangy-input-group')]) {
+            group.querySelector('[label="Last name"]').value = 'something'
+          }
+          assert.equal(itemEl.validate(), false)
+          for (let group of [...itemEl.querySelectorAll('tangy-input-group')]) {
+            group.querySelector('[label="First name"]').value = 'something'
+          }
+          assert.equal(itemEl.validate(), true)
         });
         test('tangy-input-groups creates a card, user inputs, then value exists on new input', () => {
           const element = fixture('TangyInputGroupsFormFixture');
