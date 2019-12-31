@@ -460,6 +460,16 @@ class TangyLocation extends PolymerElement {
         type: String,
         value: ''
       },
+      warnText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      discrepancyText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       value: {
         type: Array,
         value: [],
@@ -475,7 +485,19 @@ class TangyLocation extends PolymerElement {
         type: Boolean,
         value: false,
         reflectToAttribute: true,
-        observer: 'onInvalidChange'
+        observer: 'render'
+      },
+      hasWarning: {
+        type: Boolean,
+        value: false,
+        observer: 'render',
+        reflectToAttribute: true
+      },
+      hasDiscrepancy: {
+        type: Boolean,
+        value: false,
+        observer: 'render',
+        reflectToAttribute: true
       },
       showMetaData: {
         type: Boolean,
@@ -633,19 +655,27 @@ class TangyLocation extends PolymerElement {
       `).join('')}
         ${this.hintText ? `<label id="hint-text" class="hint-text">${this.hintText}</label>` : ``}
         <div id="error-text">
+          ${this.invalid
+            ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
+            : ''
+          }
+        </div>
+        <div id="warn-text">
+          ${this.hasWarning
+            ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
+            : ''
+          }
+        </div>
+        <div id="discrepancy-text">
+          ${this.hasDiscrepancy
+            ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? this.getAttribute('discrepancy-text') : ''} </div>`
+            : ''
+          }
         </div>
       </div>
     </div>
     `
 
-  }
-
-  onInvalidChange(value) {
-    if (this.shadowRoot.querySelector('#error-text')) {
-      this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
-        ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
-        : ''
-    }
   }
 
   calculateLevelOptions(selections, levels) {

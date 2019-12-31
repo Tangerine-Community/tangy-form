@@ -32,6 +32,8 @@ export class TangyCheckbox extends PolymerElement {
           </label>
         </paper-checkbox>
         <div id="error-text"></div>
+        <div id="warn-text"></div>
+        <div id="discrepancy-text"></div>
       </div>
     </div>
     `
@@ -72,6 +74,18 @@ export class TangyCheckbox extends PolymerElement {
         observer: 'onInvalidChange',
         reflectToAttribute: true
       },
+      hasWarning: {
+        type: Boolean,
+        value: false,
+        observer: 'onWarnChange',
+        reflectToAttribute: true
+      },
+      hasDiscrepancy: {
+        type: Boolean,
+        value: false,
+        observer: 'onDiscrepancyChange',
+        reflectToAttribute: true
+      },
       incomplete: {
         type: Boolean,
         value: true,
@@ -89,6 +103,16 @@ export class TangyCheckbox extends PolymerElement {
         reflectToAttribute: true
       },
       errorText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      warnText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      discrepancyText: {
         type: String,
         value: '',
         reflectToAttribute: true
@@ -141,6 +165,18 @@ export class TangyCheckbox extends PolymerElement {
   onInvalidChange(value) {
     this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
       ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
+      : ''
+  }
+
+  onDiscrepancyChange(value) {
+    this.shadowRoot.querySelector('#discrepancy-text').innerHTML = this.hasDiscrepancy
+      ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? this.getAttribute('discrepancy-text') : ''} </div>`
+      : ''
+  }
+
+  onWarnChange(value) {
+    this.shadowRoot.querySelector('#warn-text').innerHTML = this.hasWarning
+      ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
       : ''
   }
 

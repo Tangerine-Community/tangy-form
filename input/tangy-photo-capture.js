@@ -34,6 +34,8 @@ export class TangyPhotoCapture extends PolymerElement {
         <paper-button on-click="capturePhoto"><iron-icon icon="camera-enhance"></iron-icon> capture photo </paper-button>
         <label class="hint-text"></label>
         <div id="error-text"></div>
+        <div id="warn-text"></div>
+        <div id="discrepancy-text"></div>
       </div>
     </div>
     `
@@ -68,6 +70,18 @@ export class TangyPhotoCapture extends PolymerElement {
         observer: 'onDisabledChange',
         reflectToAttribute: true
       },
+      hasWarning: {
+        type: Boolean,
+        value: false,
+        observer: 'onWarnChange',
+        reflectToAttribute: true
+      },
+      hasDiscrepancy: {
+        type: Boolean,
+        value: false,
+        observer: 'onDiscrepancyChange',
+        reflectToAttribute: true
+      },
       hidden: {
         type: Boolean,
         value: false,
@@ -87,6 +101,16 @@ export class TangyPhotoCapture extends PolymerElement {
       value: {
         type: String,
         value: ''
+      },
+      warnText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      discrepancyText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
       }
      }
   }
@@ -157,6 +181,18 @@ export class TangyPhotoCapture extends PolymerElement {
     ctx.drawImage(image, 0, 0, newWidth, newHeight);
     newDataUrl = canvas.toDataURL(imageType, imageArguments);
     return newDataUrl;
+  }
+
+  onDiscrepancyChange(value) {
+    this.shadowRoot.querySelector('#discrepancy-text').innerHTML = this.hasDiscrepancy
+      ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? this.getAttribute('discrepancy-text') : ''} </div>`
+      : ''
+  }
+
+  onWarnChange(value) {
+    this.shadowRoot.querySelector('#warn-text').innerHTML = this.hasWarning
+      ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
+      : ''
   }
 
 }

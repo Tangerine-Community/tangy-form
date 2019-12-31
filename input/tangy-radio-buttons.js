@@ -74,6 +74,9 @@ class TangyRadioButtons extends PolymerElement {
           <label class="hint-text"></label>
           <div id="container"></div>
           <label id="error-text"></label>
+          <div id="warn-text"></div>
+          <div id="discrepancy-text"></div>
+
         </div>
       </div>
     `;
@@ -115,6 +118,18 @@ class TangyRadioButtons extends PolymerElement {
         observer: 'reflect',
         reflectToAttribute: true
       },
+      hasWarning: {
+        type: Boolean,
+        value: false,
+        observer: 'onWarnChange',
+        reflectToAttribute: true
+      },
+      hasDiscrepancy: {
+        type: Boolean,
+        value: false,
+        observer: 'onDiscrepancyChange',
+        reflectToAttribute: true
+      },
       hidden: {
         type: Boolean,
         value: false,
@@ -149,6 +164,16 @@ class TangyRadioButtons extends PolymerElement {
         type: String,
         value: '',
         observer: 'reflect',
+        reflectToAttribute: true
+      },
+      warnText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      discrepancyText: {
+        type: String,
+        value: '',
         reflectToAttribute: true
       }
     }
@@ -263,6 +288,18 @@ class TangyRadioButtons extends PolymerElement {
       this.invalid = false
       return true
     }
+  }
+  
+  onDiscrepancyChange(value) {
+    this.shadowRoot.querySelector('#discrepancy-text').innerHTML = this.hasDiscrepancy
+      ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? this.getAttribute('discrepancy-text') : ''} </div>`
+      : ''
+  }
+
+  onWarnChange(value) {
+    this.shadowRoot.querySelector('#warn-text').innerHTML = this.hasWarning
+      ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
+      : ''
   }
 
 }

@@ -78,6 +78,8 @@ class TangyQr extends PolymerElement {
         </paper-card>
         <label class="hint-text"></label>
         <div id="error-text"></div>
+        <div id="warn-text"></div>
+        <div id="discrepancy-text"></div>
       </div>
     </div>
     `;
@@ -119,6 +121,18 @@ class TangyQr extends PolymerElement {
         observer: 'onInvalidChange',
         reflectToAttribute: true
       },
+      hasWarning: {
+        type: Boolean,
+        value: false,
+        observer: 'onWarnChange',
+        reflectToAttribute: true
+      },
+      hasDiscrepancy: {
+        type: Boolean,
+        value: false,
+        observer: 'onDiscrepancyChange',
+        reflectToAttribute: true
+      },
       disabled: {
         type: Boolean,
         value: false,
@@ -137,6 +151,16 @@ class TangyQr extends PolymerElement {
       hideOutput: {
         type: Boolean,
         value: false,
+        reflectToAttribute: true
+      },
+      warnText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      discrepancyText: {
+        type: String,
+        value: '',
         reflectToAttribute: true
       }
     };
@@ -247,6 +271,19 @@ class TangyQr extends PolymerElement {
       return true
     } 
   }
+
+  onDiscrepancyChange(value) {
+    this.shadowRoot.querySelector('#discrepancy-text').innerHTML = this.hasDiscrepancy
+      ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? this.getAttribute('discrepancy-text') : ''} </div>`
+      : ''
+  }
+
+  onWarnChange(value) {
+    this.shadowRoot.querySelector('#warn-text').innerHTML = this.hasWarning
+      ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
+      : ''
+  }
+
 }
 
 window.customElements.define('tangy-qr', TangyQr);

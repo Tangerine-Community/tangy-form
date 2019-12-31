@@ -39,7 +39,9 @@ export class TangyInput extends PolymerElement {
         <div id="container"></div>
       </div>
     </div>
-
+    <div id="error-text"></div>    
+    <div id="warn-text"></div>
+    <div id="discrepancy-text"></div>
   `
   }
 
@@ -104,6 +106,18 @@ export class TangyInput extends PolymerElement {
         observer: 'onInvalidChange',
         reflectToAttribute: true
       },
+      hasWarning: {
+        type: Boolean,
+        value: false,
+        observer: 'onWarnChange',
+        reflectToAttribute: true
+      },
+      hasDiscrepancy: {
+        type: Boolean,
+        value: false,
+        observer: 'onDiscrepancyChange',
+        reflectToAttribute: true
+      },
       incomplete: {
         type: Boolean,
         value: true,
@@ -150,6 +164,16 @@ export class TangyInput extends PolymerElement {
         type: String,
         observer: 'reflect',
         value: ''
+      },
+      warnText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      discrepancyText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
       }
     }
   }
@@ -169,8 +193,6 @@ export class TangyInput extends PolymerElement {
         ? `<paper-input id="input"></paper-input>`
         : `<paper-textarea id="input"></paper-textarea>`
       }
-      <div id="error-text"></div>    
-    
     `
     // Listen for user changes.
     this.shadowRoot.querySelector('#input').addEventListener('value-changed', (event) => {
@@ -249,6 +271,24 @@ export class TangyInput extends PolymerElement {
         : ''
     }
   }
+  
+  onDiscrepancyChange(value) {
+    if (this.shadowRoot.querySelector('#discrepancy-text')) {
+      this.shadowRoot.querySelector('#discrepancy-text').innerHTML = this.hasDiscrepancy
+        ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? this.getAttribute('discrepancy-text') : ''} </div>`
+        : ''
+    }
+  }
+
+  onWarnChange(value) {
+    if (this.shadowRoot.querySelector('#warn-text')) {
+      this.shadowRoot.querySelector('#warn-text').innerHTML = this.hasWarning
+        ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
+        : ''
+    }
+  }
+
+
 
   validate() {
     if (this.hasAttribute('disabled') || this.hasAttribute('hidden')) {

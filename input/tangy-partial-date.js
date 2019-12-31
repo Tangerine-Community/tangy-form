@@ -59,6 +59,8 @@ class TangyPartialDate extends PolymerElement {
         <div id="container"></div>
       </div>
     </div>
+    <div id="warn-text"></div>
+    <div id="discrepancy-text"></div>
     `;
   }
 
@@ -104,6 +106,18 @@ class TangyPartialDate extends PolymerElement {
         type: Boolean,
         value: false,
         observer: 'render',
+        reflectToAttribute: true
+      },
+     hasWarning: {
+        type: Boolean,
+        value: false,
+        observer: 'onWarnChange',
+        reflectToAttribute: true
+      },
+      hasDiscrepancy: {
+        type: Boolean,
+        value: false,
+        observer: 'onDiscrepancyChange',
         reflectToAttribute: true
       },
       incomplete: {
@@ -179,6 +193,16 @@ class TangyPartialDate extends PolymerElement {
         type: String,
         value: "",
         observer: 'render',
+        reflectToAttribute: true
+      },
+      warnText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      discrepancyText: {
+        type: String,
+        value: '',
         reflectToAttribute: true
       }
     }
@@ -419,6 +443,20 @@ class TangyPartialDate extends PolymerElement {
       return true;
     }
   }
+  
+  onDiscrepancyChange(value) {
+    this.shadowRoot.querySelector('#discrepancy-text').innerHTML = this.hasDiscrepancy
+      ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? this.getAttribute('discrepancy-text') : ''} </div>`
+      : ''
+  }
+
+  onWarnChange(value) {
+    this.shadowRoot.querySelector('#warn-text').innerHTML = this.hasWarning
+      ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
+      : ''
+  }
+
+
 }
 
 window.customElements.define(TangyPartialDate.is, TangyPartialDate);
