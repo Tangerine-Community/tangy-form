@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v4.8.0
+- Add support for attributes on all inputs: discrepancy-text, has-discrepancy, warn-text, has-warning.
+  - PR: https://github.com/Tangerine-Community/tangy-form/pull/111
+  - Issue: https://github.com/Tangerine-Community/Tangerine/issues/1760
+- Fix: Ensure inputs in tangy-input-groups are validated.
+
 ## v4.7.1
 - Fix bug in tangy-location resulting in bad behavior when not defining show-levels attribute.
 
