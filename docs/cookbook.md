@@ -99,3 +99,30 @@ In the following example, we validate user input by number of decimal points.
       </tangy-form-item>
     </tangy-form>
 ```
+
+## Flag choice as discrepancy and/or warning and show or hide content depending
+[Run Example](https://codepen.io/rjsteinert/pen/eYmGGbM)
+```html
+<tangy-form id="my-form" title="My Form">
+  <tangy-form-item id="item1">
+    <tangy-radio-buttons
+      name="input1"
+      label="Answer No or Maybe and this question will be flagged with a warning. Answer No and this question will be flagged with a discrepancy. If your selection causes a discrepancy or warning to be flagged, you may click submit again to proceed. If however you selected No, submitted, then selected Maybe, because you changed your selection you will be required to click submit one last time."
+      warn-if="getValue('input1') === 'maybe' || getValue('input1') === 'no'"
+      discrepancy-if="getValue('input1') === 'no'"
+      discrepancy-text="This is a discrepancy."
+      warn-text="This is a warning."
+    >
+      <option value="maybe">Maybe</option>
+      <option value="no">No</option>
+      <option value="yes">Yes</option>
+    </tangy-radio-buttons>
+    <tangy-box name="box1" show-if="getValue('input1') === 'maybe' || getValue('input1') === 'no'">
+      This box is an example of giving feedback in a more proactive way as opposed to waiting until the user clicks submit/next.
+    </tangy-box>
+    <tangy-box name="box2" show-if="inputs.input1.hasDiscrepancy === true || inputs.input1.hasWarning === true">
+      This box is an example of how inputs and content can base logic around wether a discrepancy or warning has been flagged.
+    </tangy-box>
+  </tangy-form-item>
+</tangy-form>
+```
