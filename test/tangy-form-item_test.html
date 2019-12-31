@@ -133,6 +133,27 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyFormItemDiscrepancyIf3Fixture">
+      <template>
+        <tangy-form id="my-form-2" title="My Form 2">
+          <tangy-form-item id="item1">
+            <tangy-radio-buttons
+              name="input1"
+              discrepancy-if="getValue('input1') !== 'yes'"
+              label="Do you like tangerines?"
+            >
+              <option value="maybe">Maybe</option>
+              <option value="no">No</option>
+              <option value="yes">Yes</option>
+            </tangy-radio-buttons>
+            <!--tangy-box show-if="inputs.input1.hasDiscrepancy === true">
+              You really should consider liking tangerines.
+            </tangy-box-->
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <test-fixture id="TangyFormItemWarnIfFixture">
       <template>
         <tangy-form id="my-form-2" title="My Form 2">
@@ -321,6 +342,24 @@
           assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-input').hasDiscrepancy, true)
           assert.equal(element.querySelector('tangy-form-item').validate(), true)
           assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-input').hasDiscrepancy, true)
+        })
+
+        test('should be invalid from discrepancy-if statement, then still invalid after a failing correction, lastly valid after no correction (complex value)', () => {
+          const element = fixture('TangyFormItemDiscrepancyIf3Fixture');
+          element.newResponse()
+          // Select "maybe", should have discrepancy and item will be invalid.
+          element.querySelector('tangy-form-item').querySelector('tangy-radio-buttons').shadowRoot.querySelectorAll('tangy-radio-button')[0].click()
+          element.querySelector('tangy-form-item').querySelector('tangy-radio-buttons').shadowRoot.querySelectorAll('tangy-radio-button')[0].dispatchEvent(new Event('change', {bubbles:true}))
+          assert.equal(element.querySelector('tangy-form-item').validate(), false)
+          assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-radio-buttons').hasDiscrepancy, true)
+          // Select "no", should have discrepancy and item will still be invalid because the selection changed to another discrepancy qualifying value. 
+          element.querySelector('tangy-form-item').querySelector('tangy-radio-buttons').shadowRoot.querySelectorAll('tangy-radio-button')[1].click()
+          element.querySelector('tangy-form-item').querySelector('tangy-radio-buttons').shadowRoot.querySelectorAll('tangy-radio-button')[1].dispatchEvent(new Event('change', {bubbles:true}))
+          assert.equal(element.querySelector('tangy-form-item').validate(), false)
+          assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-radio-buttons').hasDiscrepancy, true)
+          // Make no selection, discrepancy should remain but item becomes valid because discrepancy value has not changed.
+          assert.equal(element.querySelector('tangy-form-item').validate(), true)
+          assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-radio-buttons').hasDiscrepancy, true)
         })
         
         test('should be invalid from warn-if statement, then continue after no correction, ', () => {

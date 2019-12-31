@@ -653,7 +653,7 @@ export class TangyFormItem extends PolymerElement {
         return foundNewOrChanged || 
           (
             !this.hadDiscrepancies.find(had => had.name === input.name) ||
-            this.hadDiscrepancies.find(had => had.name === input.name).value !== input.value
+            JSON.stringify(this.hadDiscrepancies.find(had => had.name === input.name).value) !== JSON.stringify(input.value)
           ) 
           ? true
           : false
@@ -663,13 +663,13 @@ export class TangyFormItem extends PolymerElement {
         return foundNewOrChanged || 
           (
             !this.hadWarnings.find(had => had.name === input.name) ||
-            this.hadWarnings.find(had => had.name === input.name).value !== input.value
+            JSON.stringify(this.hadWarnings.find(had => had.name === input.name).value) !== JSON.stringify(input.value)
           ) 
           ? true
           : false
       }, false)
-    this.hadDiscrepancies = hasDiscrepancies
-    this.hadWarnings = hasWarnings
+    this.hadDiscrepancies = JSON.parse(JSON.stringify(hasDiscrepancies))
+    this.hadWarnings = JSON.parse(JSON.stringify(hasWarnings))
     if (invalidInputNames.length !== 0 || hasNewOrChangedDiscrepancies || hasNewOrChangedWarnings) {
       this
         .querySelector(`[name="${firstInputWithIssue}"]`)
