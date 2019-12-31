@@ -34,7 +34,8 @@ export class TangyFormItem extends PolymerElement {
       save: t('save'),
       submit: t('submit')
     }
-
+    this.hadDiscrepancies = []
+    this.hadWarnings = []
   }
 
   static get template() {
@@ -612,26 +613,66 @@ export class TangyFormItem extends PolymerElement {
     const inputs = inputEls.reduce((inputsKeyedByName, input) => {
       return { [input.name]: input, ...inputsKeyedByName }
     }, {})
+    let hasWarnings = []
+    let hasDiscrepancies = []
     let invalidInputNames = []
     let validInputNames = []
+    let firstInputWithIssue = ''
     for (let input of inputEls) {
       if (!input.hidden) {
         let {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold} = this.exposeHelperFunctions();
         if ((input.validate && !input.validate()) || (input.hasAttribute('valid-if') && !eval(input.getAttribute('valid-if')))) {
           input.invalid = true
+          if (!firstInputWithIssue) firstInputWithIssue = input.name
           invalidInputNames.push(input.name)
         } else {
           input.invalid = false
           validInputNames.push(input.name)
+        }
+        if (input.hasAttribute('warn-if') && eval(input.getAttribute('warn-if'))) {
+          input.hasWarning = true
+          if (!firstInputWithIssue) firstInputWithIssue = input.name
+          hasWarnings.push({ name: input.name, value: input.value})
+        } else {
+          input.hasWarning = false
+        }
+        if (input.hasAttribute('discrepancy-if') && eval(input.getAttribute('discrepancy-if'))) {
+          input.hasDiscrepancy = true
+          if (!firstInputWithIssue) firstInputWithIssue = input.name
+          hasDiscrepancies.push({ name: input.name, value: input.value})
+        } else {
+          input.hasDiscrepancy = false
         }
       } else {
         input.invalid = false
         validInputNames.push(input.name)
       }
     }
-    if (invalidInputNames.length !== 0) {
+    const hasNewOrChangedDiscrepancies = hasDiscrepancies
+      .reduce((foundNewOrChanged, input) => {
+        return foundNewOrChanged || 
+          (
+            !this.hadDiscrepancies.find(had => had.name === input.name) ||
+            this.hadDiscrepancies.find(had => had.name === input.name).value !== input.value
+          ) 
+          ? true
+          : false
+      }, false)
+    const hasNewOrChangedWarnings = hasWarnings
+      .reduce((foundNewOrChanged, input) => {
+        return foundNewOrChanged || 
+          (
+            !this.hadWarnings.find(had => had.name === input.name) ||
+            this.hadWarnings.find(had => had.name === input.name).value !== input.value
+          ) 
+          ? true
+          : false
+      }, false)
+    this.hadDiscrepancies = hasDiscrepancies
+    this.hadWarnings = hasWarnings
+    if (invalidInputNames.length !== 0 || hasNewOrChangedDiscrepancies || hasNewOrChangedWarnings) {
       this
-        .querySelector(`[name="${invalidInputNames[0]}"]`)
+        .querySelector(`[name="${firstInputWithIssue}"]`)
         .scrollIntoView({ behavior: 'smooth', block: 'start' })
       this.incomplete = true
       this.fireHook('on-change')

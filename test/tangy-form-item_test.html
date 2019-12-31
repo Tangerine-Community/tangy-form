@@ -103,6 +103,66 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyFormItemDiscrepancyIfFixture">
+      <template>
+        <tangy-form id="my-form-2" title="My Form 2">
+          <tangy-form-item id="item1">
+            <tangy-checkbox name="input1" discrepancy-if="input.value !== 'on'">
+              Do you like tangerines?
+            </tangy-checkbox>
+            <tangy-box show-if="inputs.input1.hasDiscrepancy === true">
+              You really should consider liking tangerines.
+            </tangy-box>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="TangyFormItemDiscrepancyIf2Fixture">
+      <template>
+        <tangy-form id="my-form-2" title="My Form 2">
+          <tangy-form-item id="item1">
+            <tangy-input name="input1" discrepancy-if="input.value !== 'yes'">
+              Do you like tangerines?
+            </tangy-input>
+            <tangy-box show-if="inputs.input1.hasDiscrepancy === true">
+              You really should consider liking tangerines.
+            </tangy-box>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="TangyFormItemWarnIfFixture">
+      <template>
+        <tangy-form id="my-form-2" title="My Form 2">
+          <tangy-form-item id="item1">
+            <tangy-checkbox name="input1" warn-if="input.value !== 'on'">
+              Do you like tangerines?
+            </tangy-checkbox>
+            <tangy-box show-if="inputs.input1.hasWarning === true">
+              You really should consider liking tangerines.
+            </tangy-box>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="TangyFormItemWarnIf2Fixture">
+      <template>
+        <tangy-form id="my-form-2" title="My Form 2">
+          <tangy-form-item id="item1">
+            <tangy-input name="input1" warn-if="input.value !== 'yes'">
+              Do you like tangerines?
+            </tangy-input>
+            <tangy-box show-if="inputs.input1.hasWarning === true">
+              You really should consider liking tangerines.
+            </tangy-box>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <test-fixture id="TangyFormItemValidIfTangyIfRadioFixture">
       <template>
         <tangy-form id="my-form-3" title="My Form 3">
@@ -242,6 +302,48 @@
           assert.equal(element.querySelector('tangy-form-item').open, false)
         })
         
+        test('should be invalid from discrepancy-if statement, then continue after no correction, ', () => {
+          const element = fixture('TangyFormItemDiscrepancyIfFixture');
+          element.newResponse()
+          assert.equal(element.querySelector('tangy-form-item').validate(), false)
+          assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-checkbox').hasDiscrepancy, true)
+          assert.equal(element.querySelector('tangy-form-item').validate(), true)
+
+        })
+
+        test('should be invalid from discrepancy-if statement, then still invalid after a failing correction, lastly valid after no correction', () => {
+          const element = fixture('TangyFormItemDiscrepancyIf2Fixture');
+          element.newResponse()
+          assert.equal(element.querySelector('tangy-form-item').validate(), false)
+          assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-input').hasDiscrepancy, true)
+          element.querySelector('tangy-form-item').querySelector('tangy-input').value = 'no'
+          assert.equal(element.querySelector('tangy-form-item').validate(), false)
+          assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-input').hasDiscrepancy, true)
+          assert.equal(element.querySelector('tangy-form-item').validate(), true)
+          assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-input').hasDiscrepancy, true)
+        })
+        
+        test('should be invalid from warn-if statement, then continue after no correction, ', () => {
+          const element = fixture('TangyFormItemWarnIfFixture');
+          element.newResponse()
+          assert.equal(element.querySelector('tangy-form-item').validate(), false)
+          assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-checkbox').hasWarning, true)
+          assert.equal(element.querySelector('tangy-form-item').validate(), true)
+          assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-checkbox').hasWarning, true)
+        })
+
+        test('should be invalid from warn-if statement, then still invalid after a failing correction, lastly valid after no correction', () => {
+          const element = fixture('TangyFormItemWarnIf2Fixture');
+          element.newResponse()
+          assert.equal(element.querySelector('tangy-form-item').validate(), false)
+          assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-input').hasWarning, true)
+          element.querySelector('tangy-form-item').querySelector('tangy-input').value = 'no'
+          assert.equal(element.querySelector('tangy-form-item').validate(), false)
+          assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-input').hasWarning, true)
+          assert.equal(element.querySelector('tangy-form-item').validate(), true)
+          assert.equal(element.querySelector('tangy-form-item').querySelector('tangy-input').hasWarning, true)
+        })
+
         test('should be invalid radio and show custom error message, then continue after correction', () => {
           const sleep = (milliseconds) => new Promise((res) => setTimeout(() => res(true), milliseconds))
           const element = fixture('TangyFormItemValidIfTangyIfRadioFixture');
