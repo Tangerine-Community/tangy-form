@@ -92,6 +92,9 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         margin-bottom: 5px;
       }
 
+      /*
+       * error-text
+       */
       #error-text, #errorText {
         font-family: var(--paper-font-common-base_-_font-family);
         font-size: medium;
@@ -111,7 +114,53 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
       #error-text:empty, #errorText:empty {
         margin-bottom: 0;
       }
-   
+
+      /*
+       * warn-text
+       */
+      #warn-text {
+        font-family: var(--paper-font-common-base_-_font-family);
+        font-size: medium;
+        font-weight: bold;
+        color: var(--error-color);
+        display: flex;
+        margin-bottom: 30px;
+      }
+      #warn-text > iron-icon {
+        padding-right: 0.8em;
+        height: 24px;
+        width: 24px;
+      }
+      #warn-text > div {
+        line-height: 24px;
+      }
+      #warn-text:empty {
+        margin-bottom: 0;
+      }
+
+      /*
+       * discrepancy-text
+       */
+      #discrepancy-text {
+        font-family: var(--paper-font-common-base_-_font-family);
+        font-size: medium;
+        font-weight: bold;
+        color: var(--error-color);
+        display: flex;
+        margin-bottom: 30px;
+      }
+      #discrepancy-text > iron-icon {
+        padding-right: 0.8em;
+        height: 24px;
+        width: 24px;
+      }
+      #discrepancy-text > div {
+        line-height: 24px;
+      }
+      #discrepancy-text:empty {
+        margin-bottom: 0;
+      }
+
       .secondary_color {
         color: var(--accent-color);
       }

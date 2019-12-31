@@ -67,6 +67,18 @@ class TangySelect extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      hasWarning: {
+        type: Boolean,
+        value: false,
+        observer: 'onWarnChange',
+        reflectToAttribute: true
+      },
+      hasDiscrepancy: {
+        type: Boolean,
+        value: false,
+        observer: 'onDiscrepancyChange',
+        reflectToAttribute: true
+      },
       label: {
         type: String,
         value: '',
@@ -108,6 +120,16 @@ class TangySelect extends PolymerElement {
         observer: 'onInvalidChange',
         reflectToAttribute: true
       },
+      warnText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      discrepancyText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      }
     }
   }
 
@@ -149,6 +171,18 @@ class TangySelect extends PolymerElement {
             : ''
         }
       </label>
+      <div id="warn-text">
+        ${this.hasWarning
+          ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
+          : ''
+        }
+      </div>
+      <div id="discrepancy-text">
+        ${this.hasDiscrepancy
+          ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? this.getAttribute('discrepancy-text') : ''} </div>`
+          : ''
+        }
+      </div>
     `
     this._onChangeListener = this
       .shadowRoot
