@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.8.1
+- Add missing typings for TangyFormResponseModel for compatibility with TypeScript projects.
+
 ## v4.8.0
 - Add support for attributes on all inputs: discrepancy-text, has-discrepancy, warn-text, has-warning.
   - PR: https://github.com/Tangerine-Community/tangy-form/pull/111
