@@ -2,6 +2,7 @@
 
 ## v4.9.0
 - Add `skip-if` attribute and helpers. Similar to `hide-if` and `inputHide()`, but resets value of input when applied.
+  - Example: https://github.com/Tangerine-Community/tangy-form/blob/master/docs/cookbook.md#skip-a-question-based-on-input-in-another-question
   - PR: https://github.com/Tangerine-Community/tangy-form/pull/113
 - Add support for `mutually-exclusive` attribute on options in tangy-checkboxes. When enabled on an option, when that option is selected it will remove any prior option selections. 
   - PR: https://github.com/Tangerine-Community/tangy-form/pull/112
