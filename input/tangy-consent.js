@@ -154,6 +154,12 @@ class TangyConsent extends PolymerElement {
         type: String,
         value: '',
         reflectToAttribute: true
+      },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
       }
     };
   }
@@ -245,6 +251,11 @@ class TangyConsent extends PolymerElement {
     }
   }
 
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+    }
+  }
 
 }
 

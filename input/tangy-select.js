@@ -99,6 +99,12 @@ class TangySelect extends PolymerElement {
         type: Boolean,
         value: false
       },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       invalid: {
         type: Boolean,
         observer: 'onInvalidChange',
@@ -212,6 +218,13 @@ class TangySelect extends PolymerElement {
     } else {
       this.invalid = false
       return true
+    }
+  }
+
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+      this.render()
     }
   }
 

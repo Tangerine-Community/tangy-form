@@ -81,6 +81,15 @@
           assert.equal(element.offsetHeight > 50, true)
         })
 
+        test('should set value back to default applying skipped attribute', () => {
+          const element = fixture('TangyRadioButtonsFixture');
+          element.shadowRoot.querySelectorAll('tangy-radio-button')[0].click()
+          element.shadowRoot.querySelectorAll('tangy-radio-button')[0].dispatchEvent(new Event('change',{bubbles:true}))
+          element.setAttribute('skipped', '')
+          assert.equal(element.shadowRoot.querySelectorAll('tangy-radio-button')[0].value, '')
+          assert.equal(element.value[0].value, '')
+        })
+
       })
     </script>
 

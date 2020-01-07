@@ -87,6 +87,12 @@ export class TangyPhotoCapture extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       invalid: {
         type: Boolean,
         value: false,
@@ -193,6 +199,12 @@ export class TangyPhotoCapture extends PolymerElement {
     this.shadowRoot.querySelector('#warn-text').innerHTML = this.hasWarning
       ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
       : ''
+  }
+
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+    }
   }
 
 }

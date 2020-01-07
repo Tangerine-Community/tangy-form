@@ -135,6 +135,12 @@ export class TangyEftouch extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       invalid: {
         type: Boolean,
         value: false,
@@ -476,6 +482,13 @@ export class TangyEftouch extends PolymerElement {
       return this.value.selection && this.value.selection.length > 0 ? true: false
     } else {
       return true
+    }
+  }
+
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+      this.render()
     }
   }
 

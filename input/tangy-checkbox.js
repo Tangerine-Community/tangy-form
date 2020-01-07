@@ -96,6 +96,12 @@ export class TangyCheckbox extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       value: {
         type: String,
         value: '',
@@ -122,7 +128,15 @@ export class TangyCheckbox extends PolymerElement {
 
   connectedCallback () {
     super.connectedCallback()
-    if (this.value) this.$.checkbox.checked = true
+    this.render()
+  }
+
+  render() {
+    if (this.value) {
+      this.$.checkbox.checked = true
+    } else {
+      this.$.checkbox.checked = false
+    }
     if (this.label == '' && this.innerHTML !== '') {
      this.label = this.innerHTML
     }
@@ -191,6 +205,13 @@ export class TangyCheckbox extends PolymerElement {
   onValueChange (value) {
     if (value) this.$.checkbox.setAttribute('checked', true)
     if (!value) this.$.checkbox.removeAttribute('checked')
+  }
+
+  onSkippedChange(newValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+      this.render()
+    }
   }
 
   validate() {

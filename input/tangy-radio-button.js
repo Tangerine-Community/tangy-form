@@ -66,6 +66,12 @@ export class TangyRadioButton extends PolymerElement {
         observer: 'render',
         reflectToAttribute: true
       },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       value: {
         type: String,
         value: '',
@@ -126,6 +132,12 @@ export class TangyRadioButton extends PolymerElement {
         }
       }))
     })
+  }
+
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+    }
   }
 
 }

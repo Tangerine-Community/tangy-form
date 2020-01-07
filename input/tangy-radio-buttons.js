@@ -136,6 +136,12 @@ class TangyRadioButtons extends PolymerElement {
         observer: 'reflect',
         reflectToAttribute: true
       },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       invalid: {
         type: Boolean,
         value: false,
@@ -300,6 +306,14 @@ class TangyRadioButtons extends PolymerElement {
     this.shadowRoot.querySelector('#warn-text').innerHTML = this.hasWarning
       ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
       : ''
+  }
+
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+      this.render()
+      this.reflect()
+    }
   }
 
 }

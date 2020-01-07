@@ -86,6 +86,12 @@ class TangyCheckboxesDynamic extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       incomplete: {
         type: Boolean,
         value: true,
@@ -197,6 +203,12 @@ class TangyCheckboxesDynamic extends PolymerElement {
     this.dispatchEvent(new CustomEvent('change'))
   }
 
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+      this.render()
+    }
+  }
 
 }
 window.customElements.define(TangyCheckboxesDynamic.is, TangyCheckboxesDynamic);

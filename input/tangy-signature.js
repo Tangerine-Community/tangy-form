@@ -116,6 +116,12 @@ export class TangySignature extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       invalid: {
         type: Boolean,
         value: false,
@@ -189,6 +195,12 @@ export class TangySignature extends PolymerElement {
     } else {
       this.removeAttribute('invalid')
       return true
+    }
+  }
+
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
     }
   }
 

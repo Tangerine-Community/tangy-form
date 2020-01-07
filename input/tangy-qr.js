@@ -138,6 +138,17 @@ class TangyQr extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      hidden: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       statusMessage: {
         type: String,
         value: '',
@@ -283,6 +294,13 @@ class TangyQr extends PolymerElement {
       ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
       : ''
   }
+
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+    }
+  }
+
 
 }
 

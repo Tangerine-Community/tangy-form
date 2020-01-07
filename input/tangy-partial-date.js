@@ -102,6 +102,12 @@ class TangyPartialDate extends PolymerElement {
         type: Boolean,
         value: false
       },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       invalid: {
         type: Boolean,
         value: false,
@@ -456,6 +462,12 @@ class TangyPartialDate extends PolymerElement {
       : ''
   }
 
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+      this.render()
+    }
+  }
 
 }
 

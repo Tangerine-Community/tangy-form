@@ -135,6 +135,15 @@ class TangyToggleButton extends PolymerElement {
       this.pressed = true
     }
   }
+
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+      this.render()
+    }
+  }
+
 }
+
 
 window.customElements.define(TangyToggleButton.is, TangyToggleButton);

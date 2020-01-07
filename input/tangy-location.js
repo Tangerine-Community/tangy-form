@@ -520,6 +520,12 @@ class TangyLocation extends PolymerElement {
         reflectToAttribute: true,
         value: false
       },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       disabled: {
         type: Boolean,
         value: false,
@@ -806,7 +812,13 @@ class TangyLocation extends PolymerElement {
     return selectedLocation
   }
 
-
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+      this.render()
+    }
+  }
+  
 }
 
 window.customElements.define(TangyLocation.is, TangyLocation);
