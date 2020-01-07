@@ -49,7 +49,7 @@ export class TangyTemplate extends PolymerElement {
   connectedCallback() {
     super.connectedCallback()
     // <tangy-form-item> will evaluate this template in the scope it lives.
-    this.template = this.innerHTML
+    this.template = this.textContent
   }
 
 }
