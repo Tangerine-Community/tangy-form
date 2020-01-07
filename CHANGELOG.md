@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.10.0
+- Add `dont-skip-if` attribute to complement `skip-if` attribute directive.
+
 ## v4.9.0
 - Add `skip-if` attribute and helpers. Similar to `hide-if` and `inputHide()`, but resets value of input when applied.
   - PR: https://github.com/Tangerine-Community/tangy-form/pull/113
