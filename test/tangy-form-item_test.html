@@ -103,6 +103,31 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="SkipHelperFixture">
+      <template>
+        <tangy-form id="my-form" title="My Form">
+          <tangy-form-item id="item1"
+            on-change="
+              if (inputs.input1.value === '') {
+                skip('input2')
+              } else {
+                unskip('input2')
+              }
+            "
+          >
+            <tangy-checkbox name="input1">
+              Do you like tangerines?
+            </tangy-checkbox>
+            <tangy-input 
+              name="input2"
+              label="Where do tangerines come from?"
+            >
+            </tangy-input>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <test-fixture id="SkipIfFixture">
       <template>
         <tangy-form id="my-form" title="My Form">
@@ -317,7 +342,25 @@
           )
         })
 
-        test('should skip input', () => {
+        test('should skip input due to skip helper', () => {
+          const element = fixture('SkipHelperFixture');
+          element.newResponse()
+          // Make sure initial state is that input2 is skipped.
+          assert.equal(element.querySelector('tangy-form-item').querySelector('[name=input2]').hasAttribute('skipped'), true)
+          // Trigger action that will unskip.
+          element.querySelector('tangy-form-item').querySelector('[name=input1]').value = 'on'
+          element.querySelector('tangy-form-item').querySelector('[name=input1]').dispatchEvent(new Event('change', {bubbles:true}))
+          assert.equal(element.querySelector('tangy-form-item').querySelector('[name=input2]').hasAttribute('skipped'), false)
+          // Assign a value and make sure it gets set back to default when skipped.
+          element.querySelector('tangy-form-item').querySelector('[name=input2]').value = 'foo'
+          assert.equal(element.querySelector('tangy-form-item').querySelector('[name=input2]').value, 'foo')
+          element.querySelector('tangy-form-item').querySelector('[name=input1]').value = ''
+          element.querySelector('tangy-form-item').querySelector('[name=input1]').dispatchEvent(new Event('change', {bubbles:true}))
+          assert.equal(element.querySelector('tangy-form-item').querySelector('[name=input2]').hasAttribute('skipped'), true)
+          assert.equal(element.querySelector('tangy-form-item').querySelector('[name=input2]').value, '')
+        })
+
+        test('should skip input due to skip-if', () => {
           const element = fixture('SkipIfFixture');
           element.newResponse()
           // Make sure initial state is that input2 is skipped.
