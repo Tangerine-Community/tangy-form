@@ -189,6 +189,9 @@ class TangyCheckboxes extends PolymerElement {
     let options = this.querySelectorAll('option')
     for (let option of options) {
       let checkbox = document.createElement('tangy-checkbox')
+      if (option.hasAttribute('mutually-exclusive')) {
+        checkbox.setAttribute('mutually-exclusive', '')
+      }
       if (option.hasAttribute('hint-text')) {
         checkbox.setAttribute('hint-text', option.getAttribute('hint-text'))
       }
@@ -219,11 +222,36 @@ class TangyCheckboxes extends PolymerElement {
   }
 
   onCheckboxClick(event) {
-    let newValue = []
-    this.shadowRoot
-      .querySelectorAll('tangy-checkbox')
-      .forEach(el => newValue.push(el.getProps()))
-    this.value = newValue
+    const mutuallyExlusiveOptionNames = [...this.shadowRoot.querySelectorAll('tangy-checkbox')]
+      .reduce((mutuallyExlusiveOptionNames, option) => {
+        return option.hasAttribute('mutually-exclusive')
+          ? [option.name, ...mutuallyExlusiveOptionNames]
+          : mutuallyExlusiveOptionNames
+      }, [])
+    const previouslySelectedMutuallyExclusiveOption = this.value
+      .find((option) => option.value === 'on' && mutuallyExlusiveOptionNames.includes(option.name))
+    const currentlySelectedMutuallyExclusiveOptionNames = [...this.shadowRoot.querySelectorAll('tangy-checkbox')]
+      .reduce((currentlySelectedMutuallyExclusiveOptionNames, option) => {
+        return option.hasAttribute('mutually-exclusive') && option.getAttribute('value') === 'on'
+          ? [option.name, ...currentlySelectedMutuallyExclusiveOptionNames]
+          : currentlySelectedMutuallyExclusiveOptionNames
+      }, [])
+    if (currentlySelectedMutuallyExclusiveOptionNames.length === 0) {
+      this.value = [...this.shadowRoot.querySelectorAll('tangy-checkbox')]
+        .map(el => { return {name: el.getAttribute('name'), value: el.getAttribute('value')} })
+    } else if (currentlySelectedMutuallyExclusiveOptionNames.length === 1 && !previouslySelectedMutuallyExclusiveOption) {
+      const winningMutuallyExclusiveOptionName = currentlySelectedMutuallyExclusiveOptionNames[0]
+      this.value = [...this.shadowRoot.querySelectorAll('tangy-checkbox')]
+        .map(el => { return {name: el.getAttribute('name'), value: el.getAttribute('name') === winningMutuallyExclusiveOptionName ? 'on' : ''} })
+    } else if (currentlySelectedMutuallyExclusiveOptionNames.length === 1 && previouslySelectedMutuallyExclusiveOption) {
+      const winningMutuallyExclusiveOptionName = currentlySelectedMutuallyExclusiveOptionNames[0]
+      this.value = [...this.shadowRoot.querySelectorAll('tangy-checkbox')]
+        .map(el => { return {name: el.getAttribute('name'), value: el.getAttribute('name') === winningMutuallyExclusiveOptionName ? '' : el.getAttribute('value')} })
+    } else if (currentlySelectedMutuallyExclusiveOptionNames.length > 1) {
+      const winningMutuallyExclusiveOptionName = currentlySelectedMutuallyExclusiveOptionNames.find(name => name !== previouslySelectedMutuallyExclusiveOption.name)
+      this.value = [...this.shadowRoot.querySelectorAll('tangy-checkbox')]
+        .map(el => { return {name: el.getAttribute('name'), value: el.getAttribute('name') === winningMutuallyExclusiveOptionName ? 'on' : ''} })
+    }
     this.dispatchEvent(new CustomEvent('change'))
   }
 
