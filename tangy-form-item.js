@@ -431,6 +431,13 @@ export class TangyFormItem extends PolymerElement {
           input.removeAttribute('skipped')
         }
       }
+      if (input.hasAttribute('dont-skip-if')) {
+        if (this.eval(input.getAttribute('dont-skip-if'), 'dont-skip-if', input.getAttribute('name'))) {
+          input.removeAttribute('skipped')
+        } else {
+          input.setAttribute('skipped', '')
+        }
+      }
       if (input.hasAttribute('show-if')) {
         if (this.eval(input.getAttribute('show-if'), 'show-if', input.getAttribute('name'))) {
           inputActionFactories['visible'].truthy(input.name)
