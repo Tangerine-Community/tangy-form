@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.10.1
+- Fix bug in tangy-template causing greater and less than expressions to become HTML encoded thus breaking templates.
+
 ## v4.10.0
 - Add `dont-skip-if` attribute to complement `skip-if` attribute directive.
 

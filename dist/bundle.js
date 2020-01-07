@@ -3826,7 +3826,7 @@ var t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__p
       <style include="tangy-common-styles"></style>
       <style include="tangy-element-styles"></style>
       <div id="container"></div>
-    `}static get is(){return"tangy-template"}static get properties(){return{name:{type:String,value:"",reflectToAttribute:!0},hidden:{type:Boolean,value:!1,observer:"render",reflectToAttribute:!0},value:{type:String,value:"",observer:"render",reflectToAttribute:!0}}}connectedCallback(){super.connectedCallback(),this.template=this.innerHTML}}window.customElements.define(r.is,r)},function(e,t,i){"use strict";i(5),i(23),i(17),i(60),i(56),i(31);var n=i(44),r=i(7);
+    `}static get is(){return"tangy-template"}static get properties(){return{name:{type:String,value:"",reflectToAttribute:!0},hidden:{type:Boolean,value:!1,observer:"render",reflectToAttribute:!0},value:{type:String,value:"",observer:"render",reflectToAttribute:!0}}}connectedCallback(){super.connectedCallback(),this.template=this.textContent}}window.customElements.define(r.is,r)},function(e,t,i){"use strict";i(5),i(23),i(17),i(60),i(56),i(31);var n=i(44),r=i(7);
 /**
 @license
 Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
