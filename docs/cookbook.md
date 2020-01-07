@@ -1,6 +1,50 @@
 # Tangy Form Cookbook
 Examples of different recipes when using Tangy Form.
 
+## Skip a question based on input in another question
+In the following example we ask an additional question about tangerines if the user indicates that they do like tangerines.
+
+[Run example](https://codepen.io/rjsteinert/pen/QWwQwPJ)
+
+Using `skip-if`:
+```html
+<tangy-form id="my-form" title="My Form">
+  <tangy-form-item id="item1">
+    <tangy-checkbox name="input1">
+      Do you like tangerines?
+    </tangy-checkbox>
+    <tangy-input 
+      name="input2"
+      label="Where do tangerines come from?"
+      skip-if="getValue('input1') === ''">
+    </tangy-input>
+  </tangy-form-item>
+</tangy-form>
+```
+Using helper functions:
+```html
+<tangy-form id="my-form" title="My Form">
+  <tangy-form-item id="item1"
+    on-change="
+      if (getValue('input1') === '') {
+        skip('input2')
+      } else {
+        unskip('input2')
+      }
+    "
+  >
+    <tangy-checkbox name="input1">
+      Do you like tangerines?
+    </tangy-checkbox>
+    <tangy-input 
+      name="input2"
+      label="Where do tangerines come from?"
+    >
+    </tangy-input>
+  </tangy-form-item>
+</tangy-form>
+```
+
 ## Skip sections based on input
 In the following example, wether or not you answer yes or no to the question, you will end up on a different item.
 
