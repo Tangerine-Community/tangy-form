@@ -170,3 +170,24 @@ In the following example, we validate user input by number of decimal points.
   </tangy-form-item>
 </tangy-form>
 ```
+
+## Indicate a mutually exclusive option in a checkboxes group such as "None of the above"
+In the following example when you make a selection of a fruit and then choose one of the mutually exclusive options, your prior selections will be deselected.
+
+![Jan-03-2020 13-48-05](https://user-images.githubusercontent.com/156575/71742567-37efed00-2e30-11ea-999c-9afe2e0b9492.gif)
+
+[Run Example](https://codepen.io/rjsteinert/pen/WNbMveY)
+
+```html
+<tangy-form id="my-form" title="My Form">
+  <tangy-form-item id="item1">
+    <tangy-checkboxes name="favorite_fruits" label="What are some of your favorite fruits?">
+      <option value="orange">Orange</option>
+      <option value="banana">Banana</option>
+      <option value="tangerine">Tangerine</option>
+      <option value="favorite_is_not_an_option" mutually-exclusive>None of the above.</option>
+      <option value="na" mutually-exclusive>I don't like fruit.</option>
+    </tangy-checkboxes>
+  </tangy-form-item>
+</tangy-form>
+```
