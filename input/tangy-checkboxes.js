@@ -93,6 +93,12 @@ class TangyCheckboxes extends PolymerElement {
         observer: 'reflect',
         reflectToAttribute: true
       },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       disabled: {
         type: Boolean,
         value: false,
@@ -202,6 +208,13 @@ class TangyCheckboxes extends PolymerElement {
       })
     if (!this.value || (typeof this.value === 'object' && this.value.length < newValue.length)) {
       this.value = newValue
+    }
+  }
+
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+      this.render()
     }
   }
 

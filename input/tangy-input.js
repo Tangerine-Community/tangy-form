@@ -100,6 +100,12 @@ export class TangyInput extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       invalid: {
         type: Boolean,
         value: false,
@@ -302,6 +308,12 @@ export class TangyInput extends PolymerElement {
         this.setAttribute('invalid', '')
         return false
       }
+    }
+  }
+
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
     }
   }
 

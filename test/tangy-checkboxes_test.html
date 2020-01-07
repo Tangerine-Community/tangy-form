@@ -65,6 +65,15 @@
           assert.equal(element.value.find(item => item.name === 'tangerine').value, '')
         })
 
+        test('should set value back to default applying skipped attribute', () => {
+          const element = fixture('TangyCheckboxesFixture');
+          element.shadowRoot.querySelectorAll('tangy-checkbox')[0].value = 'on'
+          element.shadowRoot.querySelectorAll('tangy-checkbox')[0].dispatchEvent(new Event('change',{bubbles:true}))
+          element.setAttribute('skipped', '')
+          assert.equal(element.shadowRoot.querySelectorAll('tangy-checkbox')[0].value, '')
+          assert.equal(element.value[0].value, '')
+        })
+
         test('should have hint text', () => {
           const element = fixture('TangyCheckboxesHintTextFixture');
           assert.equal(element.shadowRoot.querySelector('tangy-checkbox').shadowRoot.innerHTML.includes('Oranges'), true)

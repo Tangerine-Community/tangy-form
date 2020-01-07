@@ -83,6 +83,22 @@ export class TangyFormItemHelpers {
     })
   }
 
+  skip(name) {
+    this.inputs.forEach(inputEl => {
+      if (inputEl.name === name) {
+        inputEl.skipped = true
+      }
+    })
+  }
+
+  unskip(name) {
+    this.inputs.forEach(inputEl => {
+      if (inputEl.name === name) {
+        inputEl.skipped = false
+      }
+    })
+  }
+
   inputEnable(name) {
     this.inputs.forEach(inputEl => {
       if (inputEl.name === name) {

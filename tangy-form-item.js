@@ -424,6 +424,13 @@ export class TangyFormItem extends PolymerElement {
       }
     }
     this.querySelectorAll('[name]').forEach(input => {
+      if (input.hasAttribute('skip-if')) {
+        if (this.eval(input.getAttribute('skip-if'), 'skip-if', input.getAttribute('name'))) {
+          input.setAttribute('skipped', '')
+        } else {
+          input.removeAttribute('skipped')
+        }
+      }
       if (input.hasAttribute('show-if')) {
         if (this.eval(input.getAttribute('show-if'), 'show-if', input.getAttribute('name'))) {
           inputActionFactories['visible'].truthy(input.name)
@@ -481,7 +488,7 @@ export class TangyFormItem extends PolymerElement {
     // Declare namespaces for helper functions for the eval context in form.on-change.
     // We have to do this because bundlers modify the names of things that are imported
     // but do not update the evaled code because it knows not of it.
-    let {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold, goTo, goToEnd} = this.exposeHelperFunctions()
+    let {getValue, inputHide, inputShow, skip, unskip, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold, goTo, goToEnd} = this.exposeHelperFunctions()
     if (this.hasAttribute("incorrect-threshold")) {
       hideInputsUponThreshhold(this)
     }
@@ -500,6 +507,8 @@ export class TangyFormItem extends PolymerElement {
   exposeHelperFunctions() {
     let helpers = new TangyFormItemHelpers(this)
     let getValue = (name) => helpers.getValue(name)
+    let skip = (name) => helpers.skip(name)
+    let unskip = (name) => helpers.unskip(name)
     let inputHide = (name) => helpers.inputHide(name)
     let inputShow = (name) => helpers.inputShow(name)
     let inputEnable = (name) => helpers.inputEnable(name)
@@ -519,7 +528,7 @@ export class TangyFormItem extends PolymerElement {
     let hideInputsUponThreshhold = (input) => helpers.hideInputsUponThreshhold(input)
     let goTo = (itemId, skipValidation = false) => helpers.goTo(itemId, skipValidation)
     let goToEnd = (skipValidation = false) => helpers.goToEnd(skipValidation)
-    return {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold, goTo, goToEnd};
+    return {getValue, inputHide, inputShow, skip, unskip, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold, goTo, goToEnd};
   }
 
   onOpenButtonPress() {
@@ -620,7 +629,7 @@ export class TangyFormItem extends PolymerElement {
     let firstInputWithIssue = ''
     for (let input of inputEls) {
       if (!input.hidden) {
-        let {getValue, inputHide, inputShow, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold} = this.exposeHelperFunctions();
+        let {getValue, inputHide, inputShow, skip, unskip, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold} = this.exposeHelperFunctions();
         if ((input.validate && !input.validate()) || (input.hasAttribute('valid-if') && !eval(input.getAttribute('valid-if')))) {
           input.invalid = true
           if (!firstInputWithIssue) firstInputWithIssue = input.name

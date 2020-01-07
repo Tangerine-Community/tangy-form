@@ -235,6 +235,12 @@ class TangyGps extends PolymerElement {
         value: '',
         reflectToAttribute: true
       },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       discrepancyText: {
         type: String,
         value: '',
@@ -379,6 +385,12 @@ class TangyGps extends PolymerElement {
     } else {
       this.setAttribute('invalid', '')
       return false
+    }
+  }
+
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
     }
   }
 

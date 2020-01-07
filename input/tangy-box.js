@@ -35,13 +35,16 @@ export class TangyBox extends PolymerElement {
       hidden: {
         type: Boolean,
         value: false,
-        observer: 'render',
+        reflectToAttribute: true
+      },
+      skipped: {
+        type: Boolean,
+        value: false,
         reflectToAttribute: true
       },
       value: {
         type: String,
         value: '',
-        observer: 'render',
         reflectToAttribute: true
       }
 

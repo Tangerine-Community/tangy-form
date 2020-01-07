@@ -21,7 +21,7 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         margin: var(--tangy-element-margin, 10px);
       }
 
-      :host(:not([hidden])) {
+      :host(:not([hidden])), :host(:not([skipped])) {
         -webkit-transition: opacity .5s ease-in-out, max-height .5s ease-in-out;
         -moz-transition: opacity .5s ease-in-out, max-height .5s ease-in-out;
         -ms-transition: opacity .5s ease-in-out, max-height .5s ease-in-out;
@@ -30,7 +30,7 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         max-height: 99999999999999999px;
       }
 
-      :host([hidden]) {
+      :host([hidden]), :host([skipped]) {
         -webkit-transition: 
           opacity .5s ease-in-out, 
           max-height .5s ease-in-out,

@@ -246,6 +246,17 @@ class TangyTimed extends PolymerElement {
         observer: 'reflect',
         reflectToAttribute: true
       },
+      hidden: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       autoStop: {
         type: Number,
         value: undefined,
@@ -779,6 +790,11 @@ class TangyTimed extends PolymerElement {
     return !this.invalid 
   }
 
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+    }
+  }
 
 }
 

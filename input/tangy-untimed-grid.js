@@ -156,6 +156,17 @@ class TangyUntimedGrid extends PolymerElement {
         observer: 'reflect',
         reflectToAttribute: true
       },
+      hidden: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      skipped: {
+        type: Boolean,
+        value: false,
+        observer: 'onSkippedChange',
+        reflectToAttribute: true
+      },
       autoStop: {
         type: Number,
         value: undefined,
@@ -478,6 +489,11 @@ class TangyUntimedGrid extends PolymerElement {
     return true
   }
 
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+    }
+  }
 
 }
 
