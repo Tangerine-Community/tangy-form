@@ -49,7 +49,8 @@ export class TangyTemplate extends PolymerElement {
   connectedCallback() {
     super.connectedCallback()
     // <tangy-form-item> will evaluate this template in the scope it lives.
-    this.template = this.textContent
+    // Note we're not using innerHTML because that will result in expressions like greater than becoming HTML encoded. See note on MDN docs https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML
+    this.template = this.innerHTML.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
   }
 
 }
