@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.10.2
+- Fix issue causing markup to be pruned from tangy-template templates.
+- Fix issue causing skipped inputs to be validated, thus blocking going next when they are required and empty in value. 
+
 ## v4.10.1
 - Fix bug in tangy-template causing greater and less than expressions to become HTML encoded thus breaking templates.
 
