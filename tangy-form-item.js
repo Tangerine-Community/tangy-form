@@ -635,7 +635,7 @@ export class TangyFormItem extends PolymerElement {
     let validInputNames = []
     let firstInputWithIssue = ''
     for (let input of inputEls) {
-      if (!input.hidden) {
+      if (!input.hidden && !input.skipped) {
         let {getValue, inputHide, inputShow, skip, unskip, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold} = this.exposeHelperFunctions();
         if ((input.validate && !input.validate()) || (input.hasAttribute('valid-if') && !eval(input.getAttribute('valid-if')))) {
           input.invalid = true

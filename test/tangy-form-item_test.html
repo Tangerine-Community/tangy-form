@@ -138,7 +138,9 @@
             <tangy-input 
               name="input2"
               label="Where do tangerines come from?"
-              skip-if="inputs.input1.value === ''">
+              skip-if="inputs.input1.value === ''"
+              required
+            >
             </tangy-input>
           </tangy-form-item>
         </tangy-form>
@@ -376,6 +378,8 @@
           element.querySelector('tangy-form-item').querySelector('[name=input1]').dispatchEvent(new Event('change', {bubbles:true}))
           assert.equal(element.querySelector('tangy-form-item').querySelector('[name=input2]').hasAttribute('skipped'), true)
           assert.equal(element.querySelector('tangy-form-item').querySelector('[name=input2]').value, '')
+          // Should be able to continue regardless of input2 being required and not having value.
+          assert.equal(element.querySelector('tangy-form-item').validate(), true)
         })
 
         test('should be invalid from valid-if statements', () => {
