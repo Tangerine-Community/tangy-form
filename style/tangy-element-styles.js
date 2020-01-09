@@ -37,7 +37,7 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
           border .5s ease-in-out, 
           margin .5s ease-in-out, 
           padding .5s ease-in-out;
-        opacity: 0;
+        opacity: 0 !important;
         max-height: 0px;
         border: 0px;
         margin: 0px;
