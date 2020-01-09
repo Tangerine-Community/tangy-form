@@ -198,15 +198,15 @@ Let's say you want to show a timer of how long someone has been on a single item
 [Run Example](https://codepen.io/rjsteinert/pen/abzYqvb)
 ```html
 <tangy-form id="my-form" title="My Form">
-  <tangy-form-item id="item1">
-    <tangy-checkbox name="input1">
-      Do you like tangerines?
-    </tangy-checkbox>
-    <tangy-input 
-      name="input2"
-      label="Where do tangerines come from?"
-      skip-if="getValue('input1') === 'on'">
-    </tangy-input>
+  <tangy-form-item id="item1" 
+    on-open="
+      const openTime = Date.now()
+      setInterval(() => {
+        inputs.timer.innerHTML = `${Math.floor((Date.now() - openTime)/1000)}`
+      }, 50)
+    "
+  >
+     <tangy-box name="timer"></tangy-box>
   </tangy-form-item>
 </tangy-form>
 ```
