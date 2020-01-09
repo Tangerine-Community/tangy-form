@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.10.3
+- Fix issue causing inputs skipped and disabled to overlap other content.
+
 ## v4.10.2
 - Fix issue causing markup to be pruned from tangy-template templates.
 - Fix issue causing skipped inputs to be validated, thus blocking going next when they are required and empty in value. 
