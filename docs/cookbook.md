@@ -7,7 +7,7 @@ In the following example we ask an additional question about tangerines if the u
 [Run example](https://codepen.io/rjsteinert/pen/QWwQwPJ)
 
 Using `skip-if`:
-```html
+```
 <tangy-form id="my-form" title="My Form">
   <tangy-form-item id="item1">
     <tangy-checkbox name="input1">
@@ -22,7 +22,7 @@ Using `skip-if`:
 </tangy-form>
 ```
 Using helper functions:
-```html
+```
 <tangy-form id="my-form" title="My Form">
   <tangy-form-item id="item1"
     on-change="
@@ -49,7 +49,7 @@ Using helper functions:
 In the following example, wether or not you answer yes or no to the question, you will end up on a different item.
 
 [Run example](https://codepen.io/rjsteinert/pen/WNbjPjZ)
-```html
+```
 <tangy-form id="my-form" title="My Form"
   on-change="
     if (getValue('likes_tangerine') === 'yes') {
@@ -81,7 +81,7 @@ In the following example, wether or not you answer yes or no to the question, yo
 In the following example, we validate user input by number of decimal points.
 
 [Run Example](https://codepen.io/rjsteinert/pen/bGNWzrr)
-```html
+```
 
 <tangy-form id="my-form" title="My Form">
   <tangy-form-item id="item1">
@@ -96,7 +96,7 @@ In the following example, we validate user input by number of decimal points.
 ## Valid if greater or less than other input
 
 [Run Example](https://codepen.io/rjsteinert/pen/jOEGbGK)
-```html
+```
 <tangy-form id="my-form" title="My Form">
   <tangy-form-item id="item1">
     <tangy-input 
@@ -125,7 +125,7 @@ In the following example, we validate user input by number of decimal points.
 ## Allowed date range based on today
 
 [Run Example](https://codepen.io/rjsteinert/pen/mdyBeLm)
-```html
+```
 <tangy-form id="my-form" title="My Form">
   <tangy-form-item 
     id="item1"
@@ -146,7 +146,7 @@ In the following example, we validate user input by number of decimal points.
 
 ## Flag choice as discrepancy and/or warning and show or hide content depending
 [Run Example](https://codepen.io/rjsteinert/pen/eYmGGbM)
-```html
+```
 <tangy-form id="my-form" title="My Form">
   <tangy-form-item id="item1">
     <tangy-radio-buttons
@@ -178,7 +178,7 @@ In the following example when you make a selection of a fruit and then choose on
 
 [Run Example](https://codepen.io/rjsteinert/pen/WNbMveY)
 
-```html
+```
 <tangy-form id="my-form" title="My Form">
   <tangy-form-item id="item1">
     <tangy-checkboxes name="favorite_fruits" label="What are some of your favorite fruits?">
@@ -196,7 +196,7 @@ In the following example when you make a selection of a fruit and then choose on
 Let's say you want to show a timer of how long someone has been on a single item. This calculates the time since item open and displays number of seconds since then in a tangy-box.
 
 [Run Example](https://codepen.io/rjsteinert/pen/abzYqvb)
-```html
+```
 <tangy-form id="my-form" title="My Form">
   <tangy-form-item id="item1" 
     on-open="
@@ -215,7 +215,7 @@ Let's say you want to show a timer of how long someone has been on a single item
 Sometimes we want to know how much time passed between two points in a form.
 
 [Run Example](https://fluorescent-value.glitch.me/) - [Open Code](https://glitch.com/edit/#!/fluorescent-value) - [Open Editor](https://delightful-vicuna.glitch.me/)
-```html
+```
 <tangy-form id="my-form" title="Capture the time between two items">
 
   <tangy-form-item 
