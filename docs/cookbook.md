@@ -210,3 +210,51 @@ Let's say you want to show a timer of how long someone has been on a single item
   </tangy-form-item>
 </tangy-form>
 ```
+
+## Capture the time between two items
+Sometimes we want to know how much time passed between two points in a form.
+
+[Run Example](https://fluorescent-value.glitch.me/) - [Open Code](https://glitch.com/edit/#!/fluorescent-value) - [Open Editor](https://delightful-vicuna.glitch.me/)
+```html
+<tangy-form id="my-form" title="Capture the time between two items">
+
+  <tangy-form-item 
+    id="item1" 
+    title="Item 1"
+  >
+    <tangy-box>
+      Ready to start? Click next and the timer will begin.
+    </tangy-box>
+  </tangy-form-item>
+
+  <tangy-form-item
+    id="item2"
+    title="Item 2"               
+    on-open="
+      inputs.start_time.value = Date.now()       
+    "     
+  >
+    <tangy-box>
+      Time is being tracked now by storing the current time in a hidden input. Click next to conclude.
+    </tangy-box>
+    <tangy-input name="start_time" hidden></tangy-input>
+  </tangy-form-item>
+
+  <tangy-form-item 
+    id="item3"
+    title="Item 3"
+    on-open="
+      inputs.end_time.value = Date.now()
+      inputs.time_between.value = parseInt(getValue('end_time')) - parseInt(getValue('start_time'))
+    "
+  >
+    <tangy-box>
+      The timer has concluded.
+    </tangy-box>
+    <tangy-input name="end_time" hidden></tangy-input>
+    <tangy-input name="time_between" inner-label="Time between items in milliseconds"></tangy-input>
+  </tangy-form-item>
+
+</tangy-form>
+```
+
