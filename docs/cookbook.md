@@ -191,3 +191,22 @@ In the following example when you make a selection of a fruit and then choose on
   </tangy-form-item>
 </tangy-form>
 ```
+
+## Show a timer in an item
+Let's say you want to show a timer of how long someone has been on a single item. This calculates the time since item open and displays number of seconds since then in a tangy-box.
+
+[Run Example](https://codepen.io/rjsteinert/pen/abzYqvb)
+```html
+<tangy-form id="my-form" title="My Form">
+  <tangy-form-item id="item1">
+    <tangy-checkbox name="input1">
+      Do you like tangerines?
+    </tangy-checkbox>
+    <tangy-input 
+      name="input2"
+      label="Where do tangerines come from?"
+      skip-if="getValue('input1') === 'on'">
+    </tangy-input>
+  </tangy-form-item>
+</tangy-form>
+```
