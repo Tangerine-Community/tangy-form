@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.10.4
+- Fix issue where skipped or hidden items would still take up space. This comes at the sacrifice of losing the animation. Until CSS support animating display none this we'll have to do without the animation.
+
 ## v4.10.3
 - Fix issue causing inputs skipped and disabled to overlap other content.
 
