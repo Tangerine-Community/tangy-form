@@ -242,6 +242,7 @@ const tangyFormReducer = function (state = initialState, action) {
           newState.location = {...newState.location, [locationInfo.level]: locationInfo.value}
         }
       } 
+      newState['endUnixTime']= (new Date()).getTime()
       return newState
 
     case 'ITEM_DISABLE':
