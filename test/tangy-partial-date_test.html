@@ -102,7 +102,7 @@
           assert.equal(element.diff('year', moment('2020-01-01'), '2018--'), 2)
         })
 
-        test('should calculate diff with all selected', (done) => {
+        test('should calculate diff with all selected', () => {
           const element = fixture('TangyPartialDateFixture');
           assert.equal(element.diff('year', moment('2020-01-01'), '2019-01-01'), 1)
           assert.equal(element.diff('year', moment('2020-01-01'), '2018-01-01'), 2)
