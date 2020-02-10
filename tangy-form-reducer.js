@@ -18,12 +18,15 @@ const tangyFormReducer = function (state = initialState, action) {
   switch(action.type) {
 
     case 'FORM_OPEN':
+     
       newState = Object.assign({}, action.response)
       // Ensure that the only items we have in the response are those that are in the DOM but maintain state of the existing items in the response.
-      newState.items = action.itemsInDom.map(itemInDom => {
+      newState.items = action.itemsInDom.map((itemInDom, index) => {
         let result = newState.items.find(item => item.id === itemInDom.id);
+        let firstOpenTime;
+        if(index<1 && !itemInDom.firstOpenTime) firstOpenTime = new Date();
         let merged = { ...itemInDom, ...result }
-        return result ? merged: itemInDom
+        return result ? {...merged, firstOpenTime}: {itemInDom, firstOpenTime}
         }
       )
 
@@ -199,6 +202,8 @@ const tangyFormReducer = function (state = initialState, action) {
             props.open = true
           }
           if (action.type === 'ITEM_NEXT' && newState.nextItemId === item.id) {
+            const index = newState.items.findIndex(x=>x.id===newState.nextItemId)
+            if(!newState.items[index].firstOpenTime) item.firstOpenTime = new Date()
             props.open = true
           }
           if (newState.form.hideClosedItems === true && !props.open) {

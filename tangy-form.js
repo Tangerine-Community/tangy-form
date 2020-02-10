@@ -364,6 +364,11 @@ export class TangyForm extends PolymerElement {
         type: Number,
         value: undefined,
         reflectToAttribute: true
+      },
+      recordItemFirstOpenTimes: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
     }
   }
@@ -563,7 +568,6 @@ export class TangyForm extends PolymerElement {
     if (state.form && state.form.complete) {
       //this.shadowRoot.querySelector('paper-tabs').selected = (state.form.showSummary) ? '0' : '1'
     }
-
     // Set state in tangy-form-item elements.
     let items = [].slice.call(this.querySelectorAll('tangy-form-item'))
     items.forEach((item) => {
