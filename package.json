@@ -35,7 +35,7 @@
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "polymer-cli": "^1.7.2",
     "wct-browser-legacy": "^1.0.0",
-    "webpack": "^4.39.1",
+    "webpack": "^4.41.6",
     "webpack-cli": "^3.3.6"
   },
   "directories": {
