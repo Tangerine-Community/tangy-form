@@ -49,7 +49,7 @@ const tangyFormReducer = function (state = initialState, action) {
     case 'FORM_RESPONSE_COMPLETE':
       return Object.assign({}, state, {
         complete: true,
-        endUnixTime: (new Date()).getTime(),
+        endUnixtime: Date.now(),
         form: Object.assign({}, state.form, {
           complete: true,
           linearMode: false,
@@ -243,7 +243,7 @@ const tangyFormReducer = function (state = initialState, action) {
           newState.location = {...newState.location, [locationInfo.level]: locationInfo.value}
         }
       } 
-      newState['lastSaveUnixTime'] = (new Date()).getTime()
+      newState['lastSaveUnixtime'] = Date.now()
       return newState
 
     case 'ITEM_DISABLE':
