@@ -369,6 +369,16 @@ export class TangyForm extends PolymerElement {
         type: Boolean,
         value: false,
         reflectToAttribute: true
+      }, 
+      endUnixtime: {
+        type: Number,
+        value: undefined,
+        reflectToAttribute: true
+      },
+      lastSaveUnixtime: {
+        type: Number,
+        value: undefined,
+        reflectToAttribute: true
       }
     }
   }
