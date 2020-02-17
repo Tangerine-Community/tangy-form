@@ -24,7 +24,7 @@ const tangyFormReducer = function (state = initialState, action) {
       newState.items = action.itemsInDom.map((itemInDom, index) => {
         let result = newState.items.find(item => item.id === itemInDom.id);
         let merged = { ...itemInDom, ...result }
-        return result ? {...merged}: {itemInDom}
+        return result ? {...merged}: {...itemInDom}
         }
       )
       newState.items[0]['firstOpenTime']= newState.items[0]['firstOpenTime'] ? newState.items[0]['firstOpenTime'] : Date.now()
