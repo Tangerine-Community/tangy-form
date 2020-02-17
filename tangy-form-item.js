@@ -378,6 +378,11 @@ export class TangyFormItem extends PolymerElement {
         type: Number,
         value: undefined,
         reflectToAttribute: true
+      },
+      firstOpenTime: {
+        type: Number,
+        value: undefined,
+        reflectToAttribute: false
       }
     };
   }
@@ -564,7 +569,6 @@ export class TangyFormItem extends PolymerElement {
     if (open === true && this.innerHTML === '') {
       this.openWithContent(this.template)
     }
-    
   }
 
   openWithContent(contentHTML) {
