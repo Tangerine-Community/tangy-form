@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v4.11.0
+- New
+  - Record item first Open times. [#118](https://github.com/Tangerine-Community/tangy-form/pull/118/)
+  - Add TangyPartialDate.diff function to help with calculating relative times from partial dates. [#116](https://github.com/Tangerine-Community/tangy-form/pull/116)
+- Fixes
+  - Fix endUnixTime not showing up in csv. [#115](https://github.com/Tangerine-Community/tangy-form/pull/115)
+  - If time runs out on grids, the last attempted item must not be marked automatically. [#114](https://github.com/Tangerine-Community/tangy-form/pull/114)
+
 ## v4.10.4
 - Fix issue where skipped or hidden items would still take up space. This comes at the sacrifice of losing the animation. Until CSS support animating display none this we'll have to do without the animation.
 
