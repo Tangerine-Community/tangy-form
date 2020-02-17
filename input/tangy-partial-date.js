@@ -4,6 +4,7 @@ import '../style/tangy-element-styles.js';
 import '../style/tangy-common-styles.js'
 import '../style/mdc-select-style.js'
 import { t } from '../util/t.js'
+import moment from 'moment'
 /**
  * `tangy-partial-date`
  *
@@ -467,6 +468,39 @@ class TangyPartialDate extends PolymerElement {
       this.value = this.constructor.properties.value.value
       this.render()
     }
+  }
+
+  _tranformValueToMoment(value) {
+    const [year, month, day] = value.split('-')
+    let date = null
+    if (year === '9999' || year === '') {
+      // Need at least a year to calculate.
+      return null 
+    } else if (month === '99' || month === '') {
+      // We don't have a month, just have a year to go off of.
+      date = moment(year, 'YYYY')
+    } else if (day === '99' || day === '') {
+      // We don't have a day, go off of year and month.
+      date = moment(`${year}-${month}`, 'YYYY-MM')
+    } else {
+      date = moment(`${year}-${month}-${day}`, 'YYYY-MM-DD')
+    }
+    return date
+  }
+
+  getValueAsMoment() {
+    this._tranformValueToMoment(this.value)
+  }
+
+  diff(units = 'days', endString = '', startString = '', asFloat = true) {
+    const end = moment(endString)
+    const start = startString 
+      ? this._tranformValueToMoment(startString)
+      : this.getValueAsMoment()
+    if (!start || !end) {
+      return null
+    }
+    return end.diff(start, units, asFloat)
   }
 
 }
