@@ -625,7 +625,6 @@ class TangyTimed extends PolymerElement {
     clearInterval(this.timer2)
     this.isItemCaptured = false
     this.style.background = 'red'
-    this.value = this.value.map((element, i) => Object.assign({}, element, { highlighted: (this.value.length - 1 === i) ? true : false }))
     setTimeout(() => this.style.background = 'white', 200)
     setTimeout(() => this.style.background = 'red', 400)
     setTimeout(() => this.style.background = 'white', 600)
