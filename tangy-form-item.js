@@ -626,7 +626,7 @@ export class TangyFormItem extends PolymerElement {
     let inputEls = [
       ...[...this.children].filter(el => el.hasAttribute("name")),
       ...[...this.children]
-        .filter(element => element.tagName === "TANGY-INPUT-GROUPS")
+        .filter(element => element.tagName === "TANGY-INPUT-GROUPS" && !element.hasAttribute('skipped'))
         .reduce((inputGroupCollection, element) => [...inputGroupCollection, ...element.children], [])
         .reduce((inputEls, group) => [...inputEls, ...group.querySelectorAll('[name]')], [])
     ]
