@@ -52,6 +52,7 @@
     <script type="module" src="../input/tangy-photo-capture.js"></script>
     <script type="module" src="../input/tangy-qr.js"></script>
     <script type="module" src="../input/tangy-consent.js"></script>
+    <script type="module" src="../input/tangy-partial-date.js"></script>
 
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
@@ -610,6 +611,17 @@
               <tangy-acasi required images="../demo/assets/images/never.png,../demo/assets/images/once.png,../demo/assets/images/few.png,../demo/assets/images/many.png,../demo/assets/images/dont_know.png" incomplete="" introsrc="../demo/assets/sounds/1.mp3" label="" name="pq2" on-change="" touchsrc="../demo/assets/sounds/never_Eng.mp3,../demo/assets/sounds/once_Eng.mp3,../demo/assets/sounds/fewtimes_Eng.mp3,../demo/assets/sounds/manytimes_Eng.mp3,../demo/assets/sounds/noresponse_Eng.mp3" transitionsrc="../demo/assets/sounds/swish.mp3"></tangy-acasi>
             </tangy-form-item>
           </tangy-form>
+      </demo-snippet>
+
+      <h3>Tangy partial date</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="tangy-partial-date-form" title="My Form">
+            <tangy-form-item id="tangy-partial-date-item" title="Tangy partial date">
+              <tangy-partial-date valid-if="true" name="input1" label="Test" min-year="2019" max-year="2021" allow-unknown-year show-today-button></tangy-partial-date>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
       </demo-snippet>
 
     </div>

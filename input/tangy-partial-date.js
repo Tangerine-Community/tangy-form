@@ -284,6 +284,11 @@ class TangyPartialDate extends PolymerElement {
               `)}
             </select>
         </div>  
+        
+        <paper-button style="align-self:flex-end;" id="resetButton">
+            <iron-icon icon="refresh"></iron-icon>&nbsp;
+          </paper-button>
+          
         ${(this.showTodayButton ? ` 
           <paper-button style="align-self:flex-end;" id="today" on-click="setToday" ${this.disabled ? 'disabled' : ''}>
             <iron-icon icon="query-builder"></iron-icon>&nbsp;
@@ -307,9 +312,13 @@ class TangyPartialDate extends PolymerElement {
     if (this.showTodayButton) {
       this._onClickListener = this
         .shadowRoot
-        .querySelector('paper-button')
+        .querySelector('#today')
         .addEventListener('click', this.onTodayClick.bind(this))
     }
+    this._onClickListener = this
+      .shadowRoot
+      .querySelector('#resetButton')
+      .addEventListener('click', this.onResetClick.bind(this));
     this._onChangeListener = this
       .shadowRoot
       .querySelector('select[name="day"]')
@@ -356,7 +365,9 @@ class TangyPartialDate extends PolymerElement {
       this.internalErrorText = this.missingDateErrorText;
       this.invalid = true;
       return false;
-    }    
+    }
+    if (!this.required && this.value === '')
+      return true
     if (!this.isValidDate(this.value)) {
       this.internalErrorText = this.invalidDateErrorText;
       this.invalid = true;
@@ -501,6 +512,14 @@ class TangyPartialDate extends PolymerElement {
       return null
     }
     return end.diff(start, units, asFloat)
+  }
+
+  onResetClick() {
+    this.reset()
+  }
+
+  reset() {
+    this.value = ''
   }
 
 }
