@@ -286,6 +286,8 @@
       </demo-snippet>
 
       <h3>Tangy Input Groups Demo</h3>
+      <h4>Demo 1</h4>
+      <p>Please note that the tangy-input-groups input is currently supported for a use-cases limited to the ones in this demo. The API for this type of functionality could completely change or the input could be eliminated.</p>
       <demo-snippet>
         <template>
           <tangy-form id="tangy-cards-demo" title="My Form">
@@ -298,6 +300,27 @@
             </tangy-form-item>
             <tangy-form-item id="item2" title="Thanks">
               Thanks.
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+
+      <h3>Tangy Hidden Input Groups Demo</h3>
+      <h4>Demo 2</h4>
+      <demo-snippet>
+        <template>
+          <tangy-form id="my-form" title="">
+            <tangy-form-item id="item1" title="Item 1">
+            <tangy-box name="info">
+              The checkbox shows/hides the tangy-input-groups. Note how if the checkbox is not checked and you click next, you can proceed because the tangy-input-group is skipped. Then click the checkbox to show the input group, click next, and you'll see the required fields in the input group are causing validation to fail. Validation ignores inputs in skipped (i.e. hidden) input groups.
+            </tangy-box>
+            <tangy-checkbox name="enter_info">Are there folks who want us to capture their names?</tangy-checkbox>
+            <tangy-input-groups initial-count="3" name="person" skip-if="!getValue('enter_info')">
+              <tangy-input name="first_name" label="First name" valid-if="input.value === 'something'"></tangy-input>
+              <tangy-input name="last_name" label="Last name" required></tangy-input>
+            </tangy-input-groups>
+            </tangy-form-item>
+            <tangy-form-item id="item2" title="Item 2">
             </tangy-form-item>
           </tangy-form>
         </template>
@@ -385,7 +408,7 @@
           </tangy-form>
         </template>
       </demo-snippet>
-      
+
       <h3>Hiding navigation labels and icons</h3>
       <demo-snippet>
         <template>
