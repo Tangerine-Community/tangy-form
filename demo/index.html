@@ -327,6 +327,48 @@
         </template>
       </demo-snippet>
 
+      <h3>Tangy Hidden Nested Input Groups Demo 3</h3>
+      <h4>Demo 3</h4>
+      <demo-snippet>
+        <template>
+          <tangy-form id="my-form3" title="">
+            <tangy-form-item
+                    id="section_month_year" title="Day entries" on-open="" on-change="" category="">
+              <template>
+                <tangy-partial-date name="year_month" class="" style="" required="" question-number="" label="Year/Month"
+                        error-text="" hint-text="" future-date-error-text="No future dates are allowed" missing-date-error-text=""
+                        invalid-date-error-text="" min-year="2019" max-year="2021" show-today-button>
+                </tangy-partial-date>
+
+                <tangy-box name="summary" class="" style=""></tangy-box>
+
+                <tangy-box name="" class="" style=""
+                >
+                  <tangy-input-groups
+                        name="timesheet" label="" incomplete="" max-count="10" initial-count="1"
+                >
+                  <tangy-input name="hours" class="" style="" required="" question-number="" label="Hours" error-text="" hint-text="" type="number" inner-label="" allowed-pattern="" min="-12" max="12" incomplete=""></tangy-input>
+                  </tangy-input-groups
+                ></tangy-box>
+
+                <tangy-input type="text" allowed-pattern="" inner-label="" name="comments" class="" style="" question-number=""
+                        label="Comments" error-text="" hint-text="Type in any comments that you may have. Type in CORRECTION if this timesheet is a correction of a previous one"
+                ></tangy-input>
+
+                <tangy-box name="" class="" style="" hidden="">
+                  <tangy-input name="total" class="" style="" question-number="" label="Total" error-text="" hint-text=""
+                          type="text" inner-label="" allowed-pattern="" incomplete="" min="" max=""
+                  ></tangy-input>
+                </tangy-box>
+
+                <tangy-signature name="sign" class="" style="" required="">
+                </tangy-signature>
+              </template>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+
       <h3>Tangy Template Demo</h3>
       <demo-snippet>
         <template>

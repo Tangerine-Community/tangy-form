@@ -623,13 +623,21 @@ export class TangyFormItem extends PolymerElement {
 
   validate() {
     // Look only 1 level deep for the inputEls because we don't want to validate elements inside a tangy-editor widget.
+    // We must do special searches inside TANGY-INPUT-GROUPS and TANGY-BOX elements to find their children.
+
     // An exception is inputs nested in tangy-input-groups.
+    const findGroupInputs = function(inputs) {
+      let children = [...inputs].filter(element => element.tagName === "TANGY-INPUT-GROUPS" && !element.hasAttribute('skipped'))
+          .reduce((inputGroupCollection, element) => [...inputGroupCollection, ...element.children], [])
+          .reduce((inputEls, group) => [...inputEls, ...group.querySelectorAll('[name]')], []);
+      return children
+    }
+
     let inputEls = [
-      ...[...this.children].filter(el => el.hasAttribute("name")),
-      ...[...this.children]
-        .filter(element => element.tagName === "TANGY-INPUT-GROUPS" && !element.hasAttribute('skipped'))
-        .reduce((inputGroupCollection, element) => [...inputGroupCollection, ...element.children], [])
-        .reduce((inputEls, group) => [...inputEls, ...group.querySelectorAll('[name]')], [])
+      ...[...this.children].filter(el => el.hasAttribute("name")), ...findGroupInputs(this.children),
+      ...findGroupInputs([...this.children]
+        .filter(element => element.tagName === "TANGY-BOX")
+        .reduce((inputGroupCollection, element) => [...inputGroupCollection, ...element.children], []))
     ]
     const inputs = inputEls.reduce((inputsKeyedByName, input) => {
       return { [input.name]: input, ...inputsKeyedByName }
