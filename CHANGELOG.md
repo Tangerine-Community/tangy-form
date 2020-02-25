@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.11.2
+- Fixes
+  - Fixed Required inputs in a hidden tangy-input-group should not prevent going next [#1879](https://github.com/Tangerine-Community/Tangerine/issues/1879)
+
 ## v4.11.1
 - Fixes
   - Fixed Form Response should not save on every keystroke, causes performance issues [#1918](https://github.com/Tangerine-Community/Tangerine/issues/1918)
