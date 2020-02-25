@@ -622,26 +622,14 @@ export class TangyFormItem extends PolymerElement {
   }
 
   validate() {
-    // Look only 1 level deep for the inputEls because we don't want to validate elements inside a tangy-editor widget.
-    // We must do special searches inside TANGY-INPUT-GROUPS and TANGY-BOX elements to find their children.
-
-    // An exception is inputs nested in tangy-input-groups.
-    const findGroupInputs = function(inputs) {
-      let children = [...inputs].filter(element => element.tagName === "TANGY-INPUT-GROUPS" && !element.hasAttribute('skipped'))
-          .reduce((inputGroupCollection, element) => [...inputGroupCollection, ...element.children], [])
-          .reduce((inputEls, group) => [...inputEls, ...group.querySelectorAll('[name]')], []);
-      return children
-    }
-
-    let inputEls = [
-      ...[...this.children].filter(el => el.hasAttribute("name")), ...findGroupInputs(this.children),
-      ...findGroupInputs([...this.children]
-        .filter(element => element.tagName === "TANGY-BOX")
-        .reduce((inputGroupCollection, element) => [...inputGroupCollection, ...element.children], []))
-    ]
+    // Check if tangy-input-groups and tangy-input-group have 'skipped' attribute
+    let inputEls = [...this.querySelectorAll('[name]')]
+      .filter(element => !element.parentElement.hasAttribute('skipped'))
+        .filter(element => !element.parentElement.parentElement.hasAttribute('skipped'))
     const inputs = inputEls.reduce((inputsKeyedByName, input) => {
       return { [input.name]: input, ...inputsKeyedByName }
     }, {})
+
     let hasWarnings = []
     let hasDiscrepancies = []
     let invalidInputNames = []
