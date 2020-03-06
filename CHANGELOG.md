@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.11.3
+- Fixes
+  - Removed logging of missing translation strings - this logging created too much clutter in the logs. 
+  
 ## v4.11.2
 - Fixes
   - Fixed Required inputs in a hidden tangy-input-group should not prevent going next [#1879](https://github.com/Tangerine-Community/Tangerine/issues/1879)
