@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.11.4
+- Fixes
+  - Removed render observer from tangy-radio-buttons - should speed up loading. 
+  
 ## v4.11.3
 - Fixes
   - Removed logging of missing translation strings - this logging created too much clutter in the logs. 
