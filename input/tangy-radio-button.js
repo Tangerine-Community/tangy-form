@@ -82,7 +82,7 @@ export class TangyRadioButton extends PolymerElement {
     }
   }
 
-  connectedCallback () {
+  connectedCallback() {
     super.connectedCallback()
     this.render()
   }

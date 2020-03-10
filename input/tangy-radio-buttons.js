@@ -157,7 +157,6 @@ class TangyRadioButtons extends PolymerElement {
       columns: {
         type: Number,
         value: 0,
-        observer: 'render',
         reflectToAttribute: true
       },
       noMargin: {
@@ -185,8 +184,8 @@ class TangyRadioButtons extends PolymerElement {
     }
   }
 
-  connectedCallback() {
-    super.connectedCallback()
+  ready() {
+    super.ready()
     this.render()
     this.reflect()
     this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text')
