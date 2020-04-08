@@ -1,6 +1,3 @@
-
-import 'underscore/underscore.js'
-
 export class Loc {
   /*
    * @returns FlatLocationList {locations: [ LocationNodeWithParentRef, ... ], locationsLevels: [ ... ]}
@@ -165,7 +162,7 @@ export class Loc {
     levelMap = [];
     for (i = j = 0, len = locationLevels.length; j < len; i = ++j) {
       level = locationLevels[i];
-      if (_.indexOf(levels, level) === -1) {
+      if (levels.indexOf(level) === -1) {
         levelMap[i] = null;
       } else {
         levelMap[i] = level;
@@ -179,7 +176,7 @@ export class Loc {
   static _query (depth, targetDepth, data, levelMap, criteria) {
     var allChildren, i, j, len, levelData, v;
     if (depth === targetDepth) {
-      return _.map(data, function(obj) {
+      return Object.keys(data).map(key => data[key]).map(function(obj) {
         return {
           id: obj.id,
           label: obj.label
@@ -193,12 +190,12 @@ export class Loc {
     }
     if ((levelMap[depth] == null) && (depth < targetDepth)) {
       levelData = {};
-      allChildren = _.map(data, function(loc) {
+      allChildren = Object.keys(data).map(key => data[key]).map(function(loc) {
         return loc.children;
       });
       for (i = j = 0, len = allChildren.length; j < len; i = ++j) {
         v = allChildren[i];
-        _.extend(levelData, v);
+        Object.assign(levelData, v);
       }
       return Loc._query(depth + 1, targetDepth, levelData, levelMap, criteria);
     }
@@ -212,10 +209,10 @@ export class Loc {
     for (i = j = 0, len = levels.length; j < len; i = ++j) {
       level = levels[i];
       if (criteria[level] == null) {
-        return _.indexOf(levelMap, level);
+        return levelMap.indexOf(level);
       }
     }
-    return _.indexOf(levelMap, _.last(levels));
+    return levelMap.indexOf(levels[levels.length-1]);
   }
 
 }
