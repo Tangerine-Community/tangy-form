@@ -165,7 +165,7 @@ export class Loc {
     levelMap = [];
     for (i = j = 0, len = locationLevels.length; j < len; i = ++j) {
       level = locationLevels[i];
-      if (_.indexOf(levels, level) === -1) {
+      if (levels.indexOf(level) === -1) {
         levelMap[i] = null;
       } else {
         levelMap[i] = level;
@@ -212,10 +212,10 @@ export class Loc {
     for (i = j = 0, len = levels.length; j < len; i = ++j) {
       level = levels[i];
       if (criteria[level] == null) {
-        return _.indexOf(levelMap, level);
+        return levelMap.indexOf(level);
       }
     }
-    return _.indexOf(levelMap, _.last(levels));
+    return levelMap.indexOf(_.last(levels));
   }
 
 }
