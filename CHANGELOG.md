@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.11.5
+- Fixes
+  - Fix `Uncaught TypeError: Cannot read property '_' of undefined` error experienced in some build environments by removing the Underscore dependency.
+
 ## v4.11.4
 - Fixes
   - Removed render observer from tangy-radio-buttons - should speed up loading. 
