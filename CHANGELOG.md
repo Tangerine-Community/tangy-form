@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.12.0
+- Add support for sorting items in a `<tangy-list>` https://github.com/Tangerine-Community/tangy-form/pull/131
+
 ## v4.11.5
 - Fixes
   - Fix `Uncaught TypeError: Cannot read property '_' of undefined` error experienced in some build environments by removing the Underscore dependency.
