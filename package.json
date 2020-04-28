@@ -1,7 +1,7 @@
 {
   "name": "tangy-form",
   "description": "A form element for lazy loaded multipage forms",
-  "version": "4.12.0",
+  "version": "4.12.1",
   "main": "tangy-form.js",
   "scripts": {
     "start": "polymer serve",
@@ -28,7 +28,7 @@
     "redux": "^4.0.0",
     "signature_pad": "^3.0.0-beta.3",
     "translation-web-component": "^0.1.1",
-    "@polymer/sortable-list": "git://github.com/DrNiels/sortable-list.git#polymer-3",
+    "@polymer/sortable-list": "git://github.com/DrNiels/sortable-list.git",
     "zxing-js-es6": "^0.15.3"
   },
   "devDependencies": {

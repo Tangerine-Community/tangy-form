@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.12.1
+- Changed package for sortable-list - a dependency for `<tangy-list>` - to newer version. 
+
 ## v4.12.0
 - Add support for sorting items in a `<tangy-list>` https://github.com/Tangerine-Community/tangy-form/pull/131
 
