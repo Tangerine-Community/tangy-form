@@ -21,7 +21,7 @@
     "@polymer/paper-progress": "^3.0.0-pre.18",
     "@polymer/paper-radio-group": "^3.0.0-pre.18",
     "@polymer/paper-tabs": "^3.0.0-pre.18",
-    "@polymer/polymer": "^3.0.0",
+    "@polymer/polymer": "^3.4.1",
     "@zxing/library": "^0.15.1",
     "devtools-detect": "^3.0.0",
     "moment": "^2.24.0",
