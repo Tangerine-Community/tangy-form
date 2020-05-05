@@ -1,5 +1,5 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import '@polymer/sortable-list/sortable-list.js'
+import 'dr-niels-sortable-list/sortable-list.js'
 import './util/html-element-props.js'
 import '@polymer/paper-checkbox/paper-checkbox.js'
 import '@polymer/paper-button/paper-button.js'
