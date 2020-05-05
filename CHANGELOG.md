@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.12.2
+- Fixes for importing sortable-list to make it compatible in more bundling environments.
+
 ## v4.12.1
 - Changed package for sortable-list - a dependency for `<tangy-list>` - to newer version. 
 
