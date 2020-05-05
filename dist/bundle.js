@@ -6365,6 +6365,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     `}static get is(){return"tangy-list-item"}static get _props(){return["name","value","label","disabled","invalid","incomplete","hidden","correct"]}static get properties(){return{name:{type:String,value:"",reflectToAttribute:!0},label:{type:String,value:"",reflectToAttribute:!0},disabled:{type:Boolean,value:!1,reflectToAttribute:!0},invalid:{type:Boolean,value:!1,reflectToAttribute:!0},incomplete:{type:Boolean,value:!0,reflectToAttribute:!0},hidden:{type:Boolean,value:!1,reflectToAttribute:!0},correct:{type:Boolean,value:!1,reflectToAttribute:!0}}}connectedCallback(){super.connectedCallback()}get value(){return this.shadowRoot&&this.querySelectorAll("[name]").length>0&&(this._value=[...this.querySelectorAll("[name]")].map(e=>e.getProps())),this._value?this._value:[]}set value(e){this._value=e,this._value.forEach(e=>this.querySelector(`[name=${e.name}]`).setProps(e))}validate(){return[...this.querySelectorAll("[name]")].reduce((e,t)=>!!t.validate()&&e,!0)}onRemoveClick(){this.remove()}}window.customElements.define(d.is,d);class c extends i.a{static get is(){return"tangy-list"}static get _props(){return["name","value","label","disabled","invalid","incomplete","hidden"]}static get properties(){return{name:{type:String,value:"",reflectToAttribute:!0},maxCount:{type:Number,value:999,reflectToAttribute:!0},initialCount:{type:Number,value:1,reflectToAttribute:!0},label:{type:String,value:"",reflectToAttribute:!0},disabled:{type:Boolean,value:!1,reflectToAttribute:!0},invalid:{type:Boolean,value:!1,reflectToAttribute:!0},incomplete:{type:Boolean,value:!0,reflectToAttribute:!0},hidden:{type:Boolean,value:!1,reflectToAttribute:!0}}}static get template(){return i.b`
       <style include="tangy-common-styles"></style>
       <style include="tangy-element-styles"></style>
+      <style>
+        tangy-list-item {
+          width: 100%
+        }
+      </style>
       <sortable-list id="items" style="width:100%">
       </sortable-list>
       <paper-button on-click="onClickNewItem" style="margin-left: 15px; background: var(--accent-color); color: var(--accent-text-color);" raised class="add-another"><iron-icon icon="add-circle"></iron-icon>ADD ANOTHER</paper-button>

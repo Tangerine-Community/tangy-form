@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.12.3
+- Ensure that items in a tangy-list stack in rows not rows and columns.
+
 ## v4.12.2
 - Fixes for importing sortable-list to make it compatible in more bundling environments.
 
