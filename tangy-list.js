@@ -75,6 +75,11 @@ export class TangyList extends PolymerElement {
     return html`
       <style include="tangy-common-styles"></style>
       <style include="tangy-element-styles"></style>
+      <style>
+        tangy-list-item {
+          width: 100%
+        }
+      </style>
       <sortable-list id="items" style="width:100%">
       </sortable-list>
       <paper-button on-click="onClickNewItem" style="margin-left: 15px; background: var(--accent-color); color: var(--accent-text-color);" raised class="add-another"><iron-icon icon="add-circle"></iron-icon>ADD ANOTHER</paper-button>
