@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v4.13.0
+- Add wct-browser-legacy back as it's no longer breaking npm install.
+- Add TangyForm.unlock() API for unlocking a completed form response.
+- Add improvements to TangyForm.getMeta() to ensure it delivers original state.
+
 ## v4.12.3
 - Ensure that items in a tangy-list stack in rows not rows and columns.
 
