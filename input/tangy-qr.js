@@ -260,6 +260,9 @@ class TangyQr extends PolymerElement {
           if (component.value !== result.text) {
             component.value = result.text 
             component.stopScanning()
+            let tracks = video.srcObject.getTracks();
+            tracks.forEach(track => track.stop());
+            video.srcObject = null;
             component.dispatchEvent(new Event('change'))
           }
         } catch (e) {
