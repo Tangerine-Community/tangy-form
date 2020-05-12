@@ -194,6 +194,7 @@ class TangyQr extends PolymerElement {
     this.shadowRoot.querySelector('#qnum-number').innerHTML = this.hasAttribute('question-number') 
       ? `<label>${this.getAttribute('question-number')}</label>`
       : ''
+    this.video = null;
   }
 
   onInvalidChange(value) {
@@ -206,6 +207,9 @@ class TangyQr extends PolymerElement {
     this.statusMessage = ""
     this.notScanning = true
     this.isScanning = false
+    let tracks = this.video.srcObject.getTracks();
+    tracks.forEach(track => track.stop());
+    this.video.srcObject = null;
     this.dispatchEvent(new CustomEvent('cancel'))
   }
 
@@ -218,6 +222,7 @@ class TangyQr extends PolymerElement {
       <canvas id="canvas"></canvas>
     `
     var video = document.createElement("video");
+    this.video = video;
     var canvasElement = this.shadowRoot.querySelector("canvas");
     var canvas = canvasElement.getContext("2d");
 
@@ -260,9 +265,6 @@ class TangyQr extends PolymerElement {
           if (component.value !== result.text) {
             component.value = result.text 
             component.stopScanning()
-            let tracks = video.srcObject.getTracks();
-            tracks.forEach(track => track.stop());
-            video.srcObject = null;
             component.dispatchEvent(new Event('change'))
           }
         } catch (e) {
