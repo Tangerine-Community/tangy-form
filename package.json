@@ -24,11 +24,12 @@
     "@polymer/polymer": "^3.0.0",
     "@zxing/library": "^0.15.1",
     "devtools-detect": "^3.0.0",
+    "dr-niels-sortable-list": "git://github.com/DrNiels/sortable-list.git#master",
     "moment": "^2.24.0",
     "redux": "^4.0.0",
     "signature_pad": "^3.0.0-beta.3",
     "translation-web-component": "^0.1.1",
-    "dr-niels-sortable-list": "git://github.com/DrNiels/sortable-list.git#master",
+    "wct-browser-legacy": "^1.0.2",
     "zxing-js-es6": "^0.15.3"
   },
   "devDependencies": {
