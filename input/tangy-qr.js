@@ -197,6 +197,11 @@ class TangyQr extends PolymerElement {
     this.video = null;
   }
 
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.stopScanning()
+  }
+
   onInvalidChange(value) {
     this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
       ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
@@ -207,9 +212,11 @@ class TangyQr extends PolymerElement {
     this.statusMessage = ""
     this.notScanning = true
     this.isScanning = false
-    let tracks = this.video.srcObject.getTracks();
-    tracks.forEach(track => track.stop());
-    this.video.srcObject = null;
+    if (this.video) {
+      let tracks = this.video.srcObject.getTracks();
+      tracks.forEach(track => track.stop());
+      this.video.srcObject = null;
+    }
     this.dispatchEvent(new CustomEvent('cancel'))
   }
 
