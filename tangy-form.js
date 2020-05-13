@@ -406,7 +406,8 @@ export class TangyForm extends PolymerElement {
       items: [...this.querySelectorAll('tangy-form-item')].map(itemEl => {
         return {
           ...itemEl.getProps(),
-          inputs: itemEl.getInputsMeta()
+          // Skip because tangy-form-item may not be initialized.
+          // inputs: itemEl.getInputsMeta()
         }
       })
     }
