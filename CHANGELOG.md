@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v4.14.0
+- Default for TangyFormResponseModel is type:'response'
+- Worked on tangy-qr to stop the plugin when cancelled or disconnected.
+- Updated @zxing/library" to "^0.17.0
+
 ## v4.13.1
 - Make initial collecting of meta data of a tangy-form more safe to avoid race conditions of uninitialized tangy-form-item elements. 
 
