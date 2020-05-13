@@ -15,5 +15,6 @@ export class TangyFormResponseModel {
   location:any
   inputs:Array<any>
   inputsByName:any
+  type:string = 'response'
   constructor(data?:any)
 }
