@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.13.1
+- Make initial collecting of meta data of a tangy-form more safe to avoid race conditions of uninitialized tangy-form-item elements. 
+
 ## v4.13.0
 - Add wct-browser-legacy back as it's no longer breaking npm install.
 - Add TangyForm.unlock() API for unlocking a completed form response.
