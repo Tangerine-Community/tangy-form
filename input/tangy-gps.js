@@ -83,7 +83,7 @@ class TangyGps extends PolymerElement {
           font-weight: bold;
       }
       .coordinates {
-        margin: 5px 15px;
+        margin: 0;
       }
       #hint-text{
         margin-top:6px;
@@ -95,7 +95,8 @@ class TangyGps extends PolymerElement {
     </style>
     <div class="flex-container m-y-25">
       <div id="qnum-number"></div>
-      <div id="qnum-content">
+      <div id="qnum-content">   
+        <label id="label"></label>
         <div class="coordinates">
           <div id="lat-long">
             <span class="label">[[t.latitude]]:</span> [[currentLatitude]] <br>
@@ -149,6 +150,11 @@ class TangyGps extends PolymerElement {
         },
         observer: 'reflect',
         reflectToAttribute: true
+      },
+      label: {
+        type: String,
+        observer: 'reflect',
+        value: ''
       },
       hintText: {
         type: String,
@@ -259,6 +265,7 @@ class TangyGps extends PolymerElement {
     this.shadowRoot.querySelector('#qnum-number').innerHTML = this.hasAttribute('question-number') 
       ? `<label>${this.getAttribute('question-number')}</label>`
       : ''
+    this.shadowRoot.querySelector('#label').innerHTML = this.label
   }
 
   disconnectedCallback() {
