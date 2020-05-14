@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.14.1
+- Fixed `error TS1039: Initializers are not allowed in ambient contexts.` with .d.ts typescript file for TangyFormResponseModel
+
 ## v4.14.0
 - Default for TangyFormResponseModel is type:'response'
 - Worked on tangy-qr to stop the plugin when cancelled or disconnected.
