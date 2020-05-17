@@ -41,13 +41,14 @@ export class TangyForm extends PolymerElement {
 
    getMeta() {
      return {
-        form: this.getProps(),
-        items: [...this.querySelectorAll('tangy-form-item')].map(itemEl => {
-          return {
-            ...itemEl.getProps(),
-            inputs: itemEl.getInputsMeta()
-          }
-        })
+       ...this._meta,
+       items: this._meta.items.map(metaItem => {
+         const item = this.querySelector(`tangy-form-item#${metaItem.id}`)
+         return {
+           ...metaItem,
+           inputs: item.getInputsMeta()
+         }
+       })
       }
     }
 
@@ -399,6 +400,17 @@ export class TangyForm extends PolymerElement {
 
   ready() {
     super.ready()
+    // Stash original meta state.
+    this._meta = {
+      form: this.getProps(),
+      items: [...this.querySelectorAll('tangy-form-item')].map(itemEl => {
+        return {
+          ...itemEl.getProps(),
+          // Skip because tangy-form-item may not be initialized.
+          // inputs: itemEl.getInputsMeta()
+        }
+      })
+    }
     // Pass events of items to the reducer.
     this.hasLazyItems = false
     this.querySelectorAll('tangy-form-item').forEach((item) => {
@@ -710,6 +722,14 @@ export class TangyForm extends PolymerElement {
         this.msRequestFullscreen();
       }
 
+  }
+
+  unlock() {
+    const meta = this.getMeta()
+    this.store.dispatch({
+      type: 'UNLOCK',
+      meta
+    })
   }
 
 }

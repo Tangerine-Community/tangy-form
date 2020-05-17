@@ -1,5 +1,33 @@
 # CHANGELOG
 
+## v4.14.1
+- Fixed `error TS1039: Initializers are not allowed in ambient contexts.` with .d.ts typescript file for TangyFormResponseModel
+
+## v4.14.0
+- Default for TangyFormResponseModel is type:'response'
+- Worked on tangy-qr to stop the plugin when cancelled or disconnected.
+- Updated @zxing/library" to "^0.17.0
+
+## v4.13.1
+- Make initial collecting of meta data of a tangy-form more safe to avoid race conditions of uninitialized tangy-form-item elements. 
+
+## v4.13.0
+- Add wct-browser-legacy back as it's no longer breaking npm install.
+- Add TangyForm.unlock() API for unlocking a completed form response.
+- Add improvements to TangyForm.getMeta() to ensure it delivers original state.
+
+## v4.12.3
+- Ensure that items in a tangy-list stack in rows not rows and columns.
+
+## v4.12.2
+- Fixes for importing sortable-list to make it compatible in more bundling environments.
+
+## v4.12.1
+- Changed package for sortable-list - a dependency for `<tangy-list>` - to newer version. 
+
+## v4.12.0
+- Add support for sorting items in a `<tangy-list>` https://github.com/Tangerine-Community/tangy-form/pull/131
+
 ## v4.11.5
 - Fixes
   - Fix `Uncaught TypeError: Cannot read property '_' of undefined` error experienced in some build environments by removing the Underscore dependency.
