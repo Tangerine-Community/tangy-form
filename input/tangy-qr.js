@@ -58,7 +58,6 @@ class TangyQr extends PolymerElement {
     <div class="flex-container m-y-25">
       <div id="qnum-number"></div>
       <div id="qnum-content">
-    
         <label id="label"></label>
         <paper-card>
             <div class="card-content">

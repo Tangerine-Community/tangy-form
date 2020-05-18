@@ -38,13 +38,6 @@ class TangyGps extends PolymerElement {
       :host {
         display: block;
       }
-      :host([required]:not([disabled])) label::before  { 
-        content: "*"; 
-        color: red; 
-        position: absolute;
-        top: 4px;
-        right: 5px;
-      }
       :host([hide-coordinates]) #lat-long {
         display:none;
       }
