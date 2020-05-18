@@ -1,5 +1,11 @@
 # CHANGELOG
 
+
+## v4.15.0
+- Added a `<tangy-toggle>` element based on material toggle switches.
+- Standardize output across inputs around question number and label.
+- Additional CSS variables exposed. `--tangy-form-widget--margin`, `--tangy-form-item--paper-card--header`, `--tangy-form-item--paper-card-content--padding`.
+
 ## v4.14.1
 - Fixed `error TS1039: Initializers are not allowed in ambient contexts.` with .d.ts typescript file for TangyFormResponseModel
 
