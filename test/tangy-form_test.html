@@ -260,6 +260,27 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="DeactivateFixture">
+      <template>
+        <tangy-form id="my-form" title="My Form">
+          <tangy-form-item id="item1" on-change="">
+            <tangy-input name="required-should-not-prevent-next" label="required attribute should not prevent going next." required></tangy-input>
+            <tangy-input name="disabled-should-not-disable" value="foo" label="disabled attribute should not disable." disabled></tangy-input>
+            <tangy-input name="hidden-should-not-hide" value="foo" label="hidden attribute should not hide." hidden></tangy-input>
+            <tangy-input name="valid-if-should-not-prevent-next" label="valid-if should not prevent going next." valid-if="!!input.value"></tangy-input>
+            <tangy-input name="on-change-should-not-hide" label="On-change should not hide this."></tangy-input>
+            <tangy-input name="on-open-should-not-hide" label="on-open should not hide this."></tangy-input>
+            <tangy-input name="skip-if-should-not-hide" label="skip-if should not hide this." skip-if="!inputs['skip-if-should-not-hide'].value"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item2">
+            <tangy-input name="input2" label="What is your last name?" required></tangy-input>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+
+
 
 
     <script type="module">
@@ -280,6 +301,13 @@
       })
 
       suite('tangy-form', () => {
+
+        test('should deactivate', () => {
+          const element = fixture('UnlockFixture');
+          element.newResponse()
+          element.deactivate()
+          // @TODO assert...
+        })
 
         test('should unlock', () => {
           const element = fixture('UnlockFixture');
