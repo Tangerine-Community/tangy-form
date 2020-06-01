@@ -6,7 +6,7 @@
   "scripts": {
     "start": "polymer serve",
     "build": "webpack",
-    "test": "polymer test"
+    "test": "polymer test -l chrome"
   },
   "dependencies": {
     "@polymer/iron-icon": "^3.0.0-pre.18",
