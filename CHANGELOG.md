@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.15.3
+- Firefox test env is not installing correctly, fall back on chrome tests.
+
 ## v4.15.2
 - Add package-lock.json to make npm ci command happy.
 
