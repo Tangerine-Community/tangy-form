@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.15.2
+- Add package-lock.json to make npm ci command happy.
+
 ## v4.15.1
 - Set up release process on Github Actions.
 
