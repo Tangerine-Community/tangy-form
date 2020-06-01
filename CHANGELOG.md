@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.15.4
+- Remove npm test from github action, seem to need an extra install for chrome or something. 
+
 ## v4.15.3
 - Firefox test env is not installing correctly, fall back on chrome tests.
 
