@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## v4.15.1
+- Set up release process on Github Actions.
 
 ## v4.15.0
 - Added a `<tangy-toggle>` element based on material toggle switches.
