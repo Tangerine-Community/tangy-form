@@ -441,7 +441,6 @@ class TangyLocation extends PolymerElement {
     }
   /* End of Materialize Select Styles */
       </style>
-      <label id="label" for="group"></label>
       <div id="container"></div>
 `;
   }
@@ -578,9 +577,6 @@ class TangyLocation extends PolymerElement {
     }
     request.open('GET', this.locationSrc);
     request.send();
-    this.shadowRoot.querySelector('#label').innerHTML = this.hasAttribute('label')
-        ? this.getAttribute('label')
-        : ''
   }
 
   onShowLevelsChange(newValue, previousValue) {
@@ -617,6 +613,7 @@ class TangyLocation extends PolymerElement {
     <div class="flex-container m-y-25">
       <div id="qnum-number">${this.hasAttribute('question-number') ? `<label>${this.getAttribute('question-number')}</label>` : ''}</div>
       <div id="qnum-content">
+        <label id="label" for="group">${this.hasAttribute('label') ? this.getAttribute('label') : ''}</label>
  
   ${selections.map((selection, i) => `
     

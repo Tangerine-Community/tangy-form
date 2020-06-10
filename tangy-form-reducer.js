@@ -95,6 +95,33 @@ const tangyFormReducer = function (state = initialState, action) {
         })
       })
 
+    case 'UNLOCK':
+      return Object.assign({}, state, {
+        complete: false,
+        endUnixtime: undefined,
+        form: Object.assign({}, state.form, {
+          complete: false,
+          linearMode:true, 
+          hideClosedItems: true
+        }),
+        items: state.items.map((item, index) => {
+          const itemMeta = action.meta.items.find(itemMeta => itemMeta.id === item.id)
+          let props = {
+            open: index === 0 ? true : false,
+            hidden: index === 0 ? false : true,
+            hideBackButton: index === 0 ? true : false,
+            hideNextButton: index === (action.meta.items.length-1) ? true : false,
+            hideButtons: true,
+            locked: false
+          }
+          props.inputs = item.inputs.map(input => {
+            const inputMeta = itemMeta.inputs.find(inputMeta => inputMeta.name === input.name)
+            return Object.assign({}, input, {disabled: inputMeta.disabled})
+          })
+          return Object.assign({}, item, itemMeta, props)
+        })
+      })
+ 
     case 'SHOW_RESPONSE':
       return Object.assign({}, state, { 
         form: Object.assign({}, state.form, {

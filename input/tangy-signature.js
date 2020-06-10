@@ -70,16 +70,24 @@ export class TangySignature extends PolymerElement {
       opacity: .2;
     }
   </style>
-  <span id="signature-pad">
-    <canvas id="signature-pad-canvas" width=600 height=300></canvas>
-  </span>
-  <img src="[[value]]" id="signature-rendered">
-  <div id="buttons">
-    <paper-button id="accept-button" on-click="captureSignature"><iron-icon icon="done"></iron-icon> [[t.accept]] </paper-button>
-    <paper-button id="clear-button" on-click="clearSignature"><iron-icon icon="delete"></iron-icon> [[t.clear]] </paper-button>
+
+  <div class="flex-container m-y-25">
+    <div id="qnum-number"></div>
+    <div id="qnum-content">
+      <label id="label"></label>
+      <span id="signature-pad">
+        <canvas id="signature-pad-canvas" width=600 height=300></canvas>
+      </span>
+      <img src="[[value]]" id="signature-rendered">
+      <div id="buttons">
+        <paper-button id="accept-button" on-click="captureSignature"><iron-icon icon="done"></iron-icon> [[t.accept]] </paper-button>
+        <paper-button id="clear-button" on-click="clearSignature"><iron-icon icon="delete"></iron-icon> [[t.clear]] </paper-button>
+      </div>
+      <label class="hint-text"></label>
+      <label id="error-text"></label>
+    </div>
   </div>
-  <label class="hint-text"></label>
-  <label id="error-text"></label>
+  
   `
   }
 
@@ -95,6 +103,11 @@ export class TangySignature extends PolymerElement {
       },
       hintText: {
         type: String,
+        value: ''
+      },
+      label: {
+        type: String,
+        observer: 'reflect',
         value: ''
       },
       errorText: {
@@ -158,6 +171,10 @@ export class TangySignature extends PolymerElement {
    this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text') 
     ? this.getAttribute('hint-text')
     : ''
+  this.shadowRoot.querySelector('#qnum-number').innerHTML = this.hasAttribute('question-number') 
+    ? `<label>${this.getAttribute('question-number')}</label>`
+    : ''
+  this.shadowRoot.querySelector('#label').innerHTML = this.label
   }
 
   captureSignature() {

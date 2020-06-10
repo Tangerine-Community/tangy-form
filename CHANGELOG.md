@@ -1,5 +1,44 @@
 # CHANGELOG
 
+## v4.15.4
+- Remove npm test from github action, seem to need an extra install for chrome or something. 
+
+## v4.15.3
+- Firefox test env is not installing correctly, fall back on chrome tests.
+
+## v4.15.2
+- Add package-lock.json to make npm ci command happy.
+
+## v4.15.1
+- Set up release process on Github Actions.
+
+## v4.15.0
+- Added a `<tangy-toggle>` element based on material toggle switches.
+- Standardize output across inputs around question number and label.
+- Additional CSS variables exposed. `--tangy-form-widget--margin`, `--tangy-form-item--paper-card--header`, `--tangy-form-item--paper-card-content--padding`.
+
+## v4.14.1
+- Fixed `error TS1039: Initializers are not allowed in ambient contexts.` with .d.ts typescript file for TangyFormResponseModel
+
+## v4.14.0
+- Default for TangyFormResponseModel is type:'response'
+- Worked on tangy-qr to stop the plugin when cancelled or disconnected.
+- Updated @zxing/library" to "^0.17.0
+
+## v4.13.1
+- Make initial collecting of meta data of a tangy-form more safe to avoid race conditions of uninitialized tangy-form-item elements. 
+
+## v4.13.0
+- Add wct-browser-legacy back as it's no longer breaking npm install.
+- Add TangyForm.unlock() API for unlocking a completed form response.
+- Add improvements to TangyForm.getMeta() to ensure it delivers original state.
+
+## v4.12.3
+- Ensure that items in a tangy-list stack in rows not rows and columns.
+
+## v4.12.2
+- Fixes for importing sortable-list to make it compatible in more bundling environments.
+
 ## v4.12.1
 - Changed package for sortable-list - a dependency for `<tangy-list>` - to newer version. 
 

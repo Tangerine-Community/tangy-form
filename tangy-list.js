@@ -1,5 +1,5 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import '@polymer/sortable-list/sortable-list.js'
+import 'dr-niels-sortable-list/sortable-list.js'
 import './util/html-element-props.js'
 import '@polymer/paper-checkbox/paper-checkbox.js'
 import '@polymer/paper-button/paper-button.js'
@@ -75,6 +75,11 @@ export class TangyList extends PolymerElement {
     return html`
       <style include="tangy-common-styles"></style>
       <style include="tangy-element-styles"></style>
+      <style>
+        tangy-list-item {
+          width: 100%
+        }
+      </style>
       <sortable-list id="items" style="width:100%">
       </sortable-list>
       <paper-button on-click="onClickNewItem" style="margin-left: 15px; background: var(--accent-color); color: var(--accent-text-color);" raised class="add-another"><iron-icon icon="add-circle"></iron-icon>ADD ANOTHER</paper-button>

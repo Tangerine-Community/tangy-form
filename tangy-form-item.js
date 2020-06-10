@@ -180,6 +180,16 @@ export class TangyFormItem extends PolymerElement {
           font-size: 1.2rem;
           line-height: 1rem;
         }
+
+        paper-card {
+          --paper-card-header: {
+            @apply --tangy-form-item--paper-card--header;
+          };
+        }
+        paper-card .card-content {
+          padding: var(--tangy-form-item--paper-card-content--padding, 15px);
+        }
+
       </style>
       <paper-card id="card" class="shrunk">
         <div class="card-content">

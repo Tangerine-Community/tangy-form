@@ -147,7 +147,7 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
       }
 
       .m-y-25 {
-        margin: 25px 0;
+        margin: var(--tangy-form-widget--margin, 25px 0);
       }
    
       

@@ -16,3 +16,4 @@ import './input/tangy-photo-capture.js';
 import './input/tangy-qr.js';
 import './input/tangy-consent.js';
 import './input/tangy-partial-date.js';
+import './input/tangy-toggle.js';
