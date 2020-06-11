@@ -150,6 +150,11 @@ export class TangySignature extends PolymerElement {
         type: String,
         value: '',
         observer: 'onValueChange'
+      },
+      identifier: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
     }
   }

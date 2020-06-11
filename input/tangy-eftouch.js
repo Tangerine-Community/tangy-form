@@ -163,6 +163,11 @@ export class TangyEftouch extends PolymerElement {
       transitionSoundTriggered: {
         type: Boolean,
         value: false
+      },
+      identifier: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
     };
   }

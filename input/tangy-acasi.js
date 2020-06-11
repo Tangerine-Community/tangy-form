@@ -127,6 +127,11 @@ export class TangyAcasi extends PolymerElement {
         type: Boolean,
         value: true,
         reflectToAttribute: true
+      },
+      identifier: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
     };
   }

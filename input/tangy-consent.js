@@ -160,6 +160,11 @@ class TangyConsent extends PolymerElement {
         value: false,
         observer: 'onSkippedChange',
         reflectToAttribute: true
+      },
+      identifier: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
     };
   }

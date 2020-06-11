@@ -118,6 +118,11 @@ class TangyCheckboxesDynamic extends PolymerElement {
         type: String,
         value: ''
       },
+      identifier: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      }
     }
   }
 
