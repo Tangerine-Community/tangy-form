@@ -539,6 +539,11 @@ class TangyLocation extends PolymerElement {
         type: Boolean,
         value: false,
         observer: 'render'
+      },
+      identifier: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
     };
   }

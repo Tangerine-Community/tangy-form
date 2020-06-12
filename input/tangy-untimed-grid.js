@@ -246,6 +246,11 @@ class TangyUntimedGrid extends PolymerElement {
         type: Number,
         value: 0.7,
         reflectToAttribute: true
+      },
+      identifier: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
     };
   }

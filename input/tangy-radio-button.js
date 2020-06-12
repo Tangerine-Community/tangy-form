@@ -77,8 +77,12 @@ export class TangyRadioButton extends PolymerElement {
         value: '',
         observer: 'render',
         reflectToAttribute: true
+      },
+      identifier: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
-
     }
   }
 

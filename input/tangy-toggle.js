@@ -122,6 +122,11 @@ export class TangyToggle extends PolymerElement {
         type: String,
         value: '',
         reflectToAttribute: true
+      },
+      identifier: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
     }
   }
