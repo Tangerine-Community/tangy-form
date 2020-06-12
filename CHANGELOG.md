@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.16.0
+- Added 'identifier' property to all inputs.
+
 ## v4.15.4
 - Remove npm test from github action, seem to need an extra install for chrome or something. 
 
