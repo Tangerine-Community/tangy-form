@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.17.4
+- Fix typescript definition for helpers.js.
+
 ## v4.17.3
 - Fix unlocking of inputs that exist in the data but not in the meta, for example with tangy-input-groups. 
 
