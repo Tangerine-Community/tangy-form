@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.17.0
+- Add TangyFormResponseModel.get(), TangyFormResponseModel.set(), and Get/Set factories for shorthand get() and set() methods in helpers.js. https://github.com/Tangerine-Community/tangy-form/pull/143
+
 ## v4.16.0
 - Added 'identifier' property to all inputs.
 
