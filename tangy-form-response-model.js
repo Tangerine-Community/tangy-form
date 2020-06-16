@@ -35,6 +35,7 @@ export class TangyFormResponseModel {
       return inputsArray
     }, [])
   }
+
   get inputsByName() {
     // Reduce to an object keyed on input.name. If multiple inputs with the same name, put them in an array.
     return this.inputs.reduce((inputsObject, input) => {
@@ -49,6 +50,47 @@ export class TangyFormResponseModel {
       }
       return inputsObject
     }, {})
+  }
+
+  get(name) {
+    let value = ''
+    let foundInput = this.inputsByName[name]
+    if (foundInput && typeof foundInput.value === 'object') {
+      let values = []
+      foundInput.value.forEach(subInput => {
+        if (subInput.value) {
+          values.push(subInput.name)
+        }
+      })
+      value = values
+    } else if (foundInput && foundInput.value !== undefined) {
+      value = foundInput.value
+    }
+    // Return radio buttons as a single value chosen, not a single entry array.
+    if (foundInput && foundInput.tagName === 'TANGY-RADIO-BUTTONS' && Array.isArray(value)) {
+      value = (value.length > 0) ? value[0] : ''
+    }
+    if (!value) {
+      value = ''
+    }
+    return value
+  }
+
+  set(name, value) {
+    if (this.inputsByName[name]) {
+      this.inputsByName[name].value = this.inputsByName[name].tagName === 'TANGY-RADIO-BUTTONS'
+        ? this.inputsByName[name].value.map(option => {
+            option.name === value
+              ? 'on'
+              : ''
+          })
+        : value
+    } else {
+      this.items[0].inputs.push({
+        name,
+        value
+      })
+    }
   }
 
 }
