@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.17.2
+- Fix broken npm release due to change in release process.
+
 ## v4.17.0
 - Add TangyFormResponseModel.get(), TangyFormResponseModel.set(), and Get/Set factories for shorthand get() and set() methods in helpers.js. https://github.com/Tangerine-Community/tangy-form/pull/143
 
