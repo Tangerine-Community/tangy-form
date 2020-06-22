@@ -404,6 +404,8 @@ class TangyUntimedGrid extends PolymerElement {
     switch (this.mode) {
       case TANGY_UNTIMED_GRID_MODE_MARK:
       case TANGY_UNTIMED_GRID_MODE_RUN:
+      let lastItemOnRow;
+      const allItems =  this.shadowRoot.querySelectorAll('tr')[rowNumber].querySelectorAll
 
         this.shadowRoot.querySelectorAll('tr')[rowNumber].querySelectorAll('tangy-toggle-button')
           .forEach(tangyToggleButtonEl => {
@@ -414,8 +416,17 @@ class TangyUntimedGrid extends PolymerElement {
           .querySelectorAll('tangy-toggle-button')
           .forEach(button => newValue.push(button.getProps()))
         this.value = newValue
+        if (this.autoStop && this.shouldGridAutoStop()) {
+          // ignore if we're already in mode TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED
+      if (this.mode !== TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED) {
+        allItems[allItems.length-1].highlighted = true
+        this.stopGrid()
+        this.gridAutoStopped = true
+        this.onStopClick(null, lastItemOnRow)
+      }
     }
   }
+}
 
   onTangyToggleButtonClick(event) {
 
@@ -461,7 +472,7 @@ class TangyUntimedGrid extends PolymerElement {
   }
 
   shouldGridAutoStop() {
-    const isSetsEqual = (a, b) => a.size === b.size && [...a].every(value => b.has(value));
+    const isSetsEqual = (a, b) => [...a].every(value => b.has(value));
     const tangyToggleButtons = [].slice.call(this.shadowRoot.querySelectorAll('tangy-toggle-button'))
     if (!tangyToggleButtons[0].pressed) {
       return false;
