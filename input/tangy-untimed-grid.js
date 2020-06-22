@@ -407,7 +407,7 @@ class TangyUntimedGrid extends PolymerElement {
 
         this.shadowRoot.querySelectorAll('tr')[rowNumber].querySelectorAll('tangy-toggle-button')
           .forEach(tangyToggleButtonEl => {
-            tangyToggleButtonEl.pressed = true
+            tangyToggleButtonEl.pressed = !tangyToggleButtonEl.pressed
           })
         let newValue = []
         this.shadowRoot

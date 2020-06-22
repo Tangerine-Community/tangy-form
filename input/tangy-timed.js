@@ -643,8 +643,8 @@ class TangyTimed extends PolymerElement {
 
         this.shadowRoot.querySelectorAll('tr')[rowNumber].querySelectorAll('tangy-toggle-button')
           .forEach(tangyToggleButtonEl => {
-            tangyToggleButtonEl.pressed = true
-            tangyToggleButtonEl.value = 'on'
+            tangyToggleButtonEl.pressed = !tangyToggleButtonEl.pressed
+            tangyToggleButtonEl.value = 'on'? 'off':'on'
           })
         let newValue = []
         this.shadowRoot
