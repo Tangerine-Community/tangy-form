@@ -609,20 +609,15 @@ class TangyTimed extends PolymerElement {
     }
   }
   shouldGridAutoStop() {
-    const isSetsEqual = (a, b) => [...a].every(value => b.has(value));
     const tangyToggleButtons = [].slice.call(this.shadowRoot.querySelectorAll('tangy-toggle-button'))
-    if (!tangyToggleButtons[0].pressed) {
-      return false;
-    } else {
-      const indexes = tangyToggleButtons.slice(0, this.autoStop).map((button, index) => index)
-      let pressedItemsIndex = [];
-      tangyToggleButtons.reduce((prev, curr, index) => {
-        if (curr.pressed) {
-          pressedItemsIndex = [...pressedItemsIndex, index]
-        }
-      }, [])
-      return isSetsEqual(new Set(indexes), new Set(pressedItemsIndex))
+    const firstXButtons = tangyToggleButtons.slice(0, this.autoStop)
+    let foundAnUnpressedButton = false
+    for (let button of firstXButtons) {
+      if (!button.pressed) {
+        foundAnUnpressedButton = true
+      }
     }
+    return foundAnUnpressedButton ? false : true
   }
   stopGrid() {
 
@@ -644,8 +639,8 @@ class TangyTimed extends PolymerElement {
       const allItems =  this.shadowRoot.querySelectorAll('tr')[rowNumber].querySelectorAll('tangy-toggle-button');
 
       allItems.forEach((tangyToggleButtonEl, i) => {
-            tangyToggleButtonEl.pressed = true
-            tangyToggleButtonEl.value = 'on'
+        tangyToggleButtonEl.pressed = !tangyToggleButtonEl.pressed
+            tangyToggleButtonEl.value = 'on'? 'off':'on'
             lastItemOnRow=allItems.length===i+1? tangyToggleButtonEl.name:''
           })
         let newValue = []

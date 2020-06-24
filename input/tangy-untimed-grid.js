@@ -409,7 +409,7 @@ class TangyUntimedGrid extends PolymerElement {
 
         this.shadowRoot.querySelectorAll('tr')[rowNumber].querySelectorAll('tangy-toggle-button')
           .forEach(tangyToggleButtonEl => {
-            tangyToggleButtonEl.pressed = true
+            tangyToggleButtonEl.pressed = !tangyToggleButtonEl.pressed
           })
         let newValue = []
         this.shadowRoot
@@ -419,7 +419,6 @@ class TangyUntimedGrid extends PolymerElement {
         if (this.autoStop && this.shouldGridAutoStop()) {
           // ignore if we're already in mode TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED
       if (this.mode !== TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED) {
-        allItems[allItems.length-1].highlighted = true
         this.stopGrid()
         this.gridAutoStopped = true
         this.onStopClick(null, lastItemOnRow)
@@ -472,20 +471,15 @@ class TangyUntimedGrid extends PolymerElement {
   }
 
   shouldGridAutoStop() {
-    const isSetsEqual = (a, b) => [...a].every(value => b.has(value));
     const tangyToggleButtons = [].slice.call(this.shadowRoot.querySelectorAll('tangy-toggle-button'))
-    if (!tangyToggleButtons[0].pressed) {
-      return false;
-    } else {
-      const indexes = tangyToggleButtons.slice(0, this.autoStop).map((button, index) => index)
-      let pressedItemsIndex = [];
-      tangyToggleButtons.reduce((prev, curr, index) => {
-        if (curr.pressed) {
-          pressedItemsIndex = [...pressedItemsIndex, index]
-        }
-      }, [])
-      return isSetsEqual(new Set(indexes), new Set(pressedItemsIndex))
+    const firstXButtons = tangyToggleButtons.slice(0, this.autoStop)
+    let foundAnUnpressedButton = false
+    for (let button of firstXButtons) {
+      if (!button.pressed) {
+        foundAnUnpressedButton = true
+      }
     }
+    return foundAnUnpressedButton ? false : true
   }
 
   onStopClick(event, lastItemAttempted) {
