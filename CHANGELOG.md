@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.17.5
+- Fix: Mark entire line of grid as incorrect cannot be undone [#1651](https://github.com/Tangerine-Community/Tangerine/issues/1651)
+- Fix: Autostop is not triggered when marking the entire lineas incorrect [#1869](https://github.com/Tangerine-Community/Tangerine/issues/1869) 
+
 ## v4.17.4
 - Fix typescript definition for helpers.js.
 
