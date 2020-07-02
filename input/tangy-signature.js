@@ -103,7 +103,8 @@ export class TangySignature extends PolymerElement {
       },
       hintText: {
         type: String,
-        value: ''
+        value: '',
+        reflectToAttribute: true
       },
       label: {
         type: String,

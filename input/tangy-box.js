@@ -51,7 +51,12 @@ export class TangyBox extends PolymerElement {
         type: Boolean,
         value: false,
         reflectToAttribute: true
-      }
+      },
+      hintText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
     }
   }
 

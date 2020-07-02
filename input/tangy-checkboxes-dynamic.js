@@ -110,6 +110,11 @@ class TangyCheckboxesDynamic extends PolymerElement {
         type: String,
         value: ''
       },
+      hintText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       optionsListExcludes: {
         type: String,
         value: ''

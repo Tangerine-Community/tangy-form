@@ -148,6 +148,11 @@ class TangyQr extends PolymerElement {
         observer: 'onSkippedChange',
         reflectToAttribute: true
       },
+      hintText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       statusMessage: {
         type: String,
         value: '',

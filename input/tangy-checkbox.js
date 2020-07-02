@@ -74,6 +74,11 @@ export class TangyCheckbox extends PolymerElement {
         observer: 'onInvalidChange',
         reflectToAttribute: true
       },
+      hintText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       hasWarning: {
         type: Boolean,
         value: false,
