@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.17.6
+- Fix: hint-text is missing from many inputs when using TangyForm.getMeta() [#149](https://github.com/Tangerine-Community/tangy-form/pull/149)
+
 ## v4.17.5
 - Fix: Mark entire line of grid as incorrect cannot be undone [#1651](https://github.com/Tangerine-Community/Tangerine/issues/1651)
 - Fix: Autostop is not triggered when marking the entire lineas incorrect [#1869](https://github.com/Tangerine-Community/Tangerine/issues/1869) 
