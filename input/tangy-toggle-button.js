@@ -111,6 +111,11 @@ class TangyToggleButton extends PolymerElement {
         value: false,
         reflectToAttribute: true
       },
+      hintText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       identifier: {
         type: Boolean,
         value: false,

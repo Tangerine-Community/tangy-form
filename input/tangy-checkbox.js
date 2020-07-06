@@ -22,13 +22,14 @@ export class TangyCheckbox extends PolymerElement {
           --tangy-element-border: 0;
         }
       </style>
+      
     <div class="flex-container">
       <div id="qnum-number"></div>
       <div id="qnum-content">
         <paper-checkbox id="checkbox" id="checkbox">
           <div id="checkbox-text">
           </div>
-          <label class="hint-text">
+          <label id="hint-text" class="hint-text"></label>
           </label>
         </paper-checkbox>
         <div id="error-text"></div>
@@ -73,6 +74,12 @@ export class TangyCheckbox extends PolymerElement {
         value: false,
         observer: 'onInvalidChange',
         reflectToAttribute: true
+      },
+      hintText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true,
+        observer: 'render'
       },
       hasWarning: {
         type: Boolean,
@@ -160,6 +167,7 @@ export class TangyCheckbox extends PolymerElement {
         }
       }))
     })
+    this.$['hint-text'].innerHTML = this.hintText
     this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text') 
       ? this.getAttribute('hint-text') 
       : ''

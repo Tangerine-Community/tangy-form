@@ -35,7 +35,9 @@ export class TangyRadioButton extends PolymerElement {
       },
       label: {
         type: String,
-        value: ''
+        value: '',
+        observer: 'render',
+        reflectToAttribute: true
       },
       required: {
         type: Boolean,
@@ -58,6 +60,11 @@ export class TangyRadioButton extends PolymerElement {
       incomplete: {
         type: Boolean,
         value: true,
+        reflectToAttribute: true
+      },
+      hintText: {
+        type: String,
+        value: '',
         reflectToAttribute: true
       },
       hidden: {

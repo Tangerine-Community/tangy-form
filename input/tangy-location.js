@@ -453,7 +453,8 @@ class TangyLocation extends PolymerElement {
       },
       hintText: {
         type: String,
-        value: ''
+        value: '',
+        reflectToAttribute: true
       },
       errorText: {
         type: String,

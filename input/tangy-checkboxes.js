@@ -78,8 +78,8 @@ class TangyCheckboxes extends PolymerElement {
       hintText: {
         type: String,
         value: '',
-        observer: 'reflect',
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        observer: 'reflect'
       },
       atLeast: {
         type: Number,

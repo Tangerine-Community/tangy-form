@@ -106,9 +106,20 @@ class TangyRadioButtons extends PolymerElement {
         observer: 'reflect',
         reflectToAttribute: true
       },
+      hintText: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       required: {
         type: Boolean,
         value: false,
+        observer: 'reflect',
+        reflectToAttribute: true
+      },
+      label: {
+        type: String,
+        value: '',
         observer: 'reflect',
         reflectToAttribute: true
       },
