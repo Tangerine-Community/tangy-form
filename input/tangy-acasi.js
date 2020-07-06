@@ -46,7 +46,6 @@ export class TangyAcasi extends PolymerElement {
         background-color: var(--paper-indigo-400);
       }
     </style>
-
     <div class="container">
       <label for="group">[[label]]</label>
       <paper-button id="replay" raised class="indigo" on-click="replay">[[t.replay]]</paper-button>
