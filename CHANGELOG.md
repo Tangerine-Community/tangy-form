@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.17.7
+- Refactor show-if hook on inputs to apply the skipped attribute as opposed to the hidden attribute.
+
 ## v4.17.6
 - Fix: hint-text is missing from many inputs when using TangyForm.getMeta() [#149](https://github.com/Tangerine-Community/tangy-form/pull/149)
 
