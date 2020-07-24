@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.17.8
+- Refactor tangy-if hook on inputs to apply the skipped attribute as opposed to the hidden attribute.
+
 ## v4.17.7
 - Refactor show-if hook on inputs to apply the skipped attribute as opposed to the hidden attribute.
 

@@ -475,9 +475,9 @@ export class TangyFormItem extends PolymerElement {
         }
       } else if (input.hasAttribute('tangy-if') && !input.hasAttribute('tangy-action')) {
         if (this.eval(input.getAttribute('tangy-if'), 'tangy-if', input.getAttribute('name'))) {
-          inputActionFactories['visible'].truthy(input.name)
+          input.removeAttribute('skipped')
         } else {
-          inputActionFactories['visible'].falsey(input.name)
+          input.setAttribute('skipped', '')
         }
       }
     })

@@ -371,10 +371,10 @@
           element.newResponse()
           element.querySelector('#item1').querySelector('[name=input1]').value = 'on'
           element.querySelector('#item1').querySelector('[name=input1]').dispatchEvent(new Event('change'))
-          assert.equal(element.querySelector('#item1').querySelector('[name=input2]').hidden, true)
+          assert.equal(element.querySelector('#item1').querySelector('[name=input2]').skipped, true)
           element.querySelector('#item1').querySelector('[name=input1]').value = ''
           element.querySelector('#item1').querySelector('[name=input1]').dispatchEvent(new Event('change'))
-          assert.equal(element.querySelector('#item1').querySelector('[name=input2]').hidden, false)
+          assert.equal(element.querySelector('#item1').querySelector('[name=input2]').skipped, false)
 
         });
 
