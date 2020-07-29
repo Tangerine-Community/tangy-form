@@ -79,7 +79,7 @@ export class TangyCheckbox extends PolymerElement {
         type: String,
         value: '',
         reflectToAttribute: true,
-        observer: 'render'
+        observer: 'onHintTextChanged'
       },
       hasWarning: {
         type: Boolean,
@@ -175,6 +175,10 @@ export class TangyCheckbox extends PolymerElement {
       ? `<label>${this.getAttribute('question-number')}</label>`
       : ''
     
+  }
+
+  onHintTextChanged() {
+    this.$['hint-text'].innerHTML = this.hintText
   }
 
   applyLabel(label) {
