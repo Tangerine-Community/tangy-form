@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.17.9
+- Fix: switch observer on hintText from render to fix issue with mutually exclusive checkboxes.
+
 ## v4.17.8
 - Refactor tangy-if hook on inputs to apply the skipped attribute as opposed to the hidden attribute.
 
