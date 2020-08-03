@@ -9,21 +9,20 @@
     "test": "polymer test -l chrome"
   },
   "dependencies": {
-    "@polymer/iron-icon": "^3.0.0-pre.18",
-    "@polymer/iron-icons": "^3.0.0-pre.18",
-    "@polymer/paper-button": "^3.0.0-pre.18",
-    "@polymer/paper-card": "^3.0.0-pre.18",
-    "@polymer/paper-checkbox": "^3.0.0-pre.18",
-    "@polymer/paper-fab": "^3.0.0-pre.18",
-    "@polymer/paper-icon-button": "^3.0.0-pre.18",
-    "@polymer/paper-input": "^3.0.0-pre.18",
-    "@polymer/paper-item": "^3.0.0-pre.18",
-    "@polymer/paper-progress": "^3.0.0-pre.18",
-    "@polymer/paper-radio-group": "^3.0.0-pre.18",
-    "@polymer/paper-tabs": "^3.0.0-pre.18",
-    "@polymer/paper-toggle-button": "^3.0.1",
-    "@polymer/polymer": "^3.0.0",
-    "@zxing/library": "^0.17.0",
+    "@polymer/iron-icon": "^3.0.1",
+    "@polymer/iron-icons": "^3.0.1",
+    "@polymer/paper-button": "^3.0.1",
+    "@polymer/paper-card": "^3.0.1",
+    "@polymer/paper-checkbox": "^3.0.1",
+    "@polymer/paper-fab": "^3.0.1",
+    "@polymer/paper-icon-button": "^3.0.1",
+    "@polymer/paper-input": "^3.0.1",
+    "@polymer/paper-item": "^3.0.1",
+    "@polymer/paper-progress": "^3.0.1",
+    "@polymer/paper-radio-group": "^3.0.1",
+    "@polymer/paper-tabs": "^3.0.1",
+    "@polymer/polymer": "^3.4.0",
+    "@zxing/library": "^0.15.1",
     "devtools-detect": "^3.0.0",
     "dr-niels-sortable-list": "git://github.com/DrNiels/sortable-list.git#master",
     "moment": "^2.24.0",
@@ -34,11 +33,12 @@
     "zxing-js-es6": "^0.15.3"
   },
   "devDependencies": {
-    "@polymer/iron-demo-helpers": "^3.0.0-pre.19",
-    "@webcomponents/webcomponentsjs": "^2.0.0",
-    "polymer-cli": "^1.7.2",
-    "webpack": "^4.39.1",
-    "webpack-cli": "^3.3.6"
+    "@polymer/iron-demo-helpers": "^3.1.0",
+    "@webcomponents/webcomponentsjs": "^2.2.10",
+    "polymer-cli": "^1.9.11",
+    "wct-browser-legacy": "^1.0.2",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   },
   "directories": {
     "test": "test"
