@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v4.17.10
+- Fix: abandons drawing boundary box when unable to identify all corners of scanned QR code.
+- Updated "@zxing/library": "^0.17.1",
+- Set width of canvas to 340px to reduce load on tablets.
+
 ## v4.17.9
 - Fix: switch observer on hintText from render to fix issue with mutually exclusive checkboxes.
 
