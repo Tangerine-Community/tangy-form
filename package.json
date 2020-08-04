@@ -23,7 +23,7 @@
     "@polymer/paper-tabs": "^3.0.0-pre.18",
     "@polymer/paper-toggle-button": "^3.0.1",
     "@polymer/polymer": "^3.0.0",
-    "@zxing/library": "^0.17.0",
+    "@zxing/library": "^0.17.1",
     "devtools-detect": "^3.0.0",
     "dr-niels-sortable-list": "git://github.com/DrNiels/sortable-list.git#master",
     "moment": "^2.24.0",

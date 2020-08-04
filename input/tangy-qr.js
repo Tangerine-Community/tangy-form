@@ -28,7 +28,8 @@ class TangyQr extends PolymerElement {
         }
         
         #canvas {
-          width:100%;
+          display: inline-block;
+          width:340px;
           border-color: black;
           border-style: solid;
           border-width: 0px;
@@ -46,7 +47,7 @@ class TangyQr extends PolymerElement {
           color: var(--primary-text-color);
           margin-bottom: 15px;
         }
-        #scan-icon, #container, #canvas {
+        #scan-icon, #container {
           display: inline-block;
           width: 100%;
           height: 100%;
@@ -235,7 +236,7 @@ class TangyQr extends PolymerElement {
     this.notScanning = false 
     this.isScanning = true
     this.$.container.innerHTML = `
-      <canvas id="canvas"></canvas>
+      <canvas id="canvas" height="320"></canvas>
     `
     var video = document.createElement("video");
     this.video = video;
@@ -274,10 +275,14 @@ class TangyQr extends PolymerElement {
         const codeReader = new BrowserMultiFormatReader();
         try {
           const result = await codeReader.decodeFromImageElement(imageEl)
-          drawLine(result.resultPoints[0], result.resultPoints[1], "#FF3B58");
-          drawLine(result.resultPoints[1], result.resultPoints[2], "#FF3B58");
-          drawLine(result.resultPoints[2], result.resultPoints[3], "#FF3B58");
-          drawLine(result.resultPoints[3], result.resultPoints[0], "#FF3B58");
+          try {
+            drawLine(result.resultPoints[0], result.resultPoints[1], "#FF3B58");
+            drawLine(result.resultPoints[1], result.resultPoints[2], "#FF3B58");
+            drawLine(result.resultPoints[2], result.resultPoints[3], "#FF3B58");
+            drawLine(result.resultPoints[3], result.resultPoints[0], "#FF3B58");
+          } catch (e) {
+            // console.log("May not have gotten all of the corners in result.resultPoints.")
+          }
           if (component.value !== result.text) {
             component.value = result.text 
             component.stopScanning()
