@@ -150,6 +150,22 @@ export class Loc {
     return this.unflatten(flatLocationList)
   }
 
+  getLineage(id, locationList) {
+    const flatLocationList = this.flatten(locationList)
+    const locations = flatLocationList.locations
+    let breadcrumbs = [id]
+    let parent = locations.find(location => id === location.id).parent
+    breadcrumbs.push(parent.slice())
+    while (parent !== 'root') {
+      parent = locations.find(location => parent === location.id).parent
+      breadcrumbs.push(parent.slice())
+    }
+    breadcrumbs.pop()
+    return breadcrumbs
+      .map(breadcrumb => locations.find(node => node.id === breadcrumb))
+      .reverse()
+  }
+
   static query (levels, criteria, locationList, qCallback, context) {
     var currentLevelIndex, i, j, len, level, levelIDs, levelMap, locationLevels, locations, resp, targetLevelIndex;
     if (criteria == null) {
