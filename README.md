@@ -8,7 +8,7 @@ An element for multipage forms.
 - Loads of handy input elements such as `<tangy-gps>`.
 - Easy to write logic for the form for hiding / showing and disabling / enabled inputs.
 
-Try out the [demos on glitch](https://tangy-form-demo.glitch.me/) or get started creating your own Tangy Form on [CodePen](https://codepen.io/rjsteinert/pen/RXxwmP) or [Glitch](https://glitch.com/edit/#!/remix/tangy-form-example-template).
+Try out the [demos on Glitch](https://tangy-form-demo.glitch.me/) or get started creating your own Tangy Form on [CodePen](https://codepen.io/rjsteinert/pen/RXxwmP) or [Glitch](https://glitch.com/edit/#!/remix/tangy-form-example-template).
 
 [![screenshot](demo/screenshot.png)](https://codepen.io/rjsteinert/pen/RXxwmP)
 
