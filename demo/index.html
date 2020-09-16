@@ -665,6 +665,42 @@
         </template>
       </demo-snippet>
 
+      <div class="vertical-section-container centered">
+        <h3>Multi-section input with with radio button to enable optional text entry</h3>
+        <demo-snippet>
+            <template>
+                <tangy-form id="form_id" title="Form Title" category="null" on-open="" exit-clicks="" on-change=""
+                    on-submit="">
+                    <tangy-form-item id="item_4271b37a-a953-471b-98e3-7161456fd129" title="Introduction" on-open=""
+                        on-change="" category="null">
+                        <template>
+                            <tangy-box name="intro" class="" style="">
+                                <div
+                                    style="border: 1px black solid; margin:10px 10px 10px 0px; padding:10px 10px 10px 10px; background-color:var(--tangy-select-background-color, rgba(0, 0, 0, 0.04));">
+                                    Open this form
+                                </div>
+                            </tangy-box>
+                        </template>
+                    </tangy-form-item>
+                    <tangy-form-item id="section_092007403cc447c58e79f702d4c3102d" title="Details"
+                        incorrect-threshold="undefined" on-open="" on-change="" category="null">
+                        <template>
+                            <tangy-radio-buttons name="DVDECOD" required="" question-number="" label="Deviation:"
+                                hint-text="" error-text="" warn-text="" class="" style="">
+                                <option value="1">Selection</option>
+                                <option value="88">Other</option>
+                            </tangy-radio-buttons>
+                            <tangy-input type="text" allowed-pattern="" inner-label="" name="DVTERM" required=""
+                                question-number="" label="Specify" hint-text="" show-if="getValue('DVDECOD')==='88'"
+                                error-text="" warn-text="" class="" style=""></tangy-input>
+                        </template>
+                    </tangy-form-item>
+                    <tangy-form-item id="section_0316a6405a9f4b6fbf99a2901d9f8471" title="Form Review "
+                        incorrect-threshold="undefined" on-open="" on-change="" category="null">
+                    </tangy-form-item>
+                </tangy-form>
+            </template>
+        </demo-snippet>
     </div>
   </body>
 </html>
