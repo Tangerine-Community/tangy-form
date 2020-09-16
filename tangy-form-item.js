@@ -215,12 +215,12 @@ export class TangyFormItem extends PolymerElement {
           <template is="dom-if" if="{{open}}">
             <template is="dom-if" if="{{rightToLeft}}">
               <template is="dom-if" if="{{showCompleteButton}}">
-                <paper-button id="complete" on-click="clickedComplete" on-focusin="clickedComplete" style="float:left">
+                <paper-button id="complete" on-click="clickedComplete" style="float:left">
                   [[t.submit]]
                 </paper-button>
               </template>
               <template is="dom-if" if="{{!hideNextButton}}">
-                <paper-button id="back" on-click="next" on-focusin="back">
+                <paper-button id="back" on-click="next" >
                   <template is="dom-if" if="{{!hideNavIcons}}">
                     <iron-icon icon="arrow-back"></iron-icon>
                   </template>
@@ -230,7 +230,7 @@ export class TangyFormItem extends PolymerElement {
                 </paper-button>
               </template>
               <template is="dom-if" if="{{!hideBackButton}}">
-                <paper-button id="next" on-click="back" on-focusin="back">
+                <paper-button id="next" on-click="back" >
                  <template is="dom-if" if="{{!hideNavLabels}}">
                     [[t.back]]
                   </template>
@@ -242,7 +242,7 @@ export class TangyFormItem extends PolymerElement {
             </template>
             <template is="dom-if" if="{{!rightToLeft}}">
               <template is="dom-if" if="{{!hideBackButton}}">
-                <paper-button id="back" on-click="back" on-focusin="back">
+                <paper-button id="back" on-click="back" >
                   <template is="dom-if" if="{{!hideNavIcons}}">
                     <iron-icon icon="arrow-back"></iron-icon>
                   </template>
@@ -252,7 +252,7 @@ export class TangyFormItem extends PolymerElement {
                 </paper-button>
               </template>
               <template is="dom-if" if="{{!hideNextButton}}">
-                <paper-button id="next" on-click="next" on-focusin="next">
+                <paper-button id="next" on-click="next" >
                  <template is="dom-if" if="{{!hideNavLabels}}">
                     [[t.next]]
                   </template>
@@ -262,7 +262,7 @@ export class TangyFormItem extends PolymerElement {
                 </paper-button>
               </template>
               <template is="dom-if" if="{{showCompleteButton}}">
-                <paper-button id="complete" on-click="clickedComplete" on-focusin="clickedComplete" style="float:right" >
+                <paper-button id="complete" on-click="clickedComplete" style="float:right" >
                   [[t.submit]]
                 </paper-button>
               </template>
