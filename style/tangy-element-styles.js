@@ -107,6 +107,7 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         color: var(--error-color);
         display: flex;
         margin-bottom: 30px;
+        background-color: var(--warn-background-color);
       }
       #warn-text > iron-icon {
         padding-right: 0.8em;

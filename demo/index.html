@@ -24,6 +24,7 @@
           --accent-color: #f26f10;
           --accent-text-color: #FFF;
           --error-color: var(--paper-red-500);
+          --warn-background-color: var(--paper-yellow-500);
           --disabled-color: #BBB;
         }
         h1, h2, h3, h4, h5 {
@@ -236,6 +237,23 @@
               <tangy-box tangy-if="inputs.input1.invalid === true">
                 You really should consider liking tangerines.
               </tangy-box>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+
+      <h3>Custom warning messages and custom warning logic</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="my-form-2" title="My Form 2">
+            <tangy-form-item id="item1">
+<!--              <tangy-checkbox name="input1" valid-if="input.value === 'on'">-->
+<!--                Do you like tangerines?-->
+<!--              </tangy-checkbox>-->
+              <tangy-input type="text" allowed-pattern="" inner-label="g/dL" name="hb" required="" question-number="" label="Hb result" hint-text="1 decimal place" valid-if="/^[0-9]+\.[0-9]$/.test(input.value) " error-text="ERROR: Please enter to the first decimal place. " warn-if="parseFloat(getValue('hb')) > '18.0' || parseFloat(getValue('hb')) < '1.0'" warn-text="WARNING: The expected range for this response is 1.0-18.0, but values outside of this range will be accepted. Please review the response and correct any data entry errors before continuing." class="" style=""></tangy-input>
+<!--              <tangy-box tangy-if="inputs.input1.invalid === true">-->
+<!--                You really should consider liking tangerines.-->
+<!--              </tangy-box>-->
             </tangy-form-item>
           </tangy-form>
         </template>
