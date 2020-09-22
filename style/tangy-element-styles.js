@@ -43,6 +43,7 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         top: var(--tangy-required-indicator--font-size, -2px);
         left: var(--tangy-required-indicator--font-size, -18px);
         font-size: var(--tangy-required-indicator--font-size, 2rem);
+        padding-top: 24px;
       }
 
       :host([disabled]) label {
