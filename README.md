@@ -129,7 +129,8 @@ You can provide some CSS overrides by providing a custom style definition in you
       --accent-color: #f26f10;
       --accent-text-color: #FFF;
       --error-color: var(--paper-red-500);
-      --warn-background-color: var(--paper-yellow-500);
+      --warn-color: #993f0b;
+      --warn-background-color: #f4e688;
       --disabled-color: #BBB;
     }
     h1, h2, h3, h4, h5 {
