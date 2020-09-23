@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.19.0
+- New `warn-background-color` and `warn-color` css vars
+- Alignment of required asterix.
+
 ## v4.18.0
 - New `Loc.getLineage()` function for calculating the tree of location nodes given a location node ID
 - New `<tangy-gate>` input for blocking UI until the Tangy Gate's value is set to true. This is useful for preventing users from proceeding when a complex condition is being run in an `on-change` or when asynchronous database code is running and we need a way to tell the user to hang out while it completes.

@@ -100,7 +100,7 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
       /*
        * warn-text
        */
-      #warn-text {
+      #warn-text, #warnText {
         font-family: var(--paper-font-common-base_-_font-family);
         font-size: medium;
         font-weight: bold;
@@ -108,17 +108,20 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         display: flex;
         margin-bottom: 30px;
         background-color: var(--warn-background-color);
+        padding: 0.5em;
       }
-      #warn-text > iron-icon {
+      #warn-text > iron-icon, #warnText > iron-icon {
         padding-right: 0.8em;
         height: 24px;
         width: 24px;
+        min-width: 24px;
       }
-      #warn-text > div {
+      #warn-text > div, #warnText > div {
         line-height: 24px;
       }
-      #warn-text:empty {
+      #warn-text:empty, #warnText:empty {
         margin-bottom: 0;
+        background-color: transparent;
       }
 
       /*
