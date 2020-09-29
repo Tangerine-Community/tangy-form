@@ -6,6 +6,7 @@ import '@polymer/paper-input/paper-input.js'
 import '../style/tangy-common-styles.js'
 import '../style/tangy-element-styles.js'
 import { combTranslations } from 'translation-web-component/util.js'
+import Cleave from 'cleave.js';
 
 /**
  * `tangy-input`
@@ -185,7 +186,15 @@ export class TangyInput extends PolymerElement {
         type: Boolean,
         value: false,
         reflectToAttribute: true
-      }
+      },
+      mask: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      maskProperties: {
+        type: Object
+      },
     }
   }
 
@@ -211,6 +220,15 @@ export class TangyInput extends PolymerElement {
       if (this.justReflectedValue) {
         this.justReflectedValue = false
         return
+      }
+      if (this.mask && this.mask !== '') {
+        this.maskProperties = JSON.parse(this.mask)
+        if (this.maskProperties.onValueChanged) {
+          this.maskProperties.onValueChanged = eval("(" + this.maskProperties.onValueChanged + ")");
+        }
+        let cleaveMask = new Cleave(this.shadowRoot.querySelector('#input'), this.maskProperties);
+        // console.log("cleaveMask: " + cleaveMask.properties.result)
+
       }
       // Now it's safe to set this.value.
       this.value = event.target.value
@@ -302,6 +320,9 @@ export class TangyInput extends PolymerElement {
 
 
   validate() {
+    if (this.maskProperties['removeLeadingZero']) {
+      this.value = +this.value
+    }
     if (this.hasAttribute('disabled') || this.hasAttribute('hidden')) {
       this.removeAttribute('invalid')
       return true
