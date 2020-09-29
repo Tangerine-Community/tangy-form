@@ -320,7 +320,7 @@ export class TangyInput extends PolymerElement {
 
 
   validate() {
-    if (this.maskProperties['removeLeadingZero']) {
+    if (this.maskProperties && this.maskProperties['removeLeadingZero']) {
       this.value = +this.value
     }
     if (this.hasAttribute('disabled') || this.hasAttribute('hidden')) {
