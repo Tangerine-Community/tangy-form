@@ -380,7 +380,12 @@ export class TangyForm extends PolymerElement {
         type: Number,
         value: undefined,
         reflectToAttribute: true
-      }
+      },
+      openAllItems: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
     }
   }
 
@@ -453,7 +458,11 @@ export class TangyForm extends PolymerElement {
 
     afterNextRender(this, function() {
       if (this._responseHasBeenSet === false) {
-        this.newResponse()
+        this._responseHasBeenSet = true
+        this.store.dispatch({ type: 'OPEN_ALL_ITEMS' })
+        if(this.hasAttribute('open-all-items')){
+          this.store.dispatch({ type: 'OPEN_ALL_ITEMS' })
+        }
       }
     })
 
@@ -463,7 +472,6 @@ export class TangyForm extends PolymerElement {
     this.addEventListener('exit-fullscreen', () => {
       this.store.dispatch({type: 'EXIT_FULLSCREEN'})
     })
-    
   }
 
   disconnectedCallback() {

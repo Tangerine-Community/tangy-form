@@ -244,6 +244,19 @@ const tangyFormReducer = function (state = initialState, action) {
       Object.assign(newState, calculateTargets(newState))
       return newState
 
+    case 'OPEN_ALL_ITEMS':
+      newState = Object.assign({}, state)
+      Object.assign(newState, {
+        items: newState.items.map((item) => {
+          return {
+            ...item,
+            open:true,
+            disabled:false,
+          }
+        })
+      })
+      return newState
+
 
 
     case 'ITEM_ENABLE':
