@@ -253,7 +253,7 @@
         </template>
       </demo-snippet>
 
-      <h3>Custom input mask</h3>
+      <h3>Custom input mask using blocks</h3>
       <demo-snippet>
         <template>
           <tangy-form id="my-form-2" title="My Form 2">
@@ -265,6 +265,21 @@
     "numericOnly": true,
     "numeralIntegerScale": 2,
     "removeLeadingZero": true
+}' class="" style=""></tangy-input>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+
+      <h3>Custom input mask using numeral shortcut</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="my-form-2" title="My Form 2">
+            <tangy-form-item id="item1">
+              <tangy-input type="text" allowed-pattern="" inner-label="g/dL" name="hb" required="" question-number="" label="Hb result" hint-text="1 decimal place" mask='{
+    "numeral": true,
+    "numericOnly": true,
+    "numeralDecimalScale": 1,
+    "numeralIntegerScale": 2
 }' class="" style=""></tangy-input>
           </tangy-form>
         </template>
