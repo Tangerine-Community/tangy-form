@@ -392,6 +392,35 @@
         </template>
       </demo-snippet>
 
+      <h3>Tangy Template Demo - building a table</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="my-form" title="">
+            <tangy-form-item id="item1" title="Item 1" on-open="window.foo = 'foo'">
+              <tangy-template name="bar">
+                      ${(()=>{
+                      let word
+                      if (true){
+                      word = 'hello'
+                      }
+                      else {
+                      word = 'goodbye'
+                      }
+                      return `
+                    <table>
+                      <tr>
+                        <td>BCG</td>
+                        <td>${word}</td>
+                      </tr>
+                    </table>
+                    `
+                      })()}
+              </tangy-template>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+
       <h3>Tangy Location Filter By</h3>
       <demo-snippet>
         <template>
