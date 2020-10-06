@@ -20,21 +20,19 @@ class TangySelect extends PolymerElement {
     <style include="tangy-element-styles"></style>
     <style include="tangy-common-styles"></style>
     <style include="mdc-select-style"></style>
-
     <style>
-    #errorText {
-      padding: 10px 10px 10px 0px;
-      font-size: medium;
-      font-weight: bold;
-      color: var(--error-color);
-    }
- 
+      #error-text, #errorText {
+        margin-top: 2em;
+        margin-bottom: 1em;
+      }
     </style>
-
     <div class="flex-container m-y-25">
       <div id="qnum-number"></div>
       <div id="qnum-content">
-        <div id="container">
+        <div id="container"></div>
+        <div id="error-text"></div>
+        <div id="warn-text"></div>
+        <div id="discrepancy-text"></div>
       </div>
     </div>
     `;
@@ -107,8 +105,8 @@ class TangySelect extends PolymerElement {
       },
       invalid: {
         type: Boolean,
-        observer: 'onInvalidChange',
         value: false,
+        observer: 'onInvalidChange',
         reflectToAttribute: true
       },
       incomplete: {
@@ -175,40 +173,12 @@ class TangySelect extends PolymerElement {
         </select>
         <div class="mdc-select__bottom-line"></div>
       </div>
-      <label id="error-text">
-        ${
-          this.invalid
-            ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
-            : ''
-        }
-      </label>
-      <div id="warn-text">
-        ${this.hasWarning
-          ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
-          : ''
-        }
-      </div>
-      <div id="discrepancy-text">
-        ${this.hasDiscrepancy
-          ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? this.getAttribute('discrepancy-text') : ''} </div>`
-          : ''
-        }
-      </div>
     `
     this._onChangeListener = this
       .shadowRoot
       .querySelector('select')
       .addEventListener('change', this.onChange.bind(this))
     this.dispatchEvent(new CustomEvent('render'))
-  }
-
-  onInvalidChange(value) {
-    // @TODO I'm not sure this hook is what ends up causing the error message to be displayed.
-    if (this.shadowRoot.querySelector('#error-text')) {
-      this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
-        ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
-        : ''
-    }
   }
 
   onChange(event) {
@@ -230,6 +200,31 @@ class TangySelect extends PolymerElement {
     if (newValue === true) {
       this.value = this.constructor.properties.value.value
       this.render()
+    }
+  }
+
+  onInvalidChange(value) {
+    // @TODO I'm not sure this hook is what ends up causing the error message to be displayed.
+    if (this.shadowRoot.querySelector('#error-text')) {
+      this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
+          ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
+          : ''
+    }
+  }
+
+  onDiscrepancyChange(value) {
+    if (this.shadowRoot.querySelector('#discrepancy-text')) {
+      this.shadowRoot.querySelector('#discrepancy-text').innerHTML = this.hasDiscrepancy
+          ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? this.getAttribute('discrepancy-text') : ''} </div>`
+          : ''
+    }
+  }
+
+  onWarnChange(value) {
+    if (this.shadowRoot.querySelector('#warn-text')) {
+      this.shadowRoot.querySelector('#warn-text').innerHTML = this.hasWarning
+          ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
+          : ''
     }
   }
 
