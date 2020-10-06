@@ -249,6 +249,31 @@
           <tangy-form id="my-form-2" title="My Form 2">
             <tangy-form-item id="item1">
               <tangy-input type="text" allowed-pattern="" inner-label="g/dL" name="hb" required="" question-number="" label="Hb result" hint-text="1 decimal place" valid-if="/^[0-9]+\.[0-9]$/.test(input.value) " error-text="ERROR: Please enter to the first decimal place. " warn-if="parseFloat(getValue('hb')) > '18.0' || parseFloat(getValue('hb')) < '1.0'" warn-text="WARNING: The expected range for this response is 1.0-18.0, but values outside of this range will be accepted. Please review the response and correct any data entry errors before continuing." class="" style=""></tangy-input>
+              <tangy-select name="warn_fruit_selection_2"
+                            label="What is your <b>second favorite</b> fruit?"
+                            hint-text="This is <b>hint text</b>."
+                            warn-if="getValue('warn_fruit_selection_2') === 'Orange'"
+                            warn-text="WARNING: Nerd! Tangerines are better."
+                            error-text="ERROR: Please select the correct value. "
+                            required="">
+                <option name="orange">Orange</option>
+                <option name="banana">Banana</option>
+                <option name="tangerine"><b>Tangerine</b></option>
+              </tangy-select>
+              <tangy-radio-buttons
+                      name="input1"
+                      label="Answer No or Maybe and this question will be flagged with a warning. Answer No and this question will be flagged with a discrepancy. If your selection causes a discrepancy or warning to be flagged, you may click submit again to proceed. If however you selected No, submitted, then selected Maybe, because you changed your selection you will be required to click submit one last time."
+                      warn-if="getValue('input1') === 'maybe' || getValue('input1') === 'no'"
+                      discrepancy-if="getValue('input1') === 'no'"
+                      discrepancy-text="This is a discrepancy."
+                      warn-text="This is a warning."
+              >
+                <option value="maybe">Maybe</option>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </tangy-radio-buttons>
+              <tangy-input type="text" allowed-pattern="" name="simple" required="" question-number="" label="Simple input"  class="" style=""></tangy-input>
+<!--              <tangy-location name="location" show-levels="county,school" filter-by="school1,school4" location-src="./location-list.json"></tangy-location>-->
           </tangy-form>
         </template>
       </demo-snippet>

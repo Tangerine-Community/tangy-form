@@ -669,12 +669,7 @@ class TangyLocation extends PolymerElement {
             : ''
           }
         </div>
-        <div id="warn-text">
-          ${this.hasWarning
-            ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
-            : ''
-          }
-        </div>
+        <div id="warn-text"></div>
         <div id="discrepancy-text">
           ${this.hasDiscrepancy
             ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? this.getAttribute('discrepancy-text') : ''} </div>`
@@ -819,6 +814,14 @@ class TangyLocation extends PolymerElement {
     if (newValue === true) {
       this.value = this.constructor.properties.value.value
       this.render()
+    }
+  }
+
+  onWarnChange(value) {
+    if (this.shadowRoot.querySelector('#warn-text')) {
+      this.shadowRoot.querySelector('#warn-text').innerHTML = this.hasWarning
+          ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
+          : ''
     }
   }
   
