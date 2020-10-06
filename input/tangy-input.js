@@ -37,12 +37,11 @@ export class TangyInput extends PolymerElement {
       <div id="qnum-number"></div>
       <div id="qnum-content">
         <div id="container"></div>
-        <div id="error-text"></div>    
-        <div id="warn-text"></div>
-        <div id="discrepancy-text"></div>
       </div>
     </div>
-    
+    <div id="error-text"></div>    
+    <div id="warn-text"></div>
+    <div id="discrepancy-text"></div>
   `
   }
 

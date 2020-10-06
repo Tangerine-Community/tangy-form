@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.19.1
+- Fix issue with #warn-text div displaying when empty in tangy-select and tangy-location.
+
 ## v4.19.0
 - New `warn-background-color` and `warn-color` css vars
 - Alignment of required asterix.
