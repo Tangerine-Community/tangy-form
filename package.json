@@ -26,6 +26,7 @@
     "@zxing/library": "^0.17.1",
     "devtools-detect": "^3.0.0",
     "dr-niels-sortable-list": "git://github.com/DrNiels/sortable-list.git#master",
+    "ethiopian-date": "0.0.6",
     "lit-element": "^2.3.1",
     "moment": "^2.24.0",
     "redux": "^4.0.0",
