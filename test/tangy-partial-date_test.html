@@ -88,24 +88,24 @@
 
         test('should calculate diff with only a year selected', () => {
           const element = fixture('TangyPartialDateFixture');
-          assert.equal(element.diff('year', moment('2020-01-01'), '2019-99-99'), 1)
-          assert.equal(element.diff('year', moment('2020-01-01'), '2018-99-99'), 2)
-          assert.equal(element.diff('year', moment('2020-01-01'), '2019--',), 1)
-          assert.equal(element.diff('year', moment('2020-01-01'), '2018--'), 2)
+          assert.equal(element.diff('year', '2020-01-01', '2019-99-99'), 1)
+          assert.equal(element.diff('year', '2020-01-01', '2018-99-99'), 2)
+          assert.equal(element.diff('year', '2020-01-01', '2019--',), 1)
+          assert.equal(element.diff('year', '2020-01-01', '2018--'), 2)
         })
         
         test('should calculate diff with only a year and month selected', () => {
           const element = fixture('TangyPartialDateFixture');
-          assert.equal(element.diff('year', moment('2020-01-01'), '2019-99-99'), 1)
-          assert.equal(element.diff('year', moment('2020-01-01'), '2018-99-99'), 2)
-          assert.equal(element.diff('year', moment('2020-01-01'), '2019--'), 1)
-          assert.equal(element.diff('year', moment('2020-01-01'), '2018--'), 2)
+          assert.equal(element.diff('year', '2020-01-01', '2019-01-99'), 1)
+          assert.equal(element.diff('year', '2020-01-01', '2018-01-99'), 2)
+          assert.equal(element.diff('year', '2020-01-01', '2019-01-'), 1)
+          assert.equal(element.diff('year', '2020-01-01', '2018-01-'), 2)
         })
 
         test('should calculate diff with all selected', () => {
           const element = fixture('TangyPartialDateFixture');
-          assert.equal(element.diff('year', moment('2020-01-01'), '2019-01-01'), 1)
-          assert.equal(element.diff('year', moment('2020-01-01'), '2018-01-01'), 2)
+          assert.equal(element.diff('year', '2020-01-01', '2019-01-01'), 1)
+          assert.equal(element.diff('year', '2020-01-01', '2018-01-01'), 2)
         })
 
       })

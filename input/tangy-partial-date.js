@@ -505,7 +505,7 @@ class TangyPartialDate extends PolymerElement {
   }
 
   getValueAsMoment() {
-    this._tranformValueToMoment(this.value)
+    return this._tranformValueToMoment(this.value)
   }
 
   diff(units = 'days', endString = '', startString = '', asFloat = true) {

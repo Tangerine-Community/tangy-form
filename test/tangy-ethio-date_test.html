@@ -53,9 +53,9 @@
         test('should show/not show today button', () => {
           const element = fixture('TangyEthiopianDateShowTodayButtonFixture');
           assert.equal(element.getAttribute("show-today-button"), "")
-          assert.equal(!!element.shadowRoot.querySelector("mwc-button[id='today']"),true)
+          assert.equal(!!element.shadowRoot.querySelector("paper-button[id='today']"),true)
           element.removeAttribute("show-today-button")
-          assert.equal(!!element.shadowRoot.querySelector("mwc-button[id='today']"),false)
+          assert.equal(!!element.shadowRoot.querySelector("paper-button[id='today']"),false)
         })
         test('should show/not show unknown year option', () => {
             const element = fixture('TangyEthiopianDateUnknownYear')
@@ -82,30 +82,45 @@
 
         test('should calculate diff as null with nothing selected or all unknown', () => {
           const element = fixture('TangyEthiopianDateFixture');
-          assert.equal(element.diff('year', '2020-01-01', '9999-99-99'), null)
-          assert.equal(element.diff('year', '2020-01-01', '--'), null)
+          assert.equal(element.diff('year', '2019-01-01', '9999-99-99'), null)
+          assert.equal(element.diff('year', '2019-01-01', '--'), null)
         })
 
         test('should calculate diff with only a year selected', () => {
           const element = fixture('TangyEthiopianDateFixture');
-          assert.equal(element.diff('year', moment('2020-01-01'), '2019-99-99'), 1)
-          assert.equal(element.diff('year', moment('2020-01-01'), '2018-99-99'), 2)
-          assert.equal(element.diff('year', moment('2020-01-01'), '2019--',), 1)
-          assert.equal(element.diff('year', moment('2020-01-01'), '2018--'), 2)
+          /*
+           * Strings are Ethiopian dates
+           * end date is 2027-Sept-12
+           * start dates are 2026-(Sept-12) and 2025-(Sept-12) 
+           */
+          assert.equal(element.diff('year', '2019-01-01', '2018-99-99'), 1)
+          assert.equal(element.diff('year', '2019-01-01', '2017-99-99'), 2)
+          assert.equal(element.diff('year', '2019-01-01', '2018--',), 1)
+          assert.equal(element.diff('year', '2019-01-01', '2017--'), 2)
         })
         
         test('should calculate diff with only a year and month selected', () => {
           const element = fixture('TangyEthiopianDateFixture');
-          assert.equal(element.diff('year', moment('2020-01-01'), '2019-99-99'), 1)
-          assert.equal(element.diff('year', moment('2020-01-01'), '2018-99-99'), 2)
-          assert.equal(element.diff('year', moment('2020-01-01'), '2019--'), 1)
-          assert.equal(element.diff('year', moment('2020-01-01'), '2018--'), 2)
+          /*
+           * Strings are Ethiopian dates
+           * end date is 2027-Sept-12
+           * start dates are 2026-(Sept-12) and 2025-(Sept-12) 
+           */
+          assert.equal(element.diff('year', '2019-01-01', '2018-01-99'), 1)
+          assert.equal(element.diff('year', '2019-01-01', '2017-01-99'), 2)
+          assert.equal(element.diff('year', '2019-01-01', '2018-01-',), 1)
+          assert.equal(element.diff('year', '2019-01-01', '2017-01-'), 2)
         })
 
         test('should calculate diff with all selected', () => {
           const element = fixture('TangyEthiopianDateFixture');
-          assert.equal(element.diff('year', moment('2020-01-01'), '2019-01-01'), 1)
-          assert.equal(element.diff('year', moment('2020-01-01'), '2018-01-01'), 2)
+          /*
+           * Strings are Ethiopian dates
+           * end date is 2027-Sept-12
+           * start dates are 2026-(Sept-12) and 2025-(Sept-12) 
+           */
+          assert.equal(element.diff('year', '2019-01-01', '2018-01-01'), 1)
+          assert.equal(element.diff('year', '2019-01-01', '2017-01-01'), 2)
         })
 
       })

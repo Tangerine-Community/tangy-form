@@ -462,18 +462,18 @@ class TangyEthiopianDate extends PolymerElement {
       }
       if (day < 1 || year < 1)
           return false;
-      if((month>13||month<1) & month !== 99)
+      if((month>13 || month<1) && month !== 99)
           // month out of range
           return false;
-      if ((month != 13) && day > 30 && day !== 99)
+      if ((month !== 13) && day > 30 && day !== 99)
           // First 12 Ethiopians months have 30 days
           // day out of range
           return false;
-      if (month == 13) {
+      if (month === 13) {
           // 13th Ethiopian month has 5 days on a normal year, 6 on a leap year
           // Ethiopian leap years are one year before gregrian leap years 
           // (eg: Ethiopian years 2011, 2015, 2019 are leap years)
-          const isLeapYear = (year % 4) === 3
+          const isLeapYear = ((year % 4) === 3)
           if (day === 99) {
               return true;
           } else if ((isLeapYear && day > 6) || (!isLeapYear && day > 5)) {
@@ -505,39 +505,37 @@ class TangyEthiopianDate extends PolymerElement {
   }
 
   _tranformValueToMoment(value) {
-    var [year_part, month_part, day_part] = str.split('-');
+    var [year_part, month_part, day_part] = value.split('-');
 
     let date = null
-    if (year === '9999' || year === '') {
+    if (year_part === '9999' || year_part === '') {
       // Need at least a year to calculate.
       return null 
-    } else if (month === '99' || month === '') {
-      // We don't have a month, just have a year to go off of.
-      const greg_date = ethiopian_date.toGregorian(parseInt(year_part), 1, 1);
-      const year = greg_date[0];
-      date = moment(year, 'YYYY')
-    } else if (day === '99' || day === '') {
-      // We don't have a day, go off of year and month.
-      const greg_date = ethiopian_date.toGregorian(parseInt(year_part), parseInt(month_part), 1);
-      const year = greg_date[0];
-      const month = greg_date[1];
-      date = moment(`${year}-${month}`, 'YYYY-MM')
-    } else {
-      const greg_date = ethiopian_date.toGregorian(parseInt(year_part), parseInt(month_part), parseInt(day_part));
-      const year = greg_date[0];
-      const month = greg_date[1];
-      const day = greg_date[2];
-      date = moment(`${year}-${month}-${day}`, 'YYYY-MM-DD')
     }
+    if (month_part === '99' || month_part === '') {
+      // We don't have a month, just have a year to go off of.
+      month_part = '01'
+    }
+    if (day_part === '99' || day_part === '') {
+      // We don't have a day, go off of year and month.
+      day_part = '01'
+    }
+
+    const greg_date = ethiopianDate.toGregorian(parseInt(year_part), parseInt(month_part), parseInt(day_part));
+    const year = greg_date[0];
+    const month = greg_date[1];
+    const day = greg_date[2];
+    date = moment(`${year}-${month}-${day}`, 'YYYY-MM-DD')
+
     return date
   }
 
   getValueAsMoment() {
-    this._tranformValueToMoment(this.value)
+    return this._tranformValueToMoment(this.value)
   }
 
   diff(units = 'days', endString = '', startString = '', asFloat = true) {
-    const end = moment(endString)
+    const end = this._tranformValueToMoment(endString)
     const start = startString 
       ? this._tranformValueToMoment(startString)
       : this.getValueAsMoment()
