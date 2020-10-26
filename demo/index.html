@@ -41,7 +41,9 @@
     <script type="module" src="../input/tangy-checkbox.js"></script>
     <script type="module" src="../input/tangy-checkboxes.js"></script>
     <script type="module" src="../input/tangy-checkboxes-dynamic.js"></script>
+    <script type="module" src="../input/tangy-consent.js"></script>
     <script type="module" src="../input/tangy-eftouch.js"></script>
+    <script type="module" src="../input/tangy-ethio-date.js"></script>
     <script type="module" src="../input/tangy-gps.js"></script>
     <script type="module" src="../input/tangy-input.js"></script>
     <script type="module" src="../input/tangy-location.js"></script>
@@ -51,10 +53,9 @@
     <script type="module" src="../input/tangy-timed.js"></script>
     <script type="module" src="../input/tangy-untimed-grid.js"></script>
     <script type="module" src="../input/tangy-toggle-button.js"></script>
+    <script type="module" src="../input/tangy-partial-date.js"></script>
     <script type="module" src="../input/tangy-photo-capture.js"></script>
     <script type="module" src="../input/tangy-qr.js"></script>
-    <script type="module" src="../input/tangy-consent.js"></script>
-    <script type="module" src="../input/tangy-partial-date.js"></script>
 
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
@@ -273,7 +274,7 @@
                 <option value="yes">Yes</option>
               </tangy-radio-buttons>
               <tangy-input type="text" allowed-pattern="" name="simple" required="" question-number="" label="Simple input"  class="" style=""></tangy-input>
-<!--              <tangy-location name="location" show-levels="county,school" filter-by="school1,school4" location-src="./location-list.json"></tangy-location>-->
+          <!--      <tangy-location name="location" show-levels="county,school" filter-by="school1,school4" location-src="./location-list.json"></tangy-location>-->
           </tangy-form>
         </template>
       </demo-snippet>
@@ -698,6 +699,7 @@
               </tangy-radio-buttons>
             </tangy-form-item>
           </tangy-form>
+        </template>
       </demo-snippet>
 
       <h3>ACASI widget</h3>
@@ -718,6 +720,7 @@
               <tangy-acasi required images="../demo/assets/images/never.png,../demo/assets/images/once.png,../demo/assets/images/few.png,../demo/assets/images/many.png,../demo/assets/images/dont_know.png" incomplete="" introsrc="../demo/assets/sounds/1.mp3" label="" name="pq2" on-change="" touchsrc="../demo/assets/sounds/never_Eng.mp3,../demo/assets/sounds/once_Eng.mp3,../demo/assets/sounds/fewtimes_Eng.mp3,../demo/assets/sounds/manytimes_Eng.mp3,../demo/assets/sounds/noresponse_Eng.mp3" transitionsrc="../demo/assets/sounds/swish.mp3"></tangy-acasi>
             </tangy-form-item>
           </tangy-form>
+        </template>
       </demo-snippet>
 
       <h3>Tangy partial date</h3>
@@ -725,12 +728,30 @@
         <template>
           <tangy-form id="tangy-partial-date-form" title="My Form">
             <tangy-form-item id="tangy-partial-date-item" title="Tangy partial date">
-              <tangy-partial-date valid-if="true" name="input1" label="Test" min-year="2019" max-year="2021" allow-unknown-year show-today-button></tangy-partial-date>
+              <tangy-partial-date valid-if="true" name="input1" label="Test" min-year="2019" max-year="2021" 
+                allow-unknown-year show-today-button></tangy-partial-date>
             </tangy-form-item>
           </tangy-form>
         </template>
       </demo-snippet>
 
+      <h3>Ethiopian Date Picker</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="my-form3" title="">
+            <tangy-form-item id="section_month_year" title="Ethiopian Day, Month, Year" on-open="" on-change="" category="">
+              <template>
+                <tangy-ethio-date name="year_month" class="" style="" required="" question-number="" label="Enter a date:"
+                        error-text="" hint-text="" future-date-error-text="No future dates are allowed" 
+                        missing-date-error-text="" invalid-date-error-text="" 
+                        min-year="2010" max-year="2030" show-today-button allow-unknown-day allow-unknown-month allow-unknown-year>
+                </tangy-ethio-date>
+              </template>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+        
     </div>
   </body>
 </html>

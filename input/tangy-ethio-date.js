@@ -5,15 +5,17 @@ import '../style/tangy-common-styles.js'
 import '../style/mdc-select-style.js'
 import { t } from '../util/t.js'
 import moment from 'moment'
+import * as ethiopianDate from 'ethiopian-date/index.js'
+
 /**
- * `tangy-partial-date`
+ * `tangy-ethio-date`
  *
  *
  * @customElement
  * @polymer
  * @demo demo/index.html
  */
-class TangyPartialDate extends PolymerElement {
+class TangyEthiopianDate extends PolymerElement {
   static get template() {
     return html`
     <style include="tangy-element-styles"></style>
@@ -65,7 +67,7 @@ class TangyPartialDate extends PolymerElement {
     `;
   }
 
-  static get is() { return 'tangy-partial-date'; }
+  static get is() { return 'tangy-ethio-date'; }
 
   static get properties() {
     return {
@@ -230,91 +232,79 @@ class TangyPartialDate extends PolymerElement {
   
   render() {
 
-     const months = [
-      t('January'),
-      t('February'),
-      t('March'),
-      t('April'),
-      t('May'),
-      t('June'),
-      t('July'),
-      t('August'),
-      t('September'),
-      t('October'),
-      t('November'),
-      t('December')
-    ];
-    const days = Array.from({length: 31}, (x,i) => i+1);
+    const months = ['መስከረም', 'ጥቅምት', 'ኅዳር', 'ታህሣሥ', 'ጥር', 'የካቲት', 'መጋቢት', 'ሚያዝያ', 'ግንቦት', 'ሰኔ', 'ሐምሌ', 'ነሐሴ', 'ጳጉሜ'];
+    const days = Array.from({length: 30}, (x,i) => i+1);
+
     const years = Array.from({length: parseInt(this.maxYear) - parseInt(this.minYear) + 1}, (x,i) => parseInt(this.minYear) + i);
     const unknownText = t("Unknown");
-    this.allowUnknownDay && days.push(99);
-    this.allowUnknownMonth && months.push(unknownText);
     this.allowUnknownYear && years.push(9999);
+    this.allowUnknownMonth && months.push(unknownText);
+    this.allowUnknownDay && days.push(99);
 
     this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
     this.$.container.innerHTML = `
-      <label for="group">${this.label}</label>
-      <label class="hint-text">${this.hintText}</label>
-      <div class="mdc-select partial-date-format">
-        <div class='partial-date-float'>
-          <label for='day' class='partial-date-headings'>${t('Day')}:</label>
-          <select class="mdc-select__surface partial-date-select" name="day" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
-            <option value="" default selected disabled></option>
-            ${days.map((day, i) => `
-              <option value="${day}">
-                ${(day === 99 ? t("Unknown") : day)}
-              </option>
-            `)}
-          </select>
-        </div>
-        <div class='partial-date-float'>
-          <label for='month' class='partial-date-headings'>${t('Month')}:</label>
-          <select class="mdc-select__surface partial-date-select" name="month" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
-            <option value="" default selected disabled></option>
-            ${months.map((month, i) => `
-              <option value="${(month === unknownText ? 99 : months.indexOf(month) + 1)}">
-                ${(this.numericMonth ? (month === unknownText ? unknownText : months.indexOf(month) + 1) : (month === unknownText ? unknownText : month))}
-              </option>
-            `)}    
-          </select>
-        </div>
-        <div class='partial-date-float'>
-          <label for='year' class='partial-date-headings'>${t('Year')}:</label>
-            <select class="mdc-select__surface partial-date-select" name="year" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
-              <option value="" default selected disabled></option>
-              ${years.map((year, i) => `
-                <option value="${year}">
-                ${(year === 9999 ? t("Unknown") : year)}
-                </option>
-              `)}
-            </select>
-        </div>  
-        
-        <paper-button style="align-self:flex-end;" id="resetButton">
-            <iron-icon icon="refresh"></iron-icon>&nbsp;
-          </paper-button>
-          
-        ${(this.showTodayButton ? ` 
-          <paper-button style="align-self:flex-end;" id="today" on-click="setToday" ${this.disabled ? 'disabled' : ''}>
-            <iron-icon icon="query-builder"></iron-icon>&nbsp;
-            ${t('Today')}
-          </paper-button>` : '' 
-        )}
+    <label for="group">${this.label}</label>
+    <label class="hint-text">${this.hintText}</label>
+    <div class="mdc-select partial-date-format">
+      <div class='partial-date-float'>
+      <label for='day' class='partial-date-headings'>${t('Day')}:</label>
+        <select class="mdc-select__surface partial-date-select" name="day" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
+          <option value="" default selected disabled></option>
+          ${days.map((day, i) => `
+            <option value="${day}">
+            ${(day === 99 ? t("Unknown") : day)}
+            </option>
+          `)}
+        </select>
       </div>
-      ${this.invalid && this.errorText && !this.internalErrorText ? `
-        <div id="error-text">
-          <iron-icon icon="error"></iron-icon>
-            <div>${this.errorText}</div>
-        </div>      
-      ` : ''}
-      ${this.invalid && this.internalErrorText ? `
-        <div id="error-text">
-          <iron-icon icon="error"></iron-icon>
-            <div>${this.internalErrorText}</div>
-        </div>      
-      ` : ''}
-    `
-    if (this.showTodayButton) {
+      <div class='partial-date-float'>
+        <label for='month' class='partial-date-headings'>${t('Month')}:</label>
+        <select class="mdc-select__surface partial-date-select" name="month" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
+          <option value="" default selected disabled></option>
+          ${months.map((month, i) => `
+            <option value="${(month === unknownText ? 99 : months.indexOf(month) + 1)}">
+              ${(this.numericMonth ? (month === unknownText ? unknownText : months.indexOf(month) + 1) : (month === unknownText ? unknownText : month))}
+            </option>
+          `)}    
+        </select>
+      </div>
+      <div class='partial-date-float'>
+      <label for='year' class='partial-date-headings'>${t('Year')}:</label>
+      <select class="mdc-select__surface partial-date-select" name="year" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
+        <option value="" default selected disabled></option>
+        ${years.map((year, i) => `
+          <option value="${year}">
+            ${(year === 9999 ? t("Unknown") : year)}
+          </option>
+        `)}
+      </select>
+      </div>
+
+      <paper-button style="align-self:flex-end;" id="resetButton">
+          <iron-icon icon="refresh"></iron-icon>&nbsp;
+        </paper-button>
+        
+      ${(this.showTodayButton ? ` 
+        <paper-button style="align-self:flex-end;" id="today" on-click="setToday" ${this.disabled ? 'disabled' : ''}>
+          <iron-icon icon="query-builder"></iron-icon>&nbsp;
+          ${t('Today')}
+        </paper-button>` : '' 
+      )}
+    </div>
+    ${this.invalid && this.errorText && !this.internalErrorText ? `
+      <div id="error-text">
+        <iron-icon icon="error"></iron-icon>
+          <div>${this.errorText}</div>
+      </div>      
+    ` : ''}
+    ${this.invalid && this.internalErrorText ? `
+      <div id="error-text">
+        <iron-icon icon="error"></iron-icon>
+          <div>${this.internalErrorText}</div>
+      </div>      
+    ` : ''}
+  `
+  if (this.showTodayButton) {
       this._onClickListener = this
         .shadowRoot
         .querySelector('#today')
@@ -326,7 +316,7 @@ class TangyPartialDate extends PolymerElement {
       .addEventListener('click', this.onResetClick.bind(this));
     this._onChangeListener = this
       .shadowRoot
-      .querySelector('select[name="day"]')
+      .querySelector('select[name="year"]')
       .addEventListener('change', this.onChange.bind(this));
     this._onChangeListener = this
       .shadowRoot
@@ -334,34 +324,47 @@ class TangyPartialDate extends PolymerElement {
       .addEventListener('change', this.onChange.bind(this));
     this._onChangeListener = this
       .shadowRoot
-      .querySelector('select[name="year"]')
+      .querySelector('select[name="day"]')
       .addEventListener('change', this.onChange.bind(this));
+
     this.dispatchEvent(new CustomEvent('render'))
     if (this.value !== '') {
       const dateValue = this.value;
-      this.shadowRoot.querySelector("select[name='day']").value = this.unpad(dateValue.split("-")[2]);
+      this.shadowRoot.querySelector("select[name='year']").value = dateValue.split("-")[0];
       this.shadowRoot.querySelector("select[name='month']").value = this.unpad(dateValue.split("-")[1]);
-      this.shadowRoot.querySelector("select[name='year']").value = dateValue.split("-")[0];  
+      this.shadowRoot.querySelector("select[name='day']").value = this.unpad(dateValue.split("-")[2]);
+
     }
   }
 
+  /*
+   * onTodayClick(event)
+   * Sets the date to today
+   * The Gregorian Date for today is converted to the equivalent Ethiopian Date
+   */
   onTodayClick(event) {
     const today = new Date();
-    const day = String(today.getDate()).padStart(2, '0');
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const year = today.getFullYear();
-    this.value = year + '-' + month + '-' + day;
-    this.shadowRoot.querySelector("select[name='day']").value = year;
+    const date = ethiopianDate.toEthiopian(today.getFullYear(), today.getMonth(), today.getDate());
+
+    const year = String(date[0]) ;
+    const month = String(date[1]);
+    const day = String(date[2]);
+    this.value = year + '-' +  month + '-' + day;
+
+    this.shadowRoot.querySelector("select[name='year']").value =  year;
     this.shadowRoot.querySelector("select[name='month']").value = month;
-    this.shadowRoot.querySelector("select[name='year']").value = day;
+    this.shadowRoot.querySelector("select[name='day']").value = day;
+
     this.render();
   }
 
   onChange(event) {
-    this.value =  this.shadowRoot.querySelector("select[name='year']").value + '-' +
-                  this.pad(this.shadowRoot.querySelector("select[name='month']").value,2) + '-' +
-                  this.pad(this.shadowRoot.querySelector("select[name='day']").value,2);
-    console.log("Date value updated to " + this.value);          
+    const year = this.shadowRoot.querySelector("select[name='year']").value;
+    const month = this.shadowRoot.querySelector("select[name='month']").value;
+    const day = this.shadowRoot.querySelector("select[name='day']").value;
+
+    this.value = year + '-' +  this.pad(month,2) + '-' + this.pad(day,2);
+    
     this.dispatchEvent(new CustomEvent('change'));
   }
 
@@ -400,11 +403,19 @@ class TangyPartialDate extends PolymerElement {
     return +a;
   }
 
+  /*
+   * isFutureDate(dateValue)
+   * Check if the @dateValue is in the future
+   * @dateValue is converted to Gregorian to compare against Date()
+   */
   isFutureDate(dateValue) {
+    const day = parseInt(this.unpad(dateValue.split("-")[2]));
+    const month = parseInt(this.unpad(dateValue.split("-")[1]));
+    const year = parseInt(dateValue.split("-")[0]); 
+
+    const [enteredYear, enteredMonth, enteredDay] = ethiopianDate.toGregorian(year, month, day);
+
     const today = new Date();
-    const enteredDay = parseInt(this.unpad(dateValue.split("-")[2]));
-    const enteredMonth = parseInt(this.unpad(dateValue.split("-")[1]));
-    const enteredYear = parseInt(dateValue.split("-")[0]); 
     if (enteredDay !== 99 && enteredMonth !== 99 && enteredYear !== 9999) {
       const fullDate = new Date(enteredYear, enteredMonth - 1, enteredDay);
       if (fullDate > today) {
@@ -433,35 +444,42 @@ class TangyPartialDate extends PolymerElement {
  
   }
 
+  /*
+   * isValidDate(str)
+   * Validates the selected date based on the Ethiopian Calendar
+   */
   isValidDate(str) {
     var parts = str.split('-');
     if (parts.length < 3)
       return false;
     else {
-      var day = parseInt(parts[2]);
-      var month = parseInt(parts[1]);
       var year = parseInt(parts[0]);
+      var month = parseInt(parts[1]);
+      var day = parseInt(parts[2]);
+
       if (isNaN(day) || isNaN(month) || isNaN(year)) {
           return false;
       }
       if (day < 1 || year < 1)
           return false;
-      if((month>12||month<1) & month !== 99)
+      if((month>13 || month<1) && month !== 99)
+          // month out of range
           return false;
-      if ((month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) && day > 31 && day !== 99)
+      if ((month !== 13) && day > 30 && day !== 99)
+          // First 12 Ethiopians months have 30 days
+          // day out of range
           return false;
-      if ((month == 4 || month == 6 || month == 9 || month == 11 ) && day > 30 & day !== 99)
-          return false;
-      if (month == 2) {
-        if (day === 99)
-          return true;
-        if (((year % 4) == 0 && (year % 100) != 0) || ((year % 400) == 0 && (year % 100) == 0)) {
-            if (day > 29)
-                return false;
-        } else {
-            if (day > 28)
-                return false;
-        }      
+      if (month === 13) {
+          // 13th Ethiopian month has 5 days on a normal year, 6 on a leap year
+          // Ethiopian leap years are one year before gregrian leap years 
+          // (eg: Ethiopian years 2011, 2015, 2019 are leap years)
+          const isLeapYear = ((year % 4) === 3)
+          if (day === 99) {
+              return true;
+          } else if ((isLeapYear && day > 6) || (!isLeapYear && day > 5)) {
+              // day out of range
+              return false;
+          }
       }
       return true;
     }
@@ -487,20 +505,28 @@ class TangyPartialDate extends PolymerElement {
   }
 
   _tranformValueToMoment(value) {
-    const [year, month, day] = value.split('-')
+    var [year_part, month_part, day_part] = value.split('-');
+
     let date = null
-    if (year === '9999' || year === '') {
+    if (year_part === '9999' || year_part === '') {
       // Need at least a year to calculate.
       return null 
-    } else if (month === '99' || month === '') {
-      // We don't have a month, just have a year to go off of.
-      date = moment(year, 'YYYY')
-    } else if (day === '99' || day === '') {
-      // We don't have a day, go off of year and month.
-      date = moment(`${year}-${month}`, 'YYYY-MM')
-    } else {
-      date = moment(`${year}-${month}-${day}`, 'YYYY-MM-DD')
     }
+    if (month_part === '99' || month_part === '') {
+      // We don't have a month, just have a year to go off of.
+      month_part = '01'
+    }
+    if (day_part === '99' || day_part === '') {
+      // We don't have a day, go off of year and month.
+      day_part = '01'
+    }
+
+    const greg_date = ethiopianDate.toGregorian(parseInt(year_part), parseInt(month_part), parseInt(day_part));
+    const year = greg_date[0];
+    const month = greg_date[1];
+    const day = greg_date[2];
+    date = moment(`${year}-${month}-${day}`, 'YYYY-MM-DD')
+
     return date
   }
 
@@ -509,7 +535,7 @@ class TangyPartialDate extends PolymerElement {
   }
 
   diff(units = 'days', endString = '', startString = '', asFloat = true) {
-    const end = moment(endString)
+    const end = this._tranformValueToMoment(endString)
     const start = startString 
       ? this._tranformValueToMoment(startString)
       : this.getValueAsMoment()
@@ -529,4 +555,4 @@ class TangyPartialDate extends PolymerElement {
 
 }
 
-window.customElements.define(TangyPartialDate.is, TangyPartialDate);
+window.customElements.define(TangyEthiopianDate.is, TangyEthiopianDate);
