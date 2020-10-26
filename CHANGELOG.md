@@ -1,4 +1,6 @@
 # CHANGELOG
+## v4.20.0
+- Support for `<tangy-ethio-date>` input that exposes a Date Picker that validates for the Ethiopian Calendar.
 
 ## v4.19.1
 - Fix issue with #warn-text div displaying when empty in tangy-select and tangy-location.
