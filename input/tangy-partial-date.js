@@ -355,9 +355,9 @@ class TangyPartialDate extends PolymerElement {
     this.shadowRoot.querySelector("select[name='month']").value = month;
     this.shadowRoot.querySelector("select[name='year']").value = day;
 
-    this.dispatchEvent(new CustomEvent('change'));
-
     this.render();
+
+    this.dispatchEvent(new CustomEvent('change'));
   }
 
   onChange(event) {
