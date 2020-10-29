@@ -1,4 +1,7 @@
 # CHANGELOG
+## v4.20.1
+- Make `<tangy-ethio-date>` and `<tangy-partial-date>` fire a change event when the today button is clicked
+
 ## v4.20.0
 - Support for `<tangy-ethio-date>` input that exposes a Date Picker that validates for the Ethiopian Calendar.
 
