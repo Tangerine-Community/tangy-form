@@ -26,22 +26,22 @@ class TangyEthiopianDate extends PolymerElement {
         --iron-icon-width: 32px;
         --iron-icon-height: 32px;
       }
-      .partial-date-select {
+      .ethio-date-select {
         background-image: url(data:image/svg+xml,%3Csvg%20width%3D%2210px%22%20height%3D%225px%22%20viewBox%3D%227%2010%2010%205%22%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%0A%20%20%20%20%3Cpolygon%20id%3D%22Shape%22%20stroke%3D%22none%22%20fill%3D%22%230%22%20fill-rule%3D%22evenodd%22%20opacity%3D%220.54%22%20points%3D%227%2010%2012%2015%2017%2010%22%3E%3C%2Fpolygon%3E%0A%3C%2Fsvg%3E);
         background-repeat: no-repeat;
         background-position: right 10px center;
         border-bottom: 1px solid var(--primary-text-color, black);
       }
-      .partial-date-format {
+      .ethio-date-format {
         background-image: none;
         margin-top: 20px;
         margin-bottom: 20px;
       }
-      .partial-date-float {
+      .ethio-date-float {
         /*float:left;*/
         margin-right:15px;
       }
-      .partial-date-headings {
+      .ethio-date-headings {
         color: var(--primary-text-color, black);
         font-size: smaller;
         font-weight: normal;
@@ -245,10 +245,10 @@ class TangyEthiopianDate extends PolymerElement {
     this.$.container.innerHTML = `
     <label for="group">${this.label}</label>
     <label class="hint-text">${this.hintText}</label>
-    <div class="mdc-select partial-date-format">
-      <div class='partial-date-float'>
-      <label for='day' class='partial-date-headings'>${t('Day')}:</label>
-        <select class="mdc-select__surface partial-date-select" name="day" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
+    <div class="mdc-select ethio-date-format">
+      <div class='ethio-date-float'>
+      <label for='day' class='ethio-date-headings'>${t('Day')}:</label>
+        <select class="mdc-select__surface ethio-date-select" name="day" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
           <option value="" default selected disabled></option>
           ${days.map((day, i) => `
             <option value="${day}">
@@ -257,9 +257,9 @@ class TangyEthiopianDate extends PolymerElement {
           `)}
         </select>
       </div>
-      <div class='partial-date-float'>
-        <label for='month' class='partial-date-headings'>${t('Month')}:</label>
-        <select class="mdc-select__surface partial-date-select" name="month" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
+      <div class='ethio-date-float'>
+        <label for='month' class='ethio-date-headings'>${t('Month')}:</label>
+        <select class="mdc-select__surface ethio-date-select" name="month" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
           <option value="" default selected disabled></option>
           ${months.map((month, i) => `
             <option value="${(month === unknownText ? 99 : months.indexOf(month) + 1)}">
@@ -268,9 +268,9 @@ class TangyEthiopianDate extends PolymerElement {
           `)}    
         </select>
       </div>
-      <div class='partial-date-float'>
-      <label for='year' class='partial-date-headings'>${t('Year')}:</label>
-      <select class="mdc-select__surface partial-date-select" name="year" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
+      <div class='ethio-date-float'>
+      <label for='year' class='ethio-date-headings'>${t('Year')}:</label>
+      <select class="mdc-select__surface ethio-date-select" name="year" value="${this.value}" ${this.disabled ? 'disabled' : ''}>
         <option value="" default selected disabled></option>
         ${years.map((year, i) => `
           <option value="${year}">
@@ -354,6 +354,8 @@ class TangyEthiopianDate extends PolymerElement {
     this.shadowRoot.querySelector("select[name='year']").value =  year;
     this.shadowRoot.querySelector("select[name='month']").value = month;
     this.shadowRoot.querySelector("select[name='day']").value = day;
+
+    this.dispatchEvent(new CustomEvent('change'));
 
     this.render();
   }
