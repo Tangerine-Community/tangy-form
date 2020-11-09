@@ -667,6 +667,7 @@ export class TangyForm extends PolymerElement {
       const message = `${t(`Error detected in the form's logic:`)} ${hook}`
       console.log(message)
       console.log(e)
+      console.log("Hook text: " + this.getAttribute(hook))
       this.errorMessage(message)
     }
   }
