@@ -98,6 +98,7 @@ const tangyFormReducer = function (state = initialState, action) {
     case 'UNLOCK':
       return Object.assign({}, state, {
         complete: false,
+        hasUnlocked: true,
         endUnixtime: undefined,
         form: Object.assign({}, state.form, {
           complete: false,
