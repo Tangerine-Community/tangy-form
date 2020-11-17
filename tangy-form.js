@@ -451,6 +451,13 @@ export class TangyForm extends PolymerElement {
       })
     }
 
+    if (this.hasAttribute('on-resubmit')) {
+      this.addEventListener('resubmit', (event) => {
+        let form = this
+        this.fireHook('on-resubmit')
+      })
+    }
+
     afterNextRender(this, function() {
       if (this._responseHasBeenSet === false) {
         this.newResponse()
@@ -475,7 +482,12 @@ export class TangyForm extends PolymerElement {
       type: 'ITEM_SAVE',
       item: event.target.getProps()
     })
-    const cancelledSubmit = !this.dispatchEvent(new CustomEvent('submit', {cancelable: true}))
+    let cancelledSubmit
+    if (!this.response.hasUnlocked) {
+      cancelledSubmit = !this.dispatchEvent(new CustomEvent('submit', {cancelable: true}))
+    } else {
+      cancelledSubmit = !this.dispatchEvent(new CustomEvent('resubmit', {cancelable: true}))
+    }
     if (cancelledSubmit) return
     this.store.dispatch({
       type: 'FORM_RESPONSE_COMPLETE'
@@ -486,6 +498,11 @@ export class TangyForm extends PolymerElement {
       this.store.dispatch({ type: "SHOW_SUMMARY" })
     } else {
       this.store.dispatch({ type: "SHOW_RESPONSE" })
+    }
+    if (!this.response.hasUnlocked) {
+      !this.dispatchEvent(new CustomEvent('after-submit', {cancelable: true})) || !this.dispatchEvent(new CustomEvent('tangy-form-complete', {cancelable: true}))
+    } else {
+      !this.dispatchEvent(new CustomEvent('after-resubmit', {cancelable: true})) || !this.dispatchEvent(new CustomEvent('tangy-form-complete', {cancelable: true}))
     }
   }
 
