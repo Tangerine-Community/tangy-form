@@ -1,4 +1,10 @@
 # CHANGELOG
+
+## v4.21.0
+- Add support for events on tangy-form: `resubmit`, `after-resubmit`, `after-submit`. 
+  - `submit` event no longer calls after unlocking and submitting a form, `resubmit` is called. This ensures `on-submit` hook logic is only ever called once, not again after unlock. To run logic after an unlock, add logic to `on-resubmit`.
+  - `after-resubmit` and `after-submit` are called after submit and resubmit have finished and response is marked complete. If you are saving a Tangy Form Response into a database, this would be the correct event to listen for otherwise the form response would have a complete flag set to false.
+
 ## v4.20.1
 - Make `<tangy-ethio-date>` and `<tangy-partial-date>` fire a change event when the today button is clicked
 
