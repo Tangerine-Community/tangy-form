@@ -342,15 +342,16 @@ class TangyEthiopianDate extends PolymerElement {
    * Sets the date to today
    * The Gregorian Date for today is converted to the equivalent Ethiopian Date
    *
-   * Note: the month value returned by ethiopianDate is an index so it needs to
-   * be increased one to set the month in the value and in the selector
+   * Note: The month value returned by Date() is an index so it needs to
+   * be increased one before converting to ethiopian
    */
   onTodayClick(event) {
     const today = new Date();
-    const date = ethiopianDate.toEthiopian(today.getFullYear(), today.getMonth(), today.getDate());
+    const monthNumber  = (today.getMonth() + 1)
+    const date = ethiopianDate.toEthiopian(today.getFullYear(), monthNumber, today.getDate());
 
     const year = String(date[0]);
-    const month = String(date[1] + 1).padStart(2, '0');
+    const month = String(date[1]).padStart(2, '0');
     const day = String(date[2]).padStart(2, '0');
     this.value = year + '-' +  month + '-' + day;
 
