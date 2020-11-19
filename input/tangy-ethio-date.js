@@ -510,7 +510,7 @@ class TangyEthiopianDate extends PolymerElement {
     }
   }
 
-  _tranformValueToMoment(value) {
+  _transformValueToMoment(value) {
     var [year_part, month_part, day_part] = value.split('-');
 
     let date = null
@@ -537,13 +537,13 @@ class TangyEthiopianDate extends PolymerElement {
   }
 
   getValueAsMoment() {
-    return this._tranformValueToMoment(this.value)
+    return this._transformValueToMoment(this.value)
   }
 
   diff(units = 'days', endString = '', startString = '', asFloat = true) {
-    const end = this._tranformValueToMoment(endString)
+    const end = this._transformValueToMoment(endString)
     const start = startString 
-      ? this._tranformValueToMoment(startString)
+      ? this._transformValueToMoment(startString)
       : this.getValueAsMoment()
     if (!start || !end) {
       return null
