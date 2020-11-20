@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.21.1
+- The current ethiopian date widget shows the previous month when the 'Today' button is clicked. The cause is that Date() returns an index to the current month, not the number of that month (for example February is '1'). This fix adds one to the index before converting to an ethiopian date.
+- Fixes a spelling mistake in the transfromValueMoment function.
+
 ## v4.21.0
 - Add support for events on tangy-form: `resubmit`, `after-resubmit`, `after-submit`. 
   - `submit` event no longer calls after unlocking and submitting a form, `resubmit` is called. This ensures `on-submit` hook logic is only ever called once, not again after unlock. To run logic after an unlock, add logic to `on-resubmit`.
