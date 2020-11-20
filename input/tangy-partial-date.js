@@ -489,7 +489,7 @@ class TangyPartialDate extends PolymerElement {
     }
   }
 
-  _tranformValueToMoment(value) {
+  _transformValueToMoment(value) {
     const [year, month, day] = value.split('-')
     let date = null
     if (year === '9999' || year === '') {
@@ -508,13 +508,13 @@ class TangyPartialDate extends PolymerElement {
   }
 
   getValueAsMoment() {
-    return this._tranformValueToMoment(this.value)
+    return this._transformValueToMoment(this.value)
   }
 
   diff(units = 'days', endString = '', startString = '', asFloat = true) {
     const end = moment(endString)
     const start = startString 
-      ? this._tranformValueToMoment(startString)
+      ? this._transformValueToMoment(startString)
       : this.getValueAsMoment()
     if (!start || !end) {
       return null

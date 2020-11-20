@@ -341,14 +341,18 @@ class TangyEthiopianDate extends PolymerElement {
    * onTodayClick(event)
    * Sets the date to today
    * The Gregorian Date for today is converted to the equivalent Ethiopian Date
+   *
+   * Note: The month value returned by Date() is an index so it needs to
+   * be increased one before converting to ethiopian
    */
   onTodayClick(event) {
     const today = new Date();
-    const date = ethiopianDate.toEthiopian(today.getFullYear(), today.getMonth(), today.getDate());
+    const monthNumber  = (today.getMonth() + 1)
+    const date = ethiopianDate.toEthiopian(today.getFullYear(), monthNumber, today.getDate());
 
-    const year = String(date[0]) ;
-    const month = String(date[1]);
-    const day = String(date[2]);
+    const year = String(date[0]);
+    const month = String(date[1]).padStart(2, '0');
+    const day = String(date[2]).padStart(2, '0');
     this.value = year + '-' +  month + '-' + day;
 
     this.shadowRoot.querySelector("select[name='year']").value =  year;
@@ -506,7 +510,7 @@ class TangyEthiopianDate extends PolymerElement {
     }
   }
 
-  _tranformValueToMoment(value) {
+  _transformValueToMoment(value) {
     var [year_part, month_part, day_part] = value.split('-');
 
     let date = null
@@ -533,13 +537,13 @@ class TangyEthiopianDate extends PolymerElement {
   }
 
   getValueAsMoment() {
-    return this._tranformValueToMoment(this.value)
+    return this._transformValueToMoment(this.value)
   }
 
   diff(units = 'days', endString = '', startString = '', asFloat = true) {
-    const end = this._tranformValueToMoment(endString)
+    const end = this._transformValueToMoment(endString)
     const start = startString 
-      ? this._tranformValueToMoment(startString)
+      ? this._transformValueToMoment(startString)
       : this.getValueAsMoment()
     if (!start || !end) {
       return null
