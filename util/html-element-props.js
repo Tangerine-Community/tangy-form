@@ -41,5 +41,9 @@ HTMLElement.prototype.setProps = function (props = {}) {
   let propsObject = Object.assign({}, props)
   delete propsObject.tagName
   delete propsObject.constructorName
+  // Special cases for some properties that need to be set early so they are set when Setters get called later.
+  if (propsObject.hasOwnProperty('locked')) {
+    this.locked = propsObject.locked
+  }
   Object.assign(this, propsObject)
 }
