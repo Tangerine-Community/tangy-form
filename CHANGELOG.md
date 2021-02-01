@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.21.2
+- Fixes when a form is unlocked, the first item's `on-open` was not running after unlocking. 
+
 ## v4.21.1
 - The current ethiopian date widget shows the previous month when the 'Today' button is clicked. The cause is that Date() returns an index to the current month, not the number of that month (for example February is '1'). This fix adds one to the index before converting to an ethiopian date.
 - Fixes a spelling mistake in the transfromValueMoment function.
