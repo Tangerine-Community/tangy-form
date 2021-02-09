@@ -174,8 +174,7 @@ Requires node.js and npm installed.
 git clone https://github.com/tangerine-community/tangy-form
 cd tangy-form
 npm install
-npm install -g polymer-cli
-polymer serve
+npm start
 ```
 Then open http://localhost:8080
 
