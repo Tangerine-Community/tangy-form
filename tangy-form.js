@@ -282,6 +282,7 @@ export class TangyForm extends PolymerElement {
             <paper-tab id="response-button" on-click="onClickResponseTab">[[t.response]]</paper-tab>
           </paper-tabs>
         </div>
+        <paper-button id="open-all">Open All</paper-button>
       </template>
       <div id="errors"></div>
       <div id="items"><slot></slot></div> 
