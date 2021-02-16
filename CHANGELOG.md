@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.21.3
+- Fixes dynamically set level tangy location not resuming correctly [#202](https://github.com/Tangerine-Community/tangy-form/pull/202)
+
 ## v4.21.2
 - Fixes when a form is unlocked, the first item's `on-open` was not running after unlocking. 
 
