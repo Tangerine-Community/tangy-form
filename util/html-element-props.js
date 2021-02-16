@@ -45,5 +45,11 @@ HTMLElement.prototype.setProps = function (props = {}) {
   if (propsObject.hasOwnProperty('locked')) {
     this.locked = propsObject.locked
   }
-  Object.assign(this, propsObject)
+  // Defer some properties being set.
+  if (propsObject.hasOwnProperty('value')) {
+    Object.assign(this, {...propsObject, value: this.value})
+    this.value = propsObject.value
+  } else {
+    Object.assign(this, propsObject)
+  }
 }
