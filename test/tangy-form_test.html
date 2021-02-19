@@ -305,7 +305,7 @@
           element.querySelector('#item-3').shadowRoot.querySelector('dom-if').render()
           element.querySelector('#item-3').shadowRoot.querySelector('#complete').click()
           element.shadowRoot.querySelector('dom-if').render()
-          element.shadowRoot.querySelector('#open-all').click()
+          element.shadowRoot.querySelector('#open-all-items').click()
           assert.equal([...element.querySelectorAll('tangy-form-item')].every(tangyFormItemEl => tangyFormItemEl.hasAttribute('open')), true)
         })
 
