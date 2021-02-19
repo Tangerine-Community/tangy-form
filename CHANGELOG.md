@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.22.0
+- Add an "Open All" button to a completed form response.
+
 ## v4.21.3
 - Fixes dynamically set level tangy location not resuming correctly [#202](https://github.com/Tangerine-Community/tangy-form/pull/202)
 
