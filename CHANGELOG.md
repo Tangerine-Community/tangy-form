@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.22.1
+- Add missing "Open All" feature.
+
 ## v4.22.0
 - Add an "Open All" button to a completed form response.
 
