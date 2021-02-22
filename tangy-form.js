@@ -314,12 +314,13 @@ export class TangyForm extends PolymerElement {
   }
 
   openAllItems(){
-    this.querySelectorAll("tangy-form-item").forEach(e=>e.shadowRoot.querySelector('#open').click())
+    this.store.dispatch({ type: 'OPEN_ALL_ITEMS' })
     this.shadowRoot.querySelector('#open-all-items').style.display = 'none';
     this.shadowRoot.querySelector('#close-all-items').style.display = 'initial';
   }
+
   closeAllItems(){
-    this.querySelectorAll("tangy-form-item").forEach(e=>e.shadowRoot.querySelector('#close').click())
+    this.store.dispatch({ type: 'CLOSE_ALL_ITEMS' })
     this.shadowRoot.querySelector('#open-all-items').style.display = 'initial';
     this.shadowRoot.querySelector('#close-all-items').style.display = 'none';
   }

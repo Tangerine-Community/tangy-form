@@ -48,6 +48,20 @@ const tangyFormReducer = function (state = initialState, action) {
       if (newState.form.fullscreen === true) newState.items.forEach(item => item.fullscreen = true)
       return newState
 
+    case 'OPEN_ALL_ITEMS':
+    case 'CLOSE_ALL_ITEMS':
+      return {
+        ...state, 
+        items: state.items.map(item => {
+          return !item.disabled
+            ? {
+              ...item,
+              open: true
+            }
+            : item
+        })
+      }
+
     case 'FORM_RESPONSE_COMPLETE':
       return Object.assign({}, state, {
         complete: true,

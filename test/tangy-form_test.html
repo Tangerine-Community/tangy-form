@@ -321,7 +321,7 @@
           element.querySelector('#item3').shadowRoot.querySelector('#complete').click()
         })
 
-        test('should open all items', () => {
+        test('should open all items and then close all items', () => {
           const element = fixture('SkipSecondItem');
           element.newResponse()
           element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
@@ -333,6 +333,12 @@
           assert.equal(
             [...element.querySelectorAll('tangy-form-item')]
               .every(tangyFormItemEl => tangyFormItemEl.hasAttribute('disabled') || tangyFormItemEl.hasAttribute('open'))
+            , true
+          )
+          element.shadowRoot.querySelector('#close-all-items').click()
+          assert.equal(
+            [...element.querySelectorAll('tangy-form-item')]
+              .every(tangyFormItemEl => tangyFormItemEl.hasAttribute('disabled') || !tangyFormItemEl.hasAttribute('open'))
             , true
           )
         })
