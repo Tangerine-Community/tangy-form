@@ -274,6 +274,22 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="SkipSecondItem">
+      <template>
+        <tangy-form id="my-form" title="My Form" on-change="skip('item2')">
+          <tangy-form-item id="item1">
+            <tangy-input name="input1" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item2">
+            <tangy-input name="input2" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item3">
+            <tangy-input name="input3" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
 
 
     <script type="module">
@@ -295,18 +311,36 @@
 
       suite('tangy-form', () => {
 
-        test('should open all items', () => {
-          const element = fixture('SimpleTestFixture');
+        test('should skip second item', () => {
+          const element = fixture('SkipSecondItem');
           element.newResponse()
-          element.querySelector('#item-1').shadowRoot.querySelector('dom-if').render()
-          element.querySelector('#item-1').shadowRoot.querySelector('#next').click()
-          element.querySelector('#item-2').shadowRoot.querySelector('dom-if').render()
-          element.querySelector('#item-2').shadowRoot.querySelector('#next').click()
-          element.querySelector('#item-3').shadowRoot.querySelector('dom-if').render()
-          element.querySelector('#item-3').shadowRoot.querySelector('#complete').click()
+          element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item1').shadowRoot.querySelector('#next').click()
+          // If second item wasn't skipped, the following would fail.
+          element.querySelector('#item3').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item3').shadowRoot.querySelector('#complete').click()
+        })
+
+        test('should open all items and then close all items', () => {
+          const element = fixture('SkipSecondItem');
+          element.newResponse()
+          element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item1').shadowRoot.querySelector('#next').click()
+          element.querySelector('#item3').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item3').shadowRoot.querySelector('#complete').click()
           element.shadowRoot.querySelector('dom-if').render()
           element.shadowRoot.querySelector('#open-all-items').click()
-          assert.equal([...element.querySelectorAll('tangy-form-item')].every(tangyFormItemEl => tangyFormItemEl.hasAttribute('open')), true)
+          assert.equal(
+            [...element.querySelectorAll('tangy-form-item')]
+              .every(tangyFormItemEl => tangyFormItemEl.hasAttribute('disabled') || tangyFormItemEl.hasAttribute('open'))
+            , true
+          )
+          element.shadowRoot.querySelector('#close-all-items').click()
+          assert.equal(
+            [...element.querySelectorAll('tangy-form-item')]
+              .every(tangyFormItemEl => tangyFormItemEl.hasAttribute('disabled') || !tangyFormItemEl.hasAttribute('open'))
+            , true
+          )
         })
 
         test('should unlock', () => {
