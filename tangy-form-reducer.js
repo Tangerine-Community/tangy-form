@@ -53,12 +53,15 @@ const tangyFormReducer = function (state = initialState, action) {
       return {
         ...state, 
         items: state.items.map(item => {
-          return !item.disabled
+          return !item.disabled && action.type === 'OPEN_ALL_ITEMS'
             ? {
               ...item,
               open: true
             }
-            : item
+            : {
+              ...item,
+              open: false
+            }
         })
       }
 
