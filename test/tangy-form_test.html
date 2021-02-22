@@ -295,6 +295,20 @@
 
       suite('tangy-form', () => {
 
+        test('should open all items', () => {
+          const element = fixture('SimpleTestFixture');
+          element.newResponse()
+          element.querySelector('#item-1').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item-1').shadowRoot.querySelector('#next').click()
+          element.querySelector('#item-2').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item-2').shadowRoot.querySelector('#next').click()
+          element.querySelector('#item-3').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item-3').shadowRoot.querySelector('#complete').click()
+          element.shadowRoot.querySelector('dom-if').render()
+          element.shadowRoot.querySelector('#open-all-items').click()
+          assert.equal([...element.querySelectorAll('tangy-form-item')].every(tangyFormItemEl => tangyFormItemEl.hasAttribute('open')), true)
+        })
+
         test('should unlock', () => {
           const element = fixture('UnlockFixture');
           const response = {"_id":"3c0dd3ba-2191-4103-86c4-d28ec0e69945","collection":"TangyFormResponse","form":{"fullscreen":false,"title":"My Form","complete":true,"linearMode":false,"hideClosedItems":false,"hideCompleteFab":false,"tabIndex":1,"showResponse":true,"showSummary":false,"hasSummary":false,"fullScreenGranted":false,"recordItemFirstOpenTimes":false,"id":"my-form","tagName":"TANGY-FORM","fullscreenEnabled":false},"items":[{"id":"item1","title":"","summary":false,"fullscreen":false,"fullscreenEnabled":false,"hideButtons":false,"hideBackButton":true,"hideNavIcons":false,"hideNavLabels":false,"rightToLeft":false,"hideNextButton":true,"showCompleteButton":false,"inputs":[{"name":"input1","private":false,"label":"What is your first name?","innerLabel":"","placeholder":"","hintText":"","type":"","required":true,"disabled":true,"hidden":false,"skipped":false,"invalid":false,"hasWarning":false,"hasDiscrepancy":false,"incomplete":true,"value":"First","min":"","max":"","questionNumber":"","errorText":"","allowedPattern":"","errorMessage":"","warnText":"","discrepancyText":"","tagName":"TANGY-INPUT"},{"name":"should-stay-disabled","private":false,"label":"I should stay disabled after unlock.","innerLabel":"","placeholder":"","hintText":"","type":"","required":false,"disabled":true,"hidden":false,"skipped":false,"invalid":false,"hasWarning":false,"hasDiscrepancy":false,"incomplete":true,"value":"foo","min":"","max":"","questionNumber":"","errorText":"","allowedPattern":"","errorMessage":"","warnText":"","discrepancyText":"","tagName":"TANGY-INPUT"}],"open":false,"incomplete":false,"disabled":false,"hidden":false,"locked":true,"isDirty":false,"firstOpenTime":1589305258202,"tagName":"TANGY-FORM-ITEM"},{"id":"item2","title":"","summary":false,"fullscreen":false,"fullscreenEnabled":false,"hideButtons":false,"hideBackButton":true,"hideNavIcons":false,"hideNavLabels":false,"rightToLeft":false,"hideNextButton":true,"showCompleteButton":true,"inputs":[{"name":"input2","private":false,"label":"What is your last name?","innerLabel":"","placeholder":"","hintText":"","type":"","required":true,"disabled":true,"hidden":false,"skipped":false,"invalid":false,"hasWarning":false,"hasDiscrepancy":false,"incomplete":true,"value":"Last","min":"","max":"","questionNumber":"","errorText":"","allowedPattern":"","errorMessage":"","warnText":"","discrepancyText":"","tagName":"TANGY-INPUT"}],"open":false,"incomplete":false,"disabled":false,"hidden":false,"locked":true,"isDirty":false,"firstOpenTime":1589305262150,"tagName":"TANGY-FORM-ITEM"}],"complete":true,"focusIndex":1,"nextFocusIndex":-1,"previousFocusIndex":0,"startDatetime":"5/12/2020, 1:40:58 PM","startUnixtime":1589305258202,"uploadDatetime":"","location":{},"lastSaveUnixtime":1589305266417,"previousItemId":"item1","progress":0,"endUnixtime":1589305266417}

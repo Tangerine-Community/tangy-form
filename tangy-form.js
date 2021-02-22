@@ -271,9 +271,20 @@ export class TangyForm extends PolymerElement {
         border: solid 5px red;
         padding: 5px;
       }
+      #close-all-items{
+        display:none;
+      }
       </style>
       <div id="nav"></div>
       <template is="dom-if" if="{{complete}}">
+        <div style="text-align:right">
+          <paper-button  id="open-all-items" on-click="openAllItems" >
+              [[t.openAllItems]]
+          </paper-button>
+          <paper-button id="close-all-items" on-click="closeAllItems" >
+              [[t.closeAllItems]]
+          </paper-button>
+        </div>
         <div id="bar">
           <paper-tabs selected="[[tabIndex]]" scrollable>
             <template is="dom-if" if="{{hasSummary}}">
@@ -300,6 +311,17 @@ export class TangyForm extends PolymerElement {
     this.store.dispatch({ type: 'SHOW_RESPONSE' })
     //this.querySelectorAll('tangy-form-item').forEach(el => el.hidden = false)
     this.querySelectorAll('tangy-form-item')[0].scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
+
+  openAllItems(){
+    this.querySelectorAll("tangy-form-item").forEach(e=>e.shadowRoot.querySelector('#open').click())
+    this.shadowRoot.querySelector('#open-all-items').style.display = 'none';
+    this.shadowRoot.querySelector('#close-all-items').style.display = 'initial';
+  }
+  closeAllItems(){
+    this.querySelectorAll("tangy-form-item").forEach(e=>e.shadowRoot.querySelector('#close').click())
+    this.shadowRoot.querySelector('#open-all-items').style.display = 'initial';
+    this.shadowRoot.querySelector('#close-all-items').style.display = 'none';
   }
 
   static get is() { return 'tangy-form'; }
@@ -388,7 +410,9 @@ export class TangyForm extends PolymerElement {
     super()
     this.t = {
       summary: 'summary',
-      response: 'response'
+      response: 'response',
+      openAllItems: 'Open All Items',
+      closeAllItems: 'Close All Items',
     }
     this._responseHasBeenSet = false
     // Set up the store.
