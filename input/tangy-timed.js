@@ -775,6 +775,7 @@ class TangyTimed extends PolymerElement {
   }
 
   reset() {
+    this.gridAutoStopped = false
     this.value = this.value.map(option => {
       option.highlighted = false
       option.captured = false
