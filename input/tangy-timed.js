@@ -628,7 +628,9 @@ class TangyTimed extends PolymerElement {
     setTimeout(() => this.style.background = 'white', 200)
     setTimeout(() => this.style.background = 'red', 400)
     setTimeout(() => this.style.background = 'white', 600)
-    setTimeout(() => alert(t('Please tap on last item attempted.')), 800)
+    if(!this.gridAutoStopped){
+      setTimeout(() => alert(t('Please tap on last item attempted.')), 800)
+    }
     this.mode = TANGY_TIMED_MODE_LAST_ATTEMPTED
   }
   rowMarkerClicked(rowNumber) {
@@ -724,8 +726,8 @@ class TangyTimed extends PolymerElement {
     }
     if (this.autoStop && this.shouldGridAutoStop()) {
       event.target.highlighted = true
-      this.stopGrid()
       this.gridAutoStopped = true
+      this.stopGrid()
       this.onStopClick(null, event.target.name)
     }
   }
