@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.23.1
+- Add `sectionEnable` function back to tangy-form.
+
 ## v4.23.0
 - Add new `skip()` and `unskip()` helper function for skipping `<tangy-form-item>`. Functions are available in `on-change` at the `<tangy-form>` level. Example: `<tangy-form on-change="skip('item2')>`.
 - Fix "Open All" feature when there is a skipped `<tangy-form-item>`
