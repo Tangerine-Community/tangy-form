@@ -271,7 +271,10 @@ export class TangyForm extends PolymerElement {
         border: solid 5px red;
         padding: 5px;
       }
-      #close-all-items{
+      :host([all-open=false]) #close-all-items {
+        display:none;
+      }
+      :host([all-open=true]) #open-all-items {
         display:none;
       }
       </style>
@@ -315,14 +318,10 @@ export class TangyForm extends PolymerElement {
 
   openAllItems(){
     this.store.dispatch({ type: 'OPEN_ALL_ITEMS' })
-    this.shadowRoot.querySelector('#open-all-items').style.display = 'none';
-    this.shadowRoot.querySelector('#close-all-items').style.display = 'initial';
   }
 
   closeAllItems(){
     this.store.dispatch({ type: 'CLOSE_ALL_ITEMS' })
-    this.shadowRoot.querySelector('#open-all-items').style.display = 'initial';
-    this.shadowRoot.querySelector('#close-all-items').style.display = 'none';
   }
 
   static get is() { return 'tangy-form'; }
@@ -661,6 +660,8 @@ export class TangyForm extends PolymerElement {
     } else if (this.previousState.form.fullscreen && !state.form.fullscreen) {
       this.disableFullscreen()
     }
+
+    this.setAttribute("all-open", state.items.every(item => { return item.open }))
 
     // Stash as previous state.
     this.previousState = Object.assign({}, state)
