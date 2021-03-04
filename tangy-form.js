@@ -271,7 +271,7 @@ export class TangyForm extends PolymerElement {
         border: solid 5px red;
         padding: 5px;
       }
-      :host([all-open=false]) #close-all-items {
+      :host([all-closed=true]) #close-all-items {
         display:none;
       }
       :host([all-open=true]) #open-all-items {
@@ -661,7 +661,9 @@ export class TangyForm extends PolymerElement {
       this.disableFullscreen()
     }
 
-    this.setAttribute("all-open", state.items.every(item => { return item.open }))
+    this.setAttribute("all-open", state.items.every(item => { return item.open || item.disabled}))
+
+    this.setAttribute("all-closed", state.items.every(item => { return !item.open || item.disabled}))
 
     // Stash as previous state.
     this.previousState = Object.assign({}, state)
