@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.23.2
+- Sort tangy-location options by label. 
+
 ## v4.23.1
 - Add `sectionEnable` function back to tangy-form.
 
