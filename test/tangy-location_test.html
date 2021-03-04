@@ -178,10 +178,13 @@
             element.querySelector('#item1').shadowRoot.querySelector('#complete').click()
             element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
             element.querySelector('#item1').shadowRoot.querySelector('#open').click()
+            let hasCalledDone = false
             element.querySelector('tangy-location').addEventListener('location-list-loaded', () => {
-              debugger
               assert.equal(element.querySelector('#item1').querySelector('[name="location_selection"]').value.length, 1)
-              done()
+              if (!hasCalledDone) {
+                hasCalledDone = true
+                done()
+              }
             })
           }, {once: true})
         })
