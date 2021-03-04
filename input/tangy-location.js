@@ -631,7 +631,7 @@ class TangyLocation extends PolymerElement {
     > 
       <option value="" default selected ${(options[selection.level].length === 0) ? 'hidden' : ''} disabled='disabled'>${t('Pick a')} ${selection.level} </option>
       
-      ${options[selection.level].map((option, i) => `
+      ${options[selection.level].sort((a, b) => a.label.localeCompare(b.label)).map((option, i) => `
         <option 
           value="${option.id}" 
           ${(selection.value === option.id) ? 'selected' : ''}
