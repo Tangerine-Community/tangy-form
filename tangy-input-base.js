@@ -10,12 +10,12 @@ export class TangyInputBase extends PolymerElement {
     this._initialProps = super.getProps()
   }
 
-  getProps() {
+  getModProps() {
     const initialProps = this._initialProps
     const currentProps = super.getProps()
     const modifiedProps = {}
     for (const key of Object.keys(currentProps)) {
-      if (initialProps[key] !== currentProps[key]) {
+      if (typeof currentProps[key] === 'object' || initialProps[key] !== currentProps[key]) {
         modifiedProps[key] = currentProps[key]
       }
     }
