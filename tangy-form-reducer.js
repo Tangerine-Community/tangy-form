@@ -208,6 +208,7 @@ const tangyFormReducer = function (state = initialState, action) {
       break
     case 'ITEM_BACK':
     case 'ITEM_NEXT':
+      console.log(state)
       tmp.itemIndex = state.items.findIndex(item => item.id === action.itemId)
       newState = Object.assign({}, state)
       // In case it next and previous hasn't been calculated yet.
@@ -215,12 +216,7 @@ const tangyFormReducer = function (state = initialState, action) {
       Object.assign(newState, calculateTargets(newState))
       // Mark open and closed.
       Object.assign(newState, {
-        progress:  
-          ( 
-            state.items.filter((i) => i.valid).length
-                                                      / 
-                                                        state.items.filter(item => !item.disabled).length
-                                                                                                          ) * 100,
+        
         items: newState.items.map((item) => {
           let props = {}
           if (item.id == action.itemId) {
@@ -399,20 +395,29 @@ function itemsIncompleteCheck(state, inputName) {
 }
 
 function calculateTargets(state) {
+// Previous, next and focusIndex
+  // Skip over disabled properties
+  // ItemID, nextItemID, currentItemId
+  // If last Item, no next; if first, no previous
   let tmp = {}
-  let newState = Object.assign({}, state)
+  let newState = {...state}
   newState.focusIndex = newState.items.findIndex(item => item.open)
-  newState.nextFocusIndex = state.items.findIndex((item, i) =>  (i > newState.focusIndex && (!item.hasOwnProperty('disabled') || item.disabled === false)))
-  // Find previous focus index using reversed items and focus index.
-  newState.items.reverse()
-  tmp.focusIndexReversed = newState.items.length - newState.focusIndex - 1
-  newState.previousFocusIndex = newState.items.findIndex((item, i) =>  (i > tmp.focusIndexReversed && (!item.hasOwnProperty('disabled') || item.disabled === false)))
-  if (newState.previousFocusIndex !== -1) {
-    // Unreverse the the found index.
-    newState.previousFocusIndex = newState.items.length - newState.previousFocusIndex - 1
+  const startFrom = newState.startFromIndex ||0
+  console.log(newState.nextFocusIndex)
+  const sequence = ['0,1,2']
+  const sequenceParts = sequence[0].split(',');
+  for (const [k,v] of sequenceParts.entries()) {
+    const nextIndex = Number(sequenceParts[k+1])
+    const nextItem = state.items[nextIndex]
+    if(!nextItem.hasOwnProperty('disabled') || nextItem.disabled === false){
+      newState.previousFocusIndex=sequenceParts[k]
+      newState.nextFocusIndex = nextIndex
+      newState.startFromIndex = nextIndex;
+      console.log(nextIndex)
+      break;
+    }
+    
   }
-  // Unreverse items.
-  newState.items.reverse()
   if (newState.nextFocusIndex !== -1) {
     newState.nextItemId = newState.items[newState.nextFocusIndex].id
   } else {
