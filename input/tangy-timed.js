@@ -781,6 +781,9 @@ class TangyTimed extends PolymerElement {
       option.value = ''
       option.pressed = false
       option.hidden = true
+      option.gridVarTimeIntermediateCaptured = null
+      option.startTime = 0
+      option.endTime = 0
       return option
     })
   }
