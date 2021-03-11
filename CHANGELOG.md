@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v4.23.3
+- Grid autostop last item attempted default: (loe: low) https://github.com/Tangerine-Community/Tangerine/issues/2467, PR: https://github.com/Tangerine-Community/tangy-form/pull/206
+- Grid auto stop: https://github.com/Tangerine-Community/Tangerine/issues/2559, PR: https://github.com/Tangerine-Community/tangy-form/pull/206
+- [Grid restart doesn't clear out intermediate capture variable #2661](https://github.com/Tangerine-Community/Tangerine/issues/2661) https://github.com/Tangerine-Community/tangy-form/pull/211
+
 ## v4.23.2
 - Sort tangy-location options by label. 
 
