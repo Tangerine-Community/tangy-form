@@ -9,8 +9,6 @@ const initialState = {
 }
 
 const tangyFormReducer = function (state = initialState, action) {
-  var items
-  var currentIndex
   var newState
   var tmp = {}
   var firstNotDisabled = 0
@@ -18,11 +16,18 @@ const tangyFormReducer = function (state = initialState, action) {
   switch(action.type) {
 
     case 'FORM_OPEN':
-      let {randomSequences} = action.response.form;
+      let {cycleSequences} = action.response.form;
       let currentSequence = [...Array(action.response.items.length).keys()]
-      if(randomSequences){
-        randomSequences = randomSequences.split('\n').map(e=>e.trim())
-        currentSequence = randomSequences[0].split(',');
+      if(cycleSequences){
+        let currentCycleIndex =0 ;
+        if(localStorage.getItem('lastCycleIndex')){
+          currentCycleIndex = Number(localStorage.getItem('lastCycleIndex'))+1
+          localStorage.setItem('lastCycleIndex', String(currentCycleIndex))
+        } else{
+          localStorage.setItem('lastCycleIndex', String(currentCycleIndex))
+        }
+        cycleSequences = cycleSequences.split('\n').map(e=>e.trim())
+        currentSequence = cycleSequences[currentCycleIndex].split(',');
       }
       newState = Object.assign({}, action.response)
       // Ensure that the only items we have in the response are those that are in the DOM but maintain state of the existing items in the response.

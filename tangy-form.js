@@ -389,7 +389,7 @@ export class TangyForm extends PolymerElement {
         value: undefined,
         reflectToAttribute: true
       },
-      randomSequences: {
+      cycleSequences: {
         type: String,
         value: undefined,
         reflectToAttribute: true
