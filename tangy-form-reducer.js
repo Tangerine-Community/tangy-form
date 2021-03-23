@@ -29,9 +29,12 @@ const tangyFormReducer = function (state = initialState, action) {
         return result ? {...merged}: {...itemInDom}
         }
       )
+      let x = []
+      currentSequence.forEach((e)=>x.push(newState.items[e]))
+      newState.items = x
       newState.items[0]['firstOpenTime']= newState.items[0]['firstOpenTime'] ? newState.items[0]['firstOpenTime'] : Date.now()
 
-      firstNotDisabled = newState.items.findIndex(item => item.disabled === false)
+      firstNotDisabled = newState.items.findIndex(item => !item.disabled)
       newState.items[firstNotDisabled].hideBackButton = true
       const indexOfSummaryItem = newState.items.findIndex(item => item.summary === true)
       if (indexOfSummaryItem !== -1) {
