@@ -18,9 +18,12 @@ const tangyFormReducer = function (state = initialState, action) {
   switch(action.type) {
 
     case 'FORM_OPEN':
-      let {randomSequences} = action.response.form
-      randomSequences = randomSequences.split('\n').map(e=>e.trim())
-      const currentSequence = randomSequences[0].split(',');
+      let {randomSequences} = action.response.form;
+      let currentSequence = [...Array(action.response.items.length).keys()]
+      if(randomSequences){
+        randomSequences = randomSequences.split('\n').map(e=>e.trim())
+        currentSequence = randomSequences[0].split(',');
+      }
       newState = Object.assign({}, action.response)
       // Ensure that the only items we have in the response are those that are in the DOM but maintain state of the existing items in the response.
       newState.items = action.itemsInDom.map((itemInDom, index) => {

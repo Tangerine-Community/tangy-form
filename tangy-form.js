@@ -391,7 +391,7 @@ export class TangyForm extends PolymerElement {
       },
       randomSequences: {
         type: String,
-        value: '',
+        value: undefined,
         reflectToAttribute: true
       },
       recordItemFirstOpenTimes: {
