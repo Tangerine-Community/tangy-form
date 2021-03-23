@@ -199,7 +199,6 @@ const tangyFormReducer = function (state = initialState, action) {
 
       // Mark open and closed.
       Object.assign(newState, {
-        progress: ( ( ( state.items.filter((i) => i.valid).length ) / state.items.length ) * 100 ),
         items: state.items.map((item) => {
           if (item.id == action.itemId) {
             return Object.assign({}, item, {open: false, isDirty: false, valid: true, hideButtons: false})
@@ -232,12 +231,6 @@ const tangyFormReducer = function (state = initialState, action) {
       Object.assign(newState, calculateTargets(newState))
       // Mark open and closed.
       Object.assign(newState, {
-        progress:  
-          ( 
-            state.items.filter((i) => i.valid).length
-                                                      / 
-                                                        state.items.filter(item => !item.disabled).length
-                                                                                                          ) * 100,
         items: newState.items.map((item) => {
           let props = {}
           if (item.id == action.itemId) {
