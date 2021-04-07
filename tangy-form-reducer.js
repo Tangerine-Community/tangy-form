@@ -9,8 +9,6 @@ const initialState = {
 }
 
 const tangyFormReducer = function (state = initialState, action) {
-  var items
-  var currentIndex
   var newState
   var tmp = {}
   var firstNotDisabled = 0
@@ -18,7 +16,19 @@ const tangyFormReducer = function (state = initialState, action) {
   switch(action.type) {
 
     case 'FORM_OPEN':
-     
+      let {cycleSequences} = action.response.form;
+      let currentSequence = [...Array(action.response.items.length).keys()]
+      if(cycleSequences){
+        let currentCycleIndex =0 ;
+        if(localStorage.getItem('lastCycleIndex')){
+          currentCycleIndex = Number(localStorage.getItem('lastCycleIndex'))+1
+          localStorage.setItem('lastCycleIndex', String(currentCycleIndex))
+        } else{
+          localStorage.setItem('lastCycleIndex', String(currentCycleIndex))
+        }
+        cycleSequences = cycleSequences.split('\n').map(e=>e.trim())
+        currentSequence = cycleSequences[currentCycleIndex].split(',');
+      }
       newState = Object.assign({}, action.response)
       // Ensure that the only items we have in the response are those that are in the DOM but maintain state of the existing items in the response.
       newState.items = action.itemsInDom.map((itemInDom, index) => {
@@ -27,9 +37,12 @@ const tangyFormReducer = function (state = initialState, action) {
         return result ? {...merged}: {...itemInDom}
         }
       )
+      let tempItems = []
+      currentSequence.forEach((e)=>tempItems.push(newState.items[e]))
+      newState.items = tempItems
       newState.items[0]['firstOpenTime']= newState.items[0]['firstOpenTime'] ? newState.items[0]['firstOpenTime'] : Date.now()
 
-      firstNotDisabled = newState.items.findIndex(item => item.disabled === false)
+      firstNotDisabled = newState.items.findIndex(item => !item.disabled)
       newState.items[firstNotDisabled].hideBackButton = true
       const indexOfSummaryItem = newState.items.findIndex(item => item.summary === true)
       if (indexOfSummaryItem !== -1) {
@@ -199,7 +212,6 @@ const tangyFormReducer = function (state = initialState, action) {
 
       // Mark open and closed.
       Object.assign(newState, {
-        progress: ( ( ( state.items.filter((i) => i.valid).length ) / state.items.length ) * 100 ),
         items: state.items.map((item) => {
           if (item.id == action.itemId) {
             return Object.assign({}, item, {open: false, isDirty: false, valid: true, hideButtons: false})
@@ -232,12 +244,6 @@ const tangyFormReducer = function (state = initialState, action) {
       Object.assign(newState, calculateTargets(newState))
       // Mark open and closed.
       Object.assign(newState, {
-        progress:  
-          ( 
-            state.items.filter((i) => i.valid).length
-                                                      / 
-                                                        state.items.filter(item => !item.disabled).length
-                                                                                                          ) * 100,
         items: newState.items.map((item) => {
           let props = {}
           if (item.id == action.itemId) {
