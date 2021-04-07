@@ -1,9 +1,9 @@
 # CHANGELOG
+
+## v4.24.0
 Allow users to define custom sequence for the execution in tangy-form - Tangerine-Community/Tangerine#1603
 Sections are separated by new lines while Items are comma separated
 Part of Tangerine-Community/tangy-form-editor#177
-
-## v4.24.0
 
 ## v4.23.3
 - Grid autostop last item attempted default: (loe: low) https://github.com/Tangerine-Community/Tangerine/issues/2467, PR: https://github.com/Tangerine-Community/tangy-form/pull/206
