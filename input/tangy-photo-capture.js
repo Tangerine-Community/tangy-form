@@ -1,12 +1,14 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { t } from '../util/t.js'
 import '../style/tangy-common-styles.js'
 import '../style/tangy-element-styles.js'
 import '@polymer/iron-icon/iron-icon.js'
 import '@polymer/paper-button/paper-button.js'
 
+import ImageBlobReduce from 'image-blob-reduce'
 
     /**
-     * `tangy-checkbox`
+     * `tangy-photo-capture`
      *
      *
      * @customElement
@@ -18,20 +20,43 @@ export class TangyPhotoCapture extends PolymerElement {
     return html`
     <style include="tangy-common-styles"></style>
     <style include="tangy-element-styles"></style>
+
     <style>
-      img {
+      video,img {
         width: 100%;
       }
+
       .hint-text{
         margin-top:6px;
         margin-left:4px;
+      }
+
+      #buttons {
+        margin: 15px 0px;
+      }
+
+      paper-button {
+        background-color: var(--accent-color, #CCC);
+      }
+
+      paper-button[disabled] {
+        opacity: .2;
       }
     </style>
     <div class="flex-container m-y-25">
       <div id="qnum-number"></div>
       <div id="qnum-content">
-        <img id="image"/>
-        <paper-button on-click="capturePhoto"><iron-icon icon="camera-enhance"></iron-icon> capture photo </paper-button>
+        <div>
+          <video autoplay id="video"></video>
+          <img src="[[value]]" style='display:none' id="image"/>
+        </div>
+        <div id="buttons">
+          <paper-button id="capture-button" on-click="capturePhoto"><iron-icon icon="camera-enhance"></iron-icon> [[t.capture]] </paper-button>
+          <paper-button id="accept-button" on-click="acceptPhoto" disabled><iron-icon icon="done"></iron-icon> [[t.accept]] </paper-button>
+          <paper-button id="clear-button" on-click="clearPhoto" disabled><iron-icon icon="delete"></iron-icon> [[t.clear]] </paper-button>
+        </div>
+
+
         <label class="hint-text"></label>
         <div id="error-text"></div>
         <div id="warn-text"></div>
@@ -50,6 +75,11 @@ export class TangyPhotoCapture extends PolymerElement {
       name: {
         type: String,
         value: ''
+      },
+      maxSizeInKb: {
+        type: Number,
+        value: '256',
+        reflectToAttribute: true
       },
       hintText: {
         type: String,
@@ -128,12 +158,32 @@ export class TangyPhotoCapture extends PolymerElement {
 
   connectedCallback () {
     super.connectedCallback()
-    navigator.mediaDevices.getUserMedia({video: true})
-      .then(mediaStream => this.gotMedia(mediaStream))
-      .catch(error => console.error('getUserMedia() error:', error));
     this.shadowRoot.querySelector('#qnum-number').innerHTML = this.hasAttribute('question-number') 
       ? `<label>${this.getAttribute('question-number')}</label>`
       : ''
+  }
+
+  ready() {
+    super.ready();
+    this.t = {
+      capture: t('capture'),
+      accept: t('accept'),
+      clear: t('clear')
+    }
+    // Start streaming video
+    navigator.mediaDevices.getUserMedia({video: true})
+    .then(mediaStream => {
+      this.shadowRoot.querySelector('video').srcObject = mediaStream;
+      const track = mediaStream.getVideoTracks()[0];
+      this.imageCapture = new ImageCapture(track);
+    })
+
+    if (this.value) {
+      this.shadowRoot.querySelector('video').style.display = 'none'
+      this.shadowRoot.querySelector('#image').style.display = 'block'
+      this.enableButtons(["#accept-button","#clear-button"])
+      this.disableButtons(["#capture-button"])
+    }
   }
 
   onHintTextChange(value) {
@@ -155,17 +205,63 @@ export class TangyPhotoCapture extends PolymerElement {
       return true
     }
   }
-  
-  gotMedia(mediaStream) {
-    const mediaStreamTrack = mediaStream.getVideoTracks()[0];
-    this.imageCapture = new ImageCapture(mediaStreamTrack);
-  }    
 
+  disableButtons(ids) {
+    ids.forEach( (id) =>
+      this.shadowRoot.querySelector(id).setAttribute('disabled', '')
+    )
+  }
+
+  enableButtons(ids) {
+    ids.forEach( (id) =>
+      this.shadowRoot.querySelector(id).removeAttribute('disabled')
+    )
+  }
+  
   async capturePhoto() {
-    let blob = await this.imageCapture.takePhoto()
-    this.value = btoa(blob)
-    this.$.image.src = URL.createObjectURL(blob);
+    const { imageWidth, imageHeight } = await this.imageCapture.getPhotoCapabilities();
+    this.blob = await this.imageCapture.takePhoto({
+      imageWidth: imageWidth.max,
+      imageHeight: imageHeight.max
+    })
+    var ImageReducer = new ImageBlobReduce()
+    // Forces the output to be a JPG of .8 quality
+    ImageReducer._create_blob = function (env) {
+      return this.pica.toBlob(env.out_canvas, 'image/jpeg', 0.8)
+        .then(function (blob) {
+          env.out_blob = blob;
+          return env;
+        });
+    };
+    this.blob = await ImageReducer.toBlob(this.blob, {max: this.maxSizeInKb})
+    this.$.image.src = URL.createObjectURL(this.blob);
     this.$.image.onload = () => { URL.revokeObjectURL(this.src); }
+    this.shadowRoot.querySelector('video').style.display = 'none'
+    this.shadowRoot.querySelector('#image').style.display = 'block'
+    this.enableButtons(["#accept-button","#clear-button"])
+    this.disableButtons(["#capture-button"])
+  }
+
+  clearPhoto() {
+    this.value = null;
+    this.$.image.src = ''
+    this.enableButtons(["#capture-button"])
+    this.disableButtons(["#accept-button","#clear-button"])
+    this.shadowRoot.querySelector('video').style.display = 'block'
+    this.shadowRoot.querySelector('#image').style.display = 'none'
+  }
+
+  async acceptPhoto() {
+    // Convert blob to base64 string
+    // https://stackoverflow.com/questions/18650168/convert-blob-to-base64/61226119#61226119
+    const reader = new FileReader();
+    reader.readAsDataURL(this.blob);
+    this.value = await new Promise(resolve => {
+      reader.onloadend = () => resolve(reader.result);
+    });
+    
+    this.shadowRoot.querySelector('#capture-button').setAttribute('disabled', '')
+    this.shadowRoot.querySelector('#accept-button').setAttribute('disabled', '')
   }
 
   downscaleImage(dataUrl, newWidth, imageType, imageArguments) {
