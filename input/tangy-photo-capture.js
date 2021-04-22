@@ -78,7 +78,7 @@ export class TangyPhotoCapture extends PolymerElement {
       },
       maxSizeInKb: {
         type: Number,
-        value: '256',
+        value: 256,
         reflectToAttribute: true
       },
       hintText: {
@@ -224,7 +224,7 @@ export class TangyPhotoCapture extends PolymerElement {
       imageWidth: imageWidth.max,
       imageHeight: imageHeight.max
     })
-    var ImageReducer = new ImageBlobReduce()
+    const ImageReducer = new ImageBlobReduce()
     // Forces the output to be a JPG of .8 quality
     ImageReducer._create_blob = function (env) {
       return this.pica.toBlob(env.out_canvas, 'image/jpeg', 0.8)
@@ -262,32 +262,6 @@ export class TangyPhotoCapture extends PolymerElement {
     
     this.shadowRoot.querySelector('#capture-button').setAttribute('disabled', '')
     this.shadowRoot.querySelector('#accept-button').setAttribute('disabled', '')
-  }
-
-  downscaleImage(dataUrl, newWidth, imageType, imageArguments) {
-    var image, oldWidth, oldHeight, newHeight, canvas, ctx, newDataUrl;
-
-    // Provide default values
-    imageType = imageType || "image/jpeg";
-    imageArguments = imageArguments || 0.7;
-
-    // Create a temporary image so that we can compute the height of the downscaled image.
-    image = new Image();
-    image.src = dataUrl;
-    oldWidth = image.width;
-    oldHeight = image.height;
-    newHeight = Math.floor(oldHeight / oldWidth * newWidth)
-
-    // Create a temporary canvas to draw the downscaled image on.
-    canvas = document.createElement("canvas");
-    canvas.width = newWidth;
-    canvas.height = newHeight;
-
-    // Draw the downscaled image on the canvas and return the new data URL.
-    ctx = canvas.getContext("2d");
-    ctx.drawImage(image, 0, 0, newWidth, newHeight);
-    newDataUrl = canvas.toDataURL(imageType, imageArguments);
-    return newDataUrl;
   }
 
   onDiscrepancyChange(value) {
