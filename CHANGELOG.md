@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## v4.25.0
+* Updated `photo-capure` component. 
+* Data is saved as `jpeg` with `base64` encoding
+* It attemps to take the picture with the highest possible quality and then resizes it with best practice resizing algorithms (using the built-in canvas resizer is poor quality). By default it tries to keep the size below 256kb, but this can be changed to any arbitrary size using the max-size-in-kb attribute.
+**Example**
+```html
+ <template>
+    <tangy-photo-capture name="test-photo" max-size-in-kb='128'></tangy-photo-capture>
+</template>
+```
+
 ## v4.24.0
 Allow users to define custom sequence for the execution in tangy-form - Tangerine-Community/Tangerine#1603
 Sections are separated by new lines while Items are comma separated
