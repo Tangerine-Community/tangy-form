@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.25.1
+- Declare this package as a module so that it can be imported into node.js projects.
+
+
 ## v4.25.0
 * Updated `photo-capure` component. 
 * Data is saved as `jpeg` with `base64` encoding
