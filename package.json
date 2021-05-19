@@ -8,6 +8,7 @@
     "build": "webpack",
     "test": "polymer test -l chrome"
   },
+  "type": "module",
   "dependencies": {
     "@polymer/iron-icon": "^3.0.0-pre.18",
     "@polymer/iron-icons": "^3.0.0-pre.18",
