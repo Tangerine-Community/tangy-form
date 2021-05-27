@@ -17,17 +17,20 @@ const tangyFormReducer = function (state = initialState, action) {
 
     case 'FORM_OPEN':
       let {cycleSequences} = action.response.form;
+      const lastCycleIndex = `${action.response.form.id}-lastCycleIndex`
+      const cycleSequencesArray = cycleSequences && cycleSequences.split('\n').map(e=>e.trim())
       let currentSequence = [...Array(action.response.items.length).keys()]
       if(cycleSequences){
         let currentCycleIndex =0 ;
-        if(localStorage.getItem('lastCycleIndex')){
-          currentCycleIndex = Number(localStorage.getItem('lastCycleIndex'))+1
-          localStorage.setItem('lastCycleIndex', String(currentCycleIndex))
+        if(localStorage.getItem(lastCycleIndex)){
+          currentCycleIndex = Number(localStorage.getItem(lastCycleIndex))+1 < cycleSequencesArray.length
+                              ?Number(localStorage.getItem(lastCycleIndex))+1
+                              : 0
+          localStorage.setItem(lastCycleIndex, String(currentCycleIndex))
         } else{
-          localStorage.setItem('lastCycleIndex', String(currentCycleIndex))
+          localStorage.setItem(lastCycleIndex, String(currentCycleIndex))
         }
-        cycleSequences = cycleSequences.split('\n').map(e=>e.trim())
-        currentSequence = cycleSequences[currentCycleIndex].split(',');
+        currentSequence = cycleSequencesArray[currentCycleIndex].split(',');
       }
       newState = Object.assign({}, action.response)
       // Ensure that the only items we have in the response are those that are in the DOM but maintain state of the existing items in the response.
