@@ -43,7 +43,10 @@ const tangyFormReducer = function (state = initialState, action) {
       newState.items[0]['firstOpenTime']= newState.items[0]['firstOpenTime'] ? newState.items[0]['firstOpenTime'] : Date.now()
 
       firstNotDisabled = newState.items.findIndex(item => !item.disabled)
-      newState.items[firstNotDisabled].hideBackButton = true
+      if (firstNotDisabled !== -1) {
+        newState.items[firstNotDisabled].hideBackButton = true
+      }
+
       const indexOfSummaryItem = newState.items.findIndex(item => item.summary === true)
       if (indexOfSummaryItem !== -1) {
         newState.form.hasSummary = true
