@@ -43,6 +43,8 @@ const tangyFormReducer = function (state = initialState, action) {
       newState.items[0]['firstOpenTime']= newState.items[0]['firstOpenTime'] ? newState.items[0]['firstOpenTime'] : Date.now()
 
       firstNotDisabled = newState.items.findIndex(item => !item.disabled)
+      // Out-of-date form schema issue: We are supporting situations where there may be no more items that are disabled. This can happen when items
+      // have been added to a new version of a form but the response has an old version of the form.
       if (firstNotDisabled !== -1) {
         newState.items[firstNotDisabled].hideBackButton = true
       }
@@ -56,9 +58,15 @@ const tangyFormReducer = function (state = initialState, action) {
         newState.form.hideClosedItems = true
       }
       let indexOfLastItem = newState.items.length - ([...newState.items].reverse().findIndex(item => !item.summary && !item.disabled) + 1)
-      newState.items[indexOfLastItem].hideNextButton = true
-      newState.items[indexOfLastItem].showCompleteButton = true
-      if (!newState.form.complete && !newState.items.find(item => item.open)) newState.items[firstNotDisabled].open = true
+      // Supporting Out-of-date form schemas - see comment above
+      if (indexOfLastItem !== newState.items.length) {
+        newState.items[indexOfLastItem].hideNextButton = true
+        newState.items[indexOfLastItem].showCompleteButton = true
+      }
+      // Supporting Out-of-date form schemas - see comment above
+      if (firstNotDisabled !== -1) {
+        if (!newState.form.complete && !newState.items.find(item => item.open)) newState.items[firstNotDisabled].open = true
+      }
       if (newState.form.hideClosedItems === true) newState.items.forEach(item => item.hidden = !item.open)
       if (newState.form.linearMode === true) newState.items.forEach(item => item.hideButtons = true)
       if (newState.form.fullscreen === true) newState.items.forEach(item => item.fullscreen = true)
