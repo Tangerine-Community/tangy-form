@@ -623,6 +623,7 @@ class TangyTimed extends PolymerElement {
 
     clearInterval(this.timer)
     clearInterval(this.timer2)
+    clearInterval(this.captureItemAtTimer)
     this.isItemCaptured = false
     this.style.background = 'red'
     setTimeout(() => this.style.background = 'white', 200)
@@ -736,7 +737,7 @@ class TangyTimed extends PolymerElement {
     this.reset()
     this.mode = TANGY_TIMED_MODE_RUN
     if (this.captureItemAt) {
-      setTimeout(() => {
+      this.captureItemAtTimer = setTimeout(() => {
         this.mode = TANGY_TIMED_CAPTURE_ITEM_AT
       }, this.captureItemAt * 1000);
     }
@@ -747,6 +748,7 @@ class TangyTimed extends PolymerElement {
     this.endTime = Date.now()
     clearInterval(this.timer);
     clearInterval(this.timer2);
+    clearInterval(this.captureItemAtTimer);
     this.isItemCaptured = false;
     // We have to check for typeof string because the event handler on the stop button puts an integer in the second param for some reason.
     // If it's a string, then we know it's an ID of something which should actually be lastItemAttempted.
