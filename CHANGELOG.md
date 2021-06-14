@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.25.4
+- Changes to enabled 'npm run build' to complete successfully: Update webpack to work with es6 [#244](https://github.com/Tangerine-Community/tangy-form/pull/244)
+
 ## v4.25.3
 - Revert to package-lock lockfileVersion to 1.
 
