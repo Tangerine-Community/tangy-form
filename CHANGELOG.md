@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.25.2
+- Fix Intermediate grid capture timer should stop when grid is stopped manually/ or autostop is triggered [#2724](https://github.com/Tangerine-Community/Tangerine/issues/2724)
+
 ## v4.25.1
 - Declare this package as a module so that it can be imported into node.js projects.
 
