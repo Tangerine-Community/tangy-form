@@ -163,7 +163,7 @@ export class TangyPhotoCapture extends PolymerElement {
       },
       front: {
         type: Boolean,
-        value: true,
+        value: false,
         reflectToAttribute: true
       },
      }
@@ -285,12 +285,14 @@ export class TangyPhotoCapture extends PolymerElement {
 
   async acceptPhoto() {
     // Convert blob to base64 string
-    // https://stackoverflow.com/questions/18650168/convert-blob-to-base64/61226119#61226119
-    const reader = new FileReader();
-    reader.readAsDataURL(this.blob);
-    this.value = await new Promise(resolve => {
-      reader.onloadend = () => resolve(reader.result);
-    });
+    const arrayBuffer = await this.blob.arrayBuffer()
+    // convert arrayBuffer to a string
+    const abString = String.fromCharCode.apply(null, new Uint8Array(arrayBuffer))
+    // base64 encode the string
+    const b64 = window.btoa(unescape(encodeURIComponent(abString)));
+    // turn it into a data:image
+    const nudata = 'data:image/jpeg;base64,' + b64
+    this.data = nudata
     
     this.shadowRoot.querySelector('#capture-button').setAttribute('disabled', '')
     this.shadowRoot.querySelector('#accept-button').setAttribute('disabled', '')
