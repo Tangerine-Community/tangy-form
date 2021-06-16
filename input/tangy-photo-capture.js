@@ -171,7 +171,7 @@ export class TangyPhotoCapture extends PolymerElement {
       clear: t('clear')
     }
     // Start streaming video
-    navigator.mediaDevices.getUserMedia({video: true})
+    navigator.mediaDevices.getUserMedia({video: { facingMode: { exact: "environment" } }})
     .then(mediaStream => {
       this.shadowRoot.querySelector('video').srcObject = mediaStream;
       const track = mediaStream.getVideoTracks()[0];
