@@ -16,6 +16,7 @@ import ImageBlobReduce from 'image-blob-reduce'
      * @demo demo/index.html
      */
 export class TangyPhotoCapture extends PolymerElement {
+
   static get template () {
     return html`
     <style include="tangy-common-styles"></style>
@@ -46,6 +47,7 @@ export class TangyPhotoCapture extends PolymerElement {
     <div class="flex-container m-y-25">
       <div id="qnum-number"></div>
       <div id="qnum-content">
+        <label id="label"></label>
         <div>
           <video autoplay id="video"></video>
           <img src="[[value]]" style='display:none' id="image"/>
@@ -53,6 +55,7 @@ export class TangyPhotoCapture extends PolymerElement {
         <div id="buttons">
           <paper-button id="capture-button" on-click="capturePhoto"><iron-icon icon="camera-enhance"></iron-icon> [[t.capture]] </paper-button>
           <paper-button id="accept-button" on-click="acceptPhoto" disabled><iron-icon icon="done"></iron-icon> [[t.accept]] </paper-button>
+          <paper-button id="toggle-button" on-click="toggleCamera"><iron-icon icon="image:switch-camera"></iron-icon> [[t.switch]] </paper-button>
           <paper-button id="clear-button" on-click="clearPhoto" disabled><iron-icon icon="delete"></iron-icon> [[t.clear]] </paper-button>
         </div>
 
@@ -80,6 +83,11 @@ export class TangyPhotoCapture extends PolymerElement {
         type: Number,
         value: 256,
         reflectToAttribute: true
+      },
+      label: {
+        type: String,
+        observer: 'reflect',
+        value: ''
       },
       hintText: {
         type: String,
@@ -152,7 +160,12 @@ export class TangyPhotoCapture extends PolymerElement {
         type: Boolean,
         value: false,
         reflectToAttribute: true
-      }
+      },
+      front: {
+        type: Boolean,
+        value: true,
+        reflectToAttribute: true
+      },
      }
   }
 
@@ -161,6 +174,11 @@ export class TangyPhotoCapture extends PolymerElement {
     this.shadowRoot.querySelector('#qnum-number').innerHTML = this.hasAttribute('question-number') 
       ? `<label>${this.getAttribute('question-number')}</label>`
       : ''
+    let supportedConstraints = navigator.mediaDevices.getSupportedConstraints();
+    let devices = navigator.mediaDevices.enumerateDevices().then(function(devices) {
+      var arrayLength = devices.length;
+    })
+    this.constraints = {video: { facingMode: { exact: "environment" } }}
   }
 
   ready() {
@@ -170,13 +188,27 @@ export class TangyPhotoCapture extends PolymerElement {
       accept: t('accept'),
       clear: t('clear')
     }
+    this.shadowRoot.querySelector('#label').innerHTML = this.label
     // Start streaming video
-    navigator.mediaDevices.getUserMedia({video: { facingMode: { exact: "environment" } }})
+    const constraints = this.getConstraints()
+    navigator.mediaDevices.getUserMedia(constraints)
     .then(mediaStream => {
       this.shadowRoot.querySelector('video').srcObject = mediaStream;
       const track = mediaStream.getVideoTracks()[0];
       this.imageCapture = new ImageCapture(track);
-    })
+    }).catch(error => {
+          if (error.constraint && error.constraint === 'facingMode') {
+            navigator.mediaDevices.getUserMedia({video: true})
+                .then(mediaStream => {
+                  this.shadowRoot.querySelector('video').srcObject = mediaStream;
+                  const track = mediaStream.getVideoTracks()[0];
+                  this.imageCapture = new ImageCapture(track);
+                });
+          } else {
+            console.log("error: " + error)
+          }
+        }
+      )
 
     if (this.value) {
       this.shadowRoot.querySelector('video').style.display = 'none'
@@ -262,6 +294,31 @@ export class TangyPhotoCapture extends PolymerElement {
     
     this.shadowRoot.querySelector('#capture-button').setAttribute('disabled', '')
     this.shadowRoot.querySelector('#accept-button').setAttribute('disabled', '')
+  }
+
+
+
+  getConstraints() {
+    if (this.front) {
+      return {video: { facingMode: { exact: "user" } }}
+    } else {
+      return {video: { facingMode: { exact: "environment" } }}
+    }
+  }
+
+  toggleCamera() {
+    if (this.front) {
+      this.front = false
+    } else {
+      this.front = true
+    }
+    const constraints = this.getConstraints()
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then(mediaStream => {
+          this.shadowRoot.querySelector('video').srcObject = mediaStream;
+          const track = mediaStream.getVideoTracks()[0];
+          this.imageCapture = new ImageCapture(track);
+        })
   }
 
   onDiscrepancyChange(value) {
