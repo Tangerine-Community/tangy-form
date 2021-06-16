@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.25.5
+- The tangy-photo-capture input now uses the rear camera to capture images. 
+
 ## v4.25.4
 - Changes to enabled 'npm run build' to complete successfully: Update webpack to work with es6 [#244](https://github.com/Tangerine-Community/tangy-form/pull/244)
 
