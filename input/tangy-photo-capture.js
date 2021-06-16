@@ -171,7 +171,8 @@ export class TangyPhotoCapture extends PolymerElement {
       clear: t('clear')
     }
     // Start streaming video
-    navigator.mediaDevices.getUserMedia({video: true})
+    // Tries to get the rear camera but falls back to a different camera if not found
+    navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}})
     .then(mediaStream => {
       this.shadowRoot.querySelector('video').srcObject = mediaStream;
       const track = mediaStream.getVideoTracks()[0];
