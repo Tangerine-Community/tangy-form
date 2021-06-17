@@ -50,7 +50,7 @@ export class TangyPhotoCapture extends PolymerElement {
         <label id="label"></label>
         <div>
           <video autoplay id="video"></video>
-          <img src="[[value]]" style='display:none' id="image"/>
+          <img src="[[value]]" style='display:none' id="photoCaptureImage"/>
         </div>
         <div id="buttons">
           <paper-button id="capture-button" on-click="capturePhoto"><iron-icon icon="camera-enhance"></iron-icon> [[t.capture]] </paper-button>
@@ -144,7 +144,9 @@ export class TangyPhotoCapture extends PolymerElement {
       },
       value: {
         type: String,
-        value: ''
+        value: '',
+        observer: 'reflect',
+        reflectToAttribute: true
       },
       warnText: {
         type: String,
@@ -212,11 +214,18 @@ export class TangyPhotoCapture extends PolymerElement {
 
     if (this.value) {
       this.shadowRoot.querySelector('video').style.display = 'none'
-      this.shadowRoot.querySelector('#image').style.display = 'block'
+      this.shadowRoot.querySelector('#photoCaptureImage').style.display = 'block'
       this.enableButtons(["#accept-button","#clear-button"])
       this.disableButtons(["#capture-button"])
     }
   }
+
+  reflect() {
+    if (!this.ready) return
+    if (this.shadowRoot.querySelector('#photoCaptureImage') && (this.shadowRoot.querySelector('#photoCaptureImage').src === '')) return
+    this.shadowRoot.querySelector('video').style.display = 'none'
+    this.shadowRoot.querySelector('#photoCaptureImage').style.display = 'block'
+    }
 
   onHintTextChange(value) {
     this.shadowRoot.querySelector('.hint-text').innerHTML = value
@@ -266,21 +275,21 @@ export class TangyPhotoCapture extends PolymerElement {
         });
     };
     this.blob = await ImageReducer.toBlob(this.blob, {max: this.maxSizeInKb})
-    this.$.image.src = URL.createObjectURL(this.blob);
-    this.$.image.onload = () => { URL.revokeObjectURL(this.src); }
+    this.$.photoCaptureImage.src = URL.createObjectURL(this.blob);
+    this.$.photoCaptureImage.onload = () => { URL.revokeObjectURL(this.src); }
     this.shadowRoot.querySelector('video').style.display = 'none'
-    this.shadowRoot.querySelector('#image').style.display = 'block'
+    this.shadowRoot.querySelector('#photoCaptureImage').style.display = 'block'
     this.enableButtons(["#accept-button","#clear-button"])
     this.disableButtons(["#capture-button"])
   }
 
   clearPhoto() {
     this.value = null;
-    this.$.image.src = ''
+    this.$.photoCaptureImage.src = ''
     this.enableButtons(["#capture-button"])
     this.disableButtons(["#accept-button","#clear-button"])
     this.shadowRoot.querySelector('video').style.display = 'block'
-    this.shadowRoot.querySelector('#image').style.display = 'none'
+    this.shadowRoot.querySelector('#photoCaptureImage').style.display = 'none'
   }
 
   async acceptPhoto() {
