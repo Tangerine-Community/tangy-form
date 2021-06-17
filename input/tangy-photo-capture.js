@@ -286,10 +286,7 @@ export class TangyPhotoCapture extends PolymerElement {
   async acceptPhoto() {
     // Convert blob to base64 string
     const arrayBuffer = await this.blob.arrayBuffer()
-    // convert arrayBuffer to a string
-    // const abString = String.fromCharCode.apply(null, new Uint8Array(arrayBuffer))
-    // base64 encode the string
-    // const b64 = window.btoa(unescape(encodeURIComponent(abString)));
+    // convert arrayBuffer to a base64String
     const base64String = window.btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
     // turn it into a data:image
     const nudata = 'data:image/jpeg;base64,' + base64String
