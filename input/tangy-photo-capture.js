@@ -145,8 +145,7 @@ export class TangyPhotoCapture extends PolymerElement {
       value: {
         type: String,
         value: '',
-        observer: 'reflect',
-        reflectToAttribute: true
+        observer: 'reflect'
       },
       warnText: {
         type: String,
