@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.25.6
+- Implemented a switcher for front and back cameras for the tangy-photo-capture input. PR: [#247](https://github.com/Tangerine-Community/tangy-form/pull/247)
+
 ## v4.25.5
 - The tangy-photo-capture input now uses the rear camera to capture images. 
 
