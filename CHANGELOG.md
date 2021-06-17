@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.25.7
+- tangy-photo-capture: Hiding display of video when viewing a record in order to see the captured image.
+
 ## v4.25.6
 - Implemented a switcher for front and back cameras for the tangy-photo-capture input. PR: [#247](https://github.com/Tangerine-Community/tangy-form/pull/247)
 
