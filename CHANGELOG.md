@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.25.8
+- tangy-photo-capture: Integrate Capture and Saving (Accept) into a single step. 
+
 ## v4.25.7
 - tangy-photo-capture: Hiding display of video when viewing a record in order to see the captured image.
 

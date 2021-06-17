@@ -43,18 +43,40 @@ export class TangyPhotoCapture extends PolymerElement {
       paper-button[disabled] {
         opacity: .2;
       }
+      
+      .saving {     
+        filter: grayscale(100%);
+        opacity: 0.4;
+      }
+      
+      .saved {     
+        filter: grayscale(0%);
+        opacity: 1;
+      }
+      /* Centered text */
+      .centered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: xxx-large;
+        color: red;
+        display:none;
+      }
     </style>
     <div class="flex-container m-y-25">
       <div id="qnum-number"></div>
       <div id="qnum-content">
         <label id="label"></label>
-        <div>
+        <div id="imageDisplay">
+<!--          <span style="margin: auto; font-size: 3em;"> <svg id="splash" style="width: 400px; margin:  9px 15px 0px 16px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 83.41 83.43"></svg></span>-->
+<!--          <div class="centered" id="placeholder"> <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet" viewBox="-1.0000000000002274 -2.492537313432649 644.0000000000005 645.4925373134326" width="300" height="641.49"><defs><path d="M0 -1.49L640 -1.49L640 640L0 640L0 -1.49Z" id="h2j0HmwHkI"></path></defs><g><g><use xlink:href="#h2j0HmwHkI" opacity="1" fill="#abb3ab" fill-opacity="1"></use></g></g></svg></div>-->
           <video autoplay id="video"></video>
           <img src="[[value]]" style='display:none' id="photoCaptureImage"/>
+          <div id="centeredText" class="centered">[[t.saving]]</div>
         </div>
         <div id="buttons">
           <paper-button id="capture-button" on-click="capturePhoto"><iron-icon icon="camera-enhance"></iron-icon> [[t.capture]] </paper-button>
-          <paper-button id="accept-button" on-click="acceptPhoto" disabled><iron-icon icon="done"></iron-icon> [[t.accept]] </paper-button>
           <paper-button id="toggle-button" on-click="toggleCamera"><iron-icon icon="image:switch-camera"></iron-icon> [[t.switch]] </paper-button>
           <paper-button id="clear-button" on-click="clearPhoto" disabled><iron-icon icon="delete"></iron-icon> [[t.clear]] </paper-button>
         </div>
@@ -180,6 +202,7 @@ export class TangyPhotoCapture extends PolymerElement {
       var arrayLength = devices.length;
     })
     this.constraints = {video: { facingMode: { exact: "environment" } }}
+    this.currentStream = null;
   }
 
   ready() {
@@ -187,20 +210,24 @@ export class TangyPhotoCapture extends PolymerElement {
     this.t = {
       capture: t('capture'),
       accept: t('accept'),
-      clear: t('clear')
+      clear: t('clear'),
+      saving: t('Saving...')
     }
     this.shadowRoot.querySelector('#label').innerHTML = this.label
     // Start streaming video
     const constraints = this.getConstraints()
     navigator.mediaDevices.getUserMedia(constraints)
     .then(mediaStream => {
+      this.currentStream = mediaStream
       this.shadowRoot.querySelector('video').srcObject = mediaStream;
       const track = mediaStream.getVideoTracks()[0];
       this.imageCapture = new ImageCapture(track);
     }).catch(error => {
           if (error.constraint && error.constraint === 'facingMode') {
+            // Workaround for testing on Chrome, not on Android device
             navigator.mediaDevices.getUserMedia({video: true})
                 .then(mediaStream => {
+                  this.currentStream = mediaStream
                   this.shadowRoot.querySelector('video').srcObject = mediaStream;
                   const track = mediaStream.getVideoTracks()[0];
                   this.imageCapture = new ImageCapture(track);
@@ -214,7 +241,8 @@ export class TangyPhotoCapture extends PolymerElement {
     if (this.value) {
       this.shadowRoot.querySelector('video').style.display = 'none'
       this.shadowRoot.querySelector('#photoCaptureImage').style.display = 'block'
-      this.enableButtons(["#accept-button","#clear-button"])
+      // this.enableButtons(["#accept-button","#clear-button"])
+      this.enableButtons(["#clear-button"])
       this.disableButtons(["#capture-button"])
     }
   }
@@ -259,11 +287,24 @@ export class TangyPhotoCapture extends PolymerElement {
   }
   
   async capturePhoto() {
+    // const placeholder = 'data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'
+    // const placeholder = '<svg xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF" height="640" viewBox="0 0 24 24" width="24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'
+
     const { imageWidth, imageHeight } = await this.imageCapture.getPhotoCapabilities();
     this.blob = await this.imageCapture.takePhoto({
       imageWidth: imageWidth.max,
       imageHeight: imageHeight.max
     })
+    this.shadowRoot.querySelector('video').style.display = 'none'
+    // this.shadowRoot.querySelector('#placeholder').style.display = 'block'
+    this.shadowRoot.querySelector('#photoCaptureImage').style.display = 'block'
+    this.$.photoCaptureImage.classList.add('saving');
+    this.shadowRoot.querySelector('#centeredText').style.display = 'block'
+    // Lay in the placeholder image while processing
+    this.$.photoCaptureImage.src = URL.createObjectURL(this.blob);
+    // this.$.photoCaptureImage.src = placeholder
+    this.$.photoCaptureImage.onload = () => { URL.revokeObjectURL(this.src); }
+
     const ImageReducer = new ImageBlobReduce()
     // Forces the output to be a JPG of .8 quality
     ImageReducer._create_blob = function (env) {
@@ -278,15 +319,21 @@ export class TangyPhotoCapture extends PolymerElement {
     this.$.photoCaptureImage.onload = () => { URL.revokeObjectURL(this.src); }
     this.shadowRoot.querySelector('video').style.display = 'none'
     this.shadowRoot.querySelector('#photoCaptureImage').style.display = 'block'
-    this.enableButtons(["#accept-button","#clear-button"])
+    this.shadowRoot.querySelector('#centeredText').style.display = 'none'
+    // this.shadowRoot.querySelector('#placeholder').style.display = 'none'
+    this.$.photoCaptureImage.classList.add('saved');
+    // this.enableButtons(["#accept-button","#clear-button"])
+    this.enableButtons(["#clear-button"])
     this.disableButtons(["#capture-button"])
+    await this.acceptPhoto()
   }
 
   clearPhoto() {
     this.value = null;
     this.$.photoCaptureImage.src = ''
-    this.enableButtons(["#capture-button"])
-    this.disableButtons(["#accept-button","#clear-button"])
+    this.enableButtons(["#capture-button", "#toggle-button"])
+    // this.disableButtons(["#accept-button","#clear-button"])
+    this.disableButtons(["#clear-button"])
     this.shadowRoot.querySelector('video').style.display = 'block'
     this.shadowRoot.querySelector('#photoCaptureImage').style.display = 'none'
   }
@@ -300,8 +347,9 @@ export class TangyPhotoCapture extends PolymerElement {
     const nudata = 'data:image/jpeg;base64,' + base64String
     this.value = nudata
     
-    this.shadowRoot.querySelector('#capture-button').setAttribute('disabled', '')
-    this.shadowRoot.querySelector('#accept-button').setAttribute('disabled', '')
+    // this.shadowRoot.querySelector('#capture-button').setAttribute('disabled', '')
+    // this.shadowRoot.querySelector('#accept-button').setAttribute('disabled', '')
+    this.disableButtons(["#capture-button", "#toggle-button"])
   }
 
 
@@ -314,6 +362,13 @@ export class TangyPhotoCapture extends PolymerElement {
     }
   }
 
+  stopMediaTracks(stream) {
+    stream.getTracks().forEach(track => {
+      // stream.removeTrack(track)
+      track.stop();
+    })
+  }
+
   toggleCamera() {
     if (this.front) {
       this.front = false
@@ -321,8 +376,10 @@ export class TangyPhotoCapture extends PolymerElement {
       this.front = true
     }
     const constraints = this.getConstraints()
+    this.stopMediaTracks(this.currentStream)
     navigator.mediaDevices.getUserMedia(constraints)
         .then(mediaStream => {
+          this.currentStream = mediaStream
           this.shadowRoot.querySelector('video').srcObject = mediaStream;
           const track = mediaStream.getVideoTracks()[0];
           this.imageCapture = new ImageCapture(track);
