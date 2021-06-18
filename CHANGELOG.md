@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.25.9
+- tangy-photo-capture: Disabled the switcher due to issues with Android 9. Reduced the image preview to 75%.
+
 ## v4.25.8
 - tangy-photo-capture: Integrate Capture and Saving (Accept) into a single step. 
 

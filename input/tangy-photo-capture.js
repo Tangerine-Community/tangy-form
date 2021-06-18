@@ -24,7 +24,8 @@ export class TangyPhotoCapture extends PolymerElement {
 
     <style>
       video,img {
-        width: 100%;
+        width: 75%;
+        border:5px solid red;
       }
 
       .hint-text{
@@ -52,13 +53,14 @@ export class TangyPhotoCapture extends PolymerElement {
       .saved {     
         filter: grayscale(0%);
         opacity: 1;
+        border:5px solid green;
       }
       /* Centered text */
       .centered {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        top: 37.5%;
+        left: 37.5%;
+        transform: translate(-37.5%, -37.5%);
         font-size: xxx-large;
         color: red;
         display:none;
@@ -74,14 +76,11 @@ export class TangyPhotoCapture extends PolymerElement {
           <video autoplay id="video"></video>
           <img src="[[value]]" style='display:none' id="photoCaptureImage"/>
           <div id="centeredText" class="centered">[[t.saving]]</div>
-        </div>
+        </div
         <div id="buttons">
           <paper-button id="capture-button" on-click="capturePhoto"><iron-icon icon="camera-enhance"></iron-icon> [[t.capture]] </paper-button>
-          <paper-button id="toggle-button" on-click="toggleCamera"><iron-icon icon="image:switch-camera"></iron-icon> [[t.switch]] </paper-button>
           <paper-button id="clear-button" on-click="clearPhoto" disabled><iron-icon icon="delete"></iron-icon> [[t.clear]] </paper-button>
         </div>
-
-
         <label class="hint-text"></label>
         <div id="error-text"></div>
         <div id="warn-text"></div>
@@ -287,9 +286,7 @@ export class TangyPhotoCapture extends PolymerElement {
   }
   
   async capturePhoto() {
-    // const placeholder = 'data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'
-    // const placeholder = '<svg xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF" height="640" viewBox="0 0 24 24" width="24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'
-
+    this.disableButtons(["#capture-button"])
     const { imageWidth, imageHeight } = await this.imageCapture.getPhotoCapabilities();
     this.blob = await this.imageCapture.takePhoto({
       imageWidth: imageWidth.max,
@@ -320,19 +317,15 @@ export class TangyPhotoCapture extends PolymerElement {
     this.shadowRoot.querySelector('video').style.display = 'none'
     this.shadowRoot.querySelector('#photoCaptureImage').style.display = 'block'
     this.shadowRoot.querySelector('#centeredText').style.display = 'none'
-    // this.shadowRoot.querySelector('#placeholder').style.display = 'none'
     this.$.photoCaptureImage.classList.add('saved');
-    // this.enableButtons(["#accept-button","#clear-button"])
     this.enableButtons(["#clear-button"])
-    this.disableButtons(["#capture-button"])
     await this.acceptPhoto()
   }
 
   clearPhoto() {
     this.value = null;
     this.$.photoCaptureImage.src = ''
-    this.enableButtons(["#capture-button", "#toggle-button"])
-    // this.disableButtons(["#accept-button","#clear-button"])
+    this.enableButtons(["#capture-button"])
     this.disableButtons(["#clear-button"])
     this.shadowRoot.querySelector('video').style.display = 'block'
     this.shadowRoot.querySelector('#photoCaptureImage').style.display = 'none'
@@ -346,13 +339,8 @@ export class TangyPhotoCapture extends PolymerElement {
     // turn it into a data:image
     const nudata = 'data:image/jpeg;base64,' + base64String
     this.value = nudata
-    
-    // this.shadowRoot.querySelector('#capture-button').setAttribute('disabled', '')
-    // this.shadowRoot.querySelector('#accept-button').setAttribute('disabled', '')
-    this.disableButtons(["#capture-button", "#toggle-button"])
+    this.disableButtons(["#capture-button"])
   }
-
-
 
   getConstraints() {
     if (this.front) {
