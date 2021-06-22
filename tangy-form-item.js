@@ -4,6 +4,7 @@ import './util/html-element-props.js'
 import '@polymer/paper-card/paper-card.js'
 import './style/tangy-common-styles.js'
 import { TangyFormItemHelpers } from './tangy-form-item-callback-helpers.js'
+import axios from 'axios'
 
 /**
  * `tangy-form-item`
@@ -570,6 +571,10 @@ export class TangyFormItem extends PolymerElement {
     }
   }
 
+  async loadTemplateOverHttp() {
+    this.template = axios.get(this.getAttribute('src'))
+  }
+
   onOpenChange(open) {
     // Close it.
     if (open === false) {
@@ -577,7 +582,14 @@ export class TangyFormItem extends PolymerElement {
     }
     // Open it, but only if empty because we might be stuck.
     if (open === true && this.innerHTML === '') {
-      this.openWithContent(this.template)
+      if (this.template) {
+        this.openWithContent(this.template)
+      } else if (this.hasAttribute('src')) {
+        this.loadTemplateOverHttp()
+          .then(() => this.openWithContent(this.template))
+      } else {
+        this.openWithContent('')
+      }
     }
   }
 
