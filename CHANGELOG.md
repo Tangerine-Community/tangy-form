@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.25.10
+- Defined Cycle of sequences (randomization) breaks Preview and form Play from Tablet [#2714](https://github.com/Tangerine-Community/Tangerine/issues/2714). fix(tangy-form): Reset index after reaching the last cycle index PR: [#234](https://github.com/Tangerine-Community/tangy-form/pull/234)
+
 ## v4.25.9
 - tangy-photo-capture: Disabled the switcher due to issues with Android 9. Reduced the image preview to 75%.
 
