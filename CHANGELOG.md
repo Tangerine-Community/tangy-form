@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.25.11
+- User defined Cycle Sequences index should begin at 1 PR:[#269](https://github.com/Tangerine-Community/tangy-form/pull/269).
+
 ## v4.25.10
 - Defined Cycle of sequences (randomization) breaks Preview and form Play from Tablet [#2714](https://github.com/Tangerine-Community/Tangerine/issues/2714). fix(tangy-form): Reset index after reaching the last cycle index PR: [#234](https://github.com/Tangerine-Community/tangy-form/pull/234)
 
