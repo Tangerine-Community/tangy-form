@@ -19,7 +19,7 @@ const tangyFormReducer = function (state = initialState, action) {
       let {cycleSequences} = action.response.form;
       const lastCycleIndex = `${action.response.form.id}-lastCycleIndex`
       const cycleSequencesArray = cycleSequences && cycleSequences.split('\n').map(e=>e.trim())
-      let currentSequence = [...Array(action.response.items.length).keys()]
+      let currentSequence = [...Array(action.response.items.length).fill().map((_, i) => i+1)]
       if(cycleSequences){
         let currentCycleIndex =0 ;
         if(localStorage.getItem(lastCycleIndex)){
@@ -41,7 +41,7 @@ const tangyFormReducer = function (state = initialState, action) {
         }
       )
       let tempItems = []
-      currentSequence.forEach((e)=>tempItems.push(newState.items[e]))
+      currentSequence.forEach((e)=>tempItems.push(newState.items[e-1]))
       newState.items = tempItems
       newState.items[0]['firstOpenTime']= newState.items[0]['firstOpenTime'] ? newState.items[0]['firstOpenTime'] : Date.now()
 
