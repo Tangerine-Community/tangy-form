@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.25.12
+ - Implemented a new 'before-submit' event to tangy-form in order to listen to events before the 'submit' event is dispatched.
+
 ## v4.25.11
 - User defined Cycle Sequences index should begin at 1 PR:[#269](https://github.com/Tangerine-Community/tangy-form/pull/269).
 

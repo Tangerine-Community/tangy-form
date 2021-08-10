@@ -512,6 +512,8 @@ export class TangyForm extends PolymerElement {
       type: 'ITEM_SAVE',
       item: event.target.getProps()
     })
+    const cancelledBeforeSubmit = this.dispatchEvent(new CustomEvent('before-submit', {cancelable: true}))
+    if (cancelledBeforeSubmit) return
     let cancelledSubmit
     if (!this.response.hasUnlocked) {
       cancelledSubmit = !this.dispatchEvent(new CustomEvent('submit', {cancelable: true}))
