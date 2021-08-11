@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.25.13
+ - Fixed bug in cancelledBeforeSubmit for 'before-submit' event
+
 ## v4.25.12
  - Implemented a new 'before-submit' event to tangy-form in order to listen to events before the 'submit' event is dispatched.
 
