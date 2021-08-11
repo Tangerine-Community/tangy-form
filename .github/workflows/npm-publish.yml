@@ -28,7 +28,7 @@ jobs:
           node-version: 14
           registry-url: https://registry.npmjs.org/
       - run: npm ci
-      - uses: mmarchini-oss/npm-otp-publish@v0
-        with:
-          npm_token: ${{secrets.npm_token}}
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
 
