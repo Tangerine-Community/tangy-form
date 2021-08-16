@@ -457,6 +457,7 @@ export class TangyForm extends PolymerElement {
       item.addEventListener('FORM_RESPONSE_NO_CONSENT', this.onFormResponseNoConsent.bind(this))
       item.addEventListener('logic-error', this.onItemError.bind(this))
       item.addEventListener('go-to', event => this.onItemGoTo(event))
+      item.addEventListener('before-reflect', event => this.onItemBeforeReflect(event))
     })
 
     // Subscribe to the store to reflect changes.
@@ -565,6 +566,9 @@ export class TangyForm extends PolymerElement {
   }
 
   onItemNext(event) {
+    if (this.hasAttribute('use-loading-ui')) {
+      document.querySelector(".loadingUi").style.display = "block"
+    }
     this.store.dispatch({
       type: 'ITEM_SAVE',
       item: event.target.getProps()
@@ -609,6 +613,21 @@ export class TangyForm extends PolymerElement {
 
   onItemError(event) {
     this.errorMessage(event.detail)
+  }
+
+  async onItemBeforeReflect(event) {
+    if (this.hasAttribute('use-loading-ui')) {
+
+      async function gotoSleep() {
+        // console.log('sleep started')
+        const sleep = (milliseconds) => new Promise((res) => setTimeout(() => res(true), milliseconds))
+        await sleep(1000)
+        // console.log('sleep finished')
+      }
+
+      await gotoSleep()
+      document.querySelector(".loadingUi").style.display = "none"
+    }
   }
 
   // Prevent parallel reflects, leads to race conditions.

@@ -604,7 +604,7 @@ export class TangyFormItem extends PolymerElement {
       this.showCompleteButton = false
       tangyConsentEl.addEventListener('TANGY_INPUT_CONSENT_NO', this.clickedNoConsent.bind(this))
     }
-
+    this.dispatchEvent(new CustomEvent('before-reflect'))
     this.reflect()
     if (this.open === true) {
       this.fireHook('on-open')
