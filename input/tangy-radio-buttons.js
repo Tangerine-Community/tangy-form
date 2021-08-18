@@ -204,12 +204,6 @@ class TangyRadioButtons extends PolymerElement {
     super.ready()
     this.render()
     this.reflect()
-    this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text')
-        ? this.getAttribute('hint-text')
-        : ''
-    this.shadowRoot.querySelector('#label').innerHTML = this.hasAttribute('label')
-        ? this.getAttribute('label')
-        : ''
   }
 
   reflect() {
@@ -219,10 +213,16 @@ class TangyRadioButtons extends PolymerElement {
       el.disabled = this.disabled
       el.hidden = this.hidden
     })
+    this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text')
+    ? this.getAttribute('hint-text')
+    : ''
+    this.shadowRoot.querySelector('#label').innerHTML = this.hasAttribute('label')
+        ? this.getAttribute('label')
+        : ''
+    this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
   }
 
   render() {
-    this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
     this.$.container.innerHTML = ''
     // Populate options as tangy-radio-button elements
     let options = this.querySelectorAll('option')
