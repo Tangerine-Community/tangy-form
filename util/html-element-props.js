@@ -1,4 +1,6 @@
 
+const STANDARD_HTML_INPUT_ELEMENT_NAMES = [ 'INPUT', 'SELECT' ]
+
 // Perhaps props should always be based on the attributes... Stop dealing with this transformation of naming and deal with the fact a prop not existing means it is set to false.
 HTMLElement.prototype.getAttributes = function () {
   let attributes = [].slice.call(this.attributes)
@@ -13,6 +15,14 @@ HTMLElement.prototype.setAttributes = function (attributes = {}) {
 
 // @TODO See one liner that TimvdLippe suggested https://github.com/Polymer/polymer/issues/4918#issuecomment-355835087
 HTMLElement.prototype.getProps = function () {
+  if (this.tagName === 'INPUT') {
+    const props = {
+      name: this.getAttribute('name'),
+      value: this.value
+    }
+    console.log(props)
+    return props
+  }
   if (this.constructor.hasOwnProperty('_props') && Array.isArray(this.constructor._props)) {
     let props = this.constructor._props.reduce((props, propName) => {
       return Object.assign({}, props, { [propName]: this[propName]})
@@ -38,6 +48,11 @@ HTMLElement.prototype.getProps = function () {
 }
 
 HTMLElement.prototype.setProps = function (props = {}) {
+  if (this.tagName === 'INPUT') {
+    this.setAttribute('name', props.name),
+    this.setAttribute('value', props.value)
+    return
+  }
   let propsObject = Object.assign({}, props)
   delete propsObject.tagName
   delete propsObject.constructorName
