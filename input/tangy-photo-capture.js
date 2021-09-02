@@ -204,6 +204,10 @@ export class TangyPhotoCapture extends PolymerElement {
     this.currentStream = null;
   }
 
+  disconnectedCallback() {
+    this.stopMediaTracks(this.currentStream)
+  }
+
   ready() {
     super.ready();
     this.t = {
