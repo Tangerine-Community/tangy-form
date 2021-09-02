@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.25.14
+- Fix "Camera not released after photo taken with `<tangy-photo-capture>`". Camera is now released when going to the next page or leaving a form. 
+
 ## v4.25.13
  - Fixed bug in cancelledBeforeSubmit for 'before-submit' event
 
