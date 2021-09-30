@@ -105,6 +105,11 @@ export class TangyPhotoCapture extends PolymerElement {
         value: 256,
         reflectToAttribute: true
       },
+      compression: {
+        type: String,
+        value: '0.8',
+        reflectToAttribute: true
+      },
       label: {
         type: String,
         observer: 'reflect',
@@ -307,9 +312,10 @@ export class TangyPhotoCapture extends PolymerElement {
     this.$.photoCaptureImage.onload = () => { URL.revokeObjectURL(this.src); }
 
     const ImageReducer = new ImageBlobReduce()
+    const compression = parseFloat(this.compression)
     // Forces the output to be a JPG of .8 quality
     ImageReducer._create_blob = function (env) {
-      return this.pica.toBlob(env.out_canvas, 'image/jpeg', 0.8)
+      return this.pica.toBlob(env.out_canvas, 'image/jpeg', compression)
         .then(function (blob) {
           env.out_blob = blob;
           return env;
