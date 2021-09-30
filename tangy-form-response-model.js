@@ -20,7 +20,7 @@ export class TangyFormResponseModel {
     this.location = {}
     this.type = 'response'
     if (props && props.hasOwnProperty('inputs')) delete props.inputs
-    Object.assign(this, props)
+    Object.assign(this, (props && props.shrunk) ? this._unshrink(props) : props)
   }
 
   get inputs() {
@@ -92,6 +92,89 @@ export class TangyFormResponseModel {
         value
       })
     }
+  }
+
+  get _inputPropertiesShrinkMap() {
+    return {
+      "n": "name",
+      "tN": "tagName",
+      "pH": "placeholder",
+      "t": "type",
+      "h": "hidden",
+      "mi": "min",
+      "ma": "max",
+      "d": "disabled",
+      "r": "required",
+      "s": "skipped",
+      "v": "value",
+      "hD": "hasDiscrepancy",
+      "hW": "hasWarning",
+      "i": "incomplete",
+      "iV": "invalid",
+      "iD": "identifier",
+      "aP": "allowedPattern",
+      "p": "private"
+    }
+  }
+
+  get _inputPropertiesShrinkArray() {
+    return Object.keys(this._inputPropertiesShrinkMap).map(key => {
+      return [key, this._inputPropertiesShrinkMap[key]]
+    })
+  }
+
+  _unshrink(data) {
+    return {
+      ...data,
+      shrunk: false,
+      items: data.items.map(item => {
+        return {
+          ...item,
+          inputs: item.inputs.map(input => {
+            const data = JSON.parse(JSON.stringify(input))
+            for (const map of this._inputPropertiesShrinkArray) {
+              data[map[1]] = input[map[1]] || input[map[0]]
+              delete data[map[0]] 
+            }
+            return data
+          })
+        }
+      })
+    }
+  }
+
+  _shrink(tangyFormResponse) {
+    const data = JSON.parse(JSON.stringify(tangyFormResponse))
+    data.shrunk = true
+    delete data.form.onChange
+    delete data.form.onOpen
+    delete data.form.onSubmit
+    for (const item of data.items) {
+      delete item.onOpen
+      delete item.onChange
+      for (const input of item.inputs) {
+        // Remove properties that are unlikely to have been overridden.
+        delete input.label
+        delete input.innerLabel
+        delete input.helpText
+        delete input.hintText
+        delete input.errorMessage
+        delete input.errorText
+        delete input.warnText
+        delete input.discrepancyText
+        delete input.questionNumber
+        // Shorten common property names.
+        for (const map of this._inputPropertiesShrinkArray) {
+          input[map[0]] = input[map[1]]
+          delete input[map[1]]
+        }
+      }
+    }
+    return data
+  }
+
+  getShrunkResponse() {
+    return this._shrink(this)
   }
 
 }
