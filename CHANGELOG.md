@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.26.0
+- Add support for configuring compression on `<tangy-photo-capture>`. eg.` <tangy-photo-capture compression="0.05"></tangy-photo-capture>`
+
 ## v4.25.14
 - Fix "Camera not released after photo taken with `<tangy-photo-capture>`". Camera is now released when going to the next page or leaving a form. 
 
