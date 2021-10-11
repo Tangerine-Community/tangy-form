@@ -41,20 +41,16 @@ const tangyFormReducer = function (state = initialState, action) {
         return result ? {...merged}: {...itemInDom}
         }
       )
-      const itemsInSequence = currentSequence.map((sequenceNumber) => newState.items[sequenceNumber - 1])
+      // Determine items not in sequence and items in sequence. Then shove items not in sequence after the first entry in 
+      // the items array because we can't have disabled items at the beginning or end.
+      const itemsInSequence = currentSequence
+        .map((sequenceNumber) => newState.items[sequenceNumber - 1])
       const itemsNotInSequence = newState
         .items
         .filter((item, index) => !currentSequence.includes(index+1))
-        .map((item) => {
-          return {
-            ...item,
-            disabled: true
-          }
-        })
-      // Shove disabled items not in sequence after the first entry in the items array because we can't have disabled items at the beginning or end.
       newState.items = [
         itemsInSequence.shift(),
-        ...itemsNotInSequence,
+        ...itemsNotInSequence.map((item) => { return { ...item, disabled: true } }),
         ...itemsInSequence
       ]
       newState.items[0]['firstOpenTime']= newState.items[0]['firstOpenTime'] ? newState.items[0]['firstOpenTime'] : Date.now()
