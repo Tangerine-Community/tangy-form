@@ -277,13 +277,31 @@
     <test-fixture id="SkipSecondItem">
       <template>
         <tangy-form id="my-form" title="My Form" on-change="skip('item2')">
-          <tangy-form-item id="item1">
+          <tangy-form-item id="item1" title="1">
             <tangy-input name="input1" label="What is your last name?"></tangy-input>
           </tangy-form-item>
-          <tangy-form-item id="item2">
+          <tangy-form-item id="item2" title="2">
             <tangy-input name="input2" label="What is your last name?"></tangy-input>
           </tangy-form-item>
-          <tangy-form-item id="item3">
+          <tangy-form-item id="item3" title="3">
+            <tangy-input name="input3" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="SkipSecondItemCycleSequences">
+      <template>
+        <tangy-form id="SkipSecondItemCycleSequences" title="My Form" cycle-sequences="1,3
+        1,3
+        1,3">
+          <tangy-form-item id="item1" title="1">
+            <tangy-input name="input1" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item2" title="2">
+            <tangy-input name="input2" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item3" title="3">
             <tangy-input name="input3" label="What is your last name?"></tangy-input>
           </tangy-form-item>
         </tangy-form>
@@ -311,8 +329,19 @@
 
       suite('tangy-form', () => {
 
-        test('should skip second item', () => {
+        test('should skip second item due to skip logic', () => {
           const element = fixture('SkipSecondItem');
+          element.newResponse()
+          element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item1').shadowRoot.querySelector('#next').click()
+          // If second item wasn't skipped, the following would fail.
+          element.querySelector('#item3').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item3').shadowRoot.querySelector('#complete').click()
+        })
+
+        test('should skip second item due to cycle-sequences', () => {
+          const element = fixture('SkipSecondItemCycleSequences');
+          debugger
           element.newResponse()
           element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
           element.querySelector('#item1').shadowRoot.querySelector('#next').click()
