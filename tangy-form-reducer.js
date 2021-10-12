@@ -32,6 +32,7 @@ const tangyFormReducer = function (state = initialState, action) {
         }
         currentSequence = cycleSequencesArray[currentCycleIndex].split(',');
       }
+      currentSequence = currentSequence.map(sequence => parseInt(sequence))
       newState = Object.assign({}, action.response)
       // Ensure that the only items we have in the response are those that are in the DOM but maintain state of the existing items in the response.
       newState.items = action.itemsInDom.map((itemInDom, index) => {
@@ -40,11 +41,19 @@ const tangyFormReducer = function (state = initialState, action) {
         return result ? {...merged}: {...itemInDom}
         }
       )
-      let tempItems = []
-      currentSequence.forEach((e)=>tempItems.push(newState.items[e-1]))
-      newState.items = tempItems
+      // Determine items not in sequence and items in sequence. Then shove items not in sequence after the first entry in 
+      // the items array because we can't have disabled items at the beginning or end.
+      const itemsInSequence = currentSequence
+        .map((sequenceNumber) => newState.items[sequenceNumber - 1])
+      const itemsNotInSequence = newState
+        .items
+        .filter((item, index) => !currentSequence.includes(index+1))
+      newState.items = [
+        itemsInSequence.shift(),
+        ...itemsNotInSequence.map((item) => { return { ...item, disabled: true } }),
+        ...itemsInSequence
+      ]
       newState.items[0]['firstOpenTime']= newState.items[0]['firstOpenTime'] ? newState.items[0]['firstOpenTime'] : Date.now()
-
       firstNotDisabled = newState.items.findIndex(item => !item.disabled)
       newState.items[firstNotDisabled].hideBackButton = true
       const indexOfSummaryItem = newState.items.findIndex(item => item.summary === true)
