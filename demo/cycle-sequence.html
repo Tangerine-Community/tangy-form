@@ -65,40 +65,43 @@
   <body>
     <div class="vertical-section-container centered">
 
-      <h3>Basic tangy-form demo</h3>
-      <demo-snippet>
+      <h3>cycle-sequences demo</h3>
+      <!--demo-snippet>
         <template>
-          <tangy-form id="my-form" title="My Form" cycle-sequences="2,4,3,1
-          4,3,2,1
-          1,2,3,4">
+          <tangy-form id="my-form" title="My Form" cycle-sequences="1,4,3
+          1,4,3 
+          1,4,3">
             <tangy-form-item id="item1">
-              <tangy-input name="input1" label="What is your first name?" required></tangy-input>
+              <tangy-input name="input1" label="What is your first name 1?"></tangy-input>
             </tangy-form-item>
             <tangy-form-item id="item2">
-              <tangy-input name="input2" label="What is your last name 0?" required></tangy-input>
+              <tangy-input name="input2" label="What is your last name 2?"></tangy-input>
             </tangy-form-item>
             <tangy-form-item id="item3">
-              <tangy-input name="input3" label="What is your last name 1?" required></tangy-input>
+              <tangy-input name="input3" label="What is your last name 3?"></tangy-input>
             </tangy-form-item>
             <tangy-form-item id="item4">
-              <tangy-input name="input4" label="What is your last name 2?" required></tangy-input>
+              <tangy-input name="input4" label="What is your last name 4?"></tangy-input>
             </tangy-form-item>
           </tangy-form>
-
-          <script>
-            document.querySelector('#my-form').addEventListener('submit', event => {
-              // By default, the form response is locked and the user can browse it. Use event.preventDefault()
-              // to do something else.
-              event.preventDefault()
-              // 3 ways to inspect the user's response to the form. Ordered by level of detail.
-              console.log(event.target.response)
-              console.log(event.target.inputs)
-              console.log(event.target.values)
-            })
-          </script>
         </template>
-      </demo-snippet>
-
+      </demo-snippet-->
+    <tangy-form id="SkipSecondItemCycleSequences_" title="My Form" cycle-sequences="1,3,4
+      1,3,4
+      1,3,4">
+        <tangy-form-item id="item1" title="1">
+          1 
+        </tangy-form-item>
+        <tangy-form-item id="item2" title="2">
+          2 
+        </tangy-form-item>
+        <tangy-form-item id="item3" title="3">
+          3 
+        </tangy-form-item>
+        <tangy-form-item id="item4" title="4">
+          4 
+        </tangy-form-item>
+      </tangy-form>
       
         
     </div>
