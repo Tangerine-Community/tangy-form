@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.27.0
+- Add support for leaving out an index in a cycle sequence, effectively causing it to be skipped. https://github.com/Tangerine-Community/tangy-form/pull/279
+
 ## v4.26.0
 - Add support for configuring compression on `<tangy-photo-capture>`. eg.` <tangy-photo-capture compression="0.05"></tangy-photo-capture>`
 
