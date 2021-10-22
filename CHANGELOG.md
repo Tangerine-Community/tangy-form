@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.28.0
+- Add support for changing the translation of form controls without reloading the page using the `<t-t>` AKA `<t-translate>` element from the `translation-web-component` library.
+- `<t-number>` added from the `trasnlation-web-component` library for translating numbers in content.
+
 ## v4.27.0
 - Add support for leaving out an index in a cycle sequence, effectively causing it to be skipped. https://github.com/Tangerine-Community/tangy-form/pull/279
 
