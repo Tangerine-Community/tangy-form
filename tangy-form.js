@@ -24,7 +24,7 @@ import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-tabs/paper-tab.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import 'translation-web-component/t-lang.js'
-import 'translation-web-component/t-translation.js'
+import 'translation-web-component/t-translate.js'
 import 'translation-web-component/t-t.js'
 import 'translation-web-component/t-number.js'
 
