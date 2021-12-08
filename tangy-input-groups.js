@@ -103,6 +103,9 @@ export class TangyInputGroups extends PolymerElement {
       inputGroupEl.addEventListener('input-group-remove', event => this.removeGroup(event.target.name))
       inputGroupEl.querySelectorAll('[name]').forEach(input => input.setAttribute('name', `${key}.${input.getAttribute('name')}`))
       this.appendChild(inputGroupEl)
+      this.addEventListener('click', (e) => {
+        this.dispatchEvent(new Event('change', { bubbles: true }))
+      })
     })
     keysToRemove.forEach(key => {
       this.removeChild(this.querySelector(`[name="${key}"]`))
