@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.28.1
+- Fix `on-change` logic not called when changing a value in some `tangy-input-group`. (https://github.com/Tangerine-Community/tangy-form/pull/280)
+
 ## v4.28.0
 - Add support for changing the translation of form controls without reloading the page using the `<t-t>` AKA `<t-translate>` element from the `translation-web-component` library.
 - `<t-number>` added from the `trasnlation-web-component` library for translating numbers in content.
