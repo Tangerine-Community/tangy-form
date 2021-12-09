@@ -112,7 +112,11 @@ export class TangyInputGroups extends PolymerElement {
     keysToRemove.forEach(key => {
       this.removeChild(this.querySelector(`[name="${key}"]`))
     })
-    this.dispatchEvent(new Event('change', { bubbles: true }))
+    if (this.firstTimeSet) {
+      this.dispatchEvent(new Event('change', { bubbles: true }))
+    } else {
+      this.firstTimeSet = true
+    }
   }
 
   get value() {
