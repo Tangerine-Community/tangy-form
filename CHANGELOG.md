@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.28.2
+- Fix issue causing tangy-input-groups to not resume correctly.
+
 ## v4.28.1
 - Fix `on-change` logic not called when changing a value in some `tangy-input-group`. (https://github.com/Tangerine-Community/tangy-form/pull/280)
 
