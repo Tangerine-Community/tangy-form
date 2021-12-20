@@ -33,6 +33,7 @@ const tangyFormReducer = function (state = initialState, action) {
         currentSequence = cycleSequencesArray[currentCycleIndex].split(',');
       }
       currentSequence = currentSequence.map(sequence => parseInt(sequence))
+      action.response.form =  {...action.response.form, sequenceOrderMap:String(currentSequence)}
       newState = Object.assign({}, action.response)
       // Ensure that the only items we have in the response are those that are in the DOM but maintain state of the existing items in the response.
       newState.items = action.itemsInDom.map((itemInDom, index) => {
