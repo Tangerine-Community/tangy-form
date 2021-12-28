@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.28.3
+- When using Cycle Sequences, the Cycle Sequence used is now stashed in the form response for reference later in data analysis. https://github.com/Tangerine-Community/tangy-form/pull/282
+- Merged a number of Dependabot dependencies PRs.
+
 ## v4.28.2
 - Fix issue causing tangy-input-groups to not resume correctly.
 
