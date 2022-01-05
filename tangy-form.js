@@ -722,7 +722,7 @@ export class TangyForm extends PolymerElement {
     let itemInputs = [...this.shadowRoot.querySelectorAll('[name]')].reduce((acc, input) => Object.assign({}, acc, {[input.name]: input}), {})
     try {
       eval(`
-        ${Object.properties(this._injected).map(name => `var ${name} = ${this._injected[name]}`).join('\n')}
+        ${Object.keys(this._injected).map(name => `var ${name} = this._injected['${name}']`).join('\n')}
         ${this.getAttribute(hook)}
       `)
     } catch (e) {
