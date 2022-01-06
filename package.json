@@ -29,7 +29,7 @@
     "dr-niels-sortable-list": "git://github.com/DrNiels/sortable-list.git#master",
     "ethiopian-date": "0.0.6",
     "image-blob-reduce": "^3.0.1",
-    "lit-element": "^2.3.1",
+    "lit-element": "^3.1.0",
     "moment": "^2.24.0",
     "redux": "^4.0.0",
     "signature_pad": "^3.0.0-beta.3",
