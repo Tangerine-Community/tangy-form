@@ -16,6 +16,11 @@ import { TangyFormItemHelpers } from './tangy-form-item-callback-helpers.js'
 
 export class TangyFormItem extends PolymerElement {
 
+  constructor() {
+    super()
+    this._injected = {}
+  }
+
   static get is() { return 'tangy-form-item'; }
 
   connectedCallback() {
@@ -397,6 +402,10 @@ export class TangyFormItem extends PolymerElement {
     };
   }
 
+  inject(name, value) {
+    this._injected[name] = value
+  }
+
   // Apply state in the store to the DOM.
   reflect() {
     this.shadowRoot.querySelector('.heading').innerHTML = this.hasAttribute('title')
@@ -515,7 +524,10 @@ export class TangyFormItem extends PolymerElement {
       hideInputsUponThreshhold(this)
     }
     try {
-      const result = eval(code)
+      const result = eval(`
+        ${Object.keys(this._injected).map(name => `var ${name} = this._injected['${name}']`).join('\n')}
+        ${code}
+      `)
       return result
     } catch(err) {
       const detail = `${t(`Error detected in the section logic:`)} ${context} :: ${hook} :: <br> <pre> ${code} </pre>`

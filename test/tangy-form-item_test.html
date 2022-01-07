@@ -307,6 +307,24 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="ShouldInjectVariable">
+      <template>
+        <tangy-form id="ShouldInjectVariable" title="My Form">
+          <tangy-form-item id="item1" title="1" on-open="someInjectedVariable.itWorked()">
+            <tangy-input name="input1" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item2" title="2">
+            <tangy-input name="input2" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item3" title="3">
+            <tangy-input name="input3" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+
+
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
       import '../tangy-form.js'
@@ -317,6 +335,18 @@
       import '../input/tangy-checkboxes.js'
       import { TangyFormItemHelpers } from '../tangy-form-item-callback-helpers.js'
       suite('tangy-form-item', () => {
+
+        test('should inject variable', () => {
+          var someInjectedVariable = {
+            itWorked: function() {
+              this._itWorked = true 
+            }
+          }
+          const element = fixture('ShouldInjectVariable');
+          element.inject('someInjectedVariable', someInjectedVariable)
+          element.newResponse()
+          assert.equal(someInjectedVariable._itWorked, true)
+        })
 
         test('should disable an input from disable-if', () => {
           const element = fixture('DisableIfFixture');

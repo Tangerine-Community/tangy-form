@@ -90,6 +90,9 @@ export class TangyForm extends PolymerElement {
 
   inject(name, value) {
     this._injected[name] = value
+    this.querySelectorAll('tangy-form-item').forEach(item => {
+      item.inject(name, value)
+    })
   }
 
   // Get the value of a single input by name.
