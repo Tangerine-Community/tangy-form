@@ -403,7 +403,6 @@
 
         test('should skip second item due to cycle-sequences', () => {
           const element = fixture('SkipSecondItemCycleSequences');
-          debugger
           element.newResponse()
           element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
           element.querySelector('#item1').shadowRoot.querySelector('#next').click()
