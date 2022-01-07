@@ -5,6 +5,7 @@ import '../style/tangy-common-styles.js'
 import '../style/mdc-select-style.js'
 import { t } from '../util/t.js'
 import moment from 'moment'
+import { TangyInputBase } from '../tangy-input-base.js'
 /**
  * `tangy-partial-date`
  *
@@ -13,7 +14,7 @@ import moment from 'moment'
  * @polymer
  * @demo demo/index.html
  */
-class TangyPartialDate extends PolymerElement {
+class TangyPartialDate extends TangyInputBase {
   static get template() {
     return html`
     <style include="tangy-element-styles"></style>

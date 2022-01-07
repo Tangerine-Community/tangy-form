@@ -4,6 +4,7 @@ import '../style/tangy-common-styles.js'
 import '../style/tangy-element-styles.js'
 import '@polymer/iron-icon/iron-icon.js'
 import '@polymer/paper-button/paper-button.js'
+import { TangyInputBase } from '../tangy-input-base.js'
 
 import ImageBlobReduce from 'image-blob-reduce'
 
@@ -15,7 +16,7 @@ import ImageBlobReduce from 'image-blob-reduce'
      * @polymer
      * @demo demo/index.html
      */
-export class TangyPhotoCapture extends PolymerElement {
+export class TangyPhotoCapture extends TangyInputBase {
 
   static get template () {
     return html`

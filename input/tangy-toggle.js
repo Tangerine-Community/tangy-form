@@ -3,6 +3,7 @@ import '../util/html-element-props.js'
 import '@polymer/paper-toggle-button/paper-toggle-button.js'
 import '../style/tangy-common-styles.js'
 import '../style/tangy-element-styles.js'
+import { TangyInputBase } from '../tangy-input-base.js'
 
     /**
      * `tangy-toggle`
@@ -12,7 +13,7 @@ import '../style/tangy-element-styles.js'
      * @polymer
      * @demo demo/index.html
      */
-export class TangyToggle extends PolymerElement {
+export class TangyToggle extends TangyInputBase {
   static get template () {
     return html`
     <style include="tangy-common-styles"></style>

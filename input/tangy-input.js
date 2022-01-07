@@ -1,5 +1,6 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { t } from '../util/t.js'
+import { TangyInputBase } from '../tangy-input-base.js'
 import '../util/html-element-props.js'
 import '@polymer/paper-input/paper-textarea.js'
 import '@polymer/paper-input/paper-input.js'
@@ -15,7 +16,7 @@ import { combTranslations } from 'translation-web-component/util.js'
  * @polymer
  * @demo demo/index.html
  */
-export class TangyInput extends PolymerElement {
+export class TangyInput extends TangyInputBase {
 
   static get template() {
     return html`

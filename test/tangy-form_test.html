@@ -91,10 +91,15 @@
       <template>
         <tangy-form id="test" title="test">
           <tangy-form-item id="item-1">
-            <tangy-input label='test1' name='input1'></tangy-input>
+            <tangy-input 
+              label='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+              inner-label="test1"
+              name='input1'
+            >
+            </tangy-input>
           </tangy-form-item>
           <tangy-form-item id="item-2">
-            <tangy-input label='test2' name='input2'></tangy-input>
+            <tangy-input label='test2' inner-label="test2" name='input2'></tangy-input>
           </tangy-form-item>
         </tangy-form>
       </template>
@@ -354,6 +359,36 @@
           element.inject('someInjectedVariable', someInjectedVariable)
           element.newResponse()
           assert.equal(someInjectedVariable._itWorked, true)
+        })
+        
+        test('should only have modified properties on inputs', () => {
+          window.useShrinker = true
+          const element = fixture('Simple2ItemFixture');
+          element.newResponse()
+          element.querySelector('#item-1').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item-1').querySelector('[name=input1]').value = 'foo'
+          element.querySelector('#item-1').querySelector('[name=input1]').setAttribute('label', 'A modified label')
+          element.querySelector('#item-1').shadowRoot.querySelector('#next').click()
+          element.querySelector('#item-2').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item-2').querySelector('[name=input2]').value = 'bar'
+          element.querySelector('#item-2').shadowRoot.querySelector('#complete').click()
+          const response = element.response
+          assert.equal(response.items[0].inputs[0].name, 'input1')
+          assert.equal(response.items[0].inputs[0].value, 'foo')
+          assert.equal(response.items[0].inputs[0].label, 'A modified label')
+          assert.equal(response.items[1].inputs[0].name, 'input2')
+          assert.equal(response.items[1].inputs[0].value, 'bar')
+          assert.equal(response.items[1].inputs[0].label, undefined)
+          const element2 = fixture('Simple2ItemFixture');
+          element2.response = response 
+          element2.querySelector('#item-1').shadowRoot.querySelector('dom-if').render()
+          element2.querySelector('#item-1').shadowRoot.querySelector('#open').click()
+          assert.equal(element2.querySelector('#item-1').querySelector('[name=input1]').value, 'foo')
+          assert.equal(element2.querySelector('#item-1').querySelector('[name=input1]').label, 'A modified label')
+          element2.querySelector('#item-2').shadowRoot.querySelector('dom-if').render()
+          element2.querySelector('#item-2').shadowRoot.querySelector('#open').click()
+          assert.equal(element2.querySelector('#item-2').querySelector('[name=input2]').value, 'bar')
+          window.useShrinker = false
         })
 
         test('should skip second item due to skip logic', () => {

@@ -5,6 +5,7 @@ import '../style/tangy-common-styles.js'
 import '../style/tangy-element-styles.js'
 import '@polymer/iron-icon/iron-icon.js'
 import '@polymer/paper-button/paper-button.js'
+import { TangyInputBase } from '../tangy-input-base.js'
 
 
 /**
@@ -15,7 +16,7 @@ import '@polymer/paper-button/paper-button.js'
  * @polymer
  * @demo demo/index.html
  */
-export class TangySignature extends PolymerElement {
+export class TangySignature extends TangyInputBase {
   static get template() {
     return html`
   <style include="tangy-common-styles"></style>
