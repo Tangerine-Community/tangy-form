@@ -1,7 +1,4 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import '../util/html-element-props.js'
-import '../style/tangy-common-styles.js'
-import '../style/tangy-element-styles.js'
 
 export class TangyInputBase extends PolymerElement {
 
