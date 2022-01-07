@@ -1,6 +1,7 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '../util/html-element-props.js'
 import '../style/tangy-common-styles.js'
+import { TangyInputBase } from '../tangy-input-base.js'
 
 /**
  * `tangy-acasi`
@@ -10,7 +11,7 @@ import '../style/tangy-common-styles.js'
  * @polymer
  * @demo demo/index.html
  */
-export class TangyAcasi extends PolymerElement {
+export class TangyAcasi extends TangyInputBase {
 
   constructor() {
     super()

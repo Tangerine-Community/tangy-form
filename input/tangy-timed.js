@@ -8,6 +8,7 @@ import '@polymer/iron-icons/editor-icons.js';
 import '@polymer/iron-icon/iron-icon.js';
 import './tangy-toggle-button.js';
 import '../style/tangy-common-styles.js'
+import { TangyInputBase } from '../tangy-input-base.js'
 
 /**
  * `tangy-timed`
@@ -27,7 +28,7 @@ const TANGY_TIMED_COMPLETE = 'TANGY_TIMED_COMPLETE'
 const TANGY_TIMED_MODE_DISABLED = 'TANGY_TIMED_MODE_DISABLED'
 const TANGY_TIMED_CAPTURE_ITEM_AT = 'TANGY_TIMED_CAPTURE_ITEM_AT'
 
-class TangyTimed extends PolymerElement {
+class TangyTimed extends TangyInputBase {
   constructor() {
     super()
     this.t = {

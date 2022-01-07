@@ -4,6 +4,7 @@ import '../util/html-element-props.js'
 import './tangy-radio-button.js'
 import '../style/tangy-element-styles.js';
 import '../style/tangy-common-styles.js'
+import { TangyInputBase } from '../tangy-input-base.js'
 /**
  * `tangy-radio-buttons`
  *
@@ -12,7 +13,7 @@ import '../style/tangy-common-styles.js'
  * @polymer
  * @demo demo/index.html
  */
-class TangyRadioButtons extends PolymerElement {
+class TangyRadioButtons extends TangyInputBase {
 
   static get is() { return 'tangy-radio-buttons'; }
 
