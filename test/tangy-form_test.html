@@ -313,6 +313,21 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="ShouldInjectVariable">
+      <template>
+        <tangy-form id="ShouldInjectVariable" title="My Form" on-open="someInjectedVariable.itWorked()">
+          <tangy-form-item id="item1" title="1">
+            <tangy-input name="input1" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item2" title="2">
+            <tangy-input name="input2" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item3" title="3">
+            <tangy-input name="input3" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
 
 
     <script type="module">
@@ -334,6 +349,18 @@
 
       suite('tangy-form', () => {
 
+        test('should inject variable', () => {
+          var someInjectedVariable = {
+            itWorked: function() {
+              this._itWorked = true 
+            }
+          }
+          const element = fixture('ShouldInjectVariable');
+          element.inject('someInjectedVariable', someInjectedVariable)
+          element.newResponse()
+          assert.equal(someInjectedVariable._itWorked, true)
+        })
+        
         test('should only have modified properties on inputs', () => {
           window.useShrinker = true
           const element = fixture('Simple2ItemFixture');

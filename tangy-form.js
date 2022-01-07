@@ -88,6 +88,13 @@ export class TangyForm extends PolymerElement {
     return this.inputs.reduce((acc, input) => Object.assign({}, acc, {[input.name]: input.value}), {})
   }
 
+  inject(name, value) {
+    this._injected[name] = value
+    this.querySelectorAll('tangy-form-item').forEach(item => {
+      item.inject(name, value)
+    })
+  }
+
   // Get the value of a single input by name.
   getValue(name) {
     let state = this.store.getState()
@@ -417,6 +424,7 @@ export class TangyForm extends PolymerElement {
 
   constructor() {
     super()
+    this._injected = {}
     this.t = {
       summary: 'summary',
       response: 'response',
@@ -716,7 +724,10 @@ export class TangyForm extends PolymerElement {
     // Use itemInputs instead of inputs in modules such as Class in order to summon only the inputs on-screen/in the currently active form.
     let itemInputs = [...this.shadowRoot.querySelectorAll('[name]')].reduce((acc, input) => Object.assign({}, acc, {[input.name]: input}), {})
     try {
-      eval(this.getAttribute(hook))
+      eval(`
+        ${Object.keys(this._injected).map(name => `var ${name} = this._injected['${name}']`).join('\n')}
+        ${this.getAttribute(hook)}
+      `)
     } catch (e) {
       const message = `${t(`Error detected in the form's logic:`)} ${hook}`
       console.log(message)
