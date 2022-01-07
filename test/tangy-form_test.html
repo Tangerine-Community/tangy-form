@@ -317,6 +317,7 @@
       suite('tangy-form', () => {
 
         test('should only have modified properties on inputs', () => {
+          window.useShrinker = true
           const element = fixture('Simple2ItemFixture');
           element.newResponse()
           element.querySelector('#item-1').shadowRoot.querySelector('dom-if').render()
@@ -342,6 +343,7 @@
           element2.querySelector('#item-2').shadowRoot.querySelector('dom-if').render()
           element2.querySelector('#item-2').shadowRoot.querySelector('#open').click()
           assert.equal(element2.querySelector('#item-2').querySelector('[name=input2]').value, 'bar')
+          window.useShrinker = false
         })
 
         test('should skip second item', () => {

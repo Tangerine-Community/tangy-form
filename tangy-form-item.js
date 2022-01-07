@@ -623,7 +623,7 @@ export class TangyFormItem extends PolymerElement {
     let inputs = []
     this
       .querySelectorAll('[name]')
-      .forEach(input => inputs.push(input.getModProps ? input.getModProps() : input.getProps()))
+      .forEach(input => inputs.push(input.getModProps && window.useShrinker ? input.getModProps() : input.getProps()))
     this.inputs = inputs
     if (window.devtools && window.devtools.open) {
       console.table(this.inputs.map(input => { return {name: input.name, value: input.value} }))
