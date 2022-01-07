@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.29.0
+- Add ability to inject localized variables for use in Tangy Form logic [#292](https://github.com/Tangerine-Community/tangy-form/pull/292)
+- Add support for optional `window.useShrinker` flag that will cause only modified properties on inputs to be captured [#210](https://github.com/Tangerine-Community/tangy-form/pull/210)
+
 ## v4.28.3
 - When using Cycle Sequences, the Cycle Sequence used is now stashed in the form response for reference later in data analysis. https://github.com/Tangerine-Community/tangy-form/pull/282
 - Merged a number of Dependabot dependencies PRs.
