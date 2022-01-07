@@ -5,6 +5,7 @@ import '../util/html-element-props.js'
 import '@polymer/paper-input/paper-input.js'
 import '../style/tangy-element-styles.js';
 import '../style/tangy-common-styles.js'
+import { TangyInputBase } from '../tangy-input-base.js'
 /**
  * `tangy-location`
  * 
@@ -13,7 +14,7 @@ import '../style/tangy-common-styles.js'
  * @polymer
  * @demo demo/index.html
  */
-class TangyLocation extends PolymerElement {
+class TangyLocation extends TangyInputBase {
 
   static get is() { return 'tangy-location'; }
 
