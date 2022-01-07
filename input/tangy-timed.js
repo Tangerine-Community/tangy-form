@@ -624,12 +624,15 @@ class TangyTimed extends TangyInputBase {
 
     clearInterval(this.timer)
     clearInterval(this.timer2)
+    clearInterval(this.captureItemAtTimer)
     this.isItemCaptured = false
     this.style.background = 'red'
     setTimeout(() => this.style.background = 'white', 200)
     setTimeout(() => this.style.background = 'red', 400)
     setTimeout(() => this.style.background = 'white', 600)
-    setTimeout(() => alert(t('Please tap on last item attempted.')), 800)
+    if(!this.gridAutoStopped){
+      setTimeout(() => alert(t('Please tap on last item attempted.')), 800)
+    }
     this.mode = TANGY_TIMED_MODE_LAST_ATTEMPTED
   }
   rowMarkerClicked(rowNumber) {
@@ -725,8 +728,8 @@ class TangyTimed extends TangyInputBase {
     }
     if (this.autoStop && this.shouldGridAutoStop()) {
       event.target.highlighted = true
-      this.stopGrid()
       this.gridAutoStopped = true
+      this.stopGrid()
       this.onStopClick(null, event.target.name)
     }
   }
@@ -735,7 +738,7 @@ class TangyTimed extends TangyInputBase {
     this.reset()
     this.mode = TANGY_TIMED_MODE_RUN
     if (this.captureItemAt) {
-      setTimeout(() => {
+      this.captureItemAtTimer = setTimeout(() => {
         this.mode = TANGY_TIMED_CAPTURE_ITEM_AT
       }, this.captureItemAt * 1000);
     }
@@ -746,6 +749,7 @@ class TangyTimed extends TangyInputBase {
     this.endTime = Date.now()
     clearInterval(this.timer);
     clearInterval(this.timer2);
+    clearInterval(this.captureItemAtTimer);
     this.isItemCaptured = false;
     // We have to check for typeof string because the event handler on the stop button puts an integer in the second param for some reason.
     // If it's a string, then we know it's an ID of something which should actually be lastItemAttempted.
@@ -776,12 +780,16 @@ class TangyTimed extends TangyInputBase {
   }
 
   reset() {
+    this.gridAutoStopped = false
     this.value = this.value.map(option => {
       option.highlighted = false
       option.captured = false
       option.value = ''
       option.pressed = false
       option.hidden = true
+      option.gridVarTimeIntermediateCaptured = null
+      option.startTime = 0
+      option.endTime = 0
       return option
     })
   }

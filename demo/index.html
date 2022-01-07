@@ -112,7 +112,7 @@
                 label="This is an email tangy input."
                 required>
               </tangy-input>
-              <tangy-photo-capture name="picture"></tangy-photo-capture>
+              <tangy-photo-capture name="picture" compression="0.10" max-size-in-kb=2000></tangy-photo-capture>
               <tangy-radio-buttons
                 name="fruit_selection"
                 label="What is your <b>favorite</b> fruit?"
@@ -728,7 +728,7 @@
         <template>
           <tangy-form id="tangy-partial-date-form" title="My Form">
             <tangy-form-item id="tangy-partial-date-item" title="Tangy partial date">
-              <tangy-partial-date valid-if="true" name="input1" label="Test" min-year="2019" max-year="2021" 
+              <tangy-partial-date valid-if="true" name="input1" label="Test" min-year="2019" max-year="2021"
                 allow-unknown-year show-today-button></tangy-partial-date>
             </tangy-form-item>
           </tangy-form>
@@ -742,10 +742,34 @@
             <tangy-form-item id="section_month_year" title="Ethiopian Day, Month, Year" on-open="" on-change="" category="">
               <template>
                 <tangy-ethio-date name="year_month" class="" style="" required="" question-number="" label="Enter a date:"
-                        error-text="" hint-text="" future-date-error-text="No future dates are allowed" 
-                        missing-date-error-text="" invalid-date-error-text="" 
+                        error-text="" hint-text="" future-date-error-text="No future dates are allowed"
+                        missing-date-error-text="" invalid-date-error-text=""
                         min-year="2010" max-year="2030" show-today-button allow-unknown-day allow-unknown-month allow-unknown-year>
                 </tangy-ethio-date>
+              </template>
+            </tangy-form-item>
+          </tangy-form>
+        </template>
+      </demo-snippet>
+
+      <h3>Sequences in Form Sections</h3>
+      <demo-snippet>
+        <template>
+          <tangy-form id="sequence-test" title="" cycle-sequences="1,2,3
+2,3">
+            <tangy-form-item id="item1" title="Section 1" on-open="" on-change="" category="">
+              <template>
+                <tangy-input name="s1_q1" label="S1 Q1"></tangy-input>
+              </template>
+            </tangy-form-item>
+            <tangy-form-item id="item2" title="Section 2" on-open="" on-change="" category="">
+              <template>
+                <tangy-input name="s2_q2" label="S2 Q1"></tangy-input>
+              </template>
+            </tangy-form-item>
+            <tangy-form-item id="item3" title="Section 3" on-open="" on-change="" category="">
+              <template>
+                <tangy-input name="s3_q1" label="S3 Q1"></tangy-input>
               </template>
             </tangy-form-item>
           </tangy-form>

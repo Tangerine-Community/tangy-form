@@ -1,5 +1,89 @@
 # CHANGELOG
 
+## v4.28.3
+- When using Cycle Sequences, the Cycle Sequence used is now stashed in the form response for reference later in data analysis. https://github.com/Tangerine-Community/tangy-form/pull/282
+- Merged a number of Dependabot dependencies PRs.
+
+## v4.28.2
+- Fix issue causing tangy-input-groups to not resume correctly.
+
+## v4.28.1
+- Fix `on-change` logic not called when changing a value in some `tangy-input-group`. (https://github.com/Tangerine-Community/tangy-form/pull/280)
+
+## v4.28.0
+- Add support for changing the translation of form controls without reloading the page using the `<t-t>` AKA `<t-translate>` element from the `translation-web-component` library.
+- `<t-number>` added from the `trasnlation-web-component` library for translating numbers in content.
+
+## v4.27.0
+- Add support for leaving out an index in a cycle sequence, effectively causing it to be skipped. https://github.com/Tangerine-Community/tangy-form/pull/279
+
+## v4.26.0
+- Add support for configuring compression on `<tangy-photo-capture>`. eg.` <tangy-photo-capture compression="0.05"></tangy-photo-capture>`
+
+## v4.25.14
+- Fix "Camera not released after photo taken with `<tangy-photo-capture>`". Camera is now released when going to the next page or leaving a form. 
+
+## v4.25.13
+ - Fixed bug in cancelledBeforeSubmit for 'before-submit' event
+
+## v4.25.12
+ - Implemented a new 'before-submit' event to tangy-form in order to listen to events before the 'submit' event is dispatched.
+
+## v4.25.11
+- User defined Cycle Sequences index should begin at 1 PR:[#269](https://github.com/Tangerine-Community/tangy-form/pull/269).
+
+## v4.25.10
+- Defined Cycle of sequences (randomization) breaks Preview and form Play from Tablet [#2714](https://github.com/Tangerine-Community/Tangerine/issues/2714). fix(tangy-form): Reset index after reaching the last cycle index PR: [#234](https://github.com/Tangerine-Community/tangy-form/pull/234)
+
+## v4.25.9
+- tangy-photo-capture: Disabled the switcher due to issues with Android 9. Reduced the image preview to 75%.
+
+## v4.25.8
+- tangy-photo-capture: Integrate Capture and Saving (Accept) into a single step. 
+
+## v4.25.7
+- tangy-photo-capture: Hiding display of video when viewing a record in order to see the captured image.
+
+## v4.25.6
+- Implemented a switcher for front and back cameras for the tangy-photo-capture input. PR: [#247](https://github.com/Tangerine-Community/tangy-form/pull/247)
+
+## v4.25.5
+- The tangy-photo-capture input now uses the rear camera to capture images. 
+
+## v4.25.4
+- Changes to enabled 'npm run build' to complete successfully: Update webpack to work with es6 [#244](https://github.com/Tangerine-Community/tangy-form/pull/244)
+
+## v4.25.3
+- Revert to package-lock lockfileVersion to 1.
+
+## v4.25.2
+- Fix Intermediate grid capture timer should stop when grid is stopped manually/ or autostop is triggered [#2724](https://github.com/Tangerine-Community/Tangerine/issues/2724)
+
+## v4.25.1
+- Declare this package as a module so that it can be imported into node.js projects.
+
+
+## v4.25.0
+* Updated `photo-capure` component. 
+* Data is saved as `jpeg` with `base64` encoding
+* It attemps to take the picture with the highest possible quality and then resizes it with best practice resizing algorithms (using the built-in canvas resizer is poor quality). By default it tries to keep the size below 256kb, but this can be changed to any arbitrary size using the max-size-in-kb attribute.
+**Example**
+```html
+ <template>
+    <tangy-photo-capture name="test-photo" max-size-in-kb='128'></tangy-photo-capture>
+</template>
+```
+
+## v4.24.0
+Allow users to define custom sequence for the execution in tangy-form - Tangerine-Community/Tangerine#1603
+Sections are separated by new lines while Items are comma separated
+Part of Tangerine-Community/tangy-form-editor#177
+
+## v4.23.3
+- Grid autostop last item attempted default: (loe: low) https://github.com/Tangerine-Community/Tangerine/issues/2467, PR: https://github.com/Tangerine-Community/tangy-form/pull/206
+- Grid auto stop: https://github.com/Tangerine-Community/Tangerine/issues/2559, PR: https://github.com/Tangerine-Community/tangy-form/pull/206
+- [Grid restart doesn't clear out intermediate capture variable #2661](https://github.com/Tangerine-Community/Tangerine/issues/2661) https://github.com/Tangerine-Community/tangy-form/pull/211
+
 ## v4.23.2
 - Sort tangy-location options by label. 
 

@@ -9,8 +9,6 @@ const initialState = {
 }
 
 const tangyFormReducer = function (state = initialState, action) {
-  var items
-  var currentIndex
   var newState
   var tmp = {}
   var firstNotDisabled = 0
@@ -18,7 +16,24 @@ const tangyFormReducer = function (state = initialState, action) {
   switch(action.type) {
 
     case 'FORM_OPEN':
-     
+      let {cycleSequences} = action.response.form;
+      const lastCycleIndex = `${action.response.form.id}-lastCycleIndex`
+      const cycleSequencesArray = cycleSequences && cycleSequences.split('\n').map(e=>e.trim())
+      let currentSequence = [...Array(action.response.items.length).fill().map((_, i) => i+1)]
+      if(cycleSequences){
+        let currentCycleIndex =0 ;
+        if(localStorage.getItem(lastCycleIndex)){
+          currentCycleIndex = Number(localStorage.getItem(lastCycleIndex))+1 < cycleSequencesArray.length
+                              ?Number(localStorage.getItem(lastCycleIndex))+1
+                              : 0
+          localStorage.setItem(lastCycleIndex, String(currentCycleIndex))
+        } else{
+          localStorage.setItem(lastCycleIndex, String(currentCycleIndex))
+        }
+        currentSequence = cycleSequencesArray[currentCycleIndex].split(',');
+      }
+      currentSequence = currentSequence.map(sequence => parseInt(sequence))
+      action.response.form =  {...action.response.form, sequenceOrderMap:String(currentSequence)}
       newState = Object.assign({}, action.response)
       // Ensure that the only items we have in the response are those that are in the DOM but maintain state of the existing items in the response.
       newState.items = action.itemsInDom.map((itemInDom, index) => {
@@ -27,9 +42,20 @@ const tangyFormReducer = function (state = initialState, action) {
         return result ? {...merged}: {...itemInDom}
         }
       )
+      // Determine items not in sequence and items in sequence. Then shove items not in sequence after the first entry in 
+      // the items array because we can't have disabled items at the beginning or end.
+      const itemsInSequence = currentSequence
+        .map((sequenceNumber) => newState.items[sequenceNumber - 1])
+      const itemsNotInSequence = newState
+        .items
+        .filter((item, index) => !currentSequence.includes(index+1))
+      newState.items = [
+        itemsInSequence.shift(),
+        ...itemsNotInSequence.map((item) => { return { ...item, disabled: true } }),
+        ...itemsInSequence
+      ]
       newState.items[0]['firstOpenTime']= newState.items[0]['firstOpenTime'] ? newState.items[0]['firstOpenTime'] : Date.now()
-
-      firstNotDisabled = newState.items.findIndex(item => item.disabled === false)
+      firstNotDisabled = newState.items.findIndex(item => !item.disabled)
       newState.items[firstNotDisabled].hideBackButton = true
       const indexOfSummaryItem = newState.items.findIndex(item => item.summary === true)
       if (indexOfSummaryItem !== -1) {
@@ -199,7 +225,6 @@ const tangyFormReducer = function (state = initialState, action) {
 
       // Mark open and closed.
       Object.assign(newState, {
-        progress: ( ( ( state.items.filter((i) => i.valid).length ) / state.items.length ) * 100 ),
         items: state.items.map((item) => {
           if (item.id == action.itemId) {
             return Object.assign({}, item, {open: false, isDirty: false, valid: true, hideButtons: false})
@@ -232,12 +257,6 @@ const tangyFormReducer = function (state = initialState, action) {
       Object.assign(newState, calculateTargets(newState))
       // Mark open and closed.
       Object.assign(newState, {
-        progress:  
-          ( 
-            state.items.filter((i) => i.valid).length
-                                                      / 
-                                                        state.items.filter(item => !item.disabled).length
-                                                                                                          ) * 100,
         items: newState.items.map((item) => {
           let props = {}
           if (item.id == action.itemId) {

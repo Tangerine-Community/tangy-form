@@ -24,6 +24,9 @@ import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-tabs/paper-tab.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import 'translation-web-component/t-lang.js'
+import 'translation-web-component/t-translate.js'
+import 'translation-web-component/t-t.js'
+import 'translation-web-component/t-number.js'
 
 /**
  * `tangy-form`
@@ -389,6 +392,11 @@ export class TangyForm extends PolymerElement {
         value: undefined,
         reflectToAttribute: true
       },
+      cycleSequences: {
+        type: String,
+        value: undefined,
+        reflectToAttribute: true
+      },
       recordItemFirstOpenTimes: {
         type: Boolean,
         value: false,
@@ -507,6 +515,8 @@ export class TangyForm extends PolymerElement {
       type: 'ITEM_SAVE',
       item: event.target.getProps()
     })
+    const cancelledBeforeSubmit = !this.dispatchEvent(new CustomEvent('before-submit', {cancelable: true}))
+    if (cancelledBeforeSubmit) return
     let cancelledSubmit
     if (!this.response.hasUnlocked) {
       cancelledSubmit = !this.dispatchEvent(new CustomEvent('submit', {cancelable: true}))

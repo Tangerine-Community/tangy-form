@@ -204,19 +204,19 @@ export class TangyFormItem extends PolymerElement {
             <iron-icon icon="fullscreen"></iron-icon>
           </paper-button>
           <template is="dom-if" if="{{!hideButtons}}">
-            <paper-button id="open" on-click="onOpenButtonPress">[[t.open]]</paper-button>
+            <paper-button id="open" on-click="onOpenButtonPress"><t-t>open</t-t></paper-button>
             <template is="dom-if" if="{{!locked}}">
-              <paper-button id="close" on-click="onCloseButtonPress">[[t.save]]</paper-button>
+              <paper-button id="close" on-click="onCloseButtonPress"><t-t>save</t-t></paper-button>
             </template>
             <template is="dom-if" if="{{locked}}">
-              <paper-button id="close" on-click="onCloseButtonPress">[[t.close]]</paper-button>
+              <paper-button id="close" on-click="onCloseButtonPress"><t-t>close</t-t></paper-button>
             </template>
           </template>
           <template is="dom-if" if="{{open}}">
             <template is="dom-if" if="{{rightToLeft}}">
               <template is="dom-if" if="{{showCompleteButton}}">
                 <paper-button id="complete" on-click="clickedComplete" style="float:left">
-                  [[t.submit]]
+                  <t-t>submit</t-t>
                 </paper-button>
               </template>
               <template is="dom-if" if="{{!hideNextButton}}">
@@ -225,14 +225,14 @@ export class TangyFormItem extends PolymerElement {
                     <iron-icon icon="arrow-back"></iron-icon>
                   </template>
                   <template is="dom-if" if="{{!hideNavLabels}}">
-                    [[t.next]]
+                    <t-t>next</t-t>
                   </template>
                 </paper-button>
               </template>
               <template is="dom-if" if="{{!hideBackButton}}">
                 <paper-button id="next" on-click="back" >
                  <template is="dom-if" if="{{!hideNavLabels}}">
-                    [[t.back]]
+                    <t-t>back</t-t>
                   </template>
                   <template is="dom-if" if="{{!hideNavIcons}}">
                     <iron-icon icon="arrow-forward"></iron-icon>
@@ -247,14 +247,14 @@ export class TangyFormItem extends PolymerElement {
                     <iron-icon icon="arrow-back"></iron-icon>
                   </template>
                   <template is="dom-if" if="{{!hideNavLabels}}">
-                    [[t.back]]
+                    <t-t>back</t-t>
                   </template>
                 </paper-button>
               </template>
               <template is="dom-if" if="{{!hideNextButton}}">
                 <paper-button id="next" on-click="next" >
                  <template is="dom-if" if="{{!hideNavLabels}}">
-                    [[t.next]]
+                    <t-t>Next</t-t>
                   </template>
                   <template is="dom-if" if="{{!hideNavIcons}}">
                     <iron-icon icon="arrow-forward"></iron-icon>
@@ -263,7 +263,7 @@ export class TangyFormItem extends PolymerElement {
               </template>
               <template is="dom-if" if="{{showCompleteButton}}">
                 <paper-button id="complete" on-click="clickedComplete" style="float:right" >
-                  [[t.submit]]
+                  <t-t>submit</t-t>
                 </paper-button>
               </template>
             </template>

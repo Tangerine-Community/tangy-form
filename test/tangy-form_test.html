@@ -282,13 +282,31 @@
     <test-fixture id="SkipSecondItem">
       <template>
         <tangy-form id="my-form" title="My Form" on-change="skip('item2')">
-          <tangy-form-item id="item1">
+          <tangy-form-item id="item1" title="1">
             <tangy-input name="input1" label="What is your last name?"></tangy-input>
           </tangy-form-item>
-          <tangy-form-item id="item2">
+          <tangy-form-item id="item2" title="2">
             <tangy-input name="input2" label="What is your last name?"></tangy-input>
           </tangy-form-item>
-          <tangy-form-item id="item3">
+          <tangy-form-item id="item3" title="3">
+            <tangy-input name="input3" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="SkipSecondItemCycleSequences">
+      <template>
+        <tangy-form id="SkipSecondItemCycleSequences" title="My Form" cycle-sequences="1,3
+        1,3
+        1,3">
+          <tangy-form-item id="item1" title="1">
+            <tangy-input name="input1" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item2" title="2">
+            <tangy-input name="input2" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item3" title="3">
             <tangy-input name="input3" label="What is your last name?"></tangy-input>
           </tangy-form-item>
         </tangy-form>
@@ -346,8 +364,19 @@
           window.useShrinker = false
         })
 
-        test('should skip second item', () => {
+        test('should skip second item due to skip logic', () => {
           const element = fixture('SkipSecondItem');
+          element.newResponse()
+          element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item1').shadowRoot.querySelector('#next').click()
+          // If second item wasn't skipped, the following would fail.
+          element.querySelector('#item3').shadowRoot.querySelector('dom-if').render()
+          element.querySelector('#item3').shadowRoot.querySelector('#complete').click()
+        })
+
+        test('should skip second item due to cycle-sequences', () => {
+          const element = fixture('SkipSecondItemCycleSequences');
+          debugger
           element.newResponse()
           element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
           element.querySelector('#item1').shadowRoot.querySelector('#next').click()
@@ -784,171 +813,6 @@
           assert.equal(element.querySelector('[open=""]').id, 'item-2')
           assert.equal(element.querySelectorAll('[open=""]').length, 1)
           assert.equal(element.querySelector('#item-2').hasAttribute('show-complete-button'), true)
-        })
-        test('should open with all items in form DOM even if response has fewer items', () => {
-          const element = fixture('SimpleTestFixture');
-          let response = {
-            "_id": "df7fcdaf-aa01-4ad9-8602-15cb529d3a30",
-            "collection": "TangyFormResponse",
-            "form": {
-              "complete": false,
-              "linearMode": true,
-              "hideClosedItems": true,
-              "hideCompleteFab": false,
-              "tabIndex": 0,
-              "showResponse": false,
-              "showSummary": false,
-              "hasSummary": false,
-              "onSubmit": "",
-              "id": "test",
-              "tagName": "TANGY-FORM"
-            },
-            "items": [
-              {
-                "id": "item-1",
-                "src": "tangy-form-item",
-                "title": "",
-                "summary": false,
-                "hideButtons": true,
-                "hideBackButton": false,
-                "rightToLeft": false,
-                "hideNextButton": false,
-                "showCompleteButton": false,
-                "inputs": [],
-                "open": false,
-                "incomplete": true,
-                "disabled": false,
-                "hidden": true,
-                "locked": false,
-                "tagName": "TANGY-FORM-ITEM"
-              },
-              {
-                "id": "item-2",
-                "src": "tangy-form-item",
-                "title": "",
-                "summary": false,
-                "hideButtons": true,
-                "hideBackButton": true,
-                "rightToLeft": false,
-                "hideNextButton": false,
-                "showCompleteButton": false,
-                "inputs": [],
-                "open": false,
-                "incomplete": true,
-                "disabled": false,
-                "hidden": false,
-                "locked": false,
-                "tagName": "TANGY-FORM-ITEM"
-              }
-            ],
-            "inputs": [],
-            "complete": false,
-            "focusIndex": 0,
-            "nextFocusIndex": 1,
-            "previousFocusIndex": -1,
-            "startDatetime": "7/17/2018, 6:13:38 PM",
-            "startUnixtime": 1531865618651,
-            "uploadDatetime": ""
-          }
-          element.response = response
-          assert.equal(element.response.items.length, 3)
-        })
-        test('should open form if result has more items than the form and skip to seond item after programmatically disabling items', () => {
-          const element = fixture('Simple2ItemFixture');
-          // Item 1 and 2 are disabled in this response, leaving item-3 the first item not disabled.
-          let response = {
-            "_id": "df7fcdaf-aa01-4ad9-8602-15cb529d3a30",
-            "collection": "TangyFormResponse",
-            "form": {
-              "complete": false,
-              "linearMode": true,
-              "hideClosedItems": true,
-              "hideCompleteFab": false,
-              "tabIndex": 0,
-              "showResponse": false,
-              "showSummary": false,
-              "hasSummary": false,
-              "onSubmit": "",
-              "id": "test",
-              "tagName": "TANGY-FORM"
-            },
-            "items": [
-              {
-                "id": "item-1",
-                "src": "tangy-form-item",
-                "title": "",
-                "summary": false,
-                "hideButtons": true,
-                "hideBackButton": false,
-                "rightToLeft": false,
-                "hideNextButton": false,
-                "showCompleteButton": false,
-                "inputs": [],
-                "open": false,
-                "incomplete": true,
-                "disabled": false,
-                "hidden": true,
-                "locked": false,
-                "tagName": "TANGY-FORM-ITEM"
-              },
-              {
-                "id": "item-2",
-                "src": "tangy-form-item",
-                "title": "",
-                "summary": false,
-                "hideButtons": true,
-                "hideBackButton": true,
-                "rightToLeft": false,
-                "hideNextButton": false,
-                "showCompleteButton": false,
-                "inputs": [],
-                "open": false,
-                "incomplete": true,
-                "disabled": false,
-                "hidden": false,
-                "locked": false,
-                "tagName": "TANGY-FORM-ITEM"
-              },
-              {
-                "id": "item-3",
-                "src": "tangy-form-item",
-                "title": "",
-                "summary": false,
-                "hideButtons": true,
-                "hideBackButton": true,
-                "rightToLeft": false,
-                "hideNextButton": false,
-                "showCompleteButton": false,
-                "inputs": [],
-                "open": false,
-                "incomplete": true,
-                "disabled": false,
-                "hidden": false,
-                "locked": false,
-                "tagName": "TANGY-FORM-ITEM"
-              }
-            ],
-            "inputs": [],
-            "complete": false,
-            "focusIndex": 0,
-            "nextFocusIndex": 1,
-            "previousFocusIndex": -1,
-            "startDatetime": "7/17/2018, 6:13:38 PM",
-            "startUnixtime": 1531865618651,
-            "uploadDatetime": ""
-          }
-          let itemsToDisable = ['item-1']
-          response.items = response.items.map(item => {
-            if (itemsToDisable.indexOf(item.id) !== -1) {
-              return Object.assign({}, item, {disabled: true})
-            }
-            else {
-              return Object.assign({}, item, {disabled: false})
-            }
-          })
-          element.response = response
-          assert.equal(element.querySelector('[open=""]').id, 'item-2')
-          assert.equal(element.querySelectorAll('[open=""]').length, 1)
         })
 
         test('should try to launch in fullscreen', function() {
