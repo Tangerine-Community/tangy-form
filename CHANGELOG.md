@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.29.1
+- Remove imports in TangyInputBase that are breaking builds
+
 ## v4.29.0
 - Add ability to inject localized variables for use in Tangy Form logic [#292](https://github.com/Tangerine-Community/tangy-form/pull/292)
 - Add support for optional `window.useShrinker` flag that will cause only modified properties on inputs to be captured [#210](https://github.com/Tangerine-Community/tangy-form/pull/210)
