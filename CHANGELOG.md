@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.29.2
+- Fix: Tangy Template elements all say "false" if using environment variables like caseService and T [#3203](https://github.com/Tangerine-Community/Tangerine/issues/3203)
+
 ## v4.29.1
 - Remove imports in TangyInputBase that are breaking builds
 
