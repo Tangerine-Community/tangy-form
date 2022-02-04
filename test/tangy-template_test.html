@@ -44,6 +44,16 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="TangyTemplateInjectFixture">
+      <template>
+        <tangy-form id="form1">
+          <tangy-form-item id="item1">
+            <tangy-template name="foo">${foo}</tangy-template>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
     <script type="module">
       import '../tangy-form.js'
       import '../input/tangy-input.js'
@@ -65,6 +75,13 @@
           assert.equal(form.querySelector('#item1').querySelector('tangy-template').shadowRoot.querySelector('#container').innerText, '43 is greater than or equal to 42.')
           // Ensure that markup did not get pruned either.
           assert.equal(!!form.querySelector('#item1').querySelector('tangy-template').shadowRoot.querySelector('#container').querySelector('h1'), true)
+        })
+        test('should have templated output using injected variables', function () {
+          const form = fixture('TangyTemplateInjectFixture');
+          form.inject('foo', 'bar')
+          form.newResponse()
+          form.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
+          assert.equal(form.querySelector('#item1').querySelector('tangy-template').$.container.innerText, 'bar')
         })
       })
     </script>

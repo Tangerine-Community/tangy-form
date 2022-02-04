@@ -439,51 +439,51 @@ export class TangyFormItem extends PolymerElement {
     // Let input level hooks piggy back on this hook.
     let inputActionFactories = {
       visible: {
-        truthy: name => this.eval(`inputShow("${name}")`, 'show-if', name),
-        falsey: name => this.eval(`inputHide("${name}")`, 'show-if', name)
+        truthy: name => this.eval(`inputShow("${name}")`, 'show-if', name, true),
+        falsey: name => this.eval(`inputHide("${name}")`, 'show-if', name, true)
       },
       editable: {
-        truthy: name => this.eval(`inputEnable("${name}")`, 'disable-if', name),
-        falsey: name => this.eval(`inputDisable("${name}")`, 'disable-if', name)
+        truthy: name => this.eval(`inputEnable("${name}")`, 'disable-if', name, true),
+        falsey: name => this.eval(`inputDisable("${name}")`, 'disable-if', name, true)
       }
     }
     this.querySelectorAll('[name]').forEach(input => {
       if (input.hasAttribute('skip-if')) {
-        if (this.eval(input.getAttribute('skip-if'), 'skip-if', input.getAttribute('name'))) {
+        if (this.eval(input.getAttribute('skip-if'), 'skip-if', input.getAttribute('name'), true)) {
           input.setAttribute('skipped', '')
         } else {
           input.removeAttribute('skipped')
         }
       }
       if (input.hasAttribute('dont-skip-if')) {
-        if (this.eval(input.getAttribute('dont-skip-if'), 'dont-skip-if', input.getAttribute('name'))) {
+        if (this.eval(input.getAttribute('dont-skip-if'), 'dont-skip-if', input.getAttribute('name'), true)) {
           input.removeAttribute('skipped')
         } else {
           input.setAttribute('skipped', '')
         }
       }
       if (input.hasAttribute('show-if')) {
-        if (this.eval(input.getAttribute('show-if'), 'show-if', input.getAttribute('name'))) {
+        if (this.eval(input.getAttribute('show-if'), 'show-if', input.getAttribute('name'), true)) {
           input.removeAttribute('skipped')
         } else {
           input.setAttribute('skipped', '')
         }
       }
       if (input.hasAttribute('disable-if')) {
-        if (this.eval(input.getAttribute('disable-if'), 'disable-if', input.getAttribute('name'))) {
+        if (this.eval(input.getAttribute('disable-if'), 'disable-if', input.getAttribute('name'), true)) {
           inputActionFactories['editable'].falsey(input.name)
         } else {
           inputActionFactories['editable'].truthy(input.name)
         }
       }
       if (input.hasAttribute('tangy-if') && input.hasAttribute('tangy-action')) {
-        if (this.eval(input.getAttribute('tangy-if'), 'tangy-if', input.getAttribute('name'))) {
+        if (this.eval(input.getAttribute('tangy-if'), 'tangy-if', input.getAttribute('name'), true)) {
           inputActionFactories[input.getAttribute('tangy-action')].truthy(input.name)
         } else {
           inputActionFactories[input.getAttribute('tangy-action')].falsey(input.name)
         }
       } else if (input.hasAttribute('tangy-if') && !input.hasAttribute('tangy-action')) {
-        if (this.eval(input.getAttribute('tangy-if'), 'tangy-if', input.getAttribute('name'))) {
+        if (this.eval(input.getAttribute('tangy-if'), 'tangy-if', input.getAttribute('name'), true)) {
           input.removeAttribute('skipped')
         } else {
           input.setAttribute('skipped', '')
@@ -493,12 +493,12 @@ export class TangyFormItem extends PolymerElement {
     // Let <tangy-template> rendering piggy back on this hook.
     this.querySelectorAll('tangy-template').forEach(templateEl => {
       if (templateEl.shadowRoot) {
-        templateEl.$.container.innerHTML = this.eval('`' + templateEl.template + '`', 'tangy-template', templateEl.getAttribute('name'))
+        templateEl.$.container.innerHTML = this.eval('`' + templateEl.template + '`', 'tangy-template', templateEl.getAttribute('name'), true)
       }
     })
   }
 
-  eval(code, hook, context = '') {
+  eval(code, hook, context = '', hasResult = false) {
     // Prepare some helper variables.
     let state = this.store.getState()
     // Inputs.
@@ -525,8 +525,10 @@ export class TangyFormItem extends PolymerElement {
     }
     try {
       const result = eval(`
-        ${Object.keys(this._injected).map(name => `var ${name} = this._injected['${name}']`).join('\n')}
-        ${code}
+        (() => {
+          ${Object.keys(this._injected).map(name => `var ${name} = this._injected['${name}']`).join('\n')}
+          ${hasResult ? `return ` : ``}${code}
+        })()
       `)
       return result
     } catch(err) {
