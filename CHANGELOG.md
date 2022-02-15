@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.29.3
+- Fix: Tangy Template should display rendered template when being reviewed in a submitted form response https://github.com/Tangerine-Community/tangy-form/pull/311
+
 ## v4.29.2
 - Fix: Tangy Template elements all say "false" if using environment variables like caseService and T [#3203](https://github.com/Tangerine-Community/Tangerine/issues/3203)
 
