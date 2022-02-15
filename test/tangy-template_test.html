@@ -88,6 +88,21 @@
           form.querySelector('#item1').shadowRoot.querySelector('dom-if').render();
           assert.equal(form.querySelector('#item1').querySelector('tangy-template').$.container.innerText, 'Test')
         })
+
+        test('should have dynamic templated output when reviewed in a submitted form', function () {
+          const form = fixture('TangyTemplateFixture');
+          form.newResponse()
+          form.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
+          form.querySelector('#item1').querySelector('[name="input1"]').value = 'foo'
+          form.querySelector('#item1').shadowRoot.querySelector('#next').click()
+          form.querySelector('#item2').shadowRoot.querySelector('dom-if').render()
+          form.querySelector('#item2').shadowRoot.querySelector('#complete').click()
+          form.querySelector('#item2').shadowRoot.querySelector('dom-if').render();
+          form.querySelector('#item2').shadowRoot.querySelector('#open').click()
+          form.querySelector('#item2').shadowRoot.querySelector('dom-if').render();
+          assert.equal(form.querySelector('#item2').querySelector('tangy-template').$.container.innerText, 'Output foo')
+       })
+
         test('should have templated output from advanced condition', function () {
           const form = fixture('TangyTemplateAdvanced');
           form.newResponse()
