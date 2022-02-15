@@ -592,6 +592,12 @@ export class TangyFormItem extends PolymerElement {
     // Open it, but only if empty because we might be stuck.
     if (open === true && this.innerHTML === '') {
       this.openWithContent(this.template)
+      // Render tangy-template's.
+      this.querySelectorAll('tangy-template').forEach(templateEl => {
+        if (templateEl.shadowRoot) {
+          templateEl.$.container.innerHTML = this.eval('`' + templateEl.template + '`', 'tangy-template', templateEl.getAttribute('name'), true)
+        }
+      })
     }
   }
 
