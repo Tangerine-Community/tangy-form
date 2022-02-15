@@ -22,6 +22,17 @@
         </tangy-form>
       </template>
     </test-fixture>
+    
+    <test-fixture id="TangyTemplateSimple">
+      <template>
+        <tangy-form id="form1">
+          <tangy-form-item id="item1">
+            <tangy-template name="foo">Test</tangy-template>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
+
 
     <test-fixture id="TangyTemplateAdvanced">
       <template>
@@ -55,6 +66,7 @@
     </test-fixture>
 
     <script type="module">
+      // tangy-template imported by tangy-form.
       import '../tangy-form.js'
       import '../input/tangy-input.js'
       suite('tangy-template', () => {
@@ -65,6 +77,16 @@
           form.querySelector('#item1').querySelector('[name="input1"]').value = 'foo'
           form.querySelector('#item1').shadowRoot.querySelector('#next').click()
           assert.equal(form.querySelector('#item2').querySelector('tangy-template').$.container.innerText, 'Output foo')
+        })
+        test('should have templated output when reviewed in a submitted form', function () {
+          const form = fixture('TangyTemplateSimple');
+          form.newResponse()
+          form.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
+          form.querySelector('#item1').shadowRoot.querySelector('#complete').click()
+          form.querySelector('#item1').shadowRoot.querySelector('dom-if').render();
+          form.querySelector('#item1').shadowRoot.querySelector('#open').click()
+          form.querySelector('#item1').shadowRoot.querySelector('dom-if').render();
+          assert.equal(form.querySelector('#item1').querySelector('tangy-template').$.container.innerText, 'Test')
         })
         test('should have templated output from advanced condition', function () {
           const form = fixture('TangyTemplateAdvanced');
