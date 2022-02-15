@@ -1,5 +1,9 @@
 # CHANGELOG
 
+
+## v4.29.4
+- When viewing a completed form response, all tangy-templates now appear regardless of any previously evaluated directive because state like `skipped` has not been saved in form responses. This version makes tangy-template even more dynamic by evaluating directives on tangy-template even when in a completed form response.
+
 ## v4.29.3
 - Fix: Tangy Template should display rendered template when being reviewed in a submitted form response https://github.com/Tangerine-Community/tangy-form/pull/311
 
