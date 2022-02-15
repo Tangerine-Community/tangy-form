@@ -4,8 +4,9 @@ import './style/tangy-common-styles.js'
 import './style/tangy-element-styles.js'
 
     /**
-     * `tangy-radio-button`
+     * `tangy-template`
      *
+     * This element does not have the separation of concerns you might expect from this component. The life cycle of the element is handled by the `tangy-form-item` element.
      *
      * @customElement
      * @polymer
