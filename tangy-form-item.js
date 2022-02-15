@@ -429,13 +429,7 @@ export class TangyFormItem extends PolymerElement {
       })
   }
 
-  // Callback for on-open and on-change logic. Also a number of other things piggy back on this opportunity to update
-  // such as input level show-if and tangy-template rendering.
-  fireHook(hook, event) {
-    // If locked, don't run any logic.
-    if (this.locked) return
-    // Run hook.
-    this.eval(this.getAttribute(hook), hook)
+  fireHookInput(hook, event, input) {
     // Let input level hooks piggy back on this hook.
     let inputActionFactories = {
       visible: {
@@ -447,48 +441,58 @@ export class TangyFormItem extends PolymerElement {
         falsey: name => this.eval(`inputDisable("${name}")`, 'disable-if', name, true)
       }
     }
+    if (input.hasAttribute('skip-if')) {
+      if (this.eval(input.getAttribute('skip-if'), 'skip-if', input.getAttribute('name'), true)) {
+        input.setAttribute('skipped', '')
+      } else {
+        input.removeAttribute('skipped')
+      }
+    }
+    if (input.hasAttribute('dont-skip-if')) {
+      if (this.eval(input.getAttribute('dont-skip-if'), 'dont-skip-if', input.getAttribute('name'), true)) {
+        input.removeAttribute('skipped')
+      } else {
+        input.setAttribute('skipped', '')
+      }
+    }
+    if (input.hasAttribute('show-if')) {
+      if (this.eval(input.getAttribute('show-if'), 'show-if', input.getAttribute('name'), true)) {
+        input.removeAttribute('skipped')
+      } else {
+        input.setAttribute('skipped', '')
+      }
+    }
+    if (input.hasAttribute('disable-if')) {
+      if (this.eval(input.getAttribute('disable-if'), 'disable-if', input.getAttribute('name'), true)) {
+        inputActionFactories['editable'].falsey(input.name)
+      } else {
+        inputActionFactories['editable'].truthy(input.name)
+      }
+    }
+    if (input.hasAttribute('tangy-if') && input.hasAttribute('tangy-action')) {
+      if (this.eval(input.getAttribute('tangy-if'), 'tangy-if', input.getAttribute('name'), true)) {
+        inputActionFactories[input.getAttribute('tangy-action')].truthy(input.name)
+      } else {
+        inputActionFactories[input.getAttribute('tangy-action')].falsey(input.name)
+      }
+    } else if (input.hasAttribute('tangy-if') && !input.hasAttribute('tangy-action')) {
+      if (this.eval(input.getAttribute('tangy-if'), 'tangy-if', input.getAttribute('name'), true)) {
+        input.removeAttribute('skipped')
+      } else {
+        input.setAttribute('skipped', '')
+      }
+    }
+  }
+
+  // Callback for on-open and on-change logic. Also a number of other things piggy back on this opportunity to update
+  // such as input level show-if and tangy-template rendering.
+  fireHook(hook, event) {
+    // If locked, don't run any logic.
+    if (this.locked) return
+    // Run hook.
+    this.eval(this.getAttribute(hook), hook)
     this.querySelectorAll('[name]').forEach(input => {
-      if (input.hasAttribute('skip-if')) {
-        if (this.eval(input.getAttribute('skip-if'), 'skip-if', input.getAttribute('name'), true)) {
-          input.setAttribute('skipped', '')
-        } else {
-          input.removeAttribute('skipped')
-        }
-      }
-      if (input.hasAttribute('dont-skip-if')) {
-        if (this.eval(input.getAttribute('dont-skip-if'), 'dont-skip-if', input.getAttribute('name'), true)) {
-          input.removeAttribute('skipped')
-        } else {
-          input.setAttribute('skipped', '')
-        }
-      }
-      if (input.hasAttribute('show-if')) {
-        if (this.eval(input.getAttribute('show-if'), 'show-if', input.getAttribute('name'), true)) {
-          input.removeAttribute('skipped')
-        } else {
-          input.setAttribute('skipped', '')
-        }
-      }
-      if (input.hasAttribute('disable-if')) {
-        if (this.eval(input.getAttribute('disable-if'), 'disable-if', input.getAttribute('name'), true)) {
-          inputActionFactories['editable'].falsey(input.name)
-        } else {
-          inputActionFactories['editable'].truthy(input.name)
-        }
-      }
-      if (input.hasAttribute('tangy-if') && input.hasAttribute('tangy-action')) {
-        if (this.eval(input.getAttribute('tangy-if'), 'tangy-if', input.getAttribute('name'), true)) {
-          inputActionFactories[input.getAttribute('tangy-action')].truthy(input.name)
-        } else {
-          inputActionFactories[input.getAttribute('tangy-action')].falsey(input.name)
-        }
-      } else if (input.hasAttribute('tangy-if') && !input.hasAttribute('tangy-action')) {
-        if (this.eval(input.getAttribute('tangy-if'), 'tangy-if', input.getAttribute('name'), true)) {
-          input.removeAttribute('skipped')
-        } else {
-          input.setAttribute('skipped', '')
-        }
-      }
+      this.fireHookInput(hook, event, input)
     })
     // Let <tangy-template> rendering piggy back on this hook.
     this.querySelectorAll('tangy-template').forEach(templateEl => {
@@ -594,6 +598,7 @@ export class TangyFormItem extends PolymerElement {
       this.openWithContent(this.template)
       // Render tangy-template's.
       this.querySelectorAll('tangy-template').forEach(templateEl => {
+        this.fireHookInput('on-open', {}, templateEl)
         if (templateEl.shadowRoot) {
           templateEl.$.container.innerHTML = this.eval('`' + templateEl.template + '`', 'tangy-template', templateEl.getAttribute('name'), true)
         }
