@@ -339,6 +339,11 @@ export class TangyForm extends PolymerElement {
 
   static get properties() {
     return {
+      fullscreenOnly: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
       fullscreen: {
         type: Boolean,
         value: false,
