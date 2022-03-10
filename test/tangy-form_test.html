@@ -329,6 +329,21 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="OpenInFullscreen">
+      <template>
+        <tangy-form
+          id="OpenInFullscreenForm"
+          open-in-fullscreen
+        >
+          <tangy-form-item id="item1" title="1">
+            <tangy-input name="input1" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item2" title="2">
+            <tangy-input name="input2" label="What is your last name?"></tangy-input>
+          </tangy-form-item>
+        </tangy-form>
+      </template>
+    </test-fixture>
 
     <script type="module">
       import * as Polymer from '../node_modules/@polymer/polymer/polymer-legacy.js'
@@ -348,6 +363,13 @@
       })
 
       suite('tangy-form', () => {
+
+        test('should open in fullscreen mode', () => {
+          const element = fixture('OpenInFullscreen')
+          element.newResponse()
+          element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
+          assert.equal(element.querySelector('#item1').getAttribute('fullscreen-enabled'), '')
+        })
 
         test('should inject variable', () => {
           var someInjectedVariable = {

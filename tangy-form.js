@@ -339,6 +339,11 @@ export class TangyForm extends PolymerElement {
 
   static get properties() {
     return {
+      openInFullscreen: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
       fullscreen: {
         type: Boolean,
         value: false,
@@ -642,7 +647,11 @@ export class TangyForm extends PolymerElement {
 
     let state = this.store.getState()
     // Set initial this.previousState
-    if (!this.previousState) this.previousState = state
+    let firstState = false
+    if (!this.previousState) { 
+      this.previousState = state
+      firstState = true
+    }
 
     this.setProps(state.form)
 
@@ -669,14 +678,10 @@ export class TangyForm extends PolymerElement {
       this.dispatchEvent(new CustomEvent('ALL_ITEMS_CLOSED'))
     }
 
-    if (state.form && state.form.fullscreen) {
-      if (!this.previousState.form.fullscreenEnabled && state.form.fullscreenEnabled) {
-        this.enableFullscreen()
-      }
-      else if (this.previousState.form.fullscreenEnabled && !state.form.fullscreenEnabled) {
-        this.disableFullscreen()
-      }
-    } else if (this.previousState.form.fullscreen && !state.form.fullscreen) {
+    if ((!this.previousState.form.fullscreenEnabled && state.form.fullscreenEnabled) || (firstState && state.form.fullscreenEnabled)) {
+      this.enableFullscreen()
+    }
+    else if (this.previousState.form.fullscreenEnabled && !state.form.fullscreenEnabled) {
       this.disableFullscreen()
     }
 
