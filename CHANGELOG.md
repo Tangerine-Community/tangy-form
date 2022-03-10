@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## v4.30.0
+- Add support for opening a form in fullscreen mode. Add `open-in-fullscreen` attribute to `<tangy-form>`.
 
 ## v4.29.4
 - When viewing a completed form response, all tangy-templates now appear regardless of any previously evaluated directive because state like `skipped` has not been saved in form responses. This version makes tangy-template even more dynamic by evaluating directives on tangy-template even when in a completed form response.
