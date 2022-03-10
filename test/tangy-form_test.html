@@ -329,11 +329,11 @@
       </template>
     </test-fixture>
 
-    <test-fixture id="FullscreenOnly">
+    <test-fixture id="OpenInFullscreen">
       <template>
         <tangy-form
-          id="FullscreenOnlyForm"
-          fullscreen-only
+          id="OpenInFullscreenForm"
+          open-in-fullscreen
         >
           <tangy-form-item id="item1" title="1">
             <tangy-input name="input1" label="What is your last name?"></tangy-input>
@@ -364,8 +364,8 @@
 
       suite('tangy-form', () => {
 
-        test('should launch in fullscreen mode', () => {
-          const element = fixture('FullscreenOnly')
+        test('should open in fullscreen mode', () => {
+          const element = fixture('OpenInFullscreen')
           element.newResponse()
           element.querySelector('#item1').shadowRoot.querySelector('dom-if').render()
           assert.equal(element.querySelector('#item1').getAttribute('fullscreen-enabled'), '')
