@@ -339,6 +339,12 @@ export class TangyForm extends PolymerElement {
 
   static get properties() {
     return {
+      fullscreenNavAlign: {
+        type: String,
+        // Value of 'top' or 'bottom'
+        value: 'top',
+        reflectToAttribute: true
+      },
       fullscreenInline: {
         type: Boolean,
         value: false,

@@ -97,9 +97,17 @@ export class TangyFormItem extends PolymerElement {
           padding-top: 53px;
           overflow: scroll;
         }
-        :host([fullscreen-enabled]) .card-actions {
+        :host([fullscreen-enabled][fullscreen-nav-align="top"]) .card-actions {
           position: fixed;
           top: 0px;
+          width: 100%;
+          right: 0px;
+          padding: 0px;
+          margin: 0px;
+        }
+        :host([fullscreen-enabled][fullscreen-nav-align="bottom"]) .card-actions {
+          position: fixed;
+          bottom: 0px;
           width: 100%;
           right: 0px;
           padding: 0px;
@@ -304,6 +312,12 @@ export class TangyFormItem extends PolymerElement {
       fullscreen: {
         type: Boolean,
         value: false,
+        reflectToAttribute: true
+      },
+      fullscreenNavAlign: {
+        type: String,
+        // Value of 'top' or 'bottom'
+        value: 'top',
         reflectToAttribute: true
       },
       fullscreenEnabled: {

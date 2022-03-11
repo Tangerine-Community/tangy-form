@@ -74,7 +74,10 @@ const tangyFormReducer = function (state = initialState, action) {
       if (newState.form.fullscreen === true) newState.items.forEach(item => item.fullscreen = true)
       if (newState.form.openInFullscreen === true) {
         newState.form.fullscreenEnabled = true
-        newState.items.forEach(item => item.fullscreenEnabled = true)
+        newState.items.forEach(item => {
+          item.fullscreenEnabled = true
+          item.fullscreenNavAlign = newState.form.fullscreenNavAlign
+        })
       }
       return newState
 
@@ -393,7 +396,12 @@ const tangyFormReducer = function (state = initialState, action) {
           exitClicks: state.form.exitClicks
         },
         items: state.items.map(item => {
-          return { ...item, fullscreenEnabled: true, exitClicks: state.form.exitClicks}
+          return { 
+            ...item,
+            fullscreenNavAlign: state.form.fullscreenNavAlign,
+            fullscreenEnabled: true,
+            exitClicks: state.form.exitClicks
+          }
         })
       }
 
