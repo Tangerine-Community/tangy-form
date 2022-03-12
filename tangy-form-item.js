@@ -114,8 +114,16 @@ export class TangyFormItem extends PolymerElement {
           margin: 0px;
         }
         :host([fullscreen-enabled]) paper-button {
-          background: white;
-          color: grey;
+          background-color: var(--fullscreen-nav--background-color, white);
+          background-size: var(--fullscreen-nav--background-size);
+          background-image: var(--fullscreen-nav--background-image);
+          border-radius: var(--fullscreen-nav--border-radius);
+          border: var(--fullscreen-nav--border);
+          padding: var(--fullscreen-nav--padding);
+          color: var(--fullscreen-nav--color, grey);
+          height: var(--fullscreen-nav--height);
+          width: var(--fullscreen-nav--width);
+ 
         }
         /* Buttons when nav aligned at the top */
         :host([fullscreen-enabled][fullscreen-nav-align="top"]) .card-actions paper-button#next {
@@ -144,22 +152,23 @@ export class TangyFormItem extends PolymerElement {
           position: absolute;
           bottom: var(--fullscreen-nav-align-bottom--next--bottom, 15px);
           right: var(--fullscreen-nav-align-bottom--next--right, 15px);
-          background: var(--fullscreen-nav-align-bottom--next--background, white);
-          color: var(--fullscreen-nav-align-bottom--next--color, grey);
+          background-image: var(--fullscreen-nav-align-bottom--next--background-image, var(--fullscreen-nav--background-image, none));
+          background-color: var(--fullscreen-nav-align-bottom--next--background-color, var(--fullscreen-nav--background-color, white));
         }
         :host([fullscreen-enabled][fullscreen-nav-align="bottom"]) .card-actions paper-button#back {
+          display: var(--fullscreen-nav-align-bottom--back--display, inline-block);
           position: absolute;
           bottom: var(--fullscreen-nav-align-bottom--back--bottom, 15px);
           left: var(--fullscreen-nav-align-bottom--back--right, 15px);
-          background: var(--fullscreen-nav-align-bottom--back--background, white);
-          color: var(--fullscreen-nav-align-bottom--back--color, grey);
+          background-image: var(--fullscreen-nav-align-bottom--back--background-image, var(--fullscreen-nav--background-image, none));
+          background-color: var(--fullscreen-nav-align-bottom--back--background-color, var(--fullscreen-nav--background-color, white));
         }
         :host([fullscreen-enabled][fullscreen-nav-align="bottom"]) .card-actions paper-button#complete {
           position: absolute;
           bottom: var(--fullscreen-nav-align-bottom--complete--bottom, 15px);
           right: var(--fullscreen-nav-align-bottom--complete--right, 15px);
-          background: var(--fullscreen-nav-align-bottom--complete--background, green);
-          color: var(--fullscreen-nav-align-bottom--complete--color, white);
+          background-image: var(--fullscreen-nav-align-bottom--complete--background-image, var(--fullscreen-nav--background-image, none));
+          background-color: var(--fullscreen-nav-align-bottom--complete--background-color, var(--fullscreen-nav--background-color, white));
         }
         :host([fullscreen-enabled]) paper-button#complete paper-button {
           display: none;
