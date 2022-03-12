@@ -339,6 +339,17 @@ export class TangyForm extends PolymerElement {
 
   static get properties() {
     return {
+      fullscreenNavAlign: {
+        type: String,
+        // Value of 'top' or 'bottom'
+        value: 'top',
+        reflectToAttribute: true
+      },
+      fullscreenInline: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
       openInFullscreen: {
         type: Boolean,
         value: false,
@@ -774,6 +785,8 @@ export class TangyForm extends PolymerElement {
   }
 
   enableFullscreen() {
+      // If fullscreen inline is enabled, don't use Fulscreen API.
+      if (this.fullscreenInline) return
       if(this.requestFullscreen) {
         this.requestFullscreen()
             .then(message => {

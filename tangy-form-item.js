@@ -97,7 +97,7 @@ export class TangyFormItem extends PolymerElement {
           padding-top: 53px;
           overflow: scroll;
         }
-        :host([fullscreen-enabled]) .card-actions {
+        :host([fullscreen-enabled][fullscreen-nav-align="top"]) .card-actions {
           position: fixed;
           top: 0px;
           width: 100%;
@@ -105,15 +105,70 @@ export class TangyFormItem extends PolymerElement {
           padding: 0px;
           margin: 0px;
         }
-        :host([fullscreen-enabled]) paper-button {
-          background: white;
-          color: grey;
+        :host([fullscreen-enabled][fullscreen-nav-align="bottom"]) .card-actions {
+          position: fixed;
+          bottom: 0px;
+          width: 100%;
+          right: 0px;
+          padding: 0px;
+          margin: 0px;
         }
-        :host([fullscreen-enabled]) paper-button#complete {
-          float: right;
-          margin: 15px;
-          background: green;
-          color: white; 
+        :host([fullscreen-enabled]) paper-button {
+          background-color: var(--fullscreen-nav--background-color, white);
+          background-size: var(--fullscreen-nav--background-size);
+          background-image: var(--fullscreen-nav--background-image);
+          border-radius: var(--fullscreen-nav--border-radius);
+          border: var(--fullscreen-nav--border);
+          padding: var(--fullscreen-nav--padding);
+          color: var(--fullscreen-nav--color, grey);
+          height: var(--fullscreen-nav--height);
+          width: var(--fullscreen-nav--width);
+ 
+        }
+        /* Buttons when nav aligned at the top */
+        :host([fullscreen-enabled][fullscreen-nav-align="top"]) .card-actions paper-button#next {
+          position: absolute;
+          top: var(--fullscreen-nav-align-top--next--bottom, 15px);
+          right: var(--fullscreen-nav-align-top--next--right, 15px);
+          background: var(--fullscreen-nav-align-top--next--background, white);
+          color: var(--fullscreen-nav-align-top--next--color, grey);
+        }
+        :host([fullscreen-enabled][fullscreen-nav-align="top"]) .card-actions paper-button#back {
+          position: absolute;
+          top: var(--fullscreen-nav-align-top--back--bottom, 15px);
+          left: var(--fullscreen-nav-align-top--back--right, 15px);
+          background: var(--fullscreen-nav-align-top--back--background, white);
+          color: var(--fullscreen-nav-align-top--back--color, grey);
+        }
+        :host([fullscreen-enabled][fullscreen-nav-align="top"]) .card-actions paper-button#complete {
+          position: absolute;
+          top: var(--fullscreen-nav-align-top--complete--bottom, 15px);
+          right: var(--fullscreen-nav-align-top--complete--right, 15px);
+          background: var(--fullscreen-nav-align-top--complete--background, green);
+          color: var(--fullscreen-nav-align-top--complete--color, white);
+        }
+        /* Buttons when nav aligned at the bottom */
+        :host([fullscreen-enabled][fullscreen-nav-align="bottom"]) .card-actions paper-button#next {
+          position: absolute;
+          bottom: var(--fullscreen-nav-align-bottom--next--bottom, 15px);
+          right: var(--fullscreen-nav-align-bottom--next--right, 15px);
+          background-image: var(--fullscreen-nav-align-bottom--next--background-image, var(--fullscreen-nav--background-image, none));
+          background-color: var(--fullscreen-nav-align-bottom--next--background-color, var(--fullscreen-nav--background-color, white));
+        }
+        :host([fullscreen-enabled][fullscreen-nav-align="bottom"]) .card-actions paper-button#back {
+          display: var(--fullscreen-nav-align-bottom--back--display, inline-block);
+          position: absolute;
+          bottom: var(--fullscreen-nav-align-bottom--back--bottom, 15px);
+          left: var(--fullscreen-nav-align-bottom--back--right, 15px);
+          background-image: var(--fullscreen-nav-align-bottom--back--background-image, var(--fullscreen-nav--background-image, none));
+          background-color: var(--fullscreen-nav-align-bottom--back--background-color, var(--fullscreen-nav--background-color, white));
+        }
+        :host([fullscreen-enabled][fullscreen-nav-align="bottom"]) .card-actions paper-button#complete {
+          position: absolute;
+          bottom: var(--fullscreen-nav-align-bottom--complete--bottom, 15px);
+          right: var(--fullscreen-nav-align-bottom--complete--right, 15px);
+          background-image: var(--fullscreen-nav-align-bottom--complete--background-image, var(--fullscreen-nav--background-image, none));
+          background-color: var(--fullscreen-nav-align-bottom--complete--background-color, var(--fullscreen-nav--background-color, white));
         }
         :host([fullscreen-enabled]) paper-button#complete paper-button {
           display: none;
@@ -123,6 +178,9 @@ export class TangyFormItem extends PolymerElement {
         }
         :host([fullscreen-enabled]) .card-content {
           padding-top: 0px;
+        }
+        :host([fullscreen-enabled]) .card-actions .check-mark {
+          display: none;
         }
         :host(:not([fullscreen])) #enable-fullscreen,
         :host(:not([fullscreen])) #disable-fullscreen,
@@ -274,7 +332,7 @@ export class TangyFormItem extends PolymerElement {
             </template>
           </template>
           <template is="dom-if" if="{{!incomplete}}">
-            <iron-icon style="color: var(--primary-color); float: right; margin-top: 10px" icon="icons:check-circle"></iron-icon>
+            <iron-icon class="check-mark" style="color: var(--primary-color); float: right; margin-top: 10px" icon="icons:check-circle"></iron-icon>
           </template>
         </div>
       </paper-card>
@@ -304,6 +362,12 @@ export class TangyFormItem extends PolymerElement {
       fullscreen: {
         type: Boolean,
         value: false,
+        reflectToAttribute: true
+      },
+      fullscreenNavAlign: {
+        type: String,
+        // Value of 'top' or 'bottom'
+        value: 'top',
         reflectToAttribute: true
       },
       fullscreenEnabled: {
