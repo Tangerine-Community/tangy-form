@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v4.31.0
+- Add support for `fullscreen-inline` attribute on `<tangy-form>` to do fullscreen just in app without Fullscreen API. (https://github.com/Tangerine-Community/tangy-form/commit/c5bdecbe36b8efccea362f7a158e2acc33f8526c)
+- Add support for `full-screen-nav-align` attribute on `<tangy-form>` for aligning the fullscreen nav to top or bottom. Example: `<tangy-form full-screen-nav-align="bottom">`  (https://github.com/Tangerine-Community/tangy-form/commit/7aaae3fcd3822413de523afa1abe5c931ce04ab3)
+- Provide CSS variables for action buttons when positions top or bottom in fullscreen. (https://github.com/Tangerine-Community/tangy-form/commit/a14cf6d1d434d41402c930025c5483f0d157080d, https://github.com/Tangerine-Community/tangy-form/commit/30b19ef7a0ffa0932c719c5a1781ea8d146f0441)
+- Hide tangy form item checkmarks when in fullscreen mode. (https://github.com/Tangerine-Community/tangy-form/commit/2f3da4a7e9e92ca78b56ee74766cac75b69e6a17)
+
 ## v4.30.0
 - Add support for opening a form in fullscreen mode. Add `open-in-fullscreen` attribute to `<tangy-form>`.
 
