@@ -179,6 +179,9 @@ export class TangyFormItem extends PolymerElement {
         :host([fullscreen-enabled]) .card-content {
           padding-top: 0px;
         }
+        :host([fullscreen-enabled]) .card-actions .check-mark {
+          display: none;
+        }
         :host(:not([fullscreen])) #enable-fullscreen,
         :host(:not([fullscreen])) #disable-fullscreen,
         :host([fullscreen]:not([fullscreen-enabled])) #disable-fullscreen,
@@ -329,7 +332,7 @@ export class TangyFormItem extends PolymerElement {
             </template>
           </template>
           <template is="dom-if" if="{{!incomplete}}">
-            <iron-icon style="color: var(--primary-color); float: right; margin-top: 10px" icon="icons:check-circle"></iron-icon>
+            <iron-icon class="check-mark" style="color: var(--primary-color); float: right; margin-top: 10px" icon="icons:check-circle"></iron-icon>
           </template>
         </div>
       </paper-card>
