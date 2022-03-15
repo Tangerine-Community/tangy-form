@@ -149,7 +149,7 @@ export class TangyKeyboardInput extends TangyInputLitBase {
           </div>
           <div id="input-container">
             <div id="input-value">
-              ${this.value}
+              ${this.prefix}${this.value}
             </div>
             <button id="erase" class="btn" @click="${() => this.onErasureKeyClick()}">
               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
@@ -191,6 +191,7 @@ export class TangyKeyboardInput extends TangyInputLitBase {
   constructor() {
     super()
     this.keys = 'a b c d e f g h i j k l m n o p q r s t u v w x y z'
+    this.prefix = ''
     this.value = ''
     this.keyboardAlign = 'top'
     this.bottomKeyboard = []
@@ -203,6 +204,11 @@ export class TangyKeyboardInput extends TangyInputLitBase {
 
   static get properties () {
     return {
+      prefix: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       keys: {
         type: String,
         value: 'a b c d e f g h i j k l m n o p q r s t u v w x y z',
