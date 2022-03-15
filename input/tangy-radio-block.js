@@ -118,11 +118,11 @@ export class TangyRadioBlock extends TangyInputBase {
           border-color: #ff620c;
         }
         .btn-lg {
-          width: 6.5rem;
-          height: 6.5rem;
+          width: var(--width, 6.5rem);
+          height: var(--height, 6.5rem);
           display: flex;
           align-items: center;
-          justify-content: center;
+          justify-content: var(--justify-content, center);
           font-size: 2rem !important;
           margin: 0 0.25rem;
         }

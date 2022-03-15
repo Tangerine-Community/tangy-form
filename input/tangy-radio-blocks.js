@@ -32,24 +32,45 @@ class TangyRadioBlocks extends TangyInputBase {
       <style include="tangy-common-styles"></style>
 
       <style>
+        #label {
+          margin: 0;
+          text-transform: none;
+          font-size: 2rem;
+          text-align: center;
+          margin-bottom: 1rem;
+        }
         #container {
-          display: flex;
-          justify-content: space-around;
+          height: var(--container-height, 50vh);
           background-color: var(--container-background-color, #fff);
           border-radius: 1rem;
           padding: 4rem 1.2rem;
+          margin-top: 1rem;
+          margin-bottom: 1rem;
+        }
+        #blockContainer.columns {
+          flex-direction: column;
+          justify-content: normal;
+        }
+        .columns tangy-radio-block {
+          --width: 100%;
+          --height: 4rem;
+          --justify-content: left;
+          width: 100%;
+          margin: .2rem 0;
+          padding: 0px;
+        }
+        #blockContainer {
+          height: 100%;
+          display: flex;
+          justify-content: space-around;
           font-size: 4rem;
           font-weight: 700;
           text-align: center;
           flex-grow: 1;
-          display: flex;
           align-items: center;
           text-transform: lowercase;
-          margin-top: 1rem;
-          margin-bottom: 1rem;
           letter-spacing: .4rem;
           position: relative;
-          height: var(--container-height, 50vh);
         }
       /*
         table {
@@ -93,9 +114,13 @@ class TangyRadioBlocks extends TangyInputBase {
       <div class="flex-container m-y-25">
         <div id="qnum-number"></div>
         <div id="qnum-content">
-          <label id="label" for="group"></label>
           <label class="hint-text"></label>
-          <div id="container"></div>
+          <div id="container">
+            <label id="label" for="group"></label>
+            <div id="blockContainer">
+            </div>
+          </div>
+
           <label id="error-text"></label>
           <div id="warn-text"></div>
           <div id="discrepancy-text"></div>
@@ -107,6 +132,12 @@ class TangyRadioBlocks extends TangyInputBase {
 
   static get properties() {
     return {
+      orientation: {
+        type: String,
+        // columns or rows.
+        value: 'columns',
+        reflectToAttribute: true
+      },
       hideButtons: {
         type: Boolean,
         value: false,
@@ -233,6 +264,9 @@ class TangyRadioBlocks extends TangyInputBase {
     this.shadowRoot.querySelector('#label').innerHTML = this.hasAttribute('label')
         ? this.getAttribute('label')
         : ''
+    if (this.orientation === 'rows') {
+      this.shadowRoot.querySelector('#blockContainer').setAttribute('class', 'columns')
+    }
   }
 
   reflect() {
@@ -246,7 +280,7 @@ class TangyRadioBlocks extends TangyInputBase {
 
   render() {
     this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
-    this.$.container.innerHTML = ''
+    this.$.blockContainer.innerHTML = ''
     // Populate options as tangy-radio-block elements
     let options = this.querySelectorAll('option')
     let i = 0
@@ -271,10 +305,10 @@ class TangyRadioBlocks extends TangyInputBase {
         } else {
           tr.appendChild(td)
         }
-        if (i+1 === options.length) this.$.container.appendChild(table)
+        if (i+1 === options.length) this.$.blockContainer.appendChild(table)
         i++
       } else {
-        this.$.container.appendChild(button)
+        this.$.blockContainer.appendChild(button)
       }
     }
     let newValue = []
@@ -302,7 +336,7 @@ class TangyRadioBlocks extends TangyInputBase {
     if (targetButton.value = 'on') {
       this
         .$
-        .container
+        .blockContainer
         .querySelectorAll('tangy-radio-block')
         .forEach(el => {
           if (el.name !== targetButton.name && targetButton.value == 'on') {
