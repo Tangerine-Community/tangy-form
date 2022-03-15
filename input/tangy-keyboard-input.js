@@ -17,13 +17,17 @@ export class TangyKeyboardInput extends TangyInputLitBase {
   static get styles() {
     return [
       css`
+        #erase {
+          padding: 0.375rem 0.75rem;
+        }
         .btn {
           display: inline-block;
           font-weight: 400;
           text-align: center;
           vertical-align: middle;
           user-select: none;
-          padding: 0.375rem 0.75rem;
+          padding: 0;
+          margin: 0.4rem;
           font-family: 'Andika', sans-serif;
           line-height: 1.5;
           border-radius: 0.5rem;
@@ -60,7 +64,7 @@ export class TangyKeyboardInput extends TangyInputLitBase {
           opacity: 1;
           transition: 0s;
         }
-        #top-keyboard, #bottom-keyboard {
+        #qnum-content {
           width: 80vw;
           height: 90vh;
           display: flex;
@@ -93,6 +97,26 @@ export class TangyKeyboardInput extends TangyInputLitBase {
           position: absolute;
           right: 1rem;
           top: 1rem;
+        }
+        .flex-container {
+          /* min-height: 100vh; */
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          font-family: 'Andika', sans-serif;
+          font-size: 1.3rem;
+          font-weight: 400;
+          line-height: 1.5;
+          margin: 0;
+          color: #212121;
+          background-size: cover;
+          background-attachment: fixed;
+          background-repeat: no-repeat;
+        }
+        #bottom-spacer {
+          height: var(--bottom-spacer-height);
         }
       
       `
@@ -141,6 +165,7 @@ export class TangyKeyboardInput extends TangyInputLitBase {
               <button class="btn" @click="${() => this.onKeyClick(character)}">${character}</button>
             `)}
           </div>
+          <div id="bottom-spacer"></div>
           ${this.hintText ? html`}
             <div id="hint-text" class="hint-text">${this.hintText}</div>
           ` : ''}
