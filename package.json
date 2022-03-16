@@ -26,7 +26,7 @@
     "@polymer/polymer": "^3.0.0",
     "@zxing/library": "^0.18.6",
     "devtools-detect": "^3.0.0",
-    "dr-niels-sortable-list": "git://github.com/DrNiels/sortable-list.git#master",
+    "dr-niels-sortable-list": "https://github.com/DrNiels/sortable-list.git#master",
     "ethiopian-date": "0.0.6",
     "image-blob-reduce": "^3.0.1",
     "lit": "^2.2.0",
