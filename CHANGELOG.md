@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.32.0
+- Add new inputs `<tangy-keyboard-input>` and `<tangy-radio-blocks>`.
+
 ## v4.31.0
 - Add support for `fullscreen-inline` attribute on `<tangy-form>` to do fullscreen just in app without Fullscreen API. (https://github.com/Tangerine-Community/tangy-form/commit/c5bdecbe36b8efccea362f7a158e2acc33f8526c)
 - Add support for `full-screen-nav-align` attribute on `<tangy-form>` for aligning the fullscreen nav to top or bottom. Example: `<tangy-form full-screen-nav-align="bottom">`  (https://github.com/Tangerine-Community/tangy-form/commit/7aaae3fcd3822413de523afa1abe5c931ce04ab3)
