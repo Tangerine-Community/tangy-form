@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.32.1
+- Fix URL for sortable dependency to be https instead of `git://`.
+
 ## v4.32.0
 - Add new inputs `<tangy-keyboard-input>` and `<tangy-radio-blocks>`.
 
