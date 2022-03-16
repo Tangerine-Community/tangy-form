@@ -34,11 +34,10 @@
         test('should only have one option selected', () => {
           const element = fixture('TangyRadioBlocksFixture');
           element.shadowRoot.querySelectorAll('tangy-radio-block')[0].click()
-          element.shadowRoot.querySelectorAll('tangy-radio-button')[0].dispatchEvent(new Event('change',{bubbles:true}))
+          element.shadowRoot.querySelectorAll('tangy-radio-block')[0].dispatchEvent(new Event('change',{bubbles:true}))
           element.shadowRoot.querySelectorAll('tangy-radio-block')[1].click()
-          element.shadowRoot.querySelectorAll('tangy-radio-button')[1].dispatchEvent(new Event('change',{bubbles:true}))
-          debugger
- 
+          element.shadowRoot.querySelectorAll('tangy-radio-block')[1].dispatchEvent(new Event('change',{bubbles:true}))
+          assert.equal([...element.shadowRoot.querySelectorAll('tangy-radio-block')].filter(n => n.value === 'on').length, 1)
         })
 
       })
