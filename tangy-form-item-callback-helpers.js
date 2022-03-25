@@ -1,5 +1,5 @@
-import moment from 'moment'
-import * as ethiopianDate from 'ethiopian-date/index.js'
+import { TangyPartialDate } from '../tangy-partial-date.js'
+import { TangyEthiopianDate } from '../tangy-ethio-date.js'
 
 export class TangyFormItemHelpers {
 
@@ -81,78 +81,19 @@ export class TangyFormItemHelpers {
         }
       })
     }
-    if(foundInput && typeof foundInput.value === 'object') {
-      let values = []
-      foundInput.value.forEach(subInput => {
-        if (subInput.value) {
-          values.push(subInput.name)
-        }
-      })
-      value = values
-    } else if (foundInput && foundInput.value !== undefined) {
-      value = foundInput.value
-    }
     if (foundInput && foundInput.tagName === 'TANGY-PARTIAL-DATE') {
-      //var partial_input = new TangyPartialDate() <--- can we do this instead
-      value = _transformValueToMoment(value)
+      var partial_input = new TangyPartialDate()
+      value = partial_input.getValueAsMoment()
     }
     if (foundInput && foundInput.tagName === 'TANGY-ETHIOPIAN-DATE') {
-      //var partial_input = new TangyEthiopianDate() <--- can we do this instead
-      value = _transformValueToMomentEthiopian(value)
+      var partial_input = new TangyEthiopianDate()
+      value = partial_input.getValueAsMoment()
     } else {
       console.warn(`${foundInput.name} is a ${foundInput.tagName}, not a partial date`)
     }
-    if (!value) {
-      value = ''
-    }
-    // console.log("input name: " + name + " foundInput: " + foundInput + " typeof value " + typeof value + " value: " + value)
     return value
   }
-
-  _transformValueToMoment(value) {
-    const [year, month, day] = value.split('-')
-    let date = null
-    if (year === '9999' || year === '') {
-      // Need at least a year to calculate.
-      return null
-    } else if (month === '99' || month === '') {
-      // We don't have a month, just have a year to go off of.
-      date = moment(year, 'YYYY')
-    } else if (day === '99' || day === '') {
-      // We don't have a day, go off of year and month.
-      date = moment(`${year}-${month}`, 'YYYY-MM')
-    } else {
-      date = moment(`${year}-${month}-${day}`, 'YYYY-MM-DD')
-    }
-    return date
-  }
-
-  _transformValueToMomentEthiopian(value) {
-    var [year_part, month_part, day_part] = value.split('-');
-
-    let date = null
-    if (year_part === '9999' || year_part === '') {
-      // Need at least a year to calculate.
-      return null
-    }
-    if (month_part === '99' || month_part === '') {
-      // We don't have a month, just have a year to go off of.
-      month_part = '01'
-    }
-    if (day_part === '99' || day_part === '') {
-      // We don't have a day, go off of year and month.
-      day_part = '01'
-    }
-
-    const greg_date = ethiopianDate.toGregorian(parseInt(year_part), parseInt(month_part), parseInt(day_part));
-    const year = greg_date[0];
-    const month = greg_date[1];
-    const day = greg_date[2];
-    date = moment(`${year}-${month}-${day}`, 'YYYY-MM-DD')
-
-    return date
-  }
-
+ 
   isChecked(name) {
     return (this.inputs.find(input => name === input.name).value === 'on') ? true : false
   }
