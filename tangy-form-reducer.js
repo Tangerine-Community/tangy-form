@@ -141,7 +141,6 @@ const tangyFormReducer = function (state = initialState, action) {
             props.open = true
           }
           return Object.assign({}, item, props)
-         return item
         })
       })
 
