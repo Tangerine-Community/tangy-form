@@ -28,7 +28,7 @@
     "devtools-detect": "^3.0.0",
     "dr-niels-sortable-list": "https://github.com/DrNiels/sortable-list.git#master",
     "ethiopian-date": "0.0.6",
-    "image-blob-reduce": "^3.0.1",
+    "image-blob-reduce": "^4.1.0",
     "lit": "^2.2.0",
     "lit-element": "^2.3.1",
     "moment": "^2.24.0",
