@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## v4.33.0
+- Add new input `<tangy-video-capture>`. Takes the following properties:
+  - frontCamera: Boolean. Whether to use the front camera or the back camera. Default is `true`. 
+  - noVideoConstraints: Boolean. Whether to force use of front or back camera. If tue, chooses the first available source.  Default is `true`. 
+  - codec: String. The codec to use. Default is 'video/webm;codecs=vp9,opus' - AKA webm vp9. It is possible the device may not support all of these codecs. Other potential codecs:
+    - video/webm;codecs=vp8,opus
+    - video/webm;codecs=h264,opus
+  - videoWidth: Number. The width of the video. Default is `1280`.
+  - videoHeight: Number. The height of the video. Default is `720`.
+
 ## v4.32.1
 - Fix URL for sortable dependency to be https instead of `git://`.
 
