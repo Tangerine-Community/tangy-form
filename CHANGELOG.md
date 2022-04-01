@@ -1,5 +1,10 @@
 # CHANGELOG
 
+
+
+## v4.33.1
+- Fix URL for sortable dependency to be git+https instead of git+ssh.
+
 ## v4.33.0
 - Add new input `<tangy-video-capture>`. Takes the following properties:
   - frontCamera: Boolean. Whether to use the front camera or the back camera. Default is `true`. 
