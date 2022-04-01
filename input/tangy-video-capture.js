@@ -204,9 +204,14 @@ export class TangyVideoCapture extends TangyInputBase {
                 value: false,
                 reflectToAttribute: true
             },
-            front: {
+            frontCamera: {
                 type: Boolean,
-                value: false,
+                value: true,
+                reflectToAttribute: true
+            },
+            noVideoConstraints: {
+                type: Boolean,
+                value: true,
                 reflectToAttribute: true
             },
             codec: {
@@ -214,9 +219,14 @@ export class TangyVideoCapture extends TangyInputBase {
                 value: 'video/webm;codecs=vp9,opus',
                 reflectToAttribute: true
             },
-            saveToFile: {
-                type: Boolean,
-                value: true,
+            videoWidth: {
+                type: Number,
+                value: 1280,
+                reflectToAttribute: true
+            },
+            videoHeight: {
+                type: Number,
+                value: 720,
                 reflectToAttribute: true
             },
         }
@@ -238,8 +248,8 @@ export class TangyVideoCapture extends TangyInputBase {
             }
         }
         this.handleSuccess = (stream) => {
+            this.currentStream = stream
             this.enableButtons(["#record"])
-            console.log('getUserMedia() got stream:', stream);
             window.stream = stream;
 
             const gumVideo = this.shadowRoot.querySelector('video#gum');
@@ -253,11 +263,49 @@ export class TangyVideoCapture extends TangyInputBase {
                 }
             }
         }
-
         if (this.saveToFile) {
             if (!window['isCordovaApp']) {
                 console.log("This feature is only available in the Tangerine Mobile app.")
             }
+        }
+        this.getConstraints = () => {
+            if (this.noVideoConstraints) {
+                return {video: {width: this.videoWidth, height: this.videoHeight}}
+            }
+            if (this.frontCamera) {
+                return {video: {facingMode: {exact: "user"}}, width: this.videoWidth, height: this.videoHeight}
+            } else {
+                return {video: {facingMode: {exact: "environment"}}, width: this.videoWidth, height: this.videoHeight}
+            }
+        }
+        this.startRecording = () => {
+            this.clearVideo()
+            this.shadowRoot.querySelector('#gum').style.display = 'block'
+            this.recordedBlobs = [];
+            const mimeType = this.codec
+            const options = {mimeType};
+
+            try {
+                this.mediaRecorder = new MediaRecorder(window.stream, options);
+            } catch (e) {
+                console.error('Exception while creating MediaRecorder:', e);
+                this.errorMsgElement.innerHTML = `Exception while creating MediaRecorder: ${JSON.stringify(e)}`;
+                return;
+            }
+
+            // console.log('Created MediaRecorder', this.mediaRecorder, 'with options', options);
+            this.disableButtons(["#record", "#play"])
+            this.enableButtons(["#save"])
+            this.mediaRecorder.onstop = (event) => {
+                console.log('Recorder stopped: ', event);
+                const blob = new Blob(this.recordedBlobs, {type: 'video/webm'});
+                const url = URL.createObjectURL(blob);
+                this.value = url
+                console.log('Recorded Blobs: ', this.recordedBlobs);
+            };
+            this.mediaRecorder.ondataavailable = this.handleDataAvailable;
+            this.mediaRecorder.start();
+            console.log('MediaRecorder started', this.mediaRecorder);
         }
     }
 
@@ -266,7 +314,6 @@ export class TangyVideoCapture extends TangyInputBase {
         this.shadowRoot.querySelector('#qnum-number').innerHTML = this.hasAttribute('question-number')
             ? `<label>${this.getAttribute('question-number')}</label>`
             : ''
-        this.constraints = {video: {facingMode: {exact: "environment"}}}
     }
 
     disconnectedCallback() {
@@ -285,10 +332,6 @@ export class TangyVideoCapture extends TangyInputBase {
             saving: t('Saving...')
         }
         this.shadowRoot.querySelector('#label').innerHTML = this.label
-        // Start streaming video
-        // this.constraints = this.getConstraints()
-        // this.codecPreferences = this.shadowRoot.querySelector('#codecPreferences');
-
         this.errorMsgElement = this.shadowRoot.querySelector('span#errorMsg');
         this.recordedVideo = this.shadowRoot.querySelector('video#recorded');
         this.recordButton = this.shadowRoot.querySelector('paper-button#record');
@@ -298,12 +341,10 @@ export class TangyVideoCapture extends TangyInputBase {
             this.startRecording();
         });
 
-        // this.codecPreferences = this.shadowRoot.querySelector('#codecPreferences');
         this.playButton = this.shadowRoot.querySelector('paper-button#play');
         this.playButton.addEventListener('click', () => {
             this.shadowRoot.querySelector('#gum').style.display = 'none'
             this.shadowRoot.querySelector('#recorded').style.display = 'block'
-            // const mimeType = this.codecPreferences.options[this.codecPreferences.selectedIndex].value.split(';', 1)[0];
             const mimeType = this.codec
             const superBuffer = new Blob(this.recordedBlobs, {type: mimeType});
             this.recordedVideo.src = null;
@@ -317,53 +358,10 @@ export class TangyVideoCapture extends TangyInputBase {
         this.saveButton.addEventListener('click', () => {
             this.saveButton = this.shadowRoot.querySelector('paper-button#save');
             this.stopRecording();
-            // this.recordButton.textContent = ' Start Recording ';
             this.enableButtons(["#play"]);
             this.disableButtons(["#save"]);
         });
-        this.startRecording = () => {
-            this.clearVideo()
-            this.shadowRoot.querySelector('#gum').style.display = 'block'
-            this.recordedBlobs = [];
-            // const mimeType = this.codecPreferences.options[this.codecPreferences.selectedIndex].value;
-            const mimeType = this.codec
-            const options = {mimeType};
-
-            try {
-                this.mediaRecorder = new MediaRecorder(window.stream, options);
-            } catch (e) {
-                console.error('Exception while creating MediaRecorder:', e);
-                this.errorMsgElement.innerHTML = `Exception while creating MediaRecorder: ${JSON.stringify(e)}`;
-                return;
-            }
-
-            console.log('Created MediaRecorder', this.mediaRecorder, 'with options', options);
-            this.disableButtons(["#record", "#play"])
-            this.enableButtons(["#save"])
-            // this.recordButton.textContent = 'Stop Recording';
-            // this.playButton.disabled = true;
-            // this.downloadButton.disabled = true;
-            // this.codecPreferences.disabled = true;
-            this.mediaRecorder.onstop = (event) => {
-                console.log('Recorder stopped: ', event);
-                const blob = new Blob(this.recordedBlobs, {type: 'video/webm'});
-                if (this.saveToFile) {
-                    this.value = blob
-                } else {
-                    const url = URL.createObjectURL(blob);
-                    this.value = url
-                }
-                console.log('Recorded Blobs: ', this.recordedBlobs);
-            };
-            this.mediaRecorder.ondataavailable = this.handleDataAvailable;
-            this.mediaRecorder.start();
-            console.log('MediaRecorder started', this.mediaRecorder);
-        }
-        const constraints = {
-            video: {
-                width: 1280, height: 720
-            }
-        };
+        const constraints = this.getConstraints()
         console.log('Using media constraints:', constraints);
         await this.init(constraints);
         this.disableButtons(["#save", "#play"]);
@@ -408,15 +406,9 @@ export class TangyVideoCapture extends TangyInputBase {
         )
     }
 
-
-
     clearVideo() {
         this.value = null;
-        // this.$.videoCaptureImage.src = ''
-        // this.enableButtons(["#capture-button"])
-        // this.disableButtons(["#clear-button"])
         this.shadowRoot.querySelector('#recorded').style.display = 'none'
-        // this.shadowRoot.querySelector('#photoCaptureImage').style.display = 'none'
     }
 
     getSupportedMimeTypes() {
@@ -431,78 +423,26 @@ export class TangyVideoCapture extends TangyInputBase {
         });
     }
 
-    // handleStop(event) {
-    //   console.log('Recorder stopped: ', event);
-    //   const superBuffer = new Blob(this.recordedBlobs, {type: 'video/webm'});
-    //   video.src = window.URL.createObjectURL(superBuffer);
-    // }
-
     stopRecording() {
         this.mediaRecorder.stop();
     }
-
 
     async init(constraints) {
         try {
             const stream = await navigator.mediaDevices.getUserMedia(constraints);
             this.handleSuccess(stream);
         } catch (e) {
-            console.error('navigator.getUserMedia error:', e);
+            console.error(`navigator.getUserMedia error: ${e} Constraint:  ${e.constraint} `);
             this.errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
         }
     }
 
-
-    clearPhoto() {
-        this.value = null;
-        this.$.photoCaptureImage.src = ''
-        this.enableButtons(["#capture-button"])
-        this.disableButtons(["#clear-button"])
-        this.shadowRoot.querySelector('video').style.display = 'block'
-        this.shadowRoot.querySelector('#photoCaptureImage').style.display = 'none'
-    }
-
-    async acceptPhoto() {
-        // Convert blob to base64 string
-        const arrayBuffer = await this.blob.arrayBuffer()
-        // convert arrayBuffer to a base64String
-        const base64String = window.btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
-        // turn it into a data:image
-        const nudata = 'data:image/jpeg;base64,' + base64String
-        this.value = nudata
-        this.disableButtons(["#capture-button"])
-    }
-
-    getConstraints() {
-        if (this.front) {
-            return {video: {facingMode: {exact: "user"}}}
-        } else {
-            return {video: {facingMode: {exact: "environment"}}}
-        }
-    }
 
     stopMediaTracks(stream) {
         stream.getTracks().forEach(track => {
             // stream.removeTrack(track)
             track.stop();
         })
-    }
-
-    toggleCamera() {
-        if (this.front) {
-            this.front = false
-        } else {
-            this.front = true
-        }
-        const constraints = this.getConstraints()
-        this.stopMediaTracks(this.currentStream)
-        navigator.mediaDevices.getUserMedia(constraints)
-            .then(mediaStream => {
-                this.currentStream = mediaStream
-                this.shadowRoot.querySelector('video').srcObject = mediaStream;
-                const track = mediaStream.getVideoTracks()[0];
-                this.imageCapture = new ImageCapture(track);
-            })
     }
 
     onDiscrepancyChange(value) {
