@@ -71,7 +71,29 @@
         <h3>tangy-video-capture demo</h3>
         <demo-snippet>
             <template>
-                <tangy-video-capture name="test-video" label="Take a video" ></tangy-video-capture>
+                <tangy-form id="my-form" title="My Form">
+                    <tangy-form-item id="item1">
+                        <tangy-video-capture name="test-video" label="Take a video" ></tangy-video-capture>
+                    </tangy-form-item>
+                </tangy-form>
+                <script>
+                    document.querySelector('#my-form').addEventListener('submit', event => {
+                        // By default, the form response is locked and the user can browse it. Use event.preventDefault()
+                        // to do something else.
+                        event.preventDefault()
+                        // 3 ways to inspect the user's response to the form. Ordered by level of detail.
+                        console.log(event.target.response)
+                        console.log(event.target.inputs)
+                        console.log(event.target.values)
+                    })
+                    document.querySelector('#my-form').addEventListener('TANGY_MEDIA_UPDATE', event => {
+                        // By default, the form response is locked and the user can browse it. Use event.preventDefault()
+                        // to do something else.
+                        event.preventDefault()
+                        // 3 ways to inspect the user's response to the form. Ordered by level of detail.
+                        console.log("Caught TANGY_MEDIA_UPDATE event at: " + event.target.name)
+                    }, true)
+                </script>
             </template>
         </demo-snippet>
     </div>

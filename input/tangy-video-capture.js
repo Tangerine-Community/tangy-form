@@ -302,6 +302,7 @@ export class TangyVideoCapture extends TangyInputBase {
                 const url = URL.createObjectURL(blob);
                 this.value = url
                 console.log('Recorded Blobs: ', this.recordedBlobs);
+                this.dispatchEvent(new CustomEvent('TANGY_MEDIA_UPDATE', {detail: {value: this}}))
             };
             this.mediaRecorder.ondataavailable = this.handleDataAvailable;
             this.mediaRecorder.start();

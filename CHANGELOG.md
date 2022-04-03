@@ -1,6 +1,7 @@
 # CHANGELOG
 
-
+## v4.33.2
+- Dispatch a `TANGY_MEDIA_UPDATE` event when `<tangy-video-capture>` value is updated. This will be useful when saving media files to the server.
 
 ## v4.33.1
 - Fix URL for sortable dependency to be git+https instead of git+ssh.
