@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.34.0
+- Add postfix property to tangy-keyboard-input. Also add highlight to value entered. PR: [#333](https://github.com/Tangerine-Community/tangy-form/pull/333)
+
 ## v4.33.2
 - Dispatch a `TANGY_MEDIA_UPDATE` event when `<tangy-video-capture>` value is updated. This will be useful when saving media files to the server.
 
