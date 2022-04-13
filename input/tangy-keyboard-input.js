@@ -118,6 +118,19 @@ export class TangyKeyboardInput extends TangyInputLitBase {
         #bottom-spacer {
           height: var(--bottom-spacer-height);
         }
+
+        @keyframes highlight {
+          0% {
+            background: yellow
+          }
+          100% {
+            background: none;
+          }
+        }
+
+        .highlight {
+          animation: highlight 1s;
+        }
       
       `
     ]
@@ -149,7 +162,7 @@ export class TangyKeyboardInput extends TangyInputLitBase {
           </div>
           <div id="input-container">
             <div id="input-value">
-              ${this.prefix}${this.value}
+              ${this.prefix}<span id="inputValue">${this.value}</span>${this.postfix}
             </div>
             <button id="erase" class="btn" @click="${() => this.onErasureKeyClick()}">
               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
@@ -192,6 +205,7 @@ export class TangyKeyboardInput extends TangyInputLitBase {
     super()
     this.keys = 'a b c d e f g h i j k l m n o p q r s t u v w x y z'
     this.prefix = ''
+    this.postfix = ''
     this.value = ''
     this.keyboardAlign = 'top'
     this.bottomKeyboard = []
@@ -205,6 +219,11 @@ export class TangyKeyboardInput extends TangyInputLitBase {
   static get properties () {
     return {
       prefix: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      postfix: {
         type: String,
         value: '',
         reflectToAttribute: true
@@ -331,6 +350,11 @@ export class TangyKeyboardInput extends TangyInputLitBase {
 
   onKeyClick (character) {
     this.value += character
+    this.shadowRoot.querySelector('#inputValue').classList.add('highlight');
+    const sleep = (milliseconds) => new Promise((res) => setTimeout(() => res(true), milliseconds))
+    sleep(500).then(() => {
+      this.shadowRoot.querySelector('#inputValue').classList.remove('highlight');
+    })
   }
 
   onErasureKeyClick () {
