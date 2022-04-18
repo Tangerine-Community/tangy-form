@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.34.1
+- Added 'dataType' property and removed unused properties from 'tangy-video-capture'.
+
 ## v4.34.0
 - Add postfix property to tangy-keyboard-input. Also add highlight to value entered. PR: [#333](https://github.com/Tangerine-Community/tangy-form/pull/333)
 

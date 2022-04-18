@@ -116,16 +116,6 @@ export class TangyVideoCapture extends TangyInputBase {
                 type: String,
                 value: ''
             },
-            maxSizeInKb: {
-                type: Number,
-                value: 256,
-                reflectToAttribute: true
-            },
-            compression: {
-                type: String,
-                value: '0.8',
-                reflectToAttribute: true
-            },
             label: {
                 type: String,
                 observer: 'reflect',
@@ -227,6 +217,11 @@ export class TangyVideoCapture extends TangyInputBase {
             videoHeight: {
                 type: Number,
                 value: 720,
+                reflectToAttribute: true
+            },
+            dataType: {
+                type: String,
+                value: 'video',
                 reflectToAttribute: true
             },
         }
