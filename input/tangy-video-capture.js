@@ -24,7 +24,16 @@ export class TangyVideoCapture extends TangyInputBase {
             <style>
                 video, img {
                     width: 75%;
-                    border: 5px solid red;
+                }
+                
+                .recording-active {
+                    border: 10px dashed red;
+                }
+                .recording-stopped {
+                    border: 10px solid green;
+                }
+                .playback {
+                    border: 5px solid black;
                 }
 
                 .hint-text {
@@ -84,10 +93,10 @@ export class TangyVideoCapture extends TangyInputBase {
                             <iron-icon icon="camera-enhance"></iron-icon>
                             [[t.record]]
                         </paper-button>
-                        <paper-button id="save">
-                            <iron-icon icon="icons:save"></iron-icon>
-                            [[t.save]]
-                        </paper-button>
+<!--                        <paper-button id="save">-->
+<!--                            <iron-icon icon="icons:save"></iron-icon>-->
+<!--                            [[t.save]]-->
+<!--                        </paper-button>-->
                         <paper-button id="play">
                             <iron-icon icon="av:play-circle-filled"></iron-icon>
                             [[t.play]]
@@ -229,10 +238,11 @@ export class TangyVideoCapture extends TangyInputBase {
 
     constructor() {
         super()
-        this.currentStream = null;
-        this.recordedBlobs = [];
+        this.currentStream = null
+        this.recordedBlobs = []
         this.mediaRecorder = null
-        this.sourceBuffer = null;
+        this.sourceBuffer = null
+        this.recording = false
         this.handleDataAvailable = (event) => {
             console.log('handleDataAvailable', event);
             if (event.data && event.data.size > 0) {
@@ -274,8 +284,12 @@ export class TangyVideoCapture extends TangyInputBase {
             }
         }
         this.startRecording = () => {
+            this.recording = true;
             this.clearVideo()
             this.shadowRoot.querySelector('#gum').style.display = 'block'
+            this.$.gum.classList.remove('recording-stopped')
+            this.$.gum.classList.add('recording-active')
+            this.$.record.innerHTML = '<iron-icon icon="av:stop"></iron-icon> Stop'
             this.recordedBlobs = [];
             const mimeType = this.codec
             const options = {mimeType};
@@ -289,8 +303,9 @@ export class TangyVideoCapture extends TangyInputBase {
             }
 
             // console.log('Created MediaRecorder', this.mediaRecorder, 'with options', options);
-            this.disableButtons(["#record", "#play"])
-            this.enableButtons(["#save"])
+            // this.disableButtons(["#record", "#play"])
+            this.disableButtons(["#play"])
+            // this.enableButtons(["#save"])
             this.mediaRecorder.onstop = (event) => {
                 console.log('Recorder stopped: ', event);
                 const blob = new Blob(this.recordedBlobs, {type: 'video/webm'});
@@ -298,6 +313,13 @@ export class TangyVideoCapture extends TangyInputBase {
                 this.value = url
                 console.log('Recorded Blobs: ', this.recordedBlobs);
                 this.dispatchEvent(new CustomEvent('TANGY_MEDIA_UPDATE', {detail: {value: this}}))
+                this.$.gum.classList.remove('recording-active')
+                this.$.gum.classList.add('recording-stopped')
+                const sleep = (milliseconds) => new Promise((res) => setTimeout(() => res(true), milliseconds))
+                sleep(500).then(() => {
+                    this.shadowRoot.querySelector('#centeredText').style.display = 'none'
+                    this.$.record.innerHTML = '<iron-icon icon="camera-enhance"></iron-icon> Record'
+                })
             };
             this.mediaRecorder.ondataavailable = this.handleDataAvailable;
             this.mediaRecorder.start();
@@ -334,13 +356,23 @@ export class TangyVideoCapture extends TangyInputBase {
         this.saveButton = this.shadowRoot.querySelector('paper-button#save');
         this.recordButton.addEventListener('click', () => {
             this.recordButton = this.shadowRoot.querySelector('paper-button#record');
-            this.startRecording();
+            if (this.recording) {
+                this.recording = false;
+                this.stopRecording();
+                this.enableButtons(["#play"]);
+            } else {
+                this.startRecording();
+            }
         });
 
         this.playButton = this.shadowRoot.querySelector('paper-button#play');
         this.playButton.addEventListener('click', () => {
+            this.recording = false;
+            this.$.gum.classList.remove('recording-active')
+            this.$.gum.classList.remove('recording-stopped')
             this.shadowRoot.querySelector('#gum').style.display = 'none'
             this.shadowRoot.querySelector('#recorded').style.display = 'block'
+            this.$.recorded.classList.add('playback')
             const mimeType = this.codec
             const superBuffer = new Blob(this.recordedBlobs, {type: mimeType});
             this.recordedVideo.src = null;
@@ -351,14 +383,14 @@ export class TangyVideoCapture extends TangyInputBase {
             this.disableButtons(["#save", "#play"]);
             this.enableButtons(["#record"]);
         });
-        this.saveButton.addEventListener('click', () => {
-            this.saveButton = this.shadowRoot.querySelector('paper-button#save');
-            this.stopRecording();
-            this.enableButtons(["#play"]);
-            this.disableButtons(["#save"]);
-        });
+        // this.saveButton.addEventListener('click', () => {
+        //     this.saveButton = this.shadowRoot.querySelector('paper-button#save');
+        //     this.stopRecording();
+        //     this.enableButtons(["#play"]);
+        //     this.disableButtons(["#save"]);
+        // });
         const constraints = this.getConstraints()
-        console.log('Using media constraints:', constraints);
+        // console.log('Using media constraints:', constraints);
         await this.init(constraints);
         this.disableButtons(["#save", "#play"]);
     }
@@ -420,6 +452,7 @@ export class TangyVideoCapture extends TangyInputBase {
     }
 
     stopRecording() {
+        this.shadowRoot.querySelector('#centeredText').style.display = 'block'
         this.mediaRecorder.stop();
     }
 

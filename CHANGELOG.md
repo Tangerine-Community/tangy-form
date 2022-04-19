@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.34.2
+- Improved UX for 'tangy-video-capture' by consolidating the record and save buttons into a single button. Also added some CSS borders around the video to indicate recording active, recording stopped, and playback. 
+
 ## v4.34.1
 - Added 'dataType' property and removed unused properties from 'tangy-video-capture'.
 
