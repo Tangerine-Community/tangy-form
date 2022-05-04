@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.34.3
+- Fixed configuration options for tangy-video-capture, including issue [Default Codec for tangy-video-capture is not read from input settings #3333](https://github.com/Tangerine-Community/Tangerine/issues/3333)
+
 ## v4.34.2
 - Improved UX for 'tangy-video-capture' by consolidating the record and save buttons into a single button. Also added some CSS borders around the video to indicate recording active, recording stopped, and playback. 
 
