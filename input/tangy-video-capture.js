@@ -84,7 +84,7 @@ export class TangyVideoCapture extends TangyInputBase {
                     <label id="label"></label>
                     <div id="imageDisplay">
                         <video id="gum" playsinline autoplay muted></video>
-                        <video id="recorded" playsinline loop></video>
+                        <video id="recorded" playsinline></video>
                         <!--          <img src="[[value]]" style='display:none' id="photoCaptureImage"/>-->
                         <div id="centeredText" class="centered">[[t.saving]]</div>
                     </div>
@@ -215,17 +215,15 @@ export class TangyVideoCapture extends TangyInputBase {
             },
             codec: {
                 type: String,
-                value: 'video/webm;codecs=vp9,opus',
+                value: '',
                 reflectToAttribute: true
             },
             videoWidth: {
                 type: Number,
-                value: 1280,
                 reflectToAttribute: true
             },
             videoHeight: {
                 type: Number,
-                value: 720,
                 reflectToAttribute: true
             },
             dataType: {
@@ -259,10 +257,16 @@ export class TangyVideoCapture extends TangyInputBase {
 
             const gumVideo = this.shadowRoot.querySelector('video#gum');
             gumVideo.srcObject = stream;
-            if (this.getSupportedMimeTypes().find(el => el === this.codec) !== undefined) {
+            if (this.getSupportedMimeTypes().find(el => el === this.codec) === undefined) {
+                const errorMsg = `${this.codec} is not supported; choosing one available.`
+                console.error(errorMsg);
+                this.errorMsgElement.innerHTML = errorMsg;
                 // pick the first one.
                 if (this.getSupportedMimeTypes().length > 0) {
                     this.codec = this.getSupportedMimeTypes()[0];
+                    const errorMsg = ` ${this.codec} will be used instead.`
+                    console.error(errorMsg);
+                    this.errorMsgElement.innerHTML += errorMsg;
                 } else {
                     alert('No supported codecs found.');
                 }
@@ -365,6 +369,16 @@ export class TangyVideoCapture extends TangyInputBase {
             }
         });
 
+        if (this.codec === '') {
+            this.codec = 'video/webm;codecs=vp9'
+        }
+        if (!this.videoWidth) {
+            this.videoWidth = 1280
+        }
+        if (!this.videoHeight) {
+            this.videoHeight = 720
+        }
+
         this.playButton = this.shadowRoot.querySelector('paper-button#play');
         this.playButton.addEventListener('click', () => {
             this.recording = false;
@@ -380,7 +394,7 @@ export class TangyVideoCapture extends TangyInputBase {
             this.recordedVideo.src = window.URL.createObjectURL(superBuffer);
             this.recordedVideo.controls = true;
             this.recordedVideo.play();
-            this.disableButtons(["#save", "#play"]);
+            this.disableButtons(["#play"]);
             this.enableButtons(["#record"]);
         });
         // this.saveButton.addEventListener('click', () => {
@@ -392,7 +406,7 @@ export class TangyVideoCapture extends TangyInputBase {
         const constraints = this.getConstraints()
         // console.log('Using media constraints:', constraints);
         await this.init(constraints);
-        this.disableButtons(["#save", "#play"]);
+        this.disableButtons(["#play"]);
     }
 
     reflect() {
