@@ -112,6 +112,8 @@ export class TangyFormItem extends PolymerElement {
           right: 0px;
           padding: 0px;
           margin: 0px;
+          pointer-events: none;
+          border-top: none;
         }
         :host([fullscreen-enabled]) paper-button {
           background-color: var(--fullscreen-nav--background-color, white);
@@ -123,6 +125,7 @@ export class TangyFormItem extends PolymerElement {
           color: var(--fullscreen-nav--color, grey);
           height: var(--fullscreen-nav--height);
           width: var(--fullscreen-nav--width);
+          pointer-events: auto;
  
         }
         /* Buttons when nav aligned at the top */
@@ -178,6 +181,8 @@ export class TangyFormItem extends PolymerElement {
         }
         :host([fullscreen-enabled]) .card-content {
           padding-top: 0px;
+          padding-left: var(--fullscreen-nav--width);
+          padding-right: var(--fullscreen-nav--width);
         }
         :host([fullscreen-enabled]) .card-actions .check-mark {
           display: none;

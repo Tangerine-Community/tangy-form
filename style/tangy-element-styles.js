@@ -55,7 +55,7 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
       }
       .flex-container > #qnum-content {
         width: 100%;
-        padding-right: 2em;
+        /* padding-right: 2em; */
       }
       #qnum-number > label {
         margin-right: 0.5rem;
