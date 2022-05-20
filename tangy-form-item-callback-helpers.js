@@ -1,3 +1,6 @@
+import { TangyPartialDate } from '../tangy-partial-date.js'
+import { TangyEthiopianDate } from '../tangy-ethio-date.js'
+
 export class TangyFormItemHelpers {
 
   constructor(element) {
@@ -58,6 +61,39 @@ export class TangyFormItemHelpers {
     return value
   }
 
+  getValueAsMoment(name) {
+    let value = ''
+    let foundInput = undefined
+    // Look in the shadow DOM.
+    this.inputs.forEach(input => {
+      if (input.name === name) {
+        foundInput = input
+      }
+    })
+    // Look in the store.
+    if (!foundInput) {
+      let state = this.element.store.getState()
+      let inputs = []
+      state.items.forEach(item => inputs = [...inputs, ...item.inputs])
+      foundInput = inputs.find(input => {
+        if (input.name === name) {
+          return input
+        }
+      })
+    }
+    if (foundInput && foundInput.tagName === 'TANGY-PARTIAL-DATE') {
+      var partial_input = new TangyPartialDate()
+      value = partial_input.getValueAsMoment()
+    }
+    if (foundInput && foundInput.tagName === 'TANGY-ETHIOPIAN-DATE') {
+      var partial_input = new TangyEthiopianDate()
+      value = partial_input.getValueAsMoment()
+    } else {
+      console.warn(`${foundInput.name} is a ${foundInput.tagName}, not a partial date`)
+    }
+    return value
+  }
+ 
   isChecked(name) {
     return (this.inputs.find(input => name === input.name).value === 'on') ? true : false
   }
