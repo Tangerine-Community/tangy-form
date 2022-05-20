@@ -111,7 +111,7 @@ class TangyRadioBlocks extends TangyInputBase {
         }
       </style>
       
-      <div class="flex-container m-y-25">
+      <div class="flex-container">
         <div id="qnum-number"></div>
         <div id="qnum-content">
           <label class="hint-text"></label>
