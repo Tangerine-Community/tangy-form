@@ -1,6 +1,10 @@
 # CHANGELOG
 
-## v4.34.4
+## v4.35.0
+- The <tangy-photo-capture> input may now save to the file system. It uses the same TANGY_MEDIA_UPDATE event as tangy-video-capture.
+  In the consuming application, cancel the event (event.preventDefault()) if you wish it to use the original behaviour of saving to the local Pouchdb instance. See the ./demo/tangy-photo-capture.html example for implementation details.
+
+## v4.34.5
 - Add getValueAsMoment helper function [#325](https://github.com/Tangerine-Community/tangy-form/pull/325)
 
 ## v4.34.4
