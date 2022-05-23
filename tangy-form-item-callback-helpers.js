@@ -1,5 +1,5 @@
-import { TangyPartialDate } from '../tangy-partial-date.js'
-import { TangyEthiopianDate } from '../tangy-ethio-date.js'
+import { TangyPartialDate } from './input/tangy-partial-date.js'
+import { TangyEthiopianDate } from './input/tangy-ethio-date.js'
 
 export class TangyFormItemHelpers {
 

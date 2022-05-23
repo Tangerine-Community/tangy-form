@@ -1,10 +1,12 @@
 # CHANGELOG
 
 ## v4.34.4
+- Add getValueAsMoment helper function [#325](https://github.com/Tangerine-Community/tangy-form/pull/325)
+
+## v4.34.4
 - Allow items behind card-actions to be tapped. [#340](https://github.com/Tangerine-Community/tangy-form/pull/340)
 - Remove extra space at top [#339](https://github.com/Tangerine-Community/tangy-form/pull/339)
 - Updates to libs in package.json: devtools-detect, image-blob-reduce, and signature_pad
-
 
 ## v4.34.3
 - Fixed configuration options for tangy-video-capture, including issue [Default Codec for tangy-video-capture is not read from input settings #3333](https://github.com/Tangerine-Community/Tangerine/issues/3333)

@@ -16,7 +16,7 @@ import { TangyInputBase } from '../tangy-input-base.js'
  * @polymer
  * @demo demo/index.html
  */
-class TangyEthiopianDate extends TangyInputBase {
+export class TangyEthiopianDate extends TangyInputBase {
   static get template() {
     return html`
     <style include="tangy-element-styles"></style>
