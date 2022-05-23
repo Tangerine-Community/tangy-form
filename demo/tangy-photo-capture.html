@@ -8,7 +8,10 @@
     <title>tangy-photo-capture demo</title>
 
     <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <script src="../node_modules/devtools-detect/index.js"></script>
+<!--    <script src="../node_modules/devtools-detect/index.js"></script>-->
+    <script type="module">
+        import devtools from '../node_modules/devtools-detect/index.js';
+    </script>
     <script src="../node_modules/redux/dist/redux.min.js"></script>
 
     <script type="module">
@@ -40,25 +43,7 @@
         </style>
     </custom-style>
     <script type="module" src="../tangy-form.js"></script>
-    <script type="module" src="../input/tangy-acasi.js"></script>
-    <script type="module" src="../input/tangy-box.js"></script>
-    <script type="module" src="../input/tangy-checkbox.js"></script>
-    <script type="module" src="../input/tangy-checkboxes.js"></script>
-    <script type="module" src="../input/tangy-checkboxes-dynamic.js"></script>
-    <script type="module" src="../input/tangy-eftouch.js"></script>
-    <script type="module" src="../input/tangy-gps.js"></script>
-    <script type="module" src="../input/tangy-input.js"></script>
-    <script type="module" src="../input/tangy-location.js"></script>
-    <script type="module" src="../input/tangy-radio-button.js"></script>
-    <script type="module" src="../input/tangy-radio-buttons.js"></script>
-    <script type="module" src="../input/tangy-select.js"></script>
-    <script type="module" src="../input/tangy-timed.js"></script>
-    <script type="module" src="../input/tangy-untimed-grid.js"></script>
-    <script type="module" src="../input/tangy-toggle-button.js"></script>
     <script type="module" src="../input/tangy-photo-capture.js"></script>
-    <script type="module" src="../input/tangy-qr.js"></script>
-    <script type="module" src="../input/tangy-consent.js"></script>
-    <script type="module" src="../input/tangy-signature.js"></script>
 
     <custom-style>
         <style is="custom-style" include="demo-pages-shared-styles">
@@ -71,7 +56,33 @@
         <h3>tangy-photo-capture demo</h3>
         <demo-snippet>
             <template>
+                <tangy-form id="my-form" title="My Form">
+                    <tangy-form-item id="item1">
                 <tangy-photo-capture name="test-photo" max-size-in-kb='512' label="Take a Photo" ></tangy-photo-capture>
+                    </tangy-form-item>
+                </tangy-form>
+
+                <script>
+                    window['my-form'].addEventListener('submit', function(event) {
+                        console.log('event called: submit')
+                    })
+                    document.querySelector('#my-form').addEventListener('submit', event => {
+                        // By default, the form response is locked and the user can browse it. Use event.preventDefault()
+                        // to do something else.
+                        event.preventDefault()
+                        // 3 ways to inspect the user's response to the form. Ordered by level of detail.
+                        console.log(event.target.response)
+                        console.log(event.target.inputs)
+                        console.log(event.target.values)
+                    })
+                    document.querySelector('#my-form').addEventListener('TANGY_MEDIA_UPDATE', event => {
+                        // Comment out event.preventDefault() to test saving to file system.
+                        // Enable event.preventDefault() to test saving to db.
+                        // event.preventDefault()
+                        // 3 ways to inspect the user's response to the form. Ordered by level of detail.
+                        console.log("Caught TANGY_MEDIA_UPDATE event at: " + event.target.name)
+                    }, true)
+                </script>
             </template>
         </demo-snippet>
     </div>

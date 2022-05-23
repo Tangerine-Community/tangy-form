@@ -343,13 +343,22 @@ export class TangyPhotoCapture extends TangyInputBase {
   }
 
   async acceptPhoto() {
-    // Convert blob to base64 string
-    const arrayBuffer = await this.blob.arrayBuffer()
-    // convert arrayBuffer to a base64String
-    const base64String = window.btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
-    // turn it into a data:image
-    const nudata = 'data:image/jpeg;base64,' + base64String
-    this.value = nudata
+    // If the application cancels the event, save to the local db.
+    const saveToFileSystemCancelled = !this.dispatchEvent(new CustomEvent('TANGY_MEDIA_UPDATE', {bubbles: true, detail: {value: this}, cancelable: true}))
+    if (saveToFileSystemCancelled) {
+      // Convert blob to base64 string
+      const arrayBuffer = await this.blob.arrayBuffer()
+      // convert arrayBuffer to a base64String
+      const base64String = window.btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+      // turn it into a data:image
+      const nudata = 'data:image/jpeg;base64,' + base64String
+      this.value = nudata
+      console.log("Saved image data to database.")
+    } else {
+      this.value = this.$.photoCaptureImage.src
+      console.log("Saved image data to file.")
+    }
+
     this.disableButtons(["#capture-button"])
   }
 
