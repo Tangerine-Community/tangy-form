@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.35.1
+- Set value for <tangy-photo-capture> input to image url before dispatching TANGY_MEDIA_UPDATE event. 
+
 ## v4.35.0
 - The <tangy-photo-capture> input may now save to the file system. It uses the same TANGY_MEDIA_UPDATE event as tangy-video-capture.
   In the consuming application, cancel the event (event.preventDefault()) if you wish it to use the original behaviour of saving to the local Pouchdb instance. See the ./demo/tangy-photo-capture.html example for implementation details.
