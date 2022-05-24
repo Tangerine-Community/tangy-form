@@ -344,6 +344,7 @@ export class TangyPhotoCapture extends TangyInputBase {
 
   async acceptPhoto() {
     // If the application cancels the event, save to the local db.
+    this.value = this.$.photoCaptureImage.src
     const saveToFileSystemCancelled = !this.dispatchEvent(new CustomEvent('TANGY_MEDIA_UPDATE', {bubbles: true, detail: {value: this}, cancelable: true}))
     if (saveToFileSystemCancelled) {
       // Convert blob to base64 string
@@ -353,12 +354,10 @@ export class TangyPhotoCapture extends TangyInputBase {
       // turn it into a data:image
       const nudata = 'data:image/jpeg;base64,' + base64String
       this.value = nudata
-      console.log("Saved image data to database.")
+      console.log("Image data prepared to save to database.")
     } else {
-      this.value = this.$.photoCaptureImage.src
-      console.log("Saved image data to file.")
+      console.log("Image url saved to database; image file should be saved to file system.")
     }
-
     this.disableButtons(["#capture-button"])
   }
 
