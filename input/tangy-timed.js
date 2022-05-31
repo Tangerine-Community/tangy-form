@@ -42,6 +42,7 @@ class TangyTimed extends TangyInputBase {
   static get template() {
     return html`
     <style include="tangy-common-styles"></style>
+    <style include="tangy-element-styles"></style>
     <style>
       :host {
         display: block;
