@@ -166,6 +166,11 @@ class TangyConsent extends TangyInputBase {
         type: Boolean,
         value: false,
         reflectToAttribute: true
+      },
+      confirmNo: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
     };
   }
@@ -177,7 +182,8 @@ class TangyConsent extends TangyInputBase {
       'consent_yes': t('yes, continue'),
       'consent_no': t('no, stop'),
       'message_yes': t('You marked Yes'),
-      'message_no': t('You marked No')
+      'message_no': t('You marked No'),
+      'confirm_no': t('Please confirm that you marked No.')
     }
     // this.addEventListener('click', this.inputPressed.bind(this))
     this.shadowRoot.querySelector('#qnum-number').innerHTML = this.hasAttribute('question-number') 
@@ -217,7 +223,13 @@ class TangyConsent extends TangyInputBase {
   }
 
   clickedConsentNo() {
-    this.value = 'no'
+    if (this.confirmNo) {
+      if (confirm(this.t.confirm_no) == true) {
+        this.value = 'no'
+      }
+    } else {
+      this.value = 'no'
+    }
   }
 
   inputPressed() {
