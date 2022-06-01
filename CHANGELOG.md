@@ -2,7 +2,7 @@
 
 ## v4.36.1
 - Enable grids to be hidden based on skip logic [#1391](https://github.com/Tangerine-Community/Tangerine/issues/1391)
-- 
+
 ## v4.36.0
 - Add confirmation to consent form if 'No' selected before the form is closed [#3025](https://github.com/Tangerine-Community/Tangerine/issues/3025). Activate this feature using the new property: `confirm-no="true"`.
 
