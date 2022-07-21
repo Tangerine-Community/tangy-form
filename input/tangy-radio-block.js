@@ -115,7 +115,8 @@ export class TangyRadioBlock extends TangyInputBase {
           pointer-events: none;
         }
         .toggle:active + label, .toggle:checked + label {
-          border-color: #ff620c;
+          /* Old selected orange color: #ff620c */
+          border-color: var(--button-selected-border-color, green);
         }
         .btn-lg {
           width: var(--width, 6.5rem);
@@ -137,15 +138,13 @@ export class TangyRadioBlock extends TangyInputBase {
           line-height: 1.5;
           border-radius: 0.5rem;
           color: #2a3f55;
-          border: 1px solid #ffbf09;
+          border-width: 7px solid #ffbf09;
           text-decoration: none;
           box-shadow: 0px 1px 6px 3px #ffaa004d;
           background-color: #ffbf09;
           transition-duration: 0.4s;
           position: relative;
           box-sizing: border-box;
-          letter-spacing: .4rem;
-          border-width: 4px;
       }
       </style>
       <input 
