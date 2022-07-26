@@ -68,8 +68,6 @@ class TangyRadioBlocks extends TangyInputBase {
           text-align: center;
           flex-grow: 1;
           align-items: center;
-          text-transform: lowercase;
-          letter-spacing: .4rem;
           position: relative;
         }
       /*
@@ -86,10 +84,10 @@ class TangyRadioBlocks extends TangyInputBase {
           margin: 10px 0 15px;
         }
         :host([hide-buttons]) tangy-radio-block {
-          border: 5px solid white;
+          border: 7px solid transparent;
         }
         :host([hide-buttons]) tangy-radio-block[value="on"] {
-          border: 5px solid green;
+          border: 7px solid var(--button-selected-border-color, green);
         }
         :host([no-margin]) tangy-radio-block {
           padding: 0px;
