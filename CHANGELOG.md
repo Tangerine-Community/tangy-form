@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v4.36.2
+- Additional space removal. [#347](https://github.com/Tangerine-Community/tangy-form/pull/347)
+- CSS changes for generalization [#355](https://github.com/Tangerine-Community/tangy-form/pull/355)
+- Remove forced height; hold open input-container to avoid weird growing [#360](https://github.com/Tangerine-Community/tangy-form/pull/360)
+
 ## v4.36.1
 - Enable grids to be hidden based on skip logic [#1391](https://github.com/Tangerine-Community/Tangerine/issues/1391)
 
