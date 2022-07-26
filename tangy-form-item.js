@@ -94,7 +94,8 @@ export class TangyFormItem extends PolymerElement {
           margin: 0px
         }
         :host([fullscreen-enabled]) paper-card  {
-          padding-top: 53px;
+          /*padding-top: 53px;*/
+          padding-top: var(--fullscreen-padding-top, 0);
           overflow: scroll;
         }
         :host([fullscreen-enabled][fullscreen-nav-align="top"]) .card-actions {
