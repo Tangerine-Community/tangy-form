@@ -66,7 +66,7 @@ export class TangyKeyboardInput extends TangyInputLitBase {
         }
         #qnum-content {
           width: 80vw;
-          height: 90vh;
+          /*height: 90vh;*/
           display: flex;
           flex-direction: column;
         }
@@ -92,6 +92,7 @@ export class TangyKeyboardInput extends TangyInputLitBase {
           margin-bottom: 1rem;
           letter-spacing: .4rem;
           position: relative;
+          min-height: 1.5em;
         }
         #erase {
           position: absolute;
