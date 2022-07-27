@@ -138,7 +138,7 @@ export class TangyRadioBlock extends TangyInputBase {
           line-height: 1.5;
           border-radius: 0.5rem;
           color: #2a3f55;
-          border-width: 7px solid #ffbf09;
+          border: 7px solid #ffbf09;
           text-decoration: none;
           box-shadow: 0px 1px 6px 3px #ffaa004d;
           background-color: #ffbf09;
