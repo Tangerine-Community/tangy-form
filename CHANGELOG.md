@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.36.3
+- Tangy keyboard required attribute is not respected [#3395](https://github.com/Tangerine-Community/Tangerine/issues/3395)
+- Fix border rule [#362](https://github.com/Tangerine-Community/tangy-form/pull/362)
+
 ## v4.36.2
 - Additional space removal. [#347](https://github.com/Tangerine-Community/tangy-form/pull/347)
 - CSS changes for generalization [#355](https://github.com/Tangerine-Community/tangy-form/pull/355)
