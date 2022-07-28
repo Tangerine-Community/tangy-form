@@ -132,7 +132,16 @@ export class TangyKeyboardInput extends TangyInputLitBase {
         .highlight {
           animation: highlight 1s;
         }
-      
+        #error-text {
+          color:red;
+          font-size: smaller;
+          text-transform:none;
+          letter-spacing:normal;
+        }
+        iron-icon.larger {
+          height: 40px;
+          width: 40px;
+        }
       `
     ]
   }
@@ -154,7 +163,8 @@ export class TangyKeyboardInput extends TangyInputLitBase {
         ` : ''}
         <div id="qnum-content">
           <label>${this.label}</label>
-          <div id="top-keyboard">
+          <div id="keyboard">
+            <div id="top-keyboard">
               <div class="keys">
               ${this.topKeyboard.map(character => html`
                 <button class="btn" @click="${() => this.onKeyClick(character)}">${character}</button>
@@ -173,30 +183,31 @@ export class TangyKeyboardInput extends TangyInputLitBase {
                 <path d="M83.1,73.8H51l1.5-1.5L25.7,45.4l-9.9,9.9c-2.3,2.3-2.3,6.1,0,8.5l13.5,13.4c0.4,0.4,0.9,0.6,1.4,0.6h52.5c1.1,0,2-0.9,2-2   C85.1,74.7,84.2,73.8,83.1,73.8z" fill="#ff620a" class="tangerine"></path>
               </svg>
             </button>
+            ${this.hintText ? html`}
+            <div id="hint-text" class="hint-text">${this.hintText}</div>
+          ` : ''}
+            ${this.invalid ? html`
+            <div id="error-text" >
+              <iron-icon icon="error" class="larger"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>
+            </div>
+          ` : ''}
+            ${this.hasWarning ? html`
+            <div id="warn-text"></div>
+              <iron-icon icon="warning"></iron-icon> <div> ${this.warnText || ''} </div>
+          ` : ''}
+            ${this.hasDiscrepancy ? html`
+            <div id="discrepancy-text">
+              <iron-icon icon="flag"></iron-icon> <div> ${this.discrepancyText || ''} </div>
+            </div>
+          ` : ''}
           </div>
           <div id="bottom-keyboard">
             ${this.bottomKeyboard.map(character => html`
               <button class="btn" @click="${() => this.onKeyClick(character)}">${character}</button>
             `)}
           </div>
-          <div id="bottom-spacer"></div>
-          ${this.hintText ? html`}
-            <div id="hint-text" class="hint-text">${this.hintText}</div>
-          ` : ''}
-          ${this.invalid ? html`
-            <div id="error-text" >
-              <iron-icon icon="error"></iron-icon> <div> ${this.errorText || ''} </div>
-            </div>
-          ` : ''}
-          ${this.hasWarning ? html`
-            <div id="warn-text"></div>
-              <iron-icon icon="warning"></iron-icon> <div> ${this.warnText || ''} </div>
-          ` : ''}
-          ${this.hasDiscrepancy ? html`
-            <div id="discrepancy-text">
-              <iron-icon icon="flag"></iron-icon> <div> ${this.discrepancyText || ''} </div>
-            </div>
-          ` : ''}
+            <div id="bottom-spacer"></div>
+          </div>
         </div>
       </div>
     `
@@ -366,11 +377,17 @@ export class TangyKeyboardInput extends TangyInputLitBase {
     this.$.checkbox.children['checkbox-text'].innerHTML = this.label 
   }
 
+  onDisabledChange(value) {
+    if (value === false) {
+      this.$.keyboard.removeAttribute('disabled')
+    } else {
+      this.$.keyboard.setAttribute('disabled', 'true')
+    }
+  }
+
   validate() {
     if (this.required === true && 
-        this.value === '' && 
-        this.disabled === false && 
-        this.hidden === false) {
+        this.value === '' ) {
       this.invalid = true
       return false
     } else {
@@ -378,5 +395,6 @@ export class TangyKeyboardInput extends TangyInputLitBase {
       return true
     }
   }
+
 }
 window.customElements.define(TangyKeyboardInput.is, TangyKeyboardInput)

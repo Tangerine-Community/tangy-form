@@ -34,7 +34,9 @@
         }
       </style>
     </custom-style>
+    <script type="module" src="../tangy-form.js"></script>
     <script type="module" src="../input/tangy-keyboard-input.js"></script>
+    <script type="module" src="../input/tangy-input.js"></script>
 
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
@@ -42,12 +44,40 @@
     </custom-style>
   </head>
   <body style="background: #000 !important;">
-    <div class="vertical-section-container centered">
-        <tangy-keyboard-input
-          keys="a b c d e f g h i j k l m n o p q r s t u v w x y z"
-          name="fruit_selection"
-          hint-text="Do you agree?">
-        </tangy-keyboard-input>
-    </div>
+
+
+    <demo-snippet>
+      <template>
+        <tangy-form id="my-form" title="My Form">
+          <tangy-form-item id="item1">
+            <div class="vertical-section-container centered">
+              <tangy-keyboard-input
+                      keys="a b c d e f g h i j k l m n o p q r s t u v w x y z"
+                      name="fruit_selection"
+                      hint-text="Do you agree?"
+                      error-text="Enter your response using this keyboard."
+                      required>
+              </tangy-keyboard-input>
+            </div>
+            <tangy-input name="input1" label="What is your first name?"></tangy-input>
+          </tangy-form-item>
+          <tangy-form-item id="item2">
+            <tangy-input name="input2" label="What is your last name?" required></tangy-input>
+          </tangy-form-item>
+        </tangy-form>
+
+        <script>
+          document.querySelector('#my-form').addEventListener('submit', event => {
+            // By default, the form response is locked and the user can browse it. Use event.preventDefault()
+            // to do something else.
+            event.preventDefault()
+            // 3 ways to inspect the user's response to the form. Ordered by level of detail.
+            console.log(event.target.response)
+            console.log(event.target.inputs)
+            console.log(event.target.values)
+          })
+        </script>
+      </template>
+    </demo-snippet>
   </body>
 </html>
