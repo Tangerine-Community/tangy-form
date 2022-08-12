@@ -208,11 +208,6 @@ export class TangyVideoCapture extends TangyInputBase {
                 value: true,
                 reflectToAttribute: true
             },
-            recordAudio: {
-                type: Boolean,
-                value: false,
-                reflectToAttribute: true
-            },
             noVideoConstraints: {
                 type: Boolean,
                 value: true,
@@ -477,7 +472,7 @@ export class TangyVideoCapture extends TangyInputBase {
 
     async init(constraints) {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({...constraints, audio:this.recordAudio});
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
             this.handleSuccess(stream);
         } catch (e) {
             console.error(`navigator.getUserMedia error: ${e} Constraint:  ${e.constraint} `);
