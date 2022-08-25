@@ -720,7 +720,16 @@ export class TangyFormItem extends PolymerElement {
     this
       .querySelectorAll('[name]')
       .forEach(input => inputs.push(input.getModProps && window.useShrinker ? input.getModProps() : input.getProps()))
+    let score = 0
     this.inputs = inputs
+    const tangyFormItem = this.querySelector('[name]').parentElement;
+    if(tangyFormItem.hasAttribute('scoring-section')){
+      const scoreEl = document.createElement('tangy-input')
+      scoreEl.name = `${tangyFormItem.getAttribute('id')}_score`
+      scoreEl.value = score
+      this.inputs = [...inputs, scoreEl.getModProps && window.useShrinker ? scoreEl.getModProps() : scoreEl.getProps()]
+    }
+    const selections = tangyFormItem.getAttribute('scoring-fields') || []
     if (window.devtools && window.devtools.open) {
       console.table(this.inputs.map(input => { return {name: input.name, value: input.value} }))
     }
