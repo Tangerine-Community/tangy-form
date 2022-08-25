@@ -1,8 +1,9 @@
 # CHANGELOG
 
-## v4.36.4
-- Add scoring functionality for sections that have the `scoring-section` property set. PR: [364](https://github.com/Tangerine-Community/tangy-form/pull/364)
+## v4.37.0
+- Add automatic scoring functionality for sections that have the `scoring-section` property set. PR: [364](https://github.com/Tangerine-Community/tangy-form/pull/364)
 - Allow users to record audio when capturing video. The new 'recordAudio' attribute to tangy-video-capture input adds audio to the video capture. PR: [#363](https://github.com/Tangerine-Community/tangy-form/pull/363)
+- Updates to the following libs: terser, moment, xzing.
 
 ## v4.36.3
 - Tangy keyboard required attribute is not respected [#3395](https://github.com/Tangerine-Community/Tangerine/issues/3395)
