@@ -716,11 +716,50 @@ export class TangyFormItem extends PolymerElement {
   }
 
   submit() {
+    let {getValue, getValueAsMoment, inputHide, inputShow, skip, unskip, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold} = this.exposeHelperFunctions();
     let inputs = []
     this
       .querySelectorAll('[name]')
       .forEach(input => inputs.push(input.getModProps && window.useShrinker ? input.getModProps() : input.getProps()))
+    let score = 0
     this.inputs = inputs
+    const tangyFormItem = this.querySelector('[name]').parentElement;
+    if(tangyFormItem.hasAttribute('scoring-section')){
+      const selections = tangyFormItem.getAttribute('scoring-fields') || []
+      const selectionsArray = selections.split(',')
+      function findObjectByKey(array, key, value) {
+        for (let i = 0; i < array.length; i++) {   if (array[i] == key) {return array[i];}
+        } return null;
+      }
+      function sumScore(value) {
+        let s = 0
+        for (var i = 0; i < value.length; i++) {
+          if (typeof value !== 'string')
+            if (isNaN(value))
+              s +=1; else  s += parseInt(value[i]);
+          else
+          if (isNaN(value))  s = 1; else s = parseInt(value);  }
+        return s;
+      }
+      this.inputs.forEach(input => {
+        const a = findObjectByKey(selectionsArray, input.name)
+        if (a != null){
+          let value;
+          if (input.tagName === 'TANGY-TIMED') {
+            //each grid present is scored as "number of correct items"/"number of total items" *100
+            const correct = numberOfCorrectItems(input);
+            const total = input.value.length
+            value = Math.round((correct/total) * 100).toString();
+          } else {
+            value = getValue(input.name);
+          }
+          score += sumScore(value)}
+      })
+      const scoreEl = document.createElement('tangy-input')
+      scoreEl.name = `${tangyFormItem.getAttribute('id')}_score`
+      scoreEl.value = score
+      this.inputs = [...inputs, scoreEl.getModProps && window.useShrinker ? scoreEl.getModProps() : scoreEl.getProps()]
+    }
     if (window.devtools && window.devtools.open) {
       console.table(this.inputs.map(input => { return {name: input.name, value: input.value} }))
     }
