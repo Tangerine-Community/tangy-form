@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.38.0
+- Bump the following dependencies: polymer, prismjs, translation-web-component, webcomponentsjs, redux, signature_pad
+
 ## v4.37.1
 - Add protection to scoring if no inputs are defined
 
