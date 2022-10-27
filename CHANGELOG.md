@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.38.1
+- Set init property values for frontCamera and noVideoConstraints to false for tangy-video-capture.
+
 ## v4.38.0
 - Bump the following dependencies: polymer, prismjs, translation-web-component, webcomponentsjs, redux, signature_pad
 
