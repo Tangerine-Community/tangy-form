@@ -205,7 +205,7 @@ export class TangyVideoCapture extends TangyInputBase {
             },
             frontCamera: {
                 type: Boolean,
-                value: true,
+                value: false,
                 reflectToAttribute: true
             },
             recordAudio: {
@@ -215,7 +215,7 @@ export class TangyVideoCapture extends TangyInputBase {
             },
             noVideoConstraints: {
                 type: Boolean,
-                value: true,
+                value: false,
                 reflectToAttribute: true
             },
             codec: {
