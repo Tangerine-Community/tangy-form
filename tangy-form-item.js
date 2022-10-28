@@ -360,6 +360,11 @@ export class TangyFormItem extends PolymerElement {
         value: '',
         reflectToAttribute: true
       },
+      customScoringLogic: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
       summary: {
         type: Boolean,
         value: false,
