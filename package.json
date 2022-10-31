@@ -29,11 +29,10 @@
     "dr-niels-sortable-list": "https://github.com/DrNiels/sortable-list.git#master",
     "ethiopian-date": "0.0.6",
     "image-blob-reduce": "^4.1.0",
-    "lit": "^2.2.0",
-    "lit-element": "^2.3.1",
+    "lit": "^2.4.0",
     "moment": "^2.24.0",
     "redux": "^4.0.0",
-    "signature_pad": "^4.0.4",
+    "signature_pad": "^4.1.0",
     "translation-web-component": "^1.0.0",
     "wct-browser-legacy": "^1.0.2",
     "zxing-js-es6": "^0.15.3"

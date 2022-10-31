@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v4.38.2
+- fix(custom-scoring): Add custom scoring logic property [#372](https://github.com/Tangerine-Community/tangy-form/pull/372)
+- Upgrade lit to v2.4.0 and signature_pad to v4.1.0.
+- Updated tangy-gate custom element to use new lit version. 
+
 ## v4.38.1
 - Set init property values for frontCamera and noVideoConstraints to false for tangy-video-capture.
 
