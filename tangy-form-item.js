@@ -360,6 +360,16 @@ export class TangyFormItem extends PolymerElement {
         value: '',
         reflectToAttribute: true
       },
+      customScoringLogic: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
+      },
+      customScore: {
+        type: Number,
+        value: null,
+        reflectToAttribute: false
+      },
       summary: {
         type: Boolean,
         value: false,
@@ -561,6 +571,9 @@ export class TangyFormItem extends PolymerElement {
     if (this.locked) return
     // Run hook.
     this.eval(this.getAttribute(hook), hook)
+    if(hook==='custom-scoring-logic'){
+      this.customScore = this.eval(`return ${this.getAttribute(hook)}`, hook)
+    }
     this.querySelectorAll('[name]').forEach(input => {
       this.fireHookInput(hook, event, input)
     })
@@ -705,6 +718,7 @@ export class TangyFormItem extends PolymerElement {
     if (this.open === true) {
       this.fireHook('on-open')
       this.fireHook('on-change')
+      this.fireHook('custom-scoring-logic')
     }
     this.dispatchEvent(new CustomEvent('TANGY_FORM_ITEM_OPENED'))
   }
@@ -728,21 +742,13 @@ export class TangyFormItem extends PolymerElement {
       const tangyFormItem = this.querySelector('[name]').parentElement
       if(tangyFormItem.hasAttribute('scoring-section')) {
         const selections = tangyFormItem.getAttribute('scoring-fields') || []
-        const selectionsArray = selections.split(',')
+        if(selections.length>0){
+          const selectionsArray = selections.split(',')
         function findObjectByKey(array, key, value) {
           for (let i = 0; i < array.length; i++) {   if (array[i] == key) {return array[i];}
           } return null;
         }
-        function sumScore(value) {
-          let s = 0
-          for (var i = 0; i < value.length; i++) {
-            if (typeof value !== 'string')
-              if (isNaN(value))
-                s +=1; else  s += parseInt(value[i]);
-            else
-            if (isNaN(value))  s = 1; else s = parseInt(value);  }
-          return s;
-        }
+        
         this.inputs.forEach(input => {
           const a = findObjectByKey(selectionsArray, input.name)
           if (a != null){
@@ -757,6 +763,20 @@ export class TangyFormItem extends PolymerElement {
             }
             score += sumScore(value)}
         })
+        }
+        if(tangyFormItem.hasAttribute('custom-scoring-logic')&&tangyFormItem.getAttribute('custom-scoring-logic').trim().length>0){
+          score = this.customScore
+        }
+        function sumScore(value) {
+          let s = 0
+          for (var i = 0; i < value.length; i++) {
+            if (typeof value !== 'string')
+              if (isNaN(value))
+                s +=1; else  s += parseInt(value[i]);
+            else
+            if (isNaN(value))  s = 1; else s = parseInt(value);  }
+          return s;
+        }
         const scoreEl = document.createElement('tangy-input')
         scoreEl.name = `${tangyFormItem.getAttribute('id')}_score`
         scoreEl.value = score
@@ -841,10 +861,12 @@ export class TangyFormItem extends PolymerElement {
         .scrollIntoView({ behavior: 'smooth', block: 'start' })
       this.incomplete = true
       this.fireHook('on-change')
+      this.fireHook('custom-scoring-logic')
       return false
     } else {
       this.incomplete = false
       this.fireHook('on-change')
+      this.fireHook('custom-scoring-logic')
       return true
     }
   }
