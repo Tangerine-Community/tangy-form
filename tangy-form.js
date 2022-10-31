@@ -597,6 +597,7 @@ export class TangyForm extends PolymerElement {
       item: event.target.getProps()
     })
     this.fireHook('on-change')
+    this.fireHook('custom-scoring-logic')
     this.focusOnNextItem()
   }
 
@@ -606,6 +607,7 @@ export class TangyForm extends PolymerElement {
       item: event.target.getProps()
     })
     this.fireHook('on-change')
+    this.fireHook('custom-scoring-logic')
     this.focusOnPreviousItem()
   }
 
@@ -615,6 +617,7 @@ export class TangyForm extends PolymerElement {
       item: event.target.getProps()
     })
     this.fireHook('on-change')
+    this.fireHook('custom-scoring-logic')
     this.store.dispatch({
       type: 'ITEM_GO_TO',
       itemId: event.detail
