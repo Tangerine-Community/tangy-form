@@ -366,8 +366,8 @@ export class TangyFormItem extends PolymerElement {
         reflectToAttribute: true
       },
       customScore: {
-        type: String,
-        value: '',
+        type: Number,
+        value: null,
         reflectToAttribute: false
       },
       summary: {
