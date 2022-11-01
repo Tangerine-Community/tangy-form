@@ -205,7 +205,7 @@ export class TangyVideoCapture extends TangyInputBase {
             },
             frontCamera: {
                 type: Boolean,
-                value: false,
+                value: true,
                 reflectToAttribute: true
             },
             recordAudio: {
@@ -215,7 +215,7 @@ export class TangyVideoCapture extends TangyInputBase {
             },
             noVideoConstraints: {
                 type: Boolean,
-                value: false,
+                value: true,
                 reflectToAttribute: true
             },
             codec: {
@@ -284,12 +284,12 @@ export class TangyVideoCapture extends TangyInputBase {
         }
         this.getConstraints = () => {
             if (this.noVideoConstraints) {
-                return {video: {width: this.videoWidth, height: this.videoHeight}}
+                return {video: {width: this.videoWidth, height: this.videoHeight, audio:this.recordAudio}}
             }
             if (this.frontCamera) {
-                return {video: {facingMode: {exact: "user"}}, width: this.videoWidth, height: this.videoHeight}
+                return {video: {facingMode: {exact: "user"}}, width: this.videoWidth, height: this.videoHeight, audio:this.recordAudio}
             } else {
-                return {video: {facingMode: {exact: "environment"}}, width: this.videoWidth, height: this.videoHeight}
+                return {video: {facingMode: {exact: "environment"}}, width: this.videoWidth, height: this.videoHeight, audio:this.recordAudio}
             }
         }
         this.startRecording = () => {
