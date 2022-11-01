@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.38.3
+- fix(record-audio): Request permissions for recording audio [#375](https://github.com/Tangerine-Community/tangy-form/pull/375)
+
 ## v4.38.2
 - fix(custom-scoring): Add custom scoring logic property [#372](https://github.com/Tangerine-Community/tangy-form/pull/372)
 - Upgrade lit to v2.4.0 and signature_pad to v4.1.0.
