@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>tangy-radio-blocks lists demo</title>
+
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script type="module">
+        import devtools from '../node_modules/devtools-detect/index.js';
+
+        // Check if it's open
+        console.log('Is DevTools open:', devtools.isOpen);
+
+        // Check it's orientation, `undefined` if not open
+        console.log('DevTools orientation:', devtools.orientation);
+
+        // Get notified when it's opened/closed or orientation changes
+        window.addEventListener('devtoolschange', event => {
+            console.log('Is DevTools open:', event.detail.isOpen);
+            console.log('DevTools orientation:', event.detail.orientation);
+        });
+    </script>
+    <script src="../node_modules/redux/dist/redux.min.js"></script>
+
+    <script type="module">
+        import '@polymer/iron-demo-helpers/demo-pages-shared-styles';
+        import '@polymer/iron-demo-helpers/demo-snippet';
+    </script>
+    <custom-style>
+        <style>
+            html {
+                --document-background-color: #FAFAFA;
+                --primary-color-dark: #3c5b8d;
+                --primary-text-color: var(--light-theme-text-color);
+                --primary-color: #3c5b8d;
+                --accent-color: #f26f10;
+                --accent-text-color: #FFF;
+                --error-color: var(--paper-red-500);
+                --disabled-color: #BBB;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5 {
+                @apply --paper-font-common-base;
+                color: var(--primary-text-color);
+                margin: 25px 0px 5px 15px;
+            }
+        </style>
+    </custom-style>
+    <script type="module" src="../tangy-form.js"></script>
+    <script type="module" src="../input/tangy-acasi.js"></script>
+    <script type="module" src="../input/tangy-box.js"></script>
+    <script type="module" src="../input/tangy-checkbox.js"></script>
+    <script type="module" src="../input/tangy-checkboxes.js"></script>
+    <script type="module" src="../input/tangy-checkboxes-dynamic.js"></script>
+    <script type="module" src="../input/tangy-eftouch.js"></script>
+    <script type="module" src="../input/tangy-gps.js"></script>
+    <script type="module" src="../input/tangy-input.js"></script>
+    <script type="module" src="../input/tangy-location.js"></script>
+    <script type="module" src="../input/tangy-radio-button.js"></script>
+    <script type="module" src="../input/tangy-radio-buttons.js"></script>
+    <script type="module" src="../input/tangy-select.js"></script>
+    <script type="module" src="../input/tangy-timed.js"></script>
+    <script type="module" src="../input/tangy-untimed-grid.js"></script>
+    <script type="module" src="../input/tangy-toggle-button.js"></script>
+    <script type="module" src="../input/tangy-video-capture.js"></script>
+    <script type="module" src="../input/tangy-qr.js"></script>
+    <script type="module" src="../input/tangy-consent.js"></script>
+    <script type="module" src="../input/tangy-signature.js"></script>
+    <script type="module" src="../input/tangy-radio-block.js"></script>
+    <script type="module" src="../input/tangy-radio-blocks.js"></script>
+    <script type="module" src="../input/tangy-keyboard-input.js"></script>
+
+    <custom-style>
+        <style is="custom-style" include="demo-pages-shared-styles">
+        </style>
+    </custom-style>
+</head>
+
+<body>
+    <div class="vertical-section-container centered">
+        <h3>tangy-radio-blocks lists demo</h3>
+        <demo-snippet>
+            <template>
+                <tangy-form
+                        id="trb-lists"
+                        title="TRB Lists"
+                >
+                    <tangy-form-item
+                            id="item1"
+                            title="Item 1"
+                    >
+                        <template>
+                            <tangy-radio-blocks name="moving_windows_comp_02" label="What does Kofi like to do?" orientation="rows" class="" style="" required="" media-elements=[{"image":"/assets/images/ms-talk2.png","media":"./assets/media/letters_moving_windows_comp_02_walk.mp3"},{"image":"/assets/images/ms-talk2.png","media":"./assets/media/letters_moving_windows_comp_02_fix_things.mp3"},{"image":"/assets/images/ms-talk2.png","media":"./assets/media/letters_moving_windows_comp_02_find_vendors.mp3"},{"image":"/assets/images/ms-talk2.png","media":"./assets/media/letters_moving_windows_comp_02_push_bikes.mp3"}]>
+                                <option value="0">Walk </option>
+                                <option value="1">Fix things</option>
+                                <option value="2">Find sellers</option>
+                                <option value="3">Push bikes</option>
+                            </tangy-radio-blocks>
+                            <tangy-box name="tangerineMan" class="" style="">
+                                <div style="display:flex;margin-bottom:-2rem;" id="audios">
+                                    <img src="./assets/images/instructions.png" style="max-height:100px;width:auto;border-radius:0.5rem;border:5px solid transparent;margin-right:0.5rem;" onclick="queue('./assets/media/letters_moving_windows_comp_help.mp3','instructions'); play();" id="instructions">
+                                    <img src="./assets/images/ms-talk2.png" style="max-height:100px;width:auto;border-radius:0.5rem;border:5px solid transparent;" class="talk" onclick="queue('./assets/media/letters_moving_windows_comp_02_What_does_Kofi_like_to_do.mp3','prompt'); play();" id="prompt">
+                                </div>
+                            </tangy-box>
+                        </template>
+                    </tangy-form-item>
+
+                </tangy-form>
+                <script>
+                    document.querySelector('#trb-lists').addEventListener('submit', event => {
+                        // By default, the form response is locked and the user can browse it. Use event.preventDefault()
+                        // to do something else.
+                        event.preventDefault()
+                        // 3 ways to inspect the user's response to the form. Ordered by level of detail.
+                        console.log(event.target.response)
+                        console.log(event.target.inputs)
+                        console.log(event.target.values)
+                    })
+                </script>
+            </template>
+        </demo-snippet>
+    </div>
+</body>
+
+</html>

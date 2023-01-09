@@ -248,7 +248,13 @@ class TangyRadioBlocks extends TangyInputBase {
         type: Boolean,
         value: false,
         reflectToAttribute: true
-      }
+      },
+      mediaElements: {
+        type: Array,
+        value: [],
+        observer: 'reflect',
+        reflectToAttribute: true
+      },
     }
   }
 

@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.39.0
+- update(tangy-radio-blocks): `mediaElements` property is an array of objects with `image`and `media` properties. [#386](https://github.com/Tangerine-Community/tangy-form/issues/386)
+
 ## v4.38.3
 - fix(record-audio): Request permissions for recording audio [#375](https://github.com/Tangerine-Community/tangy-form/pull/375)
 
