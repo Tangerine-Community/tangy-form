@@ -215,7 +215,6 @@ export class TangyVideoCapture extends TangyInputBase {
             },
             noVideoConstraints: {
                 type: Boolean,
-                value: true,
                 reflectToAttribute: true
             },
             codec: {
@@ -283,13 +282,14 @@ export class TangyVideoCapture extends TangyInputBase {
             }
         }
         this.getConstraints = () => {
-            if (this.noVideoConstraints) {
+            if (typeof this.noVideoConstraints === 'undefined' || this.noVideoConstraints === 'true') {
                 return {video: {width: this.videoWidth, height: this.videoHeight}, audio:this.recordAudio}
-            }
-            if (this.frontCamera) {
-                return {video: {facingMode: {exact: "user"}, width: this.videoWidth, height: this.videoHeight}, audio:this.recordAudio}
             } else {
-                return {video: {facingMode: {exact: "environment"}, width: this.videoWidth, height: this.videoHeight}, audio:this.recordAudio}
+                if (this.frontCamera) {
+                    return {video: {facingMode: {exact: "user"}, width: this.videoWidth, height: this.videoHeight}, audio:this.recordAudio}
+                } else {
+                    return {video: {facingMode: {exact: "environment"}, width: this.videoWidth, height: this.videoHeight}, audio:this.recordAudio}
+                }
             }
         }
 
@@ -477,13 +477,27 @@ export class TangyVideoCapture extends TangyInputBase {
     }
 
     async init(constraints) {
+        let stream;
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({...constraints, audio:this.recordAudio});
+            stream = await navigator.mediaDevices.getUserMedia({...constraints, audio: this.recordAudio});
+        } catch (e) {
+            let message = `navigator.getUserMedia error: ${e} Constraint:  ${e.constraint} `;
+            console.error(message);
+            if (e.name === 'OverconstrainedError') {
+                constraints = {video: {width: this.videoWidth, height: this.videoHeight}, audio:this.recordAudio}
+                stream = await navigator.mediaDevices.getUserMedia({...constraints, audio: this.recordAudio});
+                message = `Constraint: the properties for ${e.constraint} will not work for this device; using default settings.`
+            }
+            this.errorMsgElement.innerHTML = message;
+        }
+
+        try {
             this.handleSuccess(stream);
         } catch (e) {
-            console.error(`navigator.getUserMedia error: ${e} Constraint:  ${e.constraint} `);
+            console.error(`handleSuccess error: ${e} Constraint:  ${e.constraint} `);
             this.errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
         }
+
     }
 
 

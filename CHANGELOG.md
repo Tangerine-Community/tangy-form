@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.39.2
+- fixed poor logic for noVideoConstraints property (tangy-video-capture).
+
 ## v4.39.1
 - fixed bug (extra bracket) with tangy-video-capture, commit #f53a353697e8dc02e83802b01bb05aa05f9648f9
 
@@ -87,7 +90,7 @@
 ## v4.33.0
 - Add new input `<tangy-video-capture>`. Takes the following properties:
   - frontCamera: Boolean. Whether to use the front camera or the back camera. Default is `true`. 
-  - noVideoConstraints: Boolean. Whether to force use of front or back camera. If tue, chooses the first available source.  Default is `true`. 
+  - noVideoConstraints: Boolean. Whether to force use of front or back camera. If true, chooses the first available source.  Default is `true`. 
   - codec: String. The codec to use. Default is 'video/webm;codecs=vp9,opus' - AKA webm vp9. It is possible the device may not support all of these codecs. Other potential codecs:
     - video/webm;codecs=vp8,opus
     - video/webm;codecs=h264,opus
