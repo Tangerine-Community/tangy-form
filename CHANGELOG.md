@@ -7,6 +7,9 @@
 - Bump lit from 2.4.0 to 2.6.1 [#388](https://github.com/Tangerine-Community/tangy-form/pull/388)
 - Bump devtools-detect from 4.0.0 to 4.0.1 [#382](https://github.com/Tangerine-Community/tangy-form/pull/382)
 - Bump decode-uri-component from 0.2.0 to 0.2.2 [#381](https://github.com/Tangerine-Community/tangy-form/pull/381)
+- Many updates to core packages. 
+- If running on a Mac with the M1 processor, you must run `node node_modules/polymer-cli/node_modules/wd/scripts/build-browser-scripts.js`
+  in order to avoid the error `cli runtime exception: Error: Cannot find module '../build/safe-execute'` when testing with `npm test`.
 
 ## v4.38.3
 - fix(record-audio): Request permissions for recording audio [#375](https://github.com/Tangerine-Community/tangy-form/pull/375)
