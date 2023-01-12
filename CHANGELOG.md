@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v4.38.4
+## v4.39.0
 - fix(tangy-untimed-grid): Add tangy element styles to allow skipping of untimed grid. [#384](https://github.com/Tangerine-Community/tangy-form/pull/384)
 - Fix bad API use in tangy-video-capture - fixed constraints for video and audio when using `noVideoConstraints` and `frontCamera` properties. [#380](https://github.com/Tangerine-Community/tangy-form/pull/380)
 - Bump json5 from 1.0.1 to 1.0.2 [#385](https://github.com/Tangerine-Community/tangy-form/pull/385)
