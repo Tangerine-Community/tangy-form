@@ -500,12 +500,13 @@ export class TangyVideoCapture extends TangyInputBase {
 
     }
 
-
     stopMediaTracks(stream) {
-        stream.getTracks().forEach(track => {
-            // stream.removeTrack(track)
-            track.stop();
-        })
+        if (stream) {
+            stream.getTracks().forEach(track => {
+                // stream.removeTrack(track)
+                track.stop();
+            })
+        }
     }
 
     onDiscrepancyChange(value) {
