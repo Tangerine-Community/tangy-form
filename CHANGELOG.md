@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.39.3
+- Fix "Cannot read properties of null (reading 'getTracks')" error. Commit [8e4c7c4446161dbafc8c115f788916cba1f1e0e4](https://github.com/Tangerine-Community/tangy-form/commit/8e4c7c4446161dbafc8c115f788916cba1f1e0e4)
+
 ## v4.39.2
 - fixed poor logic for noVideoConstraints property (tangy-video-capture).
 
