@@ -33,6 +33,7 @@
     "moment": "^2.29.4",
     "redux": "^4.2.0",
     "signature_pad": "^4.1.4",
+    "tesseract.js": "^4.0.3",
     "translation-web-component": "^1.1.1",
     "wct-browser-legacy": "^1.0.2",
     "zxing-js-es6": "^0.15.3"

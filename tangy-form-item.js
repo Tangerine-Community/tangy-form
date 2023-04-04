@@ -4,6 +4,10 @@ import './util/html-element-props.js'
 import '@polymer/paper-card/paper-card.js'
 import './style/tangy-common-styles.js'
 import { TangyFormItemHelpers } from './tangy-form-item-callback-helpers.js'
+// import { createWorker } from 'tesseract.js';
+// const worker = createWorker({
+//   logger: m => console.log(m),
+// });
 
 /**
  * `tangy-form-item`
@@ -37,7 +41,8 @@ export class TangyFormItem extends PolymerElement {
       open: t('open'),
       close: t('close'),
       save: t('save'),
-      submit: t('submit')
+      submit: t('submit'),
+      ocr: t('ocr')
     }
     this.hadDiscrepancies = []
     this.hadWarnings = []
@@ -263,6 +268,10 @@ export class TangyFormItem extends PolymerElement {
       <paper-card id="card" class="shrunk">
         <div class="card-content">
           <label class="heading"></label>
+          <template is="dom-if" if="{{useOcr}}">
+            <paper-button id="ocrButton" on-click="onOcrButtonPress"><t-t>ocr</t-t></paper-button>
+            <tangy-photo-capture max-size-in-kb='512' label="Take a Photo" ></tangy-photo-capture>
+          </template>
           <slot></slot>
         </div>
         <div class="card-actions">
@@ -478,6 +487,11 @@ export class TangyFormItem extends PolymerElement {
         type: Number,
         value: undefined,
         reflectToAttribute: false
+      },
+      useOcr: {
+        type: Boolean,
+        value: false,
+        notify: true
       }
     };
   }
@@ -507,6 +521,16 @@ export class TangyFormItem extends PolymerElement {
         let inputEl = this.querySelector(`[name="${inputState.name}"]`)
         if (inputEl) inputEl.setProps(inputState)
       })
+    // if (this.parentElement.useOcr) {
+    //   this.useOcr = true
+    // }
+    // this.shadowRoot.querySelector('tangy-photo-capture').addEventListener('TANGY_MEDIA_UPDATE', event => {
+    //   // Comment out event.preventDefault() to test saving to file system.
+    //   // Enable event.preventDefault() to test saving to db.
+    //   // event.preventDefault()
+    //   // 3 ways to inspect the user's response to the form. Ordered by level of detail.
+    //   console.log("Tangy-form-item Caught TANGY_MEDIA_UPDATE event at: " + event.target.name)
+    // }, true)
   }
 
   fireHookInput(hook, event, input) {
@@ -938,6 +962,36 @@ export class TangyFormItem extends PolymerElement {
           ? elementsThatAreNotOptions 
           : [...elementsThatAreNotOptions, element]
       }, [])
+  }
+
+  async onOcrButtonPress() {
+    console.log("Tangy-form-item says hello. ")
+    const img = this.shadowRoot.querySelector('tangy-photo-capture').value
+
+    // Tesseract.recognize(
+    //     image,
+    //     'eng',
+    //     { logger: m => console.log(m) }
+    // ).then(({ data: { text } }) => {
+    //   console.log(text);
+    // })
+
+    // await worker.load();
+    // await worker.loadLanguage('eng');
+    // // await worker.initialize('eng', OEM.LSTM_ONLY);
+    // await worker.initialize('eng');
+    // // await worker.setParameters({
+    // //   tessedit_pageseg_mode: PSM.SINGLE_BLOCK,
+    // // });
+    // const {data: {text}} = await worker.recognize(img);
+    // console.log(text);
+
+    const { data: { text } } = await Tesseract.recognize(img, 'eng', {
+      corePath: '../../node_modules/tesseract.js-core/tesseract-core.wasm.js',
+      workerPath: "../../node_modules/tesseract.js/dist/worker.min.js",
+      logger: m => console.log(m),
+    });
+    console.log(text);
   }
 
 }
