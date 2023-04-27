@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v4.40.0
+- Add 'archived' flag to tangy inputs to allow archiving and unarchiving of form responses
+
 ## v4.39.3
 - Fix "Cannot read properties of null (reading 'getTracks')" error. Commit [8e4c7c4446161dbafc8c115f788916cba1f1e0e4](https://github.com/Tangerine-Community/tangy-form/commit/8e4c7c4446161dbafc8c115f788916cba1f1e0e4)
 
