@@ -1,8 +1,9 @@
 # CHANGELOG
 
-## v4.41.0
+## v4.41.1
 - Removed (unsupported) wct-browser-legacy, which has dependencies that are critical security risks. Tested using https://github.com/Polymer/tools/tree/master/packages/web-component-tester for tests, which has less risk, but still some issues. Tests currently throw errors. The web-component-tester lib is now in package.json devDependencies.
 - Added config file for npm-package-json-lint, which lints package.json.
+- Removed iron-icon from package.json - is a dep of iron-icons.
 
 ## v4.40.0
 - Add 'archived' flag to tangy inputs to allow archiving and unarchiving of form responses
