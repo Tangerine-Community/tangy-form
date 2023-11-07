@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.42.0
+
+- Add selected tangy-location labels to the input value for reporting outputs
+
 ## v4.41.1
 - Removed (unsupported) wct-browser-legacy, which has dependencies that are critical security risks. Tested using https://github.com/Polymer/tools/tree/master/packages/web-component-tester for tests, which has less risk, but still some issues. Tests currently throw errors. The web-component-tester lib is now in package.json devDependencies.
 - Added config file for npm-package-json-lint, which lints package.json.
