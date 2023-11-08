@@ -570,18 +570,23 @@ class TangyLocation extends TangyInputBase {
     if (this.filterByGlobal) this.filterBy = window.tangyLocationFilterBy
     // When we hear change events, it's coming from users interacting with select lists.
     this.shadowRoot.addEventListener('change', this.onSelectionChange.bind(this))
-    let that = this
+    this.onLocationSrcChange();
+  }
+
+  onLocationSrcChange() {
+    let that = this;
     const request = new XMLHttpRequest();
-    request.onreadystatechange = function() {
+
+    request.onreadystatechange = function () {
       try {
-        that.locationList = JSON.parse(this.responseText)
-        that.render()
-        that.locationListLoaded = true
-        that.dispatchEvent(new CustomEvent('location-list-loaded'))
-      } catch(e) {
-        // Do nothing. Some stages will not have valid JSON returned.
+        that.locationList = JSON.parse(this.responseText);
+        that.render();
+        that.locationListLoaded = true;
+        that.dispatchEvent(new CustomEvent('location-list-loaded'));
+      } catch (e) {// Do nothing. Some stages will not have valid JSON returned.
       }
-    }
+    };
+
     request.open('GET', this.locationSrc);
     request.send();
   }
