@@ -179,6 +179,12 @@ npm start
 Then open http://localhost:8080
 
 ## Tests 
+
+As of v4.41.0, tests are currently non-working, throwing a mocha-related error.
+
 One of the best places to learn about what Tangy Form is capable of is to take a look at the tests in `test/tangy-form_test.html`. To run tests, use `polymer test` command or just `npm run test` to just run tests in Chrome. If you want to develop tests, open http://localhost:8080/test/tangy-form_test.html
 
 Note you will need Java 8 installed in order to run tests. Info on installing Java 8 or uninstalling Java X to install Java 8 can be found [here](https://github.com/Polymer/tools/issues/405#issuecomment-405096764). 
+
+If running on a Mac with the M1 processor, you must run `node node_modules/polymer-cli/node_modules/wd/scripts/build-browser-scripts.js` 
+in order to avoid the error `cli runtime exception: Error: Cannot find module '../build/safe-execute'`

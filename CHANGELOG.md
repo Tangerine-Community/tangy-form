@@ -3,6 +3,38 @@
 ## v4.39.0
 - update(tangy-radio-blocks): `mediaElements` property is an array of objects with `image`and `media` properties. [#386](https://github.com/Tangerine-Community/tangy-form/issues/386)
 
+## v4.42.0
+
+- Add selected tangy-location labels to the input value for reporting outputs
+
+## v4.41.1
+- Removed (unsupported) wct-browser-legacy, which has dependencies that are critical security risks. Tested using https://github.com/Polymer/tools/tree/master/packages/web-component-tester for tests, which has less risk, but still some issues. Tests currently throw errors. The web-component-tester lib is now in package.json devDependencies.
+- Added config file for npm-package-json-lint, which lints package.json.
+- Removed iron-icon from package.json - is a dep of iron-icons.
+
+## v4.40.0
+- Add 'archived' flag to tangy inputs to allow archiving and unarchiving of form responses
+
+## v4.39.3
+- Fix "Cannot read properties of null (reading 'getTracks')" error. Commit [8e4c7c4446161dbafc8c115f788916cba1f1e0e4](https://github.com/Tangerine-Community/tangy-form/commit/8e4c7c4446161dbafc8c115f788916cba1f1e0e4)
+
+## v4.39.2
+- fixed poor logic for noVideoConstraints property (tangy-video-capture).
+
+## v4.39.1
+- fixed bug (extra bracket) with tangy-video-capture, commit #f53a353697e8dc02e83802b01bb05aa05f9648f9
+
+## v4.39.0
+- fix(tangy-untimed-grid): Add tangy element styles to allow skipping of untimed grid. [#384](https://github.com/Tangerine-Community/tangy-form/pull/384)
+- Fix bad API use in tangy-video-capture - fixed constraints for video and audio when using `noVideoConstraints` and `frontCamera` properties. [#380](https://github.com/Tangerine-Community/tangy-form/pull/380)
+- Bump json5 from 1.0.1 to 1.0.2 [#385](https://github.com/Tangerine-Community/tangy-form/pull/385)
+- Bump lit from 2.4.0 to 2.6.1 [#388](https://github.com/Tangerine-Community/tangy-form/pull/388)
+- Bump devtools-detect from 4.0.0 to 4.0.1 [#382](https://github.com/Tangerine-Community/tangy-form/pull/382)
+- Bump decode-uri-component from 0.2.0 to 0.2.2 [#381](https://github.com/Tangerine-Community/tangy-form/pull/381)
+- Many updates to core packages. 
+- If running on a Mac with the M1 processor, you must run `node node_modules/polymer-cli/node_modules/wd/scripts/build-browser-scripts.js`
+  in order to avoid the error `cli runtime exception: Error: Cannot find module '../build/safe-execute'` when testing with `npm test`.
+
 ## v4.38.3
 - fix(record-audio): Request permissions for recording audio [#375](https://github.com/Tangerine-Community/tangy-form/pull/375)
 
@@ -76,7 +108,7 @@
 ## v4.33.0
 - Add new input `<tangy-video-capture>`. Takes the following properties:
   - frontCamera: Boolean. Whether to use the front camera or the back camera. Default is `true`. 
-  - noVideoConstraints: Boolean. Whether to force use of front or back camera. If tue, chooses the first available source.  Default is `true`. 
+  - noVideoConstraints: Boolean. Whether to force use of front or back camera. If true, chooses the first available source.  Default is `true`. 
   - codec: String. The codec to use. Default is 'video/webm;codecs=vp9,opus' - AKA webm vp9. It is possible the device may not support all of these codecs. Other potential codecs:
     - video/webm;codecs=vp8,opus
     - video/webm;codecs=h264,opus
