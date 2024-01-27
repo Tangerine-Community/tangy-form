@@ -148,11 +148,6 @@ export class TangyAcuityChart extends TangyInputLitBase {
                 text-transform: none;
                 letter-spacing: normal;
               }
-
-              iron-icon.larger {
-                height: 40px;
-                width: 40px;
-              }
             `
         ]
     }
@@ -177,33 +172,36 @@ export class TangyAcuityChart extends TangyInputLitBase {
                     <div id="configuration">
                         <div>
                             <label>Pixels per Inch:</label>
-                            <input id="inputPixelsPerInch" type="number" value="150"></input>
+                            <input id="inputPixelsPerInch" type="number"></input>
                         </div>
 
-                        <div>
-                            <label>Chart Size in Inches:</label>
-                            <input id="inputChartSizeInInchesX" type="number" value="8.5"></input>
-                            <label>x</label>
-                            <input id="inputChartSizeInInchesY" type="number" value="11"></input>
-                        </div>
 
-                        <div>
-                            <label>Size of Top Line in Inches:</label>
-                            <input id="inputTopLineSizeInInches" type="number" value="1"></input>
-                        </div>
+<!--                        <div>-->
+<!--                            <label>Chart Size in Inches:</label>-->
+                            <input type="hidden" id="inputChartSizeInInchesX" type="number" value="5"></input>
+<!--                            <label>x</label>-->
+                            <input type="hidden" id="inputChartSizeInInchesY" type="number" value="2"></input>
+<!--                        </div>-->
 
-                        <div>
-                            <label>Number of Lines:</label>
-                            <input id="inputNumberOfLines" type="number" value="8"></input>
-                        </div>
+<!--                        <div>-->
+<!--                            <label>Size of Top Line in Inches:</label>-->
+<!--                            <input id="inputTopLineSizeInInches" type="number" value="1"></input>-->
+                            <input type="hidden" id="inputTopLineSizeInInches" type="number" value="1"></input>
+<!--                        </div>-->
+
+<!--                        <div>-->
+<!--                            <label>Number of Lines:</label>-->
+<!--                            <input id="inputNumberOfLines" type="number" value="8"></input>-->
+<!--                        </div>-->
+
+<!--                        <div>-->
+<!--                            <label>sequenceNumber:</label>-->
+<!--                            <input id="sequenceNumber" type="number" value="1"></input>-->
+<!--                        </div>-->
                     </div>
 
-                    <!--          <button onclick="generateDiagram();">Generate</button>-->
-                    <button class="btn" @click="${() => this.generateDiagram()}">Generate</button>
-
-                    <div id="feedback"></div>
                     <div id="divOutput"></div>
-
+<!--                    <button class="btn" @click="${() => this.generateDiagram()}">Next</button>-->
                     ${this.hintText ? html`}
                     <div id="hint-text" class="hint-text">${this.hintText}</div>
                     ` : ''}
@@ -330,17 +328,35 @@ export class TangyAcuityChart extends TangyInputLitBase {
                 type: Boolean,
                 value: false,
                 reflectToAttribute: true
+            },
+            sequenceNumber: {
+                type: Number,
+                value: 1,
+                reflectToAttribute: true
+            },
+            numberOfSequences: {
+                type: Number,
+                value: 8,
+                reflectToAttribute: true
+            },
+            calcPpi: {
+                type: Number,
+                value: undefined,
+                reflectToAttribute: true
             }
         }
     }
 
     connectedCallback() {
         super.connectedCallback()
-        // this.shadowRoot.querySelector('#inputPixelsPerInch').addEventListener('change', this.onPixelsPerInchChange.bind(this))
+        this.calcPpi = this.calcScreenDPI()
     }
 
-    onPixelsPerInchChange(event) {
-        const pixelsPerInch = event.target.value
+    firstUpdated(changedProperties) {
+
+        const calcPpiElement =
+            this.shadowRoot.getElementById("inputPixelsPerInch");
+        calcPpiElement.value = this.calcPpi;
         this.generateDiagram()
     }
 
@@ -368,12 +384,15 @@ export class TangyAcuityChart extends TangyInputLitBase {
         const topLineSizeInInches =
             parseFloat(topLineSizeInInchesAsString);
 
-        const inputNumberOfLines =
-            this.shadowRoot.getElementById("inputNumberOfLines");
-        const numberOfLinesAsString =
-            inputNumberOfLines.value;
+        // const inputNumberOfLines =
+        //     this.shadowRoot.getElementById("inputNumberOfLines");
+        // const numberOfLinesAsString =
+        //     inputNumberOfLines.value;
+        const numberOfLinesAsString = this.numberOfSequences
         const numberOfLines =
             parseInt(numberOfLinesAsString);
+
+        // const sequenceNumber = parseInt(this.shadowRoot.getElementById("sequenceNumber").value);
 
         const visionChart = new VisionChart
         (
@@ -383,11 +402,29 @@ export class TangyAcuityChart extends TangyInputLitBase {
             numberOfLines
         );
 
-        const visionChartAsCanvas = visionChart.toCanvas();
+        const visionChartAsCanvas = visionChart.toCanvas(this.sequenceNumber);
 
         const divOutput = this.shadowRoot.getElementById("divOutput");
         divOutput.innerHTML = "";
         divOutput.appendChild(visionChartAsCanvas);
+    }
+
+    calcScreenDPI() {
+        // Create a "1 inch" element to measure
+        const el = document.createElement('div');
+        el.style.width = '1in';
+
+        // It has to be appended to measure it
+        document.body.appendChild(el);
+
+        // Get it's (DOM-relative) pixel width, multiplied by
+        // the device pixel ratio
+        const dpi = el.offsetWidth * devicePixelRatio;
+
+        // remove the measurement element
+        el.remove();
+        console.log("dpi: " + dpi);
+        return dpi;
     }
 
 

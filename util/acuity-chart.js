@@ -77,7 +77,7 @@ export function VisionChart
 }
 
 {
-    VisionChart.prototype.toCanvas = function () {
+    VisionChart.prototype.toCanvas = function (sequenceNumber) {
         var returnValue = document.createElement("canvas");
         returnValue.style = "border:1px solid";
         returnValue.width = this.chartSizeInPixels.x;
@@ -103,7 +103,7 @@ export function VisionChart
             + Math.floor(this.distanceFromEyeInInches % inchesPerFoot)
             + " inches from the eye.";
 
-        var fontHeightInPixels = 10;
+        var fontHeightInPixels = 16;
         graphics.font = fontHeightInPixels + "px sans-serif";
         graphics.fillText(message, 0, fontHeightInPixels);
 
@@ -120,8 +120,11 @@ export function VisionChart
         var symbolSizeInPixelsOfBottomLine =
             this.topLineSizeInPixels / this.numberOfLines
 
-        for (var i = 0; i < this.numberOfLines; i++) {
-            var numberOfSymbolsOnLine = i + 1;
+        // for (var i = 0; i < this.numberOfLines; i++) {
+        //     var numberOfSymbolsOnLine = i + 1;
+        //     var numberOfSymbolsOnLine = 2 + 1;
+        var numberOfSymbolsOnLine = sequenceNumber;
+
 
             var symbolSizeInPixels =
                 this.topLineSizeInPixels
@@ -135,7 +138,9 @@ export function VisionChart
                 (this.chartSizeInPixels.x - widthOfLineInPixels)
                 / 2;
 
-            for (var s = 0; s < numberOfSymbolsOnLine; s++) {
+            // hardcode to 1 symbol per line
+            // for (var s = 0; s < numberOfSymbolsOnLine; s++) {
+            for (var s = 0; s < 1; s++) {
                 var directionIndex = Math.floor
                 (
                     Math.random() * directions.length
@@ -156,7 +161,7 @@ export function VisionChart
             graphics.fillText
             (
                 acuityNumerator + "/" + acuityDenominator,
-                this.chartSizeInPixels.x - this.topLineSizeInPixels,
+                (this.chartSizeInPixels.x - this.topLineSizeInPixels) + 10,
                 drawPos.y
             )
 
@@ -164,7 +169,7 @@ export function VisionChart
                 Math.sqrt(symbolSizeInPixels)
                 * this.topLineSizeInPixels
                 / this.numberOfLines; // hack
-        }
+        // }
 
         return returnValue;
     }
