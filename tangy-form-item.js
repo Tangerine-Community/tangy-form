@@ -4,6 +4,7 @@ import './util/html-element-props.js'
 import '@polymer/paper-card/paper-card.js'
 import './style/tangy-common-styles.js'
 import { TangyFormItemHelpers } from './tangy-form-item-callback-helpers.js'
+import { TangyPromptUtils } from './util/tangy-prompt-utils.js'
 
 /**
  * `tangy-form-item`
@@ -19,6 +20,8 @@ export class TangyFormItem extends PolymerElement {
   constructor() {
     super()
     this._injected = {}
+
+    this.sectionPromptQueue = new TangyPromptUtils();
   }
 
   static get is() { return 'tangy-form-item'; }
@@ -41,6 +44,12 @@ export class TangyFormItem extends PolymerElement {
     }
     this.hadDiscrepancies = []
     this.hadWarnings = []
+  }
+
+  disconnectedCallback() {    
+    this.sectionPromptQueue.stopAndClearQueue();
+
+    super.disconnectedCallback();
   }
 
   static get template() {
@@ -714,6 +723,33 @@ export class TangyFormItem extends PolymerElement {
       tangyConsentEl.addEventListener('TANGY_INPUT_CONSENT_NO', this.clickedNoConsent.bind(this))
     }
 
+    this.querySelectorAll('tangy-prompt-box').forEach((tangyPrompt) => {
+      // add event listeners for clicks
+      tangyPrompt.shadowRoot.querySelectorAll('tangy-radio-block').forEach((item) => {
+        if (item.sound) {
+          const inputOptionName = `${tangyPrompt.name}-${item.name}`
+          item.addEventListener('input-sound-triggered', this.onInputSoundTriggered.bind(this, inputOptionName));
+        }
+        if (tangyPrompt.getAttribute('playOnOpen') != "") {
+          if (item.hasAttribute('sound') && item.getAttribute('sound') != '') {
+            let inputOptionName = `${tangyPrompt.name}-${item.name}`
+            let playOnOpenEvent = new CustomEvent('input-sound-triggered', { detail: { sound: item.getAttribute('sound'), id: inputOptionName } } )
+            item.dispatchEvent(playOnOpenEvent)
+          }
+        }
+      })
+    })
+
+    this.querySelectorAll('tangy-radio-blocks').forEach((tangyRadioBlocks) => {   
+      const inputName = tangyRadioBlocks.getAttribute('name')   
+      tangyRadioBlocks.shadowRoot.querySelectorAll('tangy-radio-block').forEach((block) => {
+        if (block.hasAttribute('sound') && block.getAttribute('sound') != '') {
+          const inputOptionName = `${inputName}-${block.name}`
+          block.addEventListener('input-sound-triggered', this.onInputSoundTriggered.bind(this, inputOptionName));
+        }
+      })
+    })
+
     this.reflect()
     if (this.open === true) {
       this.fireHook('on-open')
@@ -883,6 +919,7 @@ export class TangyFormItem extends PolymerElement {
   }
 
   next() {
+    this.sectionPromptQueue.stopAndClearQueue();
     if (this.validate()) {
       this.submit()
       this.dispatchEvent(new CustomEvent('ITEM_NEXT'))
@@ -890,6 +927,7 @@ export class TangyFormItem extends PolymerElement {
   }
 
   back() {
+    this.sectionPromptQueue.stopAndClearQueue();
     this.submit()
     this.dispatchEvent(new CustomEvent('ITEM_BACK'))
   }
@@ -938,6 +976,30 @@ export class TangyFormItem extends PolymerElement {
           ? elementsThatAreNotOptions 
           : [...elementsThatAreNotOptions, element]
       }, [])
+  }
+
+  onInputSoundTriggered(eventName, event) {
+    const input = event.target;
+
+    // Prefer the event name passed by the caller
+    eventName = eventName || input.name;
+
+    this.sectionPromptQueue.queue(input, event.detail.sound, eventName);
+
+    if (input.hasAttribute("prompt-for")) {
+      let inputName = input.getAttribute("prompt-for")
+      let inputTangyPrompt = this.querySelector(`[name="${inputName}"]`)
+      inputTangyPrompt.shadowRoot.querySelectorAll('tangy-radio-block').forEach((option) => {
+        if (option.hasAttribute('sound') && option.getAttribute('sound') != '') {
+          let inputOptionName = `${inputName}-${option.name}`
+          this.sectionPromptQueue.queue(option, option.getAttribute('sound'), inputOptionName)
+        }
+      })
+    }
+
+    if (this.sectionPromptQueue.prompts.length > 0) {
+      this.sectionPromptQueue.play(this.sectionPromptQueue.prompts.length);
+    }
   }
 
 }

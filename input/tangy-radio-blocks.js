@@ -14,7 +14,7 @@ import './tangy-radio-block.js'
  * @polymer
  * @demo demo/index.html
  */
-class TangyRadioBlocks extends TangyInputBase {
+export class TangyRadioBlocks extends TangyInputBase {
 
   static get is() { return 'tangy-radio-blocks'; }
 
@@ -32,13 +32,6 @@ class TangyRadioBlocks extends TangyInputBase {
       <style include="tangy-common-styles"></style>
 
       <style>
-        #label {
-          margin: 0;
-          text-transform: none;
-          font-size: 2rem;
-          text-align: center;
-          margin-bottom: 1rem;
-        }
         #container {
           height: var(--container-height, 50vh);
           background-color: var(--container-background-color, #fff);
@@ -112,17 +105,12 @@ class TangyRadioBlocks extends TangyInputBase {
       <div class="flex-container">
         <div id="qnum-number"></div>
         <div id="qnum-content">
+          <label id="label" for="group"></label>
           <label class="hint-text"></label>
-          <div id="container">
-            <label id="label" for="group"></label>
-            <div id="blockContainer">
-            </div>
-          </div>
-
+          <div id="blockContainer"></div>
           <label id="error-text"></label>
           <div id="warn-text"></div>
           <div id="discrepancy-text"></div>
-
         </div>
       </div>
     `;
@@ -289,9 +277,18 @@ class TangyRadioBlocks extends TangyInputBase {
       if (option.hasAttribute('hint-text')) {
         button.setAttribute('hint-text', option.getAttribute('hint-text'))
       }
+      if (option.hasAttribute('image')) {
+        button.setAttribute('image', option.getAttribute('image'))
+      }
+      if (option.hasAttribute('sound')) {
+        button.setAttribute('sound', option.getAttribute('sound'))
+      }
+      if (option.hasAttribute('prompt-for')) {
+        button.setAttribute('prompt-for', option.getAttribute('prompt-for'))
+      }
       button.hideButton = this.hideButtons ? true : false
       button.name = option.value
-      button.innerHTML = option.innerHTML
+      button.innerHTML = option.innerHTML      
       if (this.columns > 0) {
         let td = document.createElement('td')
         td.style.width = `${Math.floor(100*(1/this.columns))}%`
