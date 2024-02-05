@@ -730,8 +730,9 @@ export class TangyFormItem extends PolymerElement {
           const inputOptionName = `${tangyPrompt.name}-${item.name}`
           item.addEventListener('input-sound-triggered', this.onInputSoundTriggered.bind(this, inputOptionName));
         }
-        if (tangyPrompt.getAttribute('playOnOpen') != "") {
-          if (item.hasAttribute('sound') && item.getAttribute('sound') != '') {
+        if (tangyPrompt.hasAttribute('play-on-open')) {
+          const playOnOpenList = tangyPrompt.getAttribute('play-on-open').split(',');
+          if (playOnOpenList.includes(item.name) && item.hasAttribute('sound') && item.getAttribute('sound') != '') {
             let inputOptionName = `${tangyPrompt.name}-${item.name}`
             let playOnOpenEvent = new CustomEvent('input-sound-triggered', { detail: { sound: item.getAttribute('sound'), id: inputOptionName } } )
             item.dispatchEvent(playOnOpenEvent)
@@ -986,15 +987,17 @@ export class TangyFormItem extends PolymerElement {
 
     this.sectionPromptQueue.queue(input, event.detail.sound, eventName);
 
-    if (input.hasAttribute("prompt-for")) {
+    if (input.hasAttribute("prompt-for") && input.getAttribute("prompt-for") != '') {
       let inputName = input.getAttribute("prompt-for")
       let inputTangyPrompt = this.querySelector(`[name="${inputName}"]`)
-      inputTangyPrompt.shadowRoot.querySelectorAll('tangy-radio-block').forEach((option) => {
-        if (option.hasAttribute('sound') && option.getAttribute('sound') != '') {
-          let inputOptionName = `${inputName}-${option.name}`
-          this.sectionPromptQueue.queue(option, option.getAttribute('sound'), inputOptionName)
-        }
-      })
+      if (inputTangyPrompt) {
+        inputTangyPrompt.shadowRoot.querySelectorAll('tangy-radio-block').forEach((option) => {
+          if (option.hasAttribute('sound') && option.getAttribute('sound') != '') {
+            let inputOptionName = `${inputName}-${option.name}`
+            this.sectionPromptQueue.queue(option, option.getAttribute('sound'), inputOptionName)
+          }
+        })
+      }
     }
 
     if (this.sectionPromptQueue.prompts.length > 0) {
