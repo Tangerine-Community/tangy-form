@@ -2,7 +2,7 @@
 
 ## v4.43.0
 
-- Tangerine Radio Blocks
+__Tangerine Radio Blocks__
 
 The `tangy-radio-blocks` element is a single-select input that shows a set of `tangy-radio-block` options. Each option has a label, image, and border that identifies the option. The set of `tangy-radio-block` options appears in either a vertical or horizontal list based on the `columns` attribute. 
 
@@ -17,7 +17,7 @@ This update adds a `sound` attribute to `tangy-radio-block` that takes a path to
 </tangy-radio-blocks>
 ```
 
-- Tangerine Prompt
+__Tangerine Prompt__
 
 The new `tangy-prompt-box` input type helps form designers create content sets that interacts with the user through a set of auto-playing sound files. The prompt in the [tangy-radio-blocks-lists demo](./demo/tangy-radio-blocks-lists.html) reads some instructions and then prompts the user by playing the audio associated with the options in a `tangy-radio-blocks` input. This provides a tool for the user to build a self administered assessment. 
 
