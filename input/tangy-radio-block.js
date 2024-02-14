@@ -196,13 +196,14 @@ export class TangyRadioBlock extends TangyInputBase {
         }
       }))
     })
-
-
-    this.shadowRoot.querySelector('img').addEventListener('click', (e) => {
-      if (this.sound !== '') {
-        this.dispatchEvent(new CustomEvent('input-sound-triggered', { detail: {sound: this.sound, id: this.name} }))
-      }
-    })
+    
+    if (this.shadowRoot.querySelector('img') != null) {
+      this.shadowRoot.querySelector('img').addEventListener('click', (e) => {
+        if (this.sound !== '') {
+          this.dispatchEvent(new CustomEvent('input-sound-triggered', { detail: {sound: this.sound, id: this.name} }))
+        }
+      })
+    }
 
   }
 
