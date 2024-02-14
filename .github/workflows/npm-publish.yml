@@ -21,7 +21,11 @@ jobs:
       - run: npm ci
       - run: npm install
       - run: npm run build
-      - run: npm publish
+      - if: github.event_name == 'release'
+        run: npm publish
+      - if: github.event_name == 'prerelease'
+        run: npm publish --tag ${{github.ref}}
+
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
 
