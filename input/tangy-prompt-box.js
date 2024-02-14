@@ -64,11 +64,6 @@ class TangyPrmoptBox extends TangyRadioBlocks {
       value: 'flex-end',
       reflectToAttribute: true
     }
-    properties.playOnOpen = {
-      type: String,
-      value: "",
-      reflectToAttribute: true
-    }
     return properties;
   }
 

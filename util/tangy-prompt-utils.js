@@ -66,7 +66,6 @@ export class TangyPromptUtils {
         thisSound.play()
         duration = (thisSound.duration) * 1000;
         durationTotal += duration
-        console.log(`Play ${thisSound.eleId} Loop: ${duration}`)
         if (thisSound.eleId.length != 1) {
             this.showDuration(thisSound.eleId)
         } else {
@@ -90,7 +89,6 @@ onSoundEnded(event) {
 }
 
 showDuration(id) {
-    console.log('showDuration', id)
     let prompt = this.prompts.find(input => input.id == id);
     let input = prompt.input;
     if (input) {
@@ -125,12 +123,11 @@ showOptionDuration(id) {
             x.style.boxSizing = 'border-box';
         })
 
-        const siblings = input.getRootNode().host.shadowRoot.querySelectorAll('tangy-radio-block') || [];
         try {
+            const siblings = input.getRootNode().host.shadowRoot.querySelectorAll('tangy-radio-block') || [];
             //the rest of the elements on this input
             siblings.forEach(x => x.style.opacity = '0.5')
         } catch (e) {
-            console.warn('No document to show options.')
         }
     }
 };
@@ -139,15 +136,14 @@ hideOptionDuration(id) {
     let prompt = this.prompts.find(prompt => prompt.id == id);
     let input = prompt.input;
     if (input) {
-        const siblings = input.getRootNode().host.shadowRoot.querySelectorAll('tangy-radio-block') || [];
         try {
+            const siblings = input.getRootNode().host.shadowRoot.querySelectorAll('tangy-radio-block') || [];
             siblings.forEach(x => {
                 x.style.borderColor = 'transparent';
                 x.style.border = 'none'
                 x.style.opacity = '1';
             })
         } catch (e) {
-            console.warn('No document to hide options.')
         }
     }
 };

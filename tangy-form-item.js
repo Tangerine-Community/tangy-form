@@ -725,17 +725,16 @@ export class TangyFormItem extends PolymerElement {
 
     this.querySelectorAll('tangy-prompt-box').forEach((tangyPrompt) => {
       // add event listeners for clicks
-      tangyPrompt.shadowRoot.querySelectorAll('tangy-radio-block').forEach((item) => {
-        if (item.sound) {
-          const inputOptionName = `${tangyPrompt.name}-${item.name}`
-          item.addEventListener('input-sound-triggered', this.onInputSoundTriggered.bind(this, inputOptionName));
-        }
-        if (tangyPrompt.hasAttribute('play-on-open')) {
-          const playOnOpenList = tangyPrompt.getAttribute('play-on-open').split(',');
-          if (playOnOpenList.includes(item.name) && item.hasAttribute('sound') && item.getAttribute('sound') != '') {
-            let inputOptionName = `${tangyPrompt.name}-${item.name}`
-            let playOnOpenEvent = new CustomEvent('input-sound-triggered', { detail: { sound: item.getAttribute('sound'), id: inputOptionName } } )
-            item.dispatchEvent(playOnOpenEvent)
+      tangyPrompt.shadowRoot.querySelectorAll('tangy-radio-block').forEach((block) => {
+
+        if (block.hasAttribute('sound') && block.getAttribute('sound') != '') {
+          const inputOptionName = `${tangyPrompt.name}-${block.name}`
+          block.addEventListener('input-sound-triggered', this.onInputSoundTriggered.bind(this, inputOptionName));
+
+          if (block.hasAttribute('play-on-open') && block.getAttribute('play-on-open') == "on") {
+            let inputOptionName = `${tangyPrompt.name}-${block.name}`
+            let playOnOpenEvent = new CustomEvent('input-sound-triggered', { detail: { sound: block.getAttribute('sound'), id: inputOptionName } } )
+            block.dispatchEvent(playOnOpenEvent)
           }
         }
       })

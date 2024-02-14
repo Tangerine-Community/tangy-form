@@ -105,6 +105,11 @@ export class TangyRadioBlock extends TangyInputBase {
         type: String,
         value: '',
         reflectToAttribute: true
+      },
+      playOnOpen: {
+        type: String,
+        value: '',
+        reflectToAttribute: true
       }
     }
   }

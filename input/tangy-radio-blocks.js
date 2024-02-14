@@ -283,6 +283,9 @@ export class TangyRadioBlocks extends TangyInputBase {
       if (option.hasAttribute('sound')) {
         button.setAttribute('sound', option.getAttribute('sound'))
       }
+      if (option.hasAttribute('play-on-open')) {
+        button.setAttribute('play-on-open', option.getAttribute('play-on-open'))
+      }
       if (option.hasAttribute('prompt-for')) {
         button.setAttribute('prompt-for', option.getAttribute('prompt-for'))
       }
