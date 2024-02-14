@@ -104,7 +104,6 @@ showDuration(id) {
 
 
 hideDuration(id) {
-    console.log('hideDuration', id)
     let prompt = this.prompts.find(prompt => prompt.id == id);
     let input = prompt.input;
     if (input) {
@@ -116,24 +115,42 @@ hideDuration(id) {
     }
 };
 
-
-
 showOptionDuration(id) {
-    //the calling ID
-    Array.from(document.querySelector(`tangy-radio-blocks`).shadowRoot.querySelectorAll(`tangy-radio-block`)).filter(el => el.name == `${id}`).forEach(x => {
-        x.style.border = 'solid 5px #ff620c';
-        x.style.boxSizing = 'border-box';
-    })
-    //the rest of the elements on this input
-    Array.from(document.querySelector(`tangy-radio-blocks`).shadowRoot.querySelectorAll(`tangy-radio-block`)).filter(el => el.name != `${id}`).forEach(x => x.style.opacity = '0.5')
+    let prompt = this.prompts.find(prompt => prompt.id == id);
+    let input = prompt.input;
+    if (input) {
+        //the calling ID
+        input.forEach(x => {
+            x.style.border = 'solid 5px #ff620c';
+            x.style.boxSizing = 'border-box';
+        })
+
+        const siblings = input.getRootNode().host.shadowRoot.querySelectorAll('tangy-radio-block') || [];
+        try {
+            //the rest of the elements on this input
+            siblings.forEach(x => x.style.opacity = '0.5')
+        } catch (e) {
+            console.warn('No document to show options.')
+        }
+    }
 };
 
 hideOptionDuration(id) {
-    Array.from(document.querySelector(`tangy-radio-blocks`).shadowRoot.querySelectorAll(`tangy-radio-block`)).forEach(x => {
-        x.style.borderColor = 'transparent';
-        x.style.border = 'none'
-        x.style.opacity = '1';
-    })
+    let prompt = this.prompts.find(prompt => prompt.id == id);
+    let input = prompt.input;
+    if (input) {
+        const siblings = input.getRootNode().host.shadowRoot.querySelectorAll('tangy-radio-block') || [];
+        try {
+            siblings.forEach(x => {
+                x.style.borderColor = 'transparent';
+                x.style.border = 'none'
+                x.style.opacity = '1';
+            })
+        } catch (e) {
+            console.warn('No document to hide options.')
+        }
+    }
 };
+
 
 }
