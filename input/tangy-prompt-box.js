@@ -15,7 +15,7 @@ import { TangyInputBase } from '../tangy-input-base.js';
  * @polymer
  * @demo demo/index.html
  */
-class TangyPrmoptBox extends TangyRadioBlocks {
+export class TangyPrmoptBox extends TangyRadioBlocks {
 
   static get is() { return 'tangy-prompt-box'; }
 
