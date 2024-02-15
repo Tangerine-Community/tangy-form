@@ -725,29 +725,33 @@ export class TangyFormItem extends PolymerElement {
 
     this.querySelectorAll('tangy-prompt-box').forEach((tangyPrompt) => {
       // add event listeners for clicks
-      tangyPrompt.shadowRoot.querySelectorAll('tangy-radio-block').forEach((block) => {
+      if (tangyPrompt.shadowRoot) {
+        tangyPrompt.shadowRoot.querySelectorAll('tangy-radio-block').forEach((block) => {
 
-        if (block.hasAttribute('sound') && block.getAttribute('sound') != '') {
-          const inputOptionName = `${tangyPrompt.name}-${block.name}`
-          block.addEventListener('input-sound-triggered', this.onInputSoundTriggered.bind(this, inputOptionName));
+          if (block.hasAttribute('sound') && block.getAttribute('sound') != '') {
+            const inputOptionName = `${tangyPrompt.name}-${block.name}`
+            block.addEventListener('input-sound-triggered', this.onInputSoundTriggered.bind(this, inputOptionName));
 
-          if (block.hasAttribute('play-on-open') && block.getAttribute('play-on-open') == "on") {
-            let inputOptionName = `${tangyPrompt.name}-${block.name}`
-            let playOnOpenEvent = new CustomEvent('input-sound-triggered', { detail: { sound: block.getAttribute('sound'), id: inputOptionName } } )
-            block.dispatchEvent(playOnOpenEvent)
+            if (block.hasAttribute('play-on-open') && block.getAttribute('play-on-open') == "on") {
+              let inputOptionName = `${tangyPrompt.name}-${block.name}`
+              let playOnOpenEvent = new CustomEvent('input-sound-triggered', { detail: { sound: block.getAttribute('sound'), id: inputOptionName } } )
+              block.dispatchEvent(playOnOpenEvent)
+            }
           }
-        }
-      })
+        })
+      }
     })
 
     this.querySelectorAll('tangy-radio-blocks').forEach((tangyRadioBlocks) => {   
       const inputName = tangyRadioBlocks.getAttribute('name')   
-      tangyRadioBlocks.shadowRoot.querySelectorAll('tangy-radio-block').forEach((block) => {
-        if (block.hasAttribute('sound') && block.getAttribute('sound') != '') {
-          const inputOptionName = `${inputName}-${block.name}`
-          block.addEventListener('input-sound-triggered', this.onInputSoundTriggered.bind(this, inputOptionName));
-        }
-      })
+      if (tangyRadioBlocks.shadowRoot) {
+        tangyRadioBlocks.shadowRoot.querySelectorAll('tangy-radio-block').forEach((block) => {
+          if (block.hasAttribute('sound') && block.getAttribute('sound') != '') {
+            const inputOptionName = `${inputName}-${block.name}`
+            block.addEventListener('input-sound-triggered', this.onInputSoundTriggered.bind(this, inputOptionName));
+          }
+        })
+      }
     })
 
     this.reflect()
