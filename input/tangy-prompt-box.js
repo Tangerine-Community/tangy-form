@@ -1,11 +1,10 @@
 import { html } from '@polymer/polymer/polymer-element.js';
-import { t } from '../util/t.js'
 import '../util/html-element-props.js'
-import { TangyRadioBlocks} from './tangy-radio-blocks.js'
 import './tangy-radio-block.js'
 import '../style/tangy-element-styles.js';
 import '../style/tangy-common-styles.js'
 import { TangyInputBase } from '../tangy-input-base.js';
+import { TangyRadioBlocks} from './tangy-radio-blocks.js'
 
 /**
  * `tangy-prompt-box`
@@ -15,7 +14,7 @@ import { TangyInputBase } from '../tangy-input-base.js';
  * @polymer
  * @demo demo/index.html
  */
-class TangyPrmoptBox extends TangyRadioBlocks {
+class TangyPromptBox extends TangyInputBase {
 
   static get is() { return 'tangy-prompt-box'; }
 
@@ -82,4 +81,4 @@ class TangyPrmoptBox extends TangyRadioBlocks {
   }
 
 }
-window.customElements.define(TangyPrmoptBox.is, TangyPrmoptBox);
+window.customElements.define(TangyPromptBox.is, TangyPromptBox);
