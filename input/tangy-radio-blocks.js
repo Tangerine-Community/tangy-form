@@ -63,37 +63,6 @@ export class TangyRadioBlocks extends TangyInputBase {
           align-items: center;
           position: relative;
         }
-      /*
-        table {
-          table-layout: fixed;
-        }
-        span {
-          font-size: .75em;
-          display: block;
-        }
-        :host([columns]) tangy-radio-block {
-          padding: 0px;
-          /*margin: 15px 0px 0px;*/
-          margin: 10px 0 15px;
-        }
-        :host([hide-buttons]) tangy-radio-block {
-          border: 7px solid transparent;
-        }
-        :host([hide-buttons]) tangy-radio-block[value="on"] {
-          border: 7px solid var(--button-selected-border-color, green);
-        }
-        :host([no-margin]) tangy-radio-block {
-          padding: 0px;
-          margin: 0px 0px !important;
-          border: 0px;
-        }
-        :host([columns="0"]) tangy-radio-block {
-          display: block;
-        }
-        :host(:not([columns="0"])) tangy-radio-block {
-          display: inline-block;
-        }
-        */
       
         #hint-text {
           color: gray;
@@ -289,7 +258,7 @@ export class TangyRadioBlocks extends TangyInputBase {
       if (option.hasAttribute('prompt-for')) {
         button.setAttribute('prompt-for', option.getAttribute('prompt-for'))
       }
-      button.hideButton = this.hideButtons ? true : false
+      button.hideButton = (this.hideButtons || option.hasAttribute('hidden')) ? true : false
       button.name = option.value
       button.innerHTML = option.innerHTML      
       if (this.columns > 0) {

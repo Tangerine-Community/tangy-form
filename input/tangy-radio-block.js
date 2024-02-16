@@ -93,23 +93,19 @@ export class TangyRadioBlock extends TangyInputBase {
       },
       image: {
         type: String,
-        value: '',
-        reflectToAttribute: true
+        value: ''
       },
       sound: {
         type: String,
-        value: '',
-        reflectToAttribute: true
+        value: ''
       },
       promptFor: {
         type: String,
-        value: '',
-        reflectToAttribute: true
+        value: ''
       },
       playOnOpen: {
         type: String,
-        value: '',
-        reflectToAttribute: true
+        value: ''
       }
     }
   }
@@ -185,6 +181,7 @@ export class TangyRadioBlock extends TangyInputBase {
         </label>
       ` : ''}
     `
+    if (this.hideButton) this.shadowRoot.querySelector('label').style.display = 'none';
     this.shadowRoot.querySelector('input').addEventListener('change', (e) => {
       e.stopPropagation()
       let incomplete = (!e.target.checked)
