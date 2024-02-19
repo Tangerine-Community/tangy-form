@@ -727,16 +727,13 @@ export class TangyFormItem extends PolymerElement {
       // add event listeners for clicks
       if (tangyPrompt.shadowRoot) {
         tangyPrompt.shadowRoot.querySelectorAll('tangy-radio-block').forEach((block) => {
+          const inputOptionName = `${tangyPrompt.name}-${block.name}`
+          block.addEventListener('input-sound-triggered', this.onInputSoundTriggered.bind(this, inputOptionName));
 
-          if (block.hasAttribute('sound') && block.getAttribute('sound') != '') {
-            const inputOptionName = `${tangyPrompt.name}-${block.name}`
-            block.addEventListener('input-sound-triggered', this.onInputSoundTriggered.bind(this, inputOptionName));
-
-            if (block.hasAttribute('play-on-open') && block.getAttribute('play-on-open') == "on") {
-              let inputOptionName = `${tangyPrompt.name}-${block.name}`
-              let playOnOpenEvent = new CustomEvent('input-sound-triggered', { detail: { sound: block.getAttribute('sound'), id: inputOptionName } } )
-              block.dispatchEvent(playOnOpenEvent)
-            }
+          if (block.hasAttribute('sound') && block.hasAttribute('play-on-open') && block.getAttribute('play-on-open') == "on") {
+            let inputOptionName = `${tangyPrompt.name}-${block.name}`
+            let playOnOpenEvent = new CustomEvent('input-sound-triggered', { detail: { sound: block.getAttribute('sound'), id: inputOptionName } } )
+            block.dispatchEvent(playOnOpenEvent)
           }
         })
       }
@@ -992,7 +989,9 @@ export class TangyFormItem extends PolymerElement {
       this.sectionPromptQueue.stopAndClearQueue();
     }
 
-    this.sectionPromptQueue.queue(input, event.detail.sound, eventName);
+    if (event.detail.sound) {
+      this.sectionPromptQueue.queue(input, event.detail.sound, eventName);
+    }
 
     if (input.hasAttribute("prompt-for") && input.getAttribute("prompt-for") != '') {
       let inputName = input.getAttribute("prompt-for")
