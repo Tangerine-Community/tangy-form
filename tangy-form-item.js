@@ -988,6 +988,10 @@ export class TangyFormItem extends PolymerElement {
     // Prefer the event name passed by the caller
     eventName = eventName || input.name;
 
+    if (event.detail.stopAndClearQueue) {
+      this.sectionPromptQueue.stopAndClearQueue();
+    }
+
     this.sectionPromptQueue.queue(input, event.detail.sound, eventName);
 
     if (input.hasAttribute("prompt-for") && input.getAttribute("prompt-for") != '') {
