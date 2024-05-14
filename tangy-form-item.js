@@ -730,7 +730,7 @@ export class TangyFormItem extends PolymerElement {
           const inputOptionName = `${tangyPrompt.name}-${block.name}`
           block.addEventListener('input-sound-triggered', this.onInputSoundTriggered.bind(this, inputOptionName));
 
-          if (block.hasAttribute('sound') && block.hasAttribute('play-on-open') && block.getAttribute('play-on-open') == "on") {
+          if (block.hasAttribute('play-on-open') && block.getAttribute('play-on-open') == "on") {
             let inputOptionName = `${tangyPrompt.name}-${block.name}`
             let playOnOpenEvent = new CustomEvent('input-sound-triggered', { detail: { sound: block.getAttribute('sound'), id: inputOptionName } } )
             block.dispatchEvent(playOnOpenEvent)
