@@ -166,11 +166,12 @@ const tangyFormReducer = function (state = initialState, action) {
           }
           props.inputs = item.inputs.map(input => {
             const inputMeta = itemMeta.inputs.find(inputMeta => inputMeta.name === input.name)
-            if(action.meta.disableComponents){
+            if(action.meta.disableComponents && action.meta.disableComponents.length > 0){
+              console.log(input.tagName)
               inputMeta.disabled = action.meta.disableComponents.find(e => e.toLowerCase() === input.tagName.toLowerCase())
               inputMeta.readOnly = true
             }
-            return Object.assign({}, input, {disabled: inputMeta ? !!inputMeta.disabled : false, readOnly: inputMeta?.readOnly})
+            return Object.assign({}, input, {disabled: inputMeta ? !!inputMeta.disabled : false, readOnly: inputMeta.readOnly})
           })
           return Object.assign({}, item, itemMeta, props)
         })
