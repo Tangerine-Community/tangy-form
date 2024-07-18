@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v4.44.0
+## v4.45.0
 
 At times we may need to disable some components when form is unlocked A good example is the tangy-gps component
 
@@ -12,7 +12,7 @@ Refs [Tangerine-Community/Tangerine#3703](https://github.com/Tangerine-Community
 Part of [Tangerine-Community/Tangerine#3719](https://github.com/Tangerine-Community/Tangerine/pull/3719)
 
 
-## v4.43.0, v4.43.1, v4.43.2
+## v4.44.0, v4.43.0, v4.43.1, v4.43.2
 
 __Tangerine Radio Blocks__
 
