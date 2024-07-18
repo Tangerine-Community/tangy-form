@@ -810,8 +810,8 @@ export class TangyForm extends PolymerElement {
 
   }
 
-  unlock() {
-    const meta = this.getMeta()
+   unlock(options ={}) {
+    const meta = {...this.getMeta(), ...options}
     this.store.dispatch({
       type: 'UNLOCK',
       meta

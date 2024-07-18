@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## v4.44.0
+
+At times we may need to disable some components when form is unlocked A good example is the tangy-gps component
+
+Add disabled property and readOnly property
+
+For example: `this.unlockFormResponses? this.formEl.unlock({disableComponents:['TANGY-GPS']}): null`
+
+Refs [Tangerine-Community/Tangerine#3703](https://github.com/Tangerine-Community/Tangerine/issues/3703)
+Part of [Tangerine-Community/Tangerine#3719](https://github.com/Tangerine-Community/Tangerine/pull/3719)
+
+
 ## v4.43.0, v4.43.1, v4.43.2
 
 __Tangerine Radio Blocks__
