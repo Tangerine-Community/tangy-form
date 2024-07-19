@@ -127,7 +127,7 @@ class TangyGps extends TangyInputBase {
     <div id="warn-text"></div>
     <div id="discrepancy-text"></div>
     <div>
-    <template is="dom-if" if="{{isDisabledAndHAsValue(disabled, value.latitude)}}">
+    <template is="dom-if" if="{{isDisabledAndHasValue(disabled, value.latitude)}}">
       <div id="lat-long">
           <span class="label">[[t.latitude]]:</span> [[value.latitude]] <br>
           <span class="label">[[t.longitude]]:</span> [[value.longitude]] <br>
@@ -437,7 +437,7 @@ class TangyGps extends TangyInputBase {
   _deg2rad(deg) {
     return deg * (Math.PI/180)
   }
-  isDisabledAndHAsValue(disabled, value){
+  isDisabledAndHasValue(disabled, value){
     return disabled && value
   }
 }
