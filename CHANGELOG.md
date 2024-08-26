@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.45.3
+
+Fix undefined access of input without tagName
+
 ## v4.45.2
 
 Fix check for 'readOnly' input metadata
