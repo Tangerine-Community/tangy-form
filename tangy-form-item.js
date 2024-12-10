@@ -818,6 +818,16 @@ export class TangyFormItem extends PolymerElement {
         scoreEl.name = `${tangyFormItem.getAttribute('id')}_score`
         scoreEl.value = score
         this.inputs = [...inputs, scoreEl.getModProps && window.useShrinker ? scoreEl.getModProps() : scoreEl.getProps()]
+
+        const countEl = document.createElement('tangy-input')
+        countEl.name = `${tangyFormItem.getAttribute('id')}_count`
+        countEl.value = inputs.length
+        this.inputs = [...this.inputs, countEl.getModProps && window.useShrinker ? countEl.getModProps() : countEl.getProps()]
+
+        const percentEl = document.createElement('tangy-input')
+        percentEl.name = `${tangyFormItem.getAttribute('id')}_percent`
+        percentEl.value = Math.round((score/inputs.length) * 100).toString()
+        this.inputs = [...this.inputs, percentEl.getModProps && window.useShrinker ? percentEl.getModProps() : percentEl.getProps()]
       }
     }
     if (window.devtools && window.devtools.open) {
