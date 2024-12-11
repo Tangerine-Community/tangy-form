@@ -772,34 +772,36 @@ export class TangyFormItem extends PolymerElement {
     this
       .querySelectorAll('[name]')
       .forEach(input => inputs.push(input.getModProps && window.useShrinker ? input.getModProps() : input.getProps()))
+    
     let score = 0
+    let inputCount = undefined
+    let scorePercent = undefined
     this.inputs = inputs
-
     if (this.querySelector('[name]')) {
       const tangyFormItem = this.querySelector('[name]').parentElement
       if(tangyFormItem.hasAttribute('scoring-section')) {
         const selections = tangyFormItem.getAttribute('scoring-fields') || []
-        if(selections.length>0){
+        if (selections.length > 0) {
           const selectionsArray = selections.split(',')
-        function findObjectByKey(array, key, value) {
-          for (let i = 0; i < array.length; i++) {   if (array[i] == key) {return array[i];}
-          } return null;
-        }
-        
-        this.inputs.forEach(input => {
-          const a = findObjectByKey(selectionsArray, input.name)
-          if (a != null){
-            let value;
-            if (input.tagName === 'TANGY-TIMED') {
-              //each grid present is scored as "number of correct items"/"number of total items" *100
-              const correct = numberOfCorrectItems(input);
-              const total = input.value.length
-              value = Math.round((correct/total) * 100).toString();
-            } else {
-              value = getValue(input.name);
-            }
-            score += sumScore(value)}
-        })
+          function findObjectByKey(array, key, value) {
+            for (let i = 0; i < array.length; i++) {   if (array[i] == key) {return array[i];}
+            } return null;
+          }
+          inputCount = selectionsArray.length
+          this.inputs.forEach(input => {
+            const a = findObjectByKey(selectionsArray, input.name)
+            if (a != null){
+              let value;
+              if (input.tagName === 'TANGY-TIMED') {
+                //each grid present is scored as "number of correct items"/"number of total items" *100
+                const correct = numberOfCorrectItems(input);
+                const total = input.value.length
+                value = Math.round((correct/total) * 100).toString();
+              } else {
+                value = getValue(input.name);
+              }
+              score += sumScore(value)}
+          })
         }
         if(tangyFormItem.hasAttribute('custom-scoring-logic')&&tangyFormItem.getAttribute('custom-scoring-logic').trim().length>0){
           score = this.customScore
@@ -820,13 +822,13 @@ export class TangyFormItem extends PolymerElement {
         this.inputs = [...inputs, scoreEl.getModProps && window.useShrinker ? scoreEl.getModProps() : scoreEl.getProps()]
 
         const countEl = document.createElement('tangy-input')
-        countEl.name = `${tangyFormItem.getAttribute('id')}_count`
-        countEl.value = inputs.length
+        countEl.name = `${tangyFormItem.getAttribute('id')}_score_count`
+        countEl.value = inputCount
         this.inputs = [...this.inputs, countEl.getModProps && window.useShrinker ? countEl.getModProps() : countEl.getProps()]
 
         const percentEl = document.createElement('tangy-input')
-        percentEl.name = `${tangyFormItem.getAttribute('id')}_percent`
-        percentEl.value = Math.round((score/inputs.length) * 100).toString()
+        percentEl.name = `${tangyFormItem.getAttribute('id')}_score_percent`
+        percentEl.value = scorePercent
         this.inputs = [...this.inputs, percentEl.getModProps && window.useShrinker ? percentEl.getModProps() : percentEl.getProps()]
       }
     }

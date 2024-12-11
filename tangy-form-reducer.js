@@ -376,7 +376,7 @@ const tangyFormReducer = function (state = initialState, action) {
             return Object.assign({}, item, props)
           return item
         })
-      })sc
+      })
 
     case 'HIDE_ITEM_BUTTONS':
       newState = Object.assign({}, state, {
