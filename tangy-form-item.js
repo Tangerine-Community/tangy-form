@@ -822,7 +822,7 @@ export class TangyFormItem extends PolymerElement {
         this.inputs = [...inputs, scoreEl.getModProps && window.useShrinker ? scoreEl.getModProps() : scoreEl.getProps()]
 
         const countEl = document.createElement('tangy-input')
-        countEl.name = `${tangyFormItem.getAttribute('id')}_score_count`
+        countEl.name = `${tangyFormItem.getAttribute('id')}_score_denominator`
         countEl.value = inputCount
         this.inputs = [...this.inputs, countEl.getModProps && window.useShrinker ? countEl.getModProps() : countEl.getProps()]
 
