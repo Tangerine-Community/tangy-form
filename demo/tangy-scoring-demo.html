@@ -70,7 +70,65 @@
     <demo-snippet>
         <template>
             <tangy-form id="my-form" title="My Form">
-                <tangy-form-item title="Awuoro Yawa" scoring-section scoring-fields="fam_word1,fam_word2,cb1,cb2,text1,fruit_time,tangy-timed-grid" id="item1">
+                <tangy-form-item title="Scoring Inputs" scoring-section scoring-fields="fam_word1,fam_word2,text1,fruit_time" id="item1">
+                    <tangy-radio-buttons name="fam_word1" question-number="" label="1. свет" hint-text=" [св'эт] закрытый слог, 2 согласные рядом" error-text="" warn-text="" class="" style="">
+                        <option value="0">Неверно / нет ответа</option>
+                        <option value="1">Верный</option>
+                    </tangy-radio-buttons>
+                    <tangy-radio-buttons name="fam_word2" question-number="" label="2. шар" hint-text="[шар] простой закрытый слог" error-text="" warn-text="" class="" style="">
+                        <option value="0">Неверно / нет ответа</option>
+                        <option value="1">Верный</option>
+                    </tangy-radio-buttons>
+                    <tangy-checkbox name="cb1">
+                        Tangerines?
+                    </tangy-checkbox>
+                    <tangy-checkbox name="cb2">
+                        Apples?
+                    </tangy-checkbox>
+                    <tangy-input name="text1" label="Number of people"></tangy-input>
+                    <tangy-checkboxes
+                            name="fruit_time"
+                            label="What <b>time</b> do you take fruit?"
+                            hint-text="This is <b>hint text</b>."
+                            >
+                        <option name="morning">Morning</option>
+                        <option name="afternoon">Afternoon</option>
+                        <option name="evening"><i>Evening</i></option>
+                    </tangy-checkboxes>
+                </tangy-form-item>
+                <tangy-form-item title="Tangy-Timed Scoring" scoring-section scoring-fields="tangy-timed-grid" id="item2">
+                    <tangy-timed required columns="3" name="tangy-timed-grid" auto-stop="2">
+                        <option value="class1_term2-d">1</option><option value="class1_term2-1">Jumatatu,</option><option value="class1_term2-2">wezi</option><option value="class1_term2-3">walikuja</option><option value="class1_term2-4">kijijini.</option><option value="class1_term2-5">Watu</option><option value="class1_term2-6">wakapiga</option><option value="class1_term2-7">mayowe.</option><option value="class1_term2-8">“Tunataka</option><option value="class1_term2-9">dhahabu!”</option><option value="class1_term2-10">wezi</option><option value="class1_term2-11">wakasema.</option><option value="class1_term2-12">Watu</option><option value="class1_term2-13">walipatwa</option><option value="class1_term2-14">na</option><option value="class1_term2-15">wasiwasi.</option><option value="class1_term2-16">Watu</option><option value="class1_term2-17">wakasema,</option><option value="class1_term2-18">“Hatuna</option><option value="class1_term2-19">chochote</option><option value="class1_term2-20">cha</option><option value="class1_term2-21">thamani.”</option><option value="class1_term2-22">Polisi</option><option value="class1_term2-23">walifika</option><option value="class1_term2-24">hapo.</option><option value="class1_term2-25">Waliwashika</option><option value="class1_term2-26">wezi</option><option value="class1_term2-27">na</option><option value="class1_term2-28">kuwatia</option><option value="class1_term2-29">pingu.</option><option value="class1_term2-30">Wezi</option><option value="class1_term2-31">walipelekwa</option><option value="class1_term2-32">gerezani.</option>
+                    </tangy-timed>
+                </tangy-form-item>
+                <tangy-form-item title="Custom Scoring Inputs" scoring-section scoring-fields="fam_word1,fam_word2,text1,fruit_time" id="item3" custom-scoring-logic="parseInt(
+                    parseInt(getValue('fam_word1')) + parseInt(getValue('fam_word2') + parseInt(getValue('text1'))  / 3 ) * 100">
+                    <tangy-radio-buttons name="fam_word1" question-number="" label="1. свет" hint-text=" [св'эт] закрытый слог, 2 согласные рядом" error-text="" warn-text="" class="" style="">
+                        <option value="0">Неверно / нет ответа</option>
+                        <option value="1">Верный</option>
+                    </tangy-radio-buttons>
+                    <tangy-radio-buttons name="fam_word2" question-number="" label="2. шар" hint-text="[шар] простой закрытый слог" error-text="" warn-text="" class="" style="">
+                        <option value="0">Неверно / нет ответа</option>
+                        <option value="1">Верный</option>
+                    </tangy-radio-buttons>
+                    <tangy-checkbox name="cb1">
+                        Tangerines?
+                    </tangy-checkbox>
+                    <tangy-checkbox name="cb2">
+                        Apples?
+                    </tangy-checkbox>
+                    <tangy-input name="text1" label="Number of people"></tangy-input>
+                    <tangy-checkboxes
+                            name="fruit_time"
+                            label="What <b>time</b> do you take fruit?"
+                            hint-text="This is <b>hint text</b>."
+                            >
+                        <option name="morning">Morning</option>
+                        <option name="afternoon">Afternoon</option>
+                        <option name="evening"><i>Evening</i></option>
+                    </tangy-checkboxes>
+                </tangy-form-item>
+                <tangy-form-item title="Mixed Inputs -- Only Scores Tangy-Timed" scoring-section scoring-fields="fam_word1,fam_word2,cb1,cb2,text1,fruit_time,tangy-timed-grid" id="item4">
                     <tangy-radio-buttons name="fam_word1" question-number="" label="1. свет" hint-text=" [св'эт] закрытый слог, 2 согласные рядом" error-text="" warn-text="" class="" style="">
                         <option value="0">Неверно / нет ответа</option>
                         <option value="1">Верный</option>

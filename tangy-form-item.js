@@ -772,37 +772,58 @@ export class TangyFormItem extends PolymerElement {
     this
       .querySelectorAll('[name]')
       .forEach(input => inputs.push(input.getModProps && window.useShrinker ? input.getModProps() : input.getProps()))
+    
     let score = 0
+    let percent = 0
+    let denominator = 0
+    let tangyTimedPercents = [];
     this.inputs = inputs
-
     if (this.querySelector('[name]')) {
       const tangyFormItem = this.querySelector('[name]').parentElement
       if(tangyFormItem.hasAttribute('scoring-section')) {
-        const selections = tangyFormItem.getAttribute('scoring-fields') || []
-        if(selections.length>0){
-          const selectionsArray = selections.split(',')
-        function findObjectByKey(array, key, value) {
-          for (let i = 0; i < array.length; i++) {   if (array[i] == key) {return array[i];}
-          } return null;
-        }
-        
-        this.inputs.forEach(input => {
-          const a = findObjectByKey(selectionsArray, input.name)
-          if (a != null){
-            let value;
-            if (input.tagName === 'TANGY-TIMED') {
-              //each grid present is scored as "number of correct items"/"number of total items" *100
-              const correct = numberOfCorrectItems(input);
-              const total = input.value.length
-              value = Math.round((correct/total) * 100).toString();
-            } else {
-              value = getValue(input.name);
-            }
-            score += sumScore(value)}
-        })
-        }
-        if(tangyFormItem.hasAttribute('custom-scoring-logic')&&tangyFormItem.getAttribute('custom-scoring-logic').trim().length>0){
+        /*
+         * Per the documentation:
+         * - custom scoring always returns a percent
+         * - users are supposed to only have one type of input per scoring section
+         * - if there is a tangy-timed input, the score is the average of the percents of each grid. All other scores are ignored.
+         */
+        if (tangyFormItem.hasAttribute('custom-scoring-logic') && tangyFormItem.getAttribute('custom-scoring-logic').trim().length > 0) {
           score = this.customScore
+          percent = score
+          denominator = 100
+        } else {
+          const selections = tangyFormItem.getAttribute('scoring-fields') || []
+          if (selections.length > 0) {
+            const selectionsArray = selections.split(',')
+            function findObjectByKey(array, key, value) {
+              for (let i = 0; i < array.length; i++) {   if (array[i] == key) {return array[i];}
+              } return null;
+            }
+            this.inputs.forEach(input => {
+              const a = findObjectByKey(selectionsArray, input.name)
+              if (a != null) {
+                let value;
+                if (input.tagName === 'TANGY-TIMED') {
+                  //each grid present is scored as "number of correct items"/"number of total items" *100 aka a percent
+                  const correct = numberOfCorrectItems(input);
+                  const total = input.value.length
+                  value = Math.round((correct/total) * 100).toString();
+                  tangyTimedPercents.push(value);
+                } else {
+                  value = getValue(input.name);
+                  score += sumScore(value)
+                  denominator += 1
+                }
+              }
+            })
+            if (tangyTimedPercents.length > 0) {
+              percent = Math.round(tangyTimedPercents.reduce((a, b) => parseInt(a) + parseInt(b)) / tangyTimedPercents.length)
+              score = percent
+              denominator = 100
+            } else {
+              percent = Math.round((score/denominator) * 100)
+            }
+          }
         }
         function sumScore(value) {
           let s = 0
@@ -818,6 +839,16 @@ export class TangyFormItem extends PolymerElement {
         scoreEl.name = `${tangyFormItem.getAttribute('id')}_score`
         scoreEl.value = score
         this.inputs = [...inputs, scoreEl.getModProps && window.useShrinker ? scoreEl.getModProps() : scoreEl.getProps()]
+
+        const countEl = document.createElement('tangy-input')
+        countEl.name = `${tangyFormItem.getAttribute('id')}_score_denominator`
+        countEl.value = denominator
+        this.inputs = [...this.inputs, countEl.getModProps && window.useShrinker ? countEl.getModProps() : countEl.getProps()]
+
+        const percentEl = document.createElement('tangy-input')
+        percentEl.name = `${tangyFormItem.getAttribute('id')}_score_percent`
+        percentEl.value = percent
+        this.inputs = [...this.inputs, percentEl.getModProps && window.useShrinker ? percentEl.getModProps() : percentEl.getProps()]
       }
     }
     if (window.devtools && window.devtools.open) {
