@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## v4.46.0
+
+Section Scoring Updates:
+- Add `<section_id>_percet` and `<section_id>_denominator` to the form item outputs.
+- Prevent scoring of both tangy-timed, custom-scoring and regular scoring in the same section.
+
+Rules:
+- custom scoring always returns a percent
+- users should only use one type of input per scoring section
+- if there is a tangy-timed input, the score is the average of the percents of each grid. All other scores are ignored.
+
 ## v4.45.4
 
 Fix missing function parens
