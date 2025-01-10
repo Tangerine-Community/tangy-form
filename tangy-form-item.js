@@ -775,7 +775,6 @@ export class TangyFormItem extends PolymerElement {
     
     let score = 0
     let inputCount = undefined
-    let scorePercent = undefined
     this.inputs = inputs
     if (this.querySelector('[name]')) {
       const tangyFormItem = this.querySelector('[name]').parentElement
@@ -828,7 +827,7 @@ export class TangyFormItem extends PolymerElement {
 
         const percentEl = document.createElement('tangy-input')
         percentEl.name = `${tangyFormItem.getAttribute('id')}_score_percent`
-        percentEl.value = scorePercent
+        percentEl.value = inputCount > 0 ? int(score/inputCount*100) : 0
         this.inputs = [...this.inputs, percentEl.getModProps && window.useShrinker ? percentEl.getModProps() : percentEl.getProps()]
       }
     }
