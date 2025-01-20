@@ -102,7 +102,7 @@
                     </tangy-timed>
                 </tangy-form-item>
                 <tangy-form-item title="Custom Scoring Inputs" scoring-section scoring-fields="fam_word1,fam_word2,text1,fruit_time" id="item3" custom-scoring-logic="parseInt(
-                    parseInt(getValue('fam_word1')) + parseInt(getValue('fam_word2') + parseInt(getValue('text1'))  / 3 ) * 100">
+                    parseInt(getValue('fam_word1')) + parseInt(getValue('fam_word2')) + parseInt(getValue('text1'))  / 3 ) * 100">
                     <tangy-radio-buttons name="fam_word1" question-number="" label="1. свет" hint-text=" [св'эт] закрытый слог, 2 согласные рядом" error-text="" warn-text="" class="" style="">
                         <option value="0">Неверно / нет ответа</option>
                         <option value="1">Верный</option>
@@ -164,11 +164,11 @@
                 document.querySelector('#my-form').addEventListener('submit', event => {
                     // By default, the form response is locked and the user can browse it. Use event.preventDefault()
                     // to do something else.
-                    event.preventDefault()
+                    // event.preventDefault()
                     // 3 ways to inspect the user's response to the form. Ordered by level of detail.
-                    console.log(event.target.response)
-                    console.log(event.target.inputs)
-                    console.log(event.target.values)
+                    // console.log(event.target.response)
+                    // console.log(event.target.inputs)
+                    // console.log(event.target.values)
                 })
             </script>
         </template>

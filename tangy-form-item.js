@@ -812,7 +812,7 @@ export class TangyFormItem extends PolymerElement {
                 } else {
                   value = getValue(input.name);
                   score += sumScore(value)
-                  denominator += 1
+                  denominator += Array.isArray(input.value) ? input.value.length : 1
                 }
               }
             })
