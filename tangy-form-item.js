@@ -91,6 +91,12 @@ export class TangyFormItem extends PolymerElement {
           display: none;
         }
 
+        :host([single-input-mode]) paper-card {
+          width: 100%;
+          max-width: 100% !important;
+          display: inline-block;
+        }
+
        /*
         * Fullscreen 
         */
@@ -269,88 +275,93 @@ export class TangyFormItem extends PolymerElement {
         }
 
       </style>
-      <paper-card id="card" class="shrunk">
-        <div class="card-content">
-          <label class="heading"></label>
-          <slot></slot>
-        </div>
-        <div class="card-actions">
-          <paper-button id="disable-fullscreen" on-click="onExitFullscreenClick" >
-            <iron-icon icon="fullscreen-exit"></iron-icon>
-          </paper-button>
-          <paper-button id="enable-fullscreen" on-click="onEnterFullscreenClick" >
-            <iron-icon icon="fullscreen"></iron-icon>
-          </paper-button>
-          <template is="dom-if" if="{{!hideButtons}}">
-            <paper-button id="open" on-click="onOpenButtonPress"><t-t>open</t-t></paper-button>
-            <template is="dom-if" if="{{!locked}}">
-              <paper-button id="close" on-click="onCloseButtonPress"><t-t>save</t-t></paper-button>
-            </template>
-            <template is="dom-if" if="{{locked}}">
-              <paper-button id="close" on-click="onCloseButtonPress"><t-t>close</t-t></paper-button>
-            </template>
-          </template>
-          <template is="dom-if" if="{{open}}">
-            <template is="dom-if" if="{{rightToLeft}}">
-              <template is="dom-if" if="{{showCompleteButton}}">
-                <paper-button id="complete" on-click="clickedComplete" style="float:left">
-                  <t-t>submit</t-t>
-                </paper-button>
+      <template is="dom-if" if="{{!singleInputMode}}">
+        <paper-card id="card" class="shrunk">
+          <div class="card-content">
+            <label class="heading"></label>
+            <slot></slot>
+          </div>
+          <div class="card-actions">
+            <paper-button id="disable-fullscreen" on-click="onExitFullscreenClick" >
+              <iron-icon icon="fullscreen-exit"></iron-icon>
+            </paper-button>
+            <paper-button id="enable-fullscreen" on-click="onEnterFullscreenClick" >
+              <iron-icon icon="fullscreen"></iron-icon>
+            </paper-button>
+            <template is="dom-if" if="{{!hideButtons}}">
+              <paper-button id="open" on-click="onOpenButtonPress"><t-t>open</t-t></paper-button>
+              <template is="dom-if" if="{{!locked}}">
+                <paper-button id="close" on-click="onCloseButtonPress"><t-t>save</t-t></paper-button>
               </template>
-              <template is="dom-if" if="{{!hideNextButton}}">
-                <paper-button id="back" on-click="next" >
-                  <template is="dom-if" if="{{!hideNavIcons}}">
-                    <iron-icon icon="arrow-back"></iron-icon>
-                  </template>
+              <template is="dom-if" if="{{locked}}">
+                <paper-button id="close" on-click="onCloseButtonPress"><t-t>close</t-t></paper-button>
+              </template>
+            </template>
+            <template is="dom-if" if="{{open}}">
+              <template is="dom-if" if="{{rightToLeft}}">
+                <template is="dom-if" if="{{showCompleteButton}}">
+                  <paper-button id="complete" on-click="clickedComplete" style="float:left">
+                    <t-t>submit</t-t>
+                  </paper-button>
+                </template>
+                <template is="dom-if" if="{{!hideNextButton}}">
+                  <paper-button id="back" on-click="next" >
+                    <template is="dom-if" if="{{!hideNavIcons}}">
+                      <iron-icon icon="arrow-back"></iron-icon>
+                    </template>
+                    <template is="dom-if" if="{{!hideNavLabels}}">
+                      <t-t>next</t-t>
+                    </template>
+                  </paper-button>
+                </template>
+                <template is="dom-if" if="{{!hideBackButton}}">
+                  <paper-button id="next" on-click="back" >
                   <template is="dom-if" if="{{!hideNavLabels}}">
-                    <t-t>next</t-t>
-                  </template>
-                </paper-button>
+                      <t-t>back</t-t>
+                    </template>
+                    <template is="dom-if" if="{{!hideNavIcons}}">
+                      <iron-icon icon="arrow-forward"></iron-icon>
+                    </template>
+                  </paper-button>
+                </template>
               </template>
-              <template is="dom-if" if="{{!hideBackButton}}">
-                <paper-button id="next" on-click="back" >
-                 <template is="dom-if" if="{{!hideNavLabels}}">
-                    <t-t>back</t-t>
-                  </template>
-                  <template is="dom-if" if="{{!hideNavIcons}}">
-                    <iron-icon icon="arrow-forward"></iron-icon>
-                  </template>
-                </paper-button>
-              </template>
-            </template>
-            <template is="dom-if" if="{{!rightToLeft}}">
-              <template is="dom-if" if="{{!hideBackButton}}">
-                <paper-button id="back" on-click="back" >
-                  <template is="dom-if" if="{{!hideNavIcons}}">
-                    <iron-icon icon="arrow-back"></iron-icon>
-                  </template>
+              <template is="dom-if" if="{{!rightToLeft}}">
+                <template is="dom-if" if="{{!hideBackButton}}">
+                  <paper-button id="back" on-click="back" >
+                    <template is="dom-if" if="{{!hideNavIcons}}">
+                      <iron-icon icon="arrow-back"></iron-icon>
+                    </template>
+                    <template is="dom-if" if="{{!hideNavLabels}}">
+                      <t-t>back</t-t>
+                    </template>
+                  </paper-button>
+                </template>
+                <template is="dom-if" if="{{!hideNextButton}}">
+                  <paper-button id="next" on-click="next" >
                   <template is="dom-if" if="{{!hideNavLabels}}">
-                    <t-t>back</t-t>
-                  </template>
-                </paper-button>
-              </template>
-              <template is="dom-if" if="{{!hideNextButton}}">
-                <paper-button id="next" on-click="next" >
-                 <template is="dom-if" if="{{!hideNavLabels}}">
-                    <t-t>Next</t-t>
-                  </template>
-                  <template is="dom-if" if="{{!hideNavIcons}}">
-                    <iron-icon icon="arrow-forward"></iron-icon>
-                  </template>
-                </paper-button>
-              </template>
-              <template is="dom-if" if="{{showCompleteButton}}">
-                <paper-button id="complete" on-click="clickedComplete" style="float:right" >
-                  <t-t>submit</t-t>
-                </paper-button>
+                      <t-t>Next</t-t>
+                    </template>
+                    <template is="dom-if" if="{{!hideNavIcons}}">
+                      <iron-icon icon="arrow-forward"></iron-icon>
+                    </template>
+                  </paper-button>
+                </template>
+                <template is="dom-if" if="{{showCompleteButton}}">
+                  <paper-button id="complete" on-click="clickedComplete" style="float:right" >
+                    <t-t>submit</t-t>
+                  </paper-button>
+                </template>
               </template>
             </template>
-          </template>
-          <template is="dom-if" if="{{!incomplete}}">
-            <iron-icon class="check-mark" style="color: var(--primary-color); float: right; margin-top: 10px" icon="icons:check-circle"></iron-icon>
-          </template>
-        </div>
-      </paper-card>
+            <template is="dom-if" if="{{!incomplete}}">
+              <iron-icon class="check-mark" style="color: var(--primary-color); float: right; margin-top: 10px" icon="icons:check-circle"></iron-icon>
+            </template>
+          </div>
+        </paper-card>
+      </template>
+      <template is="dom-if" if="{{singleInputMode}}">
+        <slot></slot>
+      </template>
     `
   }
 
@@ -487,6 +498,11 @@ export class TangyFormItem extends PolymerElement {
         type: Number,
         value: undefined,
         reflectToAttribute: false
+      },
+      singleInputMode: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
       }
     };
   }
@@ -497,9 +513,11 @@ export class TangyFormItem extends PolymerElement {
 
   // Apply state in the store to the DOM.
   reflect() {
-    this.shadowRoot.querySelector('.heading').innerHTML = this.hasAttribute('title')
-      ? this.getAttribute('title')
-      : ''
+    if (!this.singleInputMode) {
+      this.shadowRoot.querySelector('.heading').innerHTML = this.hasAttribute('title')
+        ? this.getAttribute('title')
+        : ''
+    }
     // Reflect to tangy-input-groups first because they may need to template out some additional inputs.
     this.inputs
       .filter(input => input.tagName === 'TANGY-INPUT-GROUPS')
@@ -723,6 +741,23 @@ export class TangyFormItem extends PolymerElement {
       tangyConsentEl.addEventListener('TANGY_INPUT_CONSENT_NO', this.clickedNoConsent.bind(this))
     }
 
+    if (this.singleInputMode) {
+      let input;
+      if (this.querySelector("tangy-select")) {
+        input = this.querySelector("tangy-select")
+        input.addEventListener('change', this.clickedComplete.bind(this))
+      } else if (this.querySelector("tangy-input")) {
+        input = this.querySelector("tangy-input")
+        input.addEventListener('change', this.clickedComplete.bind(this))
+      } else if (this.querySelector("tangy-checkbox")) {
+        input = this.querySelector("tangy-checkbox")
+        input.addEventListener('change', this.clickedComplete.bind(this))
+      } else if (this.querySelector("tangy-eftouch")) {
+        input = this.querySelector("tangy-eftouch")
+        input.addEventListener('change', this.clickedComplete.bind(this))
+      }
+    }
+
     this.querySelectorAll('tangy-prompt-box').forEach((tangyPrompt) => {
       // add event listeners for clicks
       if (tangyPrompt.shadowRoot) {
@@ -940,11 +975,10 @@ export class TangyFormItem extends PolymerElement {
     }
   }
 
-
   clickedComplete() {
     if (this.validate()) {
       this.submit()
-      this.dispatchEvent(new CustomEvent('FORM_RESPONSE_COMPLETE', {bubbles: true}))
+      this.dispatchEvent(new CustomEvent('FORM_RESPONSE_COMPLETE', {bubbles: true, detail: {singleInputMode: this.singleInputMode}}))
     }
   }
 

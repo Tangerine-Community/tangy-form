@@ -12,6 +12,7 @@ const tangyFormReducer = function (state = initialState, action) {
   var newState
   var tmp = {}
   var firstNotDisabled = 0
+  var singleInputMode = action.detail && action.detail.singleInputMode ? action.detail.singleInputMode : false
 
   switch(action.type) {
 

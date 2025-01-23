@@ -286,7 +286,7 @@ export class TangyForm extends PolymerElement {
       }
       </style>
       <div id="nav"></div>
-      <template is="dom-if" if="{{complete}}">
+      <template is="dom-if" if="{{showCompleteButtons()}}">
         <div style="text-align:right">
           <paper-button  id="open-all-items" on-click="openAllItems" >
               [[t.openAllItems]]
@@ -333,6 +333,10 @@ export class TangyForm extends PolymerElement {
     this.store.dispatch({ type: 'CLOSE_ALL_ITEMS' })
     this.shadowRoot.querySelector('#open-all-items').style.display = 'initial';
     this.shadowRoot.querySelector('#close-all-items').style.display = 'none';
+  }
+
+  showCompleteButtons() {
+    return this.complete && !this.singleInputMode
   }
 
   static get is() { return 'tangy-form'; }
@@ -433,6 +437,11 @@ export class TangyForm extends PolymerElement {
       lastSaveUnixtime: {
         type: Number,
         value: undefined,
+        reflectToAttribute: true
+      },
+      singleInputMode: {
+        type: Boolean,
+        value: false,
         reflectToAttribute: true
       }
     }
@@ -549,7 +558,8 @@ export class TangyForm extends PolymerElement {
     }
     if (cancelledSubmit) return
     this.store.dispatch({
-      type: 'FORM_RESPONSE_COMPLETE'
+      type: 'FORM_RESPONSE_COMPLETE',
+      detail: event.detail
     })
     const cancelledComplete = !this.dispatchEvent(new CustomEvent('tangy-form-complete', {cancelable: true}))
     if (cancelledComplete) return
