@@ -802,9 +802,9 @@ export class TangyFormItem extends PolymerElement {
             this.inputs.forEach(input => {
               const a = findObjectByKey(selectionsArray, input.name)
               if (a != null) {
-                let value;
-                let score;
-                let denominator;
+                let value = 0;
+                let score = 0;
+                let denominator = 0;
                 if (input.tagName === 'TANGY-TIMED') {
                   //each grid present is scored as "number of correct items"/"number of total items" *100 aka a percent
                   const correct = numberOfCorrectItems(input);
