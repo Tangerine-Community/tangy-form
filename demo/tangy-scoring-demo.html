@@ -70,31 +70,47 @@
     <demo-snippet>
         <template>
             <tangy-form id="my-form" title="My Form">
-                <tangy-form-item title="Scoring Inputs" scoring-section scoring-fields="fam_word1,fam_word2,text1,fruit_time" id="item1">
-                    <tangy-radio-buttons name="fam_word1" question-number="" label="1. свет" hint-text=" [св'эт] закрытый слог, 2 согласные рядом" error-text="" warn-text="" class="" style="">
-                        <option value="0">Неверно / нет ответа</option>
-                        <option value="1">Верный</option>
+                <tangy-form-item title="Scoring Inputs" scoring-section scoring-fields="fam_word1,fam_word2,fam_word3,text1,text2,fruit_time,fruit_time_2" id="item1">
+                    <tangy-radio-buttons name="fam_word1" question-number="" label="Radio Buttons with Number Values" hint-text="" error-text="" warn-text="" class="" style="">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
                     </tangy-radio-buttons>
-                    <tangy-radio-buttons name="fam_word2" question-number="" label="2. шар" hint-text="[шар] простой закрытый слог" error-text="" warn-text="" class="" style="">
-                        <option value="0">Неверно / нет ответа</option>
-                        <option value="1">Верный</option>
+                    <tangy-radio-buttons name="fam_word2" question-number="" label="Second Radio Buttons with Number Values" hint-text="" error-text="" warn-text="" class="" style="">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </tangy-radio-buttons>
+                    <tangy-radio-buttons name="fam_word3" question-number="" label="Radio Buttons with String Values" hint-text="" error-text="" warn-text="" class="" style="">
+                        <option value="0">0</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
                     </tangy-radio-buttons>
                     <tangy-checkbox name="cb1">
-                        Tangerines?
+                        Checked?
                     </tangy-checkbox>
                     <tangy-checkbox name="cb2">
-                        Apples?
+                        Not Checked?
                     </tangy-checkbox>
-                    <tangy-input name="text1" label="Number of people"></tangy-input>
+                    <tangy-input name="text1" label="Number Input with Max" max="4" type="number"></tangy-input>
+                    <tangy-input name="text2" label="String Input Answer"></tangy-input>
                     <tangy-checkboxes
                             name="fruit_time"
-                            label="What <b>time</b> do you take fruit?"
+                            label="Checkboxes with String Values"
                             hint-text="This is <b>hint text</b>."
                             >
                         <option name="morning">Morning</option>
                         <option name="afternoon">Afternoon</option>
                         <option name="evening"><i>Evening</i></option>
                     </tangy-checkboxes>
+                    <tangy-checkboxes
+                        name="fruit_time_2"
+                        label="Checkboxes with Number Values"
+                        hint-text="This is <b>hint text</b>."
+                        >
+                    <option name="0">0</option>
+                    <option name="1">1</option>
+                    <option name="2"><i>2</i></option>
+                </tangy-checkboxes>
                 </tangy-form-item>
                 <tangy-form-item title="Tangy-Timed Scoring" scoring-section scoring-fields="tangy-timed-grid" id="item2">
                     <tangy-timed required columns="3" name="tangy-timed-grid" auto-stop="2">
@@ -102,7 +118,7 @@
                     </tangy-timed>
                 </tangy-form-item>
                 <tangy-form-item title="Custom Scoring Inputs" scoring-section scoring-fields="fam_word1,fam_word2,text1,fruit_time" id="item3" custom-scoring-logic="parseInt(
-                    parseInt(getValue('fam_word1')) + parseInt(getValue('fam_word2') + parseInt(getValue('text1'))  / 3 ) * 100">
+                    parseInt(getValue('fam_word1')) + parseInt(getValue('fam_word2')) + parseInt(getValue('text1'))  / 3 ) * 100">
                     <tangy-radio-buttons name="fam_word1" question-number="" label="1. свет" hint-text=" [св'эт] закрытый слог, 2 согласные рядом" error-text="" warn-text="" class="" style="">
                         <option value="0">Неверно / нет ответа</option>
                         <option value="1">Верный</option>
@@ -111,12 +127,6 @@
                         <option value="0">Неверно / нет ответа</option>
                         <option value="1">Верный</option>
                     </tangy-radio-buttons>
-                    <tangy-checkbox name="cb1">
-                        Tangerines?
-                    </tangy-checkbox>
-                    <tangy-checkbox name="cb2">
-                        Apples?
-                    </tangy-checkbox>
                     <tangy-input name="text1" label="Number of people"></tangy-input>
                     <tangy-checkboxes
                             name="fruit_time"
@@ -128,21 +138,7 @@
                         <option name="evening"><i>Evening</i></option>
                     </tangy-checkboxes>
                 </tangy-form-item>
-                <tangy-form-item title="Mixed Inputs -- Only Scores Tangy-Timed" scoring-section scoring-fields="fam_word1,fam_word2,cb1,cb2,text1,fruit_time,tangy-timed-grid" id="item4">
-                    <tangy-radio-buttons name="fam_word1" question-number="" label="1. свет" hint-text=" [св'эт] закрытый слог, 2 согласные рядом" error-text="" warn-text="" class="" style="">
-                        <option value="0">Неверно / нет ответа</option>
-                        <option value="1">Верный</option>
-                    </tangy-radio-buttons>
-                    <tangy-radio-buttons name="fam_word2" question-number="" label="2. шар" hint-text="[шар] простой закрытый слог" error-text="" warn-text="" class="" style="">
-                        <option value="0">Неверно / нет ответа</option>
-                        <option value="1">Верный</option>
-                    </tangy-radio-buttons>
-                    <tangy-checkbox name="cb1">
-                        Tangerines?
-                    </tangy-checkbox>
-                    <tangy-checkbox name="cb2">
-                        Apples?
-                    </tangy-checkbox>
+                <tangy-form-item title="Mixed Inputs -- Only Scores Tangy-Timed" scoring-section scoring-fields="text1,fruit_time,tangy-timed-grid" id="item4">
                     <tangy-input name="text1" label="Number of people"></tangy-input>
                     <tangy-checkboxes
                             name="fruit_time"
@@ -164,11 +160,11 @@
                 document.querySelector('#my-form').addEventListener('submit', event => {
                     // By default, the form response is locked and the user can browse it. Use event.preventDefault()
                     // to do something else.
-                    event.preventDefault()
+                    // event.preventDefault()
                     // 3 ways to inspect the user's response to the form. Ordered by level of detail.
-                    console.log(event.target.response)
-                    console.log(event.target.inputs)
-                    console.log(event.target.values)
+                    // console.log(event.target.response)
+                    // console.log(event.target.inputs)
+                    // console.log(event.target.values)
                 })
             </script>
         </template>

@@ -773,9 +773,9 @@ export class TangyFormItem extends PolymerElement {
       .querySelectorAll('[name]')
       .forEach(input => inputs.push(input.getModProps && window.useShrinker ? input.getModProps() : input.getProps()))
     
-    let score = 0
+    let scoreSum = 0
     let percent = 0
-    let denominator = 0
+    let denominatorSum = 0
     let tangyTimedPercents = [];
     this.inputs = inputs
     if (this.querySelector('[name]')) {
@@ -788,9 +788,9 @@ export class TangyFormItem extends PolymerElement {
          * - if there is a tangy-timed input, the score is the average of the percents of each grid. All other scores are ignored.
          */
         if (tangyFormItem.hasAttribute('custom-scoring-logic') && tangyFormItem.getAttribute('custom-scoring-logic').trim().length > 0) {
-          score = this.customScore
-          percent = score
-          denominator = 100
+          scoreSum = this.customScore
+          percent = this.customScore
+          denominatorSum = 100
         } else {
           const selections = tangyFormItem.getAttribute('scoring-fields') || []
           if (selections.length > 0) {
@@ -802,28 +802,56 @@ export class TangyFormItem extends PolymerElement {
             this.inputs.forEach(input => {
               const a = findObjectByKey(selectionsArray, input.name)
               if (a != null) {
-                let value;
+                let value = 0;
+                let score = 0;
+                let denominator = 0;
                 if (input.tagName === 'TANGY-TIMED') {
                   //each grid present is scored as "number of correct items"/"number of total items" *100 aka a percent
                   const correct = numberOfCorrectItems(input);
                   const total = input.value.length
                   value = Math.round((correct/total) * 100).toString();
                   tangyTimedPercents.push(value);
-                } else {
+                } else if (input.tagName === 'TANGY-CHECKBOX') {
+                  // if the input is a checkbox, the score is 1 if checked, 0 if not
+                  value = isChecked(input.name) ? 1 : 0
+                  score += value
+                  denominator = 1
+                } else if (Array.isArray(input.value)) {
+                  // the score is the sum of the values and the denominator is the max value or length of the array
                   value = getValue(input.name);
                   score += sumScore(value)
-                  denominator += 1
+                  denominator =  maxValue(input.value)
+                } else if (input.tagName === 'TANGY-INPUT' && input.type === 'number') {
+                  // if the input is a number, the score is the value and the denominator is the max
+                  value = parseInt(input.value)
+                  score += value
+                  denominator = parseInt(input.max)
+                } else {
+                  // default to the input value and increment the denominator
+                  value = getValue(input.name);
+                  score += sumScore(value)
+                  denominator = 1
                 }
+                scoreSum += score
+                denominatorSum += denominator
               }
             })
             if (tangyTimedPercents.length > 0) {
               percent = Math.round(tangyTimedPercents.reduce((a, b) => parseInt(a) + parseInt(b)) / tangyTimedPercents.length)
-              score = percent
-              denominator = 100
+              scoreSum = percent
+              denominatorSum = 100
             } else {
-              percent = Math.round((score/denominator) * 100)
+              percent = Math.round((scoreSum/denominatorSum) * 100)
             }
           }
+        }
+        function maxValue(inputValues) {
+          if (inputValues.some(value => isNaN(value.name))) {
+            return inputValues.length;
+          }
+
+          const values = inputValues.map(value => { return parseInt(value.name) });
+          return Math.max(...values)
         }
         function sumScore(value) {
           let s = 0
@@ -837,12 +865,12 @@ export class TangyFormItem extends PolymerElement {
         }
         const scoreEl = document.createElement('tangy-input')
         scoreEl.name = `${tangyFormItem.getAttribute('id')}_score`
-        scoreEl.value = score
+        scoreEl.value = scoreSum
         this.inputs = [...inputs, scoreEl.getModProps && window.useShrinker ? scoreEl.getModProps() : scoreEl.getProps()]
 
         const countEl = document.createElement('tangy-input')
         countEl.name = `${tangyFormItem.getAttribute('id')}_score_denominator`
-        countEl.value = denominator
+        countEl.value = denominatorSum
         this.inputs = [...this.inputs, countEl.getModProps && window.useShrinker ? countEl.getModProps() : countEl.getProps()]
 
         const percentEl = document.createElement('tangy-input')
