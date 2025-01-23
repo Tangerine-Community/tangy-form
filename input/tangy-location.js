@@ -5,6 +5,7 @@ import '../util/html-element-props.js'
 import '@polymer/paper-input/paper-input.js'
 import '../style/tangy-element-styles.js';
 import '../style/tangy-common-styles.js'
+import './filter-select.js';
 import { TangyInputBase } from '../tangy-input-base.js'
 /**
  * `tangy-location`
@@ -628,6 +629,7 @@ class TangyLocation extends TangyInputBase {
         <label id="label" for="group">${this.hasAttribute('label') ? this.getAttribute('label') : ''}</label>
  
   ${selections.map((selection, i) => `
+    <filter-select></filter-select>
     
     <div class="mdc-select">
     <select class="mdc-select__surface"
