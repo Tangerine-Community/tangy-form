@@ -443,6 +443,7 @@ class TangyLocation extends TangyInputBase {
     }
   /* End of Materialize Select Styles */
       </style>
+      <filter-select data="[[dynamicData]]" category-name="agh"></filter-select>
       <div id="container"></div>
 `;
   }
@@ -547,7 +548,16 @@ class TangyLocation extends TangyInputBase {
         type: Boolean,
         value: false,
         reflectToAttribute: true
-      }
+      },
+      dynamicData: {
+        type: Array,
+        value: () => [
+          { label: 'Iris', id: 'A-User' },
+          { label: 'Jonathan', id: 'B-User' },
+          { label: 'Charlie', id: 'Admin' },
+          { label: 'Daisy', id: 'Guest' },
+        ],
+      },
     };
   }
 
@@ -629,7 +639,7 @@ class TangyLocation extends TangyInputBase {
         <label id="label" for="group">${this.hasAttribute('label') ? this.getAttribute('label') : ''}</label>
  
   ${selections.map((selection, i) => `
-    <filter-select></filter-select>
+    <filter-select category-name=${selection.level}></filter-select>
     
     <div class="mdc-select">
     <select class="mdc-select__surface"

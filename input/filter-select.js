@@ -18,8 +18,12 @@ class FilterSelect extends PolymerElement {
             },
             filteredData: {
                 type: Array,
-                computed: 'computeFilteredData(data, filterText, filterCategory)',
+                computed: 'computeFilteredData(data, filterText)',
             },
+            categoryName: {
+                type: String,
+                value: '',
+            }
         };
     }
 
@@ -104,16 +108,28 @@ class FilterSelect extends PolymerElement {
 
       <!-- Filtered Data -->
       <div class="select-wrapper">
+          <label>[[categoryName]]</label>
           <select size="2">
             <template is="dom-repeat" items="[[filteredData]]">
               <option key="[[item.id]]">[[item.label]]</option>
             </template>
           </select>
       </div>
+      <div class="matches-list-wrapper">
+          <template is="dom-if" if="[[filterText]]">
+              <label>List of matches:</label>
+              <ul>
+                <template is="dom-repeat" items="[[filteredData]]">
+                  <li>[[item.label]]</li>
+                </template>
+              </ul>
+          </template>
+      </div>
     `;
     }
 
-    computeFilteredData(data, filterText, filterCategory) {
+    computeFilteredData(data, filterText) {
+        if(!data) return [];
         return data.filter((item) => {
             const matchesText = item.label
                 .toLowerCase()
