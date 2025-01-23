@@ -1,9 +1,18 @@
 # CHANGELOG
 
+## v4.46.1
+
+Calculate section score percent and denominator based on type of input:
+- TANGY-TIMED: each grid present is scored as "number of correct items"/"number of total items" *100 aka a percent
+- TANGY-CHECKBOX: score is 1 if checked, 0 if not; denominator is 1 per checkbox
+- Inputs with Array values (TANGY-CHECKBOXES, TANGY-RADIO-BUTTONS): score is the value selected in the array; denominator is the max value of the array.
+- TANGY-INPUT with `type=number` and `max=X` attributes: score is the input value; denominator is the input.max value.
+- DEFAULT: score is the value; denominator is 1
+
 ## v4.46.0
 
 Section Scoring Updates:
-- Add `<section_id>_percet` and `<section_id>_denominator` to the form item outputs.
+- Add `<section_id>_percent` and `<section_id>_denominator` to the form item outputs.
 - Prevent scoring of both tangy-timed, custom-scoring and regular scoring in the same section.
 
 Rules:
