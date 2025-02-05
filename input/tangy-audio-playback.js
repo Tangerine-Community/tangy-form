@@ -110,4 +110,4 @@ export class TangyAudioPlayback extends TangyInputBase {
   }
 }
 
-customElements.define("tangy-audio-playback", TangyAudioPlayback);
+window.customElements.define("tangy-audio-playback", TangyAudioPlayback);
