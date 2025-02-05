@@ -12,49 +12,61 @@ export class TangyAudioRecording extends TangyInputBase {
       <style include="tangy-common-styles"></style>
       <style include="tangy-element-styles"></style>
       <style>
-             .hint-text {
-               margin-top: 6px;
-               margin-left: 4px;
-             }
-             #buttons {
-               margin: 15px 0px;
-             }
-             #recording-time{
-                 text-align:center;
-                 font-size: 24px;
-                 font-style bold;
-                 color: var(--accent-color, #ccc);;
+         .hint-text {
+           margin-top: 6px;
+           margin-left: 4px;
+         }
+         #buttons {
+           margin: 15px 0px;
+         }
+         #recording-time{
+             text-align:center;
+             font-size: 24px;
+             font-style bold;
+             color: var(--accent-color, #ccc);;
 
-             }
-            :host(:not([show-button])) #signature-pad {
-                display:none;
-            }
-            :host([show-button]) paper-button {
-                display:block;
-            }
-             paper-button {
-               background-color: var(--accent-color, #ccc);
-             }
-             paper-button[disabled] {
-               opacity: 0.2;
-             }
+         }
+        :host(:not([show-button])) #signature-pad {
+            display:none;
+        }
+        :host([show-button]) paper-button {
+            display:block;
+        }
+         paper-button {
+           background-color: var(--accent-color, #ccc);
+         }
+         paper-button[disabled] {
+           opacity: 0.2;
+         }
       </style>
-      <p id="recording-time">[[recordingTime]]</p>
-      <div id="buttons">
-        <paper-button id="startRecording" on-click="startRecording"
-          ><iron-icon icon="settings-voice"></iron-icon> [[t.record]]
-        </paper-button>
-        <paper-button id="stopRecording" on-click="stopRecording"
-          ><iron-icon icon="av:stop"></iron-icon> [[t.stop]]
-        </paper-button>
-        <paper-button ="playRecording" on-click="playRecording" disabled="[[!audioBlob]]"
-          ><iron-icon icon="av:play-circle-filled"></iron-icon> [[t.play]]
-        </paper-button>
-        <paper-button id="deleteRecordings" on-click="deleteRecording" disabled="[[!audioBlob]]"
-          ><iron-icon icon="delete"></iron-icon> [[t.delete]]
-        </paper-button>
+      <div id="qnum-number"></div>
+      <div id="qnum-content">
+        <label id="label"></label>
+        <label id="hintText" class="hint-text"></label>
+        <p id="recording-time">[[recordingTime]]</p>
+        <div id="buttons">
+          <paper-button id="startRecording" on-click="startRecording"
+            ><iron-icon icon="settings-voice"></iron-icon> [[t.record]]
+          </paper-button>
+          <paper-button id="stopRecording" on-click="stopRecording"
+            ><iron-icon icon="av:stop"></iron-icon> [[t.stop]]
+          </paper-button>
+          <paper-button
+            ="playRecording"
+            on-click="playRecording"
+            disabled="[[!audioBlob]]"
+            ><iron-icon icon="av:play-circle-filled"></iron-icon> [[t.play]]
+          </paper-button>
+          <paper-button
+            id="deleteRecordings"
+            on-click="deleteRecording"
+            disabled="[[!audioBlob]]"
+            ><iron-icon icon="delete"></iron-icon> [[t.delete]]
+          </paper-button>
+        </div>
+        <audio id="audioPlayback" controls></audio>
+        <label id="error-text"></label>
       </div>
-      <audio id="audioPlayback" controls></audio>
     `;
   }
 
@@ -127,7 +139,7 @@ export class TangyAudioRecording extends TangyInputBase {
       },
       audioBlob: {
         type: Object,
-        value: null
+        value: null,
       },
     };
   }
@@ -143,8 +155,17 @@ export class TangyAudioRecording extends TangyInputBase {
       play: t("play"),
       delete: t("delete"),
     };
-    this.recordingTime = '00:00'
-    this.shadowRoot.querySelector('#stopRecording').style.display = 'none';
+    this.recordingTime = "00:00";
+    this.shadowRoot.querySelector("#stopRecording").style.display = "none";
+  }
+  reflect() {
+    this.shadowRoot.querySelector("#qnum-number").innerHTML = this.hasAttribute(
+      "question-number"
+    )
+      ? `<label>${this.getAttribute("question-number")}</label>`
+      : "";
+    this.shadowRoot.querySelector("#hintText").innerHTML = this.hintText;
+    this.shadowRoot.querySelector("#label").innerHTML = this.label;
   }
   startRecording() {
     navigator.mediaDevices
@@ -152,10 +173,11 @@ export class TangyAudioRecording extends TangyInputBase {
       .then((stream) => {
         this.mediaRecorder = new MediaRecorder(stream);
         this.mediaRecorder.start();
-        this.audioBlob = null
-        this.value = null
-        this.shadowRoot.querySelector('#startRecording').style.display = 'none';
-        this.shadowRoot.querySelector('#stopRecording').style.display = 'inline-flex';
+        this.audioBlob = null;
+        this.value = null;
+        this.shadowRoot.querySelector("#startRecording").style.display = "none";
+        this.shadowRoot.querySelector("#stopRecording").style.display =
+          "inline-flex";
         this.recordingInterval = setInterval(() => {
           const currentTime = new Date().getTime();
           const elapsedTime = currentTime - this.startTime;
@@ -177,9 +199,10 @@ export class TangyAudioRecording extends TangyInputBase {
 
   stopRecording() {
     this.mediaRecorder.stop();
-    clearInterval(this.recordingInterval)
-    this.shadowRoot.querySelector('#stopRecording').style.display = 'none';
-    this.shadowRoot.querySelector('#startRecording').style.display = 'inline-flex';
+    clearInterval(this.recordingInterval);
+    this.shadowRoot.querySelector("#stopRecording").style.display = "none";
+    this.shadowRoot.querySelector("#startRecording").style.display =
+      "inline-flex";
     this.mediaRecorder.onstop = () => {
       this.audioBlob = new Blob(this.audioChunks, { type: "audio/wav" });
       this.audioChunks = [];
@@ -198,7 +221,7 @@ export class TangyAudioRecording extends TangyInputBase {
 
   deleteRecording() {
     this.audioBlob = null;
-    this.recordingTime = '00:00'
+    this.recordingTime = "00:00";
     this.$.audioPlayback.src = "";
   }
 }
