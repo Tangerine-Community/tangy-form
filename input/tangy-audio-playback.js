@@ -25,6 +25,9 @@ export class TangyAudioPlayback extends TangyInputBase {
     </div>
     `;
   }
+  static get is() {
+    return 'tangy-audio-playback'
+}
   static get properties() {
     return {
       name: {
