@@ -69,7 +69,9 @@ export class TangyAudioRecording extends TangyInputBase {
       </div>
     `;
   }
-
+  static get is() {
+    return 'tangy-audio-recording'
+}
   static get properties() {
     return {
       name: {
