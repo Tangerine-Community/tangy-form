@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## v4.47.0
+
+- Add `tangy-audio-recording` and `tangy-audio-playback` inputs
+
+Two new inputs are available for recording and playing back audio. Recorded audio is saved as a media file separate from the form response and available for upload to a server through the media uploads during the sync process. The audio playback input allows users to listen to audio files that are part of the form.
+
+```html
+<tangy-audio-recording name="test-audio" label="Record Audio"></tangy-audio-recording>
+<tangy-audio-playback name="test-playback" label="Audio Playback" src="assets/sounds/fewtimes_Eng.mp3"></tangy-audio-playback>
+```
+
 ## v4.46.1
 
 Calculate section score percent and denominator based on type of input:
