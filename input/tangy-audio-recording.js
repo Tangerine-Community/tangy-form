@@ -46,7 +46,6 @@ export class TangyAudioRecording extends TangyInputBase {
       <div id="qnum-content">
         <label id="label"></label>
         <label id="hintText" class="hint-text"></label>
-        <p id="recording-time">[[recordingTime]]</p>
         <div id="buttons">
           <paper-button id="startRecording" on-click="startRecording"
             ><iron-icon icon="settings-voice"></iron-icon> [[t.record]]
@@ -60,6 +59,7 @@ export class TangyAudioRecording extends TangyInputBase {
             disabled="[[!audioBlob]]"
             ><iron-icon icon="delete"></iron-icon> [[t.delete]]
           </paper-button>
+          <span id="recording-time">[[recordingTime]]</span>
         </div>
         <audio id="audioPlayback" controls></audio>
         <label id="error-text"></label>
