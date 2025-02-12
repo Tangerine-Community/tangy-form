@@ -2,7 +2,10 @@ import { PolymerElement, html } from "@polymer/polymer/polymer-element.js";
 import { t } from "../util/t.js";
 import "../style/tangy-common-styles.js";
 import "../style/tangy-element-styles.js";
-import "@polymer/iron-icon/iron-icon.js";
+import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/iron-icons/av-icons.js';
+import '@polymer/iron-icons/editor-icons.js';
+import '@polymer/iron-icon/iron-icon.js';
 import "@polymer/paper-button/paper-button.js";
 import { TangyInputBase } from "../tangy-input-base.js";
 
@@ -50,12 +53,6 @@ export class TangyAudioRecording extends TangyInputBase {
           </paper-button>
           <paper-button id="stopRecording" on-click="stopRecording"
             ><iron-icon icon="av:stop"></iron-icon> [[t.stop]]
-          </paper-button>
-          <paper-button
-            ="playRecording"
-            on-click="playRecording"
-            disabled="[[!audioBlob]]"
-            ><iron-icon icon="av:play-circle-filled"></iron-icon> [[t.play]]
           </paper-button>
           <paper-button
             id="deleteRecordings"
@@ -215,10 +212,6 @@ export class TangyAudioRecording extends TangyInputBase {
       );
       this.$.audioPlayback.src = audioURL;
     };
-  }
-
-  playRecording() {
-    this.$.audioPlayback.play();
   }
 
   deleteRecording() {
