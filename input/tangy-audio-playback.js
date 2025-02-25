@@ -37,7 +37,7 @@ export class TangyAudioPlayback extends TangyInputBase {
       hintText: {
         type: String,
         value: "",
-        reflectToAttribute: true,
+        observer: 'onHintTextChange',
       },
       label: {
         type: String,
@@ -92,7 +92,7 @@ export class TangyAudioPlayback extends TangyInputBase {
       },
       controls: {
         type: Boolean,
-        value: false,
+        value: true,
         reflectToAttribute: true,
       },
     };
@@ -101,15 +101,16 @@ export class TangyAudioPlayback extends TangyInputBase {
   constructor() {
     super();
     this.src = "";
-    this.controls = true;
   }
 
-  reflect(){
-    this.shadowRoot.querySelector('#qnum-number').innerHTML = this.hasAttribute('question-number')
-    ? `<label>${this.getAttribute('question-number')}</label>`
-    : ''
-    this.shadowRoot.querySelector('#hintText').innerHTML = this.hintText
-    this.shadowRoot.querySelector('#label').innerHTML = this.label
+  reflect() {
+    this.shadowRoot.querySelector("#qnum-number").innerHTML = this.hasAttribute(
+      "question-number"
+    )
+      ? `<label>${this.getAttribute("question-number")}</label>`
+      : "";
+    this.shadowRoot.querySelector("#hintText").innerHTML = this.hintText;
+    this.shadowRoot.querySelector("#label").innerHTML = this.label;
   }
 }
 
