@@ -179,7 +179,7 @@ class TangySelect extends TangyInputBase {
       .shadowRoot
       .querySelector('select')
       .addEventListener('change', this.onChange.bind(this))
-    document.body.addEventListener('lang-ready', this.reflect.bind(this))
+    document.body.addEventListener('lang-ready', this.render.bind(this))
     this.dispatchEvent(new CustomEvent('render'))
   }
 
