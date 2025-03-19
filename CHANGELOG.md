@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v4.48.0
+
+- Update translation-web-component and use it to update translations on the fly (lang and direction)
+
+The text and style for tangy-form and it's elements will be set to 'ltr' or 'rtl' as required. This also fixes issues with refreshing
+translations pulled using the combTranslation function. 
+
 ## v4.47.0
 
 - Add `tangy-audio-recording` and `tangy-audio-playback` inputs
