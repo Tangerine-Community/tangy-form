@@ -9,6 +9,7 @@
     <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../node_modules/devtools-detect/index.js"></script>
     <script src="../node_modules/redux/dist/redux.min.js"></script>
+    <script type="module" src="../node_modules/translation-web-component/t-select.js"></script>
 
     <custom-style>
       <style>
@@ -37,30 +38,13 @@
   </head>
   <body>
     <h3>Inputs Demo</h3>
-    <div class="vertical-section-container centered">
-        <button onclick="changeLanguage('en')">
-          Enable English
-        </button>
-        <button onclick="changeLanguage('fr')">
-          Enable French 
-        </button>
-      </div>  
-      <script>
-        window.changeLanguage = async function (languageCode) {
-          document.documentElement.lang = languageCode;
-          document.body.dispatchEvent(new CustomEvent('lang-change'));
-          const response = await fetch(`./translation.${languageCode}.json`)
-          const translation = await response.json()
-          window.translation = translation
-          document.body.dispatchEvent(new CustomEvent('lang-ready'));
-        }
-      </script>
+    <t-select basePath="./" label="Language:" pathToTranslationDefinitions="./translations.json"></t-select>
     <tangy-form id="my-form" title="My Form">
         <tangy-form-item id="item1">
-            <tangy-input name="input1" label="<t-lang en>Hello.</t-lang><t-lang fr>Bonjour.</t-lang>"></tangy-input>
+            <tangy-input name="input1" label="<t-lang en>Hello.</t-lang><t-lang fr>Bonjour.</t-lang><t-lang JO_ar>مرحبًا.</t-lang>"></tangy-input>
         </tangy-form-item>
         <tangy-form-item id="item2">
-            <t-lang en>Hello.</t-lang><t-lang fr>Bonjour.</t-lang>
+            <t-lang en>Hello.</t-lang><t-lang fr>Bonjour.</t-lang><t-lang JO_ar>مرحبًا.</t-lang>
         </tangy-form-item>
     </tangy-form>
   </body>

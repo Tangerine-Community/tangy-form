@@ -144,6 +144,12 @@ export class TangyRadioButton extends TangyInputBase {
         }
       }))
     })
+    document.body.addEventListener('lang-change', () => {
+      // 'lang-change' comes from the translation-web-component 't-select' element
+      if (document.documentElement.langDirection) {
+        this.shadowRoot.querySelector('paper-radio-button').dir = document.documentElement.langDirection;
+      }
+    });
   }
 
   onSkippedChange(newValue, oldValue) {

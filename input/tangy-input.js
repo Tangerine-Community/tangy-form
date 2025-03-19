@@ -226,6 +226,7 @@ export class TangyInput extends TangyInputBase {
         bubbles: true
       }))
     })
+    document.body.addEventListener('lang-ready', this.reflect.bind(this))
     this.ready = true
     this.reflect()
 

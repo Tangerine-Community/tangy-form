@@ -168,6 +168,12 @@ export class TangyCheckbox extends TangyInputBase {
         }
       }))
     })
+    document.body.addEventListener('lang-change', () => {
+      // 'lang-change' comes from the translation-web-component 't-select' element
+      if (document.documentElement.langDirection) {
+        this.shadowRoot.querySelector('paper-checkbox').dir = document.documentElement.langDirection;
+      }
+    });
     this.$['hint-text'].innerHTML = this.hintText
     this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text') 
       ? this.getAttribute('hint-text') 

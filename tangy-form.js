@@ -527,7 +527,12 @@ export class TangyForm extends PolymerElement {
     this.addEventListener('exit-fullscreen', () => {
       this.store.dispatch({type: 'EXIT_FULLSCREEN'})
     })
-    
+    document.body.addEventListener('lang-change', () => {
+      // 'lang-change' comes from the translation-web-component 't-select' element
+      if (document.documentElement.langDirection) {
+        document.querySelector('tangy-form').style.direction = document.documentElement.langDirection;
+      }
+    });
   }
 
   disconnectedCallback() {
