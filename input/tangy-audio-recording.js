@@ -140,6 +140,10 @@ export class TangyAudioRecording extends TangyInputBase {
         type: Object,
         value: null,
       },
+      isRecording: {
+        type: Boolean,
+        value: false,
+      },
     };
   }
   connectedCallback() {
@@ -180,6 +184,9 @@ export class TangyAudioRecording extends TangyInputBase {
     }
   }
   validate() {
+    if(this.isRecording){
+      alert(t('Please stop the recording to continue.'))
+    }
     if (this.hasAttribute('required') && !this.value) {
       this.invalid = true
       return false
@@ -189,6 +196,7 @@ export class TangyAudioRecording extends TangyInputBase {
     }
   }
   startRecording() {
+    this.isRecording = true;
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
@@ -219,6 +227,7 @@ export class TangyAudioRecording extends TangyInputBase {
   }
 
   stopRecording() {
+    this.isRecording = false;
     this.mediaRecorder.stop();
     clearInterval(this.recordingInterval);
     this.shadowRoot.querySelector("#stopRecording").style.display = "none";
