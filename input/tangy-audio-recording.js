@@ -46,6 +46,7 @@ export class TangyAudioRecording extends TangyInputBase {
       <div id="qnum-content">
         <label id="label"></label>
         <label id="hintText" class="hint-text"></label>
+        <label id="error-text"></label>
         <div id="buttons">
           <paper-button id="startRecording" on-click="startRecording"
             ><iron-icon icon="settings-voice"></iron-icon> [[t.record]]
@@ -62,7 +63,6 @@ export class TangyAudioRecording extends TangyInputBase {
           <span id="recording-time">[[recordingTime]]</span>
         </div>
         <audio id="audioPlayback" controls></audio>
-        <label id="error-text"></label>
       </div>
     `;
   }
@@ -165,6 +165,23 @@ export class TangyAudioRecording extends TangyInputBase {
       : "";
     this.shadowRoot.querySelector("#hintText").innerHTML = this.hintText;
     this.shadowRoot.querySelector("#label").innerHTML = this.label;
+  }
+
+  onInvalidChange(value) {
+    if (this.shadowRoot.querySelector('#error-text')) {
+      this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
+        ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
+        : ''
+    }
+  }
+  validate() {
+    if (this.hasAttribute('required') && !this.value) {
+      this.invalid = true
+      return false
+    } else {
+      this.invalid = false
+      return true
+    }
   }
   startRecording() {
     navigator.mediaDevices
