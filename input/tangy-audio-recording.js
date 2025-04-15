@@ -174,6 +174,11 @@ export class TangyAudioRecording extends TangyInputBase {
         : ''
     }
   }
+  onSkippedChange(newValue, oldValue) {
+    if (newValue === true) {
+      this.value = this.constructor.properties.value.value
+    }
+  }
   validate() {
     if (this.hasAttribute('required') && !this.value) {
       this.invalid = true
