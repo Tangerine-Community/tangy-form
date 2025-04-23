@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.48.2
+
+- Updates and fixes for `tangy-audio-recording`
+
 ## v4.48.0, v4.48.1
 
 - Update translation-web-component and use it to update translations on the fly (lang and direction)
