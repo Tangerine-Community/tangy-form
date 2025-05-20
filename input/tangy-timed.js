@@ -264,6 +264,11 @@ class TangyTimed extends TangyInputBase {
         value: undefined,
         reflectToAttribute: true
       },
+      autoStopMode: {
+        type: String,
+        value: 'first', // 'first' or 'consecutive'
+        reflectToAttribute: true
+      },
       gridVarItemAtTime: {
         type: Number,
         reflectToAttribute: true,
@@ -612,14 +617,30 @@ class TangyTimed extends TangyInputBase {
   }
   shouldGridAutoStop() {
     const tangyToggleButtons = [].slice.call(this.shadowRoot.querySelectorAll('tangy-toggle-button'))
-    const firstXButtons = tangyToggleButtons.slice(0, this.autoStop)
-    let foundAnUnpressedButton = false
-    for (let button of firstXButtons) {
-      if (!button.pressed) {
-        foundAnUnpressedButton = true
+    
+    if (this.autoStopMode === 'first') {
+      const firstXButtons = tangyToggleButtons.slice(0, this.autoStop)
+      let foundAnUnpressedButton = false
+      for (let button of firstXButtons) {
+        if (!button.pressed) {
+          foundAnUnpressedButton = true
+        }
       }
+      return foundAnUnpressedButton ? false : true
+    } else if (this.autoStopMode === 'consecutive') {
+      let consecutiveCount = 0
+      for (let button of tangyToggleButtons) {
+        if (button.pressed) {
+          consecutiveCount++
+          if (consecutiveCount >= this.autoStop) {
+            return true
+          }
+        } else {
+          consecutiveCount = 0
+        }
+      }
+      return false
     }
-    return foundAnUnpressedButton ? false : true
   }
   stopGrid() {
 
