@@ -9,6 +9,8 @@ import '@polymer/iron-icon/iron-icon.js';
 import "@polymer/paper-button/paper-button.js";
 import { TangyInputBase } from "../tangy-input-base.js";
 
+import AudioMotionAnalyzer from 'audiomotion-analyzer';
+
 export class TangyAudioRecording extends TangyInputBase {
   static get template() {
     return html`
@@ -63,6 +65,7 @@ export class TangyAudioRecording extends TangyInputBase {
           <span id="recording-time">[[recordingTime]]</span>
         </div>
         <audio id="audioPlayback" controls></audio>
+        <div id="audio-motion-container" style="width: 100%; height: 200px;"></div>
       </div>
     `;
   }
@@ -158,6 +161,7 @@ export class TangyAudioRecording extends TangyInputBase {
       play: t("play"),
       delete: t("delete"),
     };
+
     this.recordingTime = "00:00";
     this.shadowRoot.querySelector("#stopRecording").style.display = "none";
   }
@@ -169,6 +173,67 @@ export class TangyAudioRecording extends TangyInputBase {
       : "";
     this.shadowRoot.querySelector("#hintText").innerHTML = this.hintText;
     this.shadowRoot.querySelector("#label").innerHTML = this.label;
+
+    this.micStream = null;
+    // Options pulled from https://audiomotion.dev/demo/fluid.html -- click the getOptions() button and see the console
+    const audioMotionContainer = this.shadowRoot.getElementById('audio-motion-container')
+    const options = {
+      "alphaBars": false,
+      "ansiBands": false,
+      "barSpace": 0.25,
+      "bgAlpha": 0.7,
+      "channelLayout": "single",
+      "colorMode": "bar-level",
+      "fadePeaks": false,
+      "fftSize": 8192,
+      "fillAlpha": 1,
+      "frequencyScale": "log",
+      "gradient": "orangered",
+      "gravity": 3.8,
+      "ledBars": false,
+      "linearAmplitude": true,
+      "linearBoost": 1.6,
+      "lineWidth": 0,
+      "loRes": false,
+      "lumiBars": false,
+      "maxDecibels": -25,
+      "maxFPS": 0,
+      "maxFreq": 16000,
+      "minDecibels": -85,
+      "minFreq": 30,
+      "mirror": 0,
+      "mode": 2,
+      "noteLabels": false,
+      "outlineBars": false,
+      "overlay": false,
+      "peakFadeTime": 750,
+      "peakHoldTime": 500,
+      "peakLine": false,
+      "radial": false,
+      "radialInvert": false,
+      "radius": 0.3,
+      "reflexAlpha": 1,
+      "reflexBright": 1,
+      "reflexFit": true,
+      "reflexRatio": 0.5,
+      "roundBars": true,
+      "showBgColor": false,
+      "showFPS": false,
+      "showPeaks": false,
+      "showScaleX": false,
+      "showScaleY": false,
+      "smoothing": 0.7,
+      "spinSpeed": 0,
+      "splitGradient": false,
+      "trueLeds": false,
+      "useCanvas": true,
+      "volume": 1,
+      "weightingFilter": "D"
+    }
+    this.audioMotion = new AudioMotionAnalyzer(
+      audioMotionContainer, options
+    );
+
   }
 
   onInvalidChange(value) {
@@ -205,8 +270,15 @@ export class TangyAudioRecording extends TangyInputBase {
         this.audioBlob = null;
         this.value = null;
         this.shadowRoot.querySelector("#startRecording").style.display = "none";
-        this.shadowRoot.querySelector("#stopRecording").style.display =
-          "inline-flex";
+        this.shadowRoot.querySelector("#stopRecording").style.display = "inline-flex";
+
+        // create stream using audioMotion audio context
+        this.micStream = this.audioMotion.audioCtx.createMediaStreamSource( stream );
+        // connect microphone stream to analyzer
+        this.audioMotion.connectInput( this.micStream );
+        // mute output to prevent feedback loops from the speakers
+        this.audioMotion.volume = 0;
+
         this.recordingInterval = setInterval(() => {
           const currentTime = new Date().getTime();
           const elapsedTime = currentTime - this.startTime;
@@ -233,6 +305,9 @@ export class TangyAudioRecording extends TangyInputBase {
     this.shadowRoot.querySelector("#stopRecording").style.display = "none";
     this.shadowRoot.querySelector("#startRecording").style.display =
       "inline-flex";
+
+    this.audioMotion.disconnectInput( this.micStream );
+
     this.mediaRecorder.onstop = () => {
       this.audioBlob = new Blob(this.audioChunks, { type: "audio/wav" });
       this.audioChunks = [];
