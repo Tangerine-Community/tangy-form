@@ -159,6 +159,8 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         background-color: var(--accent-color, #ccc);
         color: var(--accent-text-color, #fff);
         border-radius: 4px;
+        padding: 4px 8px;
+        margin-top: 10px;
         box-sizing: border-box;
       }
       audio::-webkit-media-controls-play-button,
