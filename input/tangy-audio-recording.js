@@ -25,10 +25,9 @@ export class TangyAudioRecording extends TangyInputBase {
            margin: 15px 0px;
          }
          #recording-time{
-             text-align:center;
-             font-size: 24px;
+             align: right;
+             font-size: 12px;
              font-style bold;
-             color: var(--accent-color, #ccc);;
 
          }
         :host(:not([show-button])) #signature-pad {
@@ -54,6 +53,14 @@ export class TangyAudioRecording extends TangyInputBase {
         audio#audioPlayback {
            display: none;
         }
+        .audio-row {
+          display: flex;
+          align-items: center;
+          gap: 4px; /* Optional: adds space between analyzer and button */
+        }
+        #audio-motion-container {
+          flex: 1 1 auto;
+        }
       </style>
       <div id="qnum-number"></div>
       <div id="qnum-content">
@@ -64,25 +71,27 @@ export class TangyAudioRecording extends TangyInputBase {
           <paper-button id="startRecording" on-click="startRecording"
             ><iron-icon icon="settings-voice"></iron-icon> [[t.record]]
           </paper-button>
-          <div id="audio-motion-container" style="width: 100%; max-height: 48px;"></div>
-        <div id="buttons">
+        <div class="audio-row">
           <paper-button id="stopRecording" on-click="stopRecording"
-            ><iron-icon icon="av:stop"></iron-icon> [[t.stop]]
+            ><iron-icon icon="av:stop"></iron-icon>
           </paper-button>
           <paper-button id="playRecording"
-            on-click="playRecording"
-            disabled="[[!audioBlob]]"
-            ><iron-icon icon="av:play-arrow"></iron-icon> [[t.play]]
+              on-click="playRecording"
+              disabled="[[!audioBlob]]"
+              ><iron-icon icon="av:play-arrow"></iron-icon>
           </paper-button>
           <paper-button
             id="deleteRecording"
             on-click="deleteRecording"
             disabled="[[!audioBlob]]"
-            ><iron-icon icon="delete"></iron-icon> [[t.delete]]
+            ><iron-icon icon="delete"></iron-icon>
           </paper-button>
+          <span id="audio-motion-container" style="max-height: 48px;"></span>
           <span id="recording-time">[[recordingTime]]</span>
-          <audio id="audioPlayback" controls></audio>
         </div>
+         <!-- this element is hidden, and used for playback only -->
+        <audio id="audioPlayback" controls></audio>
+
       </div>
     `;
   }
@@ -304,6 +313,7 @@ export class TangyAudioRecording extends TangyInputBase {
         this.shadowRoot.querySelector("#startRecording").style.display = "none";
         this.shadowRoot.querySelector("#stopRecording").style.display = "inline-flex";
         this.shadowRoot.querySelector("#audio-motion-container").style.display = "inline-flex";
+        this.shadowRoot.querySelector("#recording-time").style.display = "inline-flex";
 
         // create stream using audioMotion audio context
         this.micStream = this.audioMotion.audioCtx.createMediaStreamSource( stream );
@@ -340,7 +350,6 @@ export class TangyAudioRecording extends TangyInputBase {
     this.shadowRoot.querySelector("#playRecording").style.display = "inline-flex";
     this.shadowRoot.querySelector("#deleteRecording").style.display = "inline-flex";
     this.shadowRoot.querySelector("#recording-time").style.display = "inline-flex";
-    // this.shadowRoot.querySelector("#audio-motion-container").style.display = "none";
 
     this.mediaRecorder.onstop = () => {
       this.audioBlob = new Blob(this.audioChunks, { type: "audio/wav" });
