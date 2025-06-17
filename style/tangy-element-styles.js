@@ -155,7 +155,20 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         margin: var(--tangy-form-widget--margin, 25px 0);
       }
    
-      
+      audio {
+        background-color: var(--accent-color, #ccc);
+        color: var(--accent-text-color, #fff);
+        border-radius: 4px;
+        padding: 4px 8px;
+        margin-top: 10px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      audio::-webkit-media-controls-play-button,
+      audio::-webkit-media-controls-panel {
+        background-color: var(--accent-color, #fff);
+        color: var(--accent-text-color, #fff);
+      }
      
   
     </style>

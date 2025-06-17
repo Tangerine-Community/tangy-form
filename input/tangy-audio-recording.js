@@ -158,7 +158,6 @@ export class TangyAudioRecording extends TangyInputBase {
     this.t = {
       record: t("record"),
       stop: t("stop"),
-      play: t("play"),
       delete: t("delete"),
     };
 
@@ -188,7 +187,7 @@ export class TangyAudioRecording extends TangyInputBase {
       "fftSize": 8192,
       "fillAlpha": 1,
       "frequencyScale": "log",
-      "gradient": "orangered",
+      //"gradient": "orangered", // defined below
       "gravity": 3.8,
       "ledBars": false,
       "linearAmplitude": true,
@@ -217,7 +216,7 @@ export class TangyAudioRecording extends TangyInputBase {
       "reflexFit": true,
       "reflexRatio": 0.5,
       "roundBars": true,
-      "showBgColor": false,
+      "showBgColor": true,
       "showFPS": false,
       "showPeaks": false,
       "showScaleX": false,
@@ -233,6 +232,15 @@ export class TangyAudioRecording extends TangyInputBase {
     this.audioMotion = new AudioMotionAnalyzer(
       audioMotionContainer, options
     );
+    this.audioMotion.registerGradient( 'tangyGradient', {
+      bgColor: '#fff', // background color (optional) - defaults to '#111'
+      dir: 'h',           // add this property to create a horizontal gradient (optional)
+      colorStops: [       // list your gradient colors in this array (at least one color is required)
+          { color: 'orangered', pos: .6 }, // in an object, use `pos` to adjust the offset (0 to 1) of a colorStop
+          { color: 'orange', level: .5 }  // use `level` to set the max bar amplitude (0 to 1) to use this color
+      ]
+    });
+    this.audioMotion.gradient = 'tangyGradient';
 
   }
 
