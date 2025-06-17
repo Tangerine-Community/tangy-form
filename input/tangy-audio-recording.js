@@ -43,18 +43,28 @@ export class TangyAudioRecording extends TangyInputBase {
          paper-button[disabled] {
            opacity: 0.2;
          }
+        audio#audioPlayback {
+           display: none;
+        }
       </style>
       <div id="qnum-number"></div>
       <div id="qnum-content">
         <label id="label"></label>
         <label id="hintText" class="hint-text"></label>
         <label id="error-text"></label>
-        <div id="buttons">
+        <div>
           <paper-button id="startRecording" on-click="startRecording"
             ><iron-icon icon="settings-voice"></iron-icon> [[t.record]]
           </paper-button>
+          <div id="audio-motion-container" style="width: 100%; height: 200px;"></div>
+        <div id="buttons">
           <paper-button id="stopRecording" on-click="stopRecording"
             ><iron-icon icon="av:stop"></iron-icon> [[t.stop]]
+          </paper-button>
+          <paper-button id="playRecording"
+            on-click="playRecording"
+            disabled="[[!audioBlob]]"
+            ><iron-icon icon="av:play-arrow"></iron-icon> [[t.play]]
           </paper-button>
           <paper-button
             id="deleteRecordings"
@@ -63,9 +73,8 @@ export class TangyAudioRecording extends TangyInputBase {
             ><iron-icon icon="delete"></iron-icon> [[t.delete]]
           </paper-button>
           <span id="recording-time">[[recordingTime]]</span>
+          <audio id="audioPlayback" controls></audio>
         </div>
-        <audio id="audioPlayback" controls></audio>
-        <div id="audio-motion-container" style="width: 100%; height: 200px;"></div>
       </div>
     `;
   }
@@ -158,6 +167,7 @@ export class TangyAudioRecording extends TangyInputBase {
     this.t = {
       record: t("record"),
       stop: t("stop"),
+      play: t("play"),
       delete: t("delete"),
     };
 
@@ -326,6 +336,14 @@ export class TangyAudioRecording extends TangyInputBase {
       );
       this.$.audioPlayback.src = audioURL;
     };
+  }
+
+  playRecording() {
+    if (this.audioBlob) {
+      this.$.audioPlayback.play();
+    } else {
+      console.warn("No audio recording available to play.");
+    }
   }
 
   deleteRecording() {
