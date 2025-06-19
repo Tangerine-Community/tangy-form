@@ -52,9 +52,6 @@ export class TangyAudioRecording extends TangyInputBase {
           align-items: center;
           gap: 4px; /* Optional: adds space between analyzer and button */
         }
-        #audio-motion-container {
-          flex: 1 1 auto;
-        }
       </style>
       <div id="qnum-number"></div>
       <div id="qnum-content">
@@ -150,7 +147,7 @@ export class TangyAudioRecording extends TangyInputBase {
       value: {
         type: String,
         value: "",
-        observer: "onValueChange",
+        reflectToAttribute: true
       },
       identifier: {
         type: Boolean,
@@ -367,9 +364,6 @@ export class TangyAudioRecording extends TangyInputBase {
       }
       this.audioMotion.volume = 1; // restore volume to normal
     };
-
-
-
   }
 
   playRecording() {
