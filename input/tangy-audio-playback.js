@@ -125,13 +125,7 @@ export class TangyAudioPlayback extends TangyInputBase {
     }
   }
   validate() {
-    if (this.hasAttribute('required') && !this.value) {
-      this.invalid = true
-      return false
-    } else {
-      this.invalid = false
-      return true
-    }
+    return true
   }
 }
 

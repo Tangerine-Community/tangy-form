@@ -9,6 +9,8 @@ import '@polymer/iron-icon/iron-icon.js';
 import "@polymer/paper-button/paper-button.js";
 import { TangyInputBase } from "../tangy-input-base.js";
 
+import AudioMotionAnalyzer from 'audiomotion-analyzer';
+
 export class TangyAudioRecording extends TangyInputBase {
   static get template() {
     return html`
@@ -23,46 +25,67 @@ export class TangyAudioRecording extends TangyInputBase {
            margin: 15px 0px;
          }
          #recording-time{
-             text-align:center;
-             font-size: 24px;
+             align: right;
+             font-size: 12px;
              font-style bold;
-             color: var(--accent-color, #ccc);;
-
          }
-        :host(:not([show-button])) #signature-pad {
-            display:none;
-        }
         :host([show-button]) paper-button {
             display:block;
         }
-         paper-button {
+        paper-button[disabled] {
+          opacity: 0.2;
+        }
+        paper-button#startRecording {
+            width: 100%;
+        }
+        paper-button#startRecording {
+            width: 100%;
+        }
+        paper-button {
            background-color: var(--accent-color, #ccc);
-         }
-         paper-button[disabled] {
-           opacity: 0.2;
-         }
+        }
+        audio#audioPlayback {
+           display: none;
+        }
+        .audio-row {
+          display: flex;
+          align-items: center;
+          gap: 4px; /* Optional: adds space between analyzer and button */
+        }
       </style>
       <div id="qnum-number"></div>
       <div id="qnum-content">
         <label id="label"></label>
         <label id="hintText" class="hint-text"></label>
         <label id="error-text"></label>
-        <div id="buttons">
+        <div>
           <paper-button id="startRecording" on-click="startRecording"
             ><iron-icon icon="settings-voice"></iron-icon> [[t.record]]
           </paper-button>
+        <div class="audio-row">
           <paper-button id="stopRecording" on-click="stopRecording"
-            ><iron-icon icon="av:stop"></iron-icon> [[t.stop]]
+            ><iron-icon icon="av:stop"></iron-icon>
+          </paper-button>
+          <paper-button id="playRecording"
+              on-click="playRecording"
+              disabled="[[!audioBlob]]"
+              ><iron-icon icon="av:play-arrow"></iron-icon>
+          </paper-button>
+          <paper-button id="pausePlayback" on-click="pausePlayback"
+            ><iron-icon icon="av:pause"></iron-icon>
           </paper-button>
           <paper-button
-            id="deleteRecordings"
+            id="deleteRecording"
             on-click="deleteRecording"
             disabled="[[!audioBlob]]"
-            ><iron-icon icon="delete"></iron-icon> [[t.delete]]
+            ><iron-icon icon="delete"></iron-icon>
           </paper-button>
+          <span id="audio-motion-container"></span>
           <span id="recording-time">[[recordingTime]]</span>
         </div>
+         <!-- this element is hidden, and used for playback only -->
         <audio id="audioPlayback" controls></audio>
+
       </div>
     `;
   }
@@ -124,7 +147,7 @@ export class TangyAudioRecording extends TangyInputBase {
       value: {
         type: String,
         value: "",
-        observer: "onValueChange",
+        reflectToAttribute: true
       },
       identifier: {
         type: Boolean,
@@ -158,8 +181,14 @@ export class TangyAudioRecording extends TangyInputBase {
       play: t("play"),
       delete: t("delete"),
     };
+
     this.recordingTime = "00:00";
     this.shadowRoot.querySelector("#stopRecording").style.display = "none";
+    this.shadowRoot.querySelector("#playRecording").style.display = "none";
+    this.shadowRoot.querySelector("#pausePlayback").style.display = "none";
+    this.shadowRoot.querySelector("#deleteRecording").style.display = "none";
+    this.shadowRoot.querySelector("#recording-time").style.display = "none";
+    this.shadowRoot.querySelector("#audio-motion-container").style.display = "none";
   }
   reflect() {
     this.shadowRoot.querySelector("#qnum-number").innerHTML = this.hasAttribute(
@@ -169,6 +198,77 @@ export class TangyAudioRecording extends TangyInputBase {
       : "";
     this.shadowRoot.querySelector("#hintText").innerHTML = this.hintText;
     this.shadowRoot.querySelector("#label").innerHTML = this.label;
+
+    this.micStream = null;
+    this.audioPlaybackSource = null;
+    // Options pulled from https://audiomotion.dev/demo/fluid.html -- click the getOptions() button and see the console
+    const audioMotionContainer = this.shadowRoot.getElementById('audio-motion-container')
+    const options = {
+      "alphaBars": false,
+      "ansiBands": false,
+      "barSpace": 0.25,
+      "bgAlpha": 0.7,
+      "channelLayout": "single",
+      "colorMode": "bar-level",
+      "fadePeaks": false,
+      "fftSize": 8192,
+      "fillAlpha": 1,
+      "frequencyScale": "log",
+      //"gradient": "orangered", // defined below
+      "gravity": 3.8,
+      "ledBars": false,
+      "linearAmplitude": true,
+      "linearBoost": 1.6,
+      "lineWidth": 0,
+      "loRes": false,
+      "lumiBars": false,
+      "maxDecibels": -25,
+      "maxFPS": 0,
+      "maxFreq": 16000,
+      "minDecibels": -85,
+      "minFreq": 30,
+      "mirror": 0,
+      "mode": 2,
+      "noteLabels": false,
+      "outlineBars": false,
+      "overlay": false,
+      "peakFadeTime": 750,
+      "peakHoldTime": 500,
+      "peakLine": false,
+      "radial": false,
+      "radialInvert": false,
+      "radius": 0.3,
+      "reflexAlpha": 1,
+      "reflexBright": 1,
+      "reflexFit": true,
+      "reflexRatio": 0.5,
+      "roundBars": true,
+      "showBgColor": true,
+      "showFPS": false,
+      "showPeaks": false,
+      "showScaleX": false,
+      "showScaleY": false,
+      "smoothing": 0.7,
+      "spinSpeed": 0,
+      "splitGradient": false,
+      "trueLeds": false,
+      "useCanvas": true,
+      "volume": 1,
+      "weightingFilter": "D"
+    }
+    this.audioMotion = new AudioMotionAnalyzer(
+      audioMotionContainer, options
+    );
+    this.audioMotion.registerGradient( 'tangyGradient', {
+      bgColor: '#eee', // background color (optional) - defaults to '#111'
+      dir: 'h',           // add this property to create a horizontal gradient (optional)
+      colorStops: [       // list your gradient colors in this array (at least one color is required)
+          { color: 'orangered', pos: .6 }, // in an object, use `pos` to adjust the offset (0 to 1) of a colorStop
+          { color: 'orange', level: .5 }  // use `level` to set the max bar amplitude (0 to 1) to use this color
+      ]
+    });
+    this.audioMotion.gradient = 'tangyGradient';
+
   }
 
   onInvalidChange(value) {
@@ -195,6 +295,7 @@ export class TangyAudioRecording extends TangyInputBase {
       return true
     }
   }
+  
   startRecording() {
     this.isRecording = true;
     navigator.mediaDevices
@@ -205,8 +306,17 @@ export class TangyAudioRecording extends TangyInputBase {
         this.audioBlob = null;
         this.value = null;
         this.shadowRoot.querySelector("#startRecording").style.display = "none";
-        this.shadowRoot.querySelector("#stopRecording").style.display =
-          "inline-flex";
+        this.shadowRoot.querySelector("#stopRecording").style.display = "inline-flex";
+        this.shadowRoot.querySelector("#audio-motion-container").style.display = "inline-flex";
+        this.shadowRoot.querySelector("#recording-time").style.display = "inline-flex";
+
+        // create stream using audioMotion audio context
+        this.micStream = this.audioMotion.audioCtx.createMediaStreamSource( stream );
+        // connect microphone stream to analyzer
+        this.audioMotion.connectInput( this.micStream );
+        // mute output to prevent feedback loops from the speakers
+        this.audioMotion.volume = 0;
+
         this.recordingInterval = setInterval(() => {
           const currentTime = new Date().getTime();
           const elapsedTime = currentTime - this.startTime;
@@ -231,8 +341,11 @@ export class TangyAudioRecording extends TangyInputBase {
     this.mediaRecorder.stop();
     clearInterval(this.recordingInterval);
     this.shadowRoot.querySelector("#stopRecording").style.display = "none";
-    this.shadowRoot.querySelector("#startRecording").style.display =
-      "inline-flex";
+    this.shadowRoot.querySelector("#startRecording").style.display = "none";
+    this.shadowRoot.querySelector("#playRecording").style.display = "inline-flex";
+    this.shadowRoot.querySelector("#deleteRecording").style.display = "inline-flex";
+    this.shadowRoot.querySelector("#recording-time").style.display = "inline-flex";
+
     this.mediaRecorder.onstop = () => {
       this.audioBlob = new Blob(this.audioChunks, { type: "audio/wav" });
       this.audioChunks = [];
@@ -242,13 +355,52 @@ export class TangyAudioRecording extends TangyInputBase {
         new CustomEvent("TANGY_MEDIA_UPDATE", { detail: { value: this } })
       );
       this.$.audioPlayback.src = audioURL;
+
+      this.audioMotion.disconnectInput( this.micStream );
+
+      if (!this.audioPlaybackSource) {
+        this.audioPlaybackSource = this.audioMotion.audioCtx.createMediaElementSource(this.$.audioPlayback);
+        this.audioMotion.connectInput(this.audioPlaybackSource);
+      }
+      this.audioMotion.volume = 1; // restore volume to normal
     };
+  }
+
+  playRecording() {
+    if (this.audioBlob) {
+      this.$.audioPlayback.play();
+
+      this.shadowRoot.querySelector("#playRecording").style.display = "none";
+      this.shadowRoot.querySelector("#pausePlayback").style.display = "inline-flex";
+
+    } else {
+      console.warn("No audio recording available to play.");
+    }
+  }
+
+  pausePlayback() {
+    if (this.$.audioPlayback) {
+      this.$.audioPlayback.pause();
+
+      this.shadowRoot.querySelector("#playRecording").style.display = "inline-flex";
+      this.shadowRoot.querySelector("#pausePlayback").style.display = "none";
+
+    }
   }
 
   deleteRecording() {
     this.audioBlob = null;
     this.recordingTime = "00:00";
     this.$.audioPlayback.src = "";
+    this.value = "";
+
+    this.shadowRoot.querySelector("#startRecording").style.display = "inline-flex";
+    this.shadowRoot.querySelector("#stopRecording").style.display = "none";
+    this.shadowRoot.querySelector("#playRecording").style.display = "none";
+    this.shadowRoot.querySelector("#pausePlayback").style.display = "none";
+    this.shadowRoot.querySelector("#deleteRecording").style.display = "none";
+    this.shadowRoot.querySelector("#recording-time").style.display = "none";
+    this.shadowRoot.querySelector("#audio-motion-container").style.display = "none";
   }
 }
 
