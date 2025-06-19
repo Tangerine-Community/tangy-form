@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.49.0
+
+- Add audiomotion-analyzer for vizualization of audio in tangy-audio-recording
+
 ## v4.48.2
 
 - Updates and fixes for `tangy-audio-recording`
