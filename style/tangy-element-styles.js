@@ -168,6 +168,11 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
         background-color: var(--accent-color, #fff);
         color: var(--accent-text-color, #fff);
       }
+
+      #audio-motion-container {
+        display: flex;
+        max-height: 48px;
+      }
      
   
     </style>
