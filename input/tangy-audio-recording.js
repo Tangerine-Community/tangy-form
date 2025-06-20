@@ -196,6 +196,7 @@ export class TangyAudioRecording extends TangyInputBase {
     this.shadowRoot.querySelector("#deleteRecording").style.display = "none";
     this.shadowRoot.querySelector("#recording-time").style.display = "none";
     this.shadowRoot.querySelector("#audio-motion-container").style.display = "none";
+    this.shadowRoot.querySelector("#label").style.display = "none";
   }
 
   ready() {
@@ -337,6 +338,7 @@ export class TangyAudioRecording extends TangyInputBase {
   
   startRecording() {
     this.isRecording = true;
+    this.shadowRoot.querySelector("#label").style.display = "";
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
@@ -440,6 +442,7 @@ export class TangyAudioRecording extends TangyInputBase {
     this.shadowRoot.querySelector("#deleteRecording").style.display = "none";
     this.shadowRoot.querySelector("#recording-time").style.display = "none";
     this.shadowRoot.querySelector("#audio-motion-container").style.display = "none";
+    this.shadowRoot.querySelector("#label").style.display = "none";
   }
 }
 
