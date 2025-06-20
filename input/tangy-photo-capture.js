@@ -257,7 +257,6 @@ export class TangyPhotoCapture extends TangyInputBase {
   }
 
   reflect() {
-    if (!this.ready) return
     if (this.shadowRoot.querySelector('#photoCaptureImage') && (this.shadowRoot.querySelector('#photoCaptureImage').src === '')) return
     this.shadowRoot.querySelector('video').style.display = 'none'
     this.shadowRoot.querySelector('#photoCaptureImage').style.display = 'block'
