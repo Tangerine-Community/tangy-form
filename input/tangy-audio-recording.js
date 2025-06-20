@@ -168,6 +168,12 @@ export class TangyAudioRecording extends TangyInputBase {
         type: Boolean,
         value: false,
       },
+      recordingTime: {
+        type: String,
+        value: "00:00",
+        observer: "reflect",
+        reflectToAttribute: true
+      }
     };
   }
 
@@ -199,8 +205,6 @@ export class TangyAudioRecording extends TangyInputBase {
 
     this.shadowRoot.querySelector("#hintText").innerHTML = this.hintText;
     this.shadowRoot.querySelector("#label").innerHTML = this.label;
-
-    this.recordingTime = "00:00";
 
     // Options pulled from https://audiomotion.dev/demo/fluid.html -- click the getOptions() button and see the console
     const audioMotionContainer = this.shadowRoot.getElementById('audio-motion-container')
@@ -280,11 +284,17 @@ export class TangyAudioRecording extends TangyInputBase {
     if (this.value && this.value !== '') {
       this.shadowRoot.querySelector("#startRecording").style.display = "none";
       this.shadowRoot.querySelector("#stopRecording").style.display = "none";
-      this.shadowRoot.querySelector("#playRecording").style.display = "inline-flex";
-      this.shadowRoot.querySelector("#pausePlayback").style.display = "none";
       this.shadowRoot.querySelector("#deleteRecording").style.display = "inline-flex";
       this.shadowRoot.querySelector("#recording-time").style.display = "inline-flex";
-      this.shadowRoot.querySelector("#audio-motion-container").style.display = "inline-flex";
+      this.shadowRoot.querySelector("#audio-motion-container").style.display = "inline-flex";    
+
+      if (this.isRecording) {
+        this.shadowRoot.querySelector("#playRecording").style.display = "none";
+        this.shadowRoot.querySelector("#pausePlayback").style.display = "inline-flex";
+      } else {
+        this.shadowRoot.querySelector("#playRecording").style.display = "inline-flex";
+        this.shadowRoot.querySelector("#pausePlayback").style.display = "none";
+      }
     }
 
   }
@@ -380,10 +390,15 @@ export class TangyAudioRecording extends TangyInputBase {
 
   playRecording() {
     if (this.audioBlob) {
-      this.$.audioPlayback.play();
-
       this.shadowRoot.querySelector("#playRecording").style.display = "none";
       this.shadowRoot.querySelector("#pausePlayback").style.display = "inline-flex";
+
+      this.$.audioPlayback.play();
+      this.$.audioPlayback.addEventListener('ended', () => {
+        // Handle end of audio playback here
+        this.shadowRoot.querySelector("#playRecording").style.display = "inline-flex";
+        this.shadowRoot.querySelector("#pausePlayback").style.display = "none";
+      });
 
     } else {
       console.warn("No audio recording available to play.");
