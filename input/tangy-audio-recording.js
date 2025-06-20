@@ -168,6 +168,10 @@ export class TangyAudioRecording extends TangyInputBase {
         type: Boolean,
         value: false,
       },
+      isPlaying: {
+        type: Boolean,
+        value: false,
+      },
       recordingTime: {
         type: String,
         value: "00:00",
@@ -283,12 +287,16 @@ export class TangyAudioRecording extends TangyInputBase {
     this.value = this.$.audioPlayback.src
     if (this.value && this.value !== '') {
       this.shadowRoot.querySelector("#startRecording").style.display = "none";
-      this.shadowRoot.querySelector("#stopRecording").style.display = "none";
-      this.shadowRoot.querySelector("#deleteRecording").style.display = "inline-flex";
+
+      this.shadowRoot.querySelector("#audio-motion-container").style.display = "inline-flex";
       this.shadowRoot.querySelector("#recording-time").style.display = "inline-flex";
-      this.shadowRoot.querySelector("#audio-motion-container").style.display = "inline-flex";    
 
       if (this.isRecording) {
+        this.shadowRoot.querySelector("#playRecording").style.display = "none";
+        this.shadowRoot.querySelector("#pausePlayback").style.display = "none";
+        this.shadowRoot.querySelector("#stopRecording").style.display = "inline-flex";
+        this.shadowRoot.querySelector("#deleteRecording").style.display = "none";
+      } else if (this.isPlaying) {
         this.shadowRoot.querySelector("#playRecording").style.display = "none";
         this.shadowRoot.querySelector("#pausePlayback").style.display = "inline-flex";
       } else {
@@ -314,9 +322,10 @@ export class TangyAudioRecording extends TangyInputBase {
   }
 
   validate() {
-    if(this.isRecording){
+    if (this.isRecording) {
       alert(t('Please stop the recording to continue.'))
     }
+    this.pausePlayback();
     if (this.hasAttribute('required') && !this.value) {
       this.invalid = true
       return false
@@ -394,8 +403,10 @@ export class TangyAudioRecording extends TangyInputBase {
       this.shadowRoot.querySelector("#pausePlayback").style.display = "inline-flex";
 
       this.$.audioPlayback.play();
+      this.isPlaying = true;
       this.$.audioPlayback.addEventListener('ended', () => {
         // Handle end of audio playback here
+        this.isPlaying = false;
         this.shadowRoot.querySelector("#playRecording").style.display = "inline-flex";
         this.shadowRoot.querySelector("#pausePlayback").style.display = "none";
       });
@@ -408,7 +419,7 @@ export class TangyAudioRecording extends TangyInputBase {
   pausePlayback() {
     if (this.$.audioPlayback) {
       this.$.audioPlayback.pause();
-
+      this.isPlaying = false;
       this.shadowRoot.querySelector("#playRecording").style.display = "inline-flex";
       this.shadowRoot.querySelector("#pausePlayback").style.display = "none";
 
@@ -416,6 +427,7 @@ export class TangyAudioRecording extends TangyInputBase {
   }
 
   deleteRecording() {
+    this.isPlaying = false;
     this.audioBlob = null;
     this.recordingTime = "00:00";
     this.$.audioPlayback.src = "";
