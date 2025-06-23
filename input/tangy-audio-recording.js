@@ -299,9 +299,11 @@ export class TangyAudioRecording extends TangyInputBase {
       } else if (this.isPlaying) {
         this.shadowRoot.querySelector("#playRecording").style.display = "none";
         this.shadowRoot.querySelector("#pausePlayback").style.display = "inline-flex";
+        this.shadowRoot.querySelector("#deleteRecording").style.display = "inline-flex";
       } else {
         this.shadowRoot.querySelector("#playRecording").style.display = "inline-flex";
         this.shadowRoot.querySelector("#pausePlayback").style.display = "none";
+        this.shadowRoot.querySelector("#deleteRecording").style.display = "inline-flex";
       }
     }
 
