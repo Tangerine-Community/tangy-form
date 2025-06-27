@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## v4.49.3
+
+__Addition of validate_back() function to enable separate validation checks when the back button is hit__
+
+Validation checks when hitting the back button were turned on in [this commit](https://github.com/Tangerine-Community/tangy-form/commit/e460a44ae70428c25345b06cf6164c5debe5a3c1
+). We want to allow navigation with the back button in most cases. The commit was aimed to fix an issue where audio was being recorded when the back button is clicked.
+
+This fixes the issue instead by introducing a `validate_back()` function in `tangy-form-item`. Any tangy input can add that function to enforce validation when the back button is hit. 
+
+We start by validating `tangy-audio-recording` and `tangy-video-capture`. If the audio or video is actively being recorded, the `validate_back()` button will cancel the navigation, and prompt the user to stop the recording. 
+
+This also fixes issues with the `tangy-audio-recording` deletion workflow.
+
+__Fixes for tangy-prompt-box__
+
+- Icon buttons are not clickable but the image is. Help and tangerine icons can be clicked but if you tap anywhere inside the whitespace for that item it doesn’t trigger the sound playing.
+
+- Background of tangy-prompt options should be transparent (could not trick it with a workaround)
+
+
+
 ## v4.49.0, v4.49.1, v4.49.2
 
 - Add audiomotion-analyzer for vizualization of audio in tangy-audio-recording

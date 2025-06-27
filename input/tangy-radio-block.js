@@ -151,7 +151,6 @@ export class TangyRadioBlock extends TangyInputBase {
           border-radius: 0.5rem;
           border: 4px solid #2c3e50;
           text-decoration: none;
-          background-color: #ffff;
           transition-duration: 0.4s;
           position: relative;
           box-sizing: border-box;
@@ -169,7 +168,7 @@ export class TangyRadioBlock extends TangyInputBase {
         name="answer"
       >
       </input>
-        <label for="a1" class="btn btn-lg">
+        <label id="radio-block-label" for="a1" class="btn btn-lg">
           ${this.label ? this.label : this.innerHTML}
           ${this.hasAttribute('image') && this.getAttribute('image') != '' ? `
           <img id="blockImage" src="${this.image}" style="margin-left: auto; max-width: 50px; max-height: 50px;">
@@ -199,9 +198,9 @@ export class TangyRadioBlock extends TangyInputBase {
       }))
     })
     
-    if (this.shadowRoot.querySelector('img') != null) {
-      this.shadowRoot.querySelector('img').addEventListener('click', (e) => {
-          this.dispatchEvent(new CustomEvent('input-sound-triggered', { detail: {sound: this.sound, id: this.name, stopAndClearQueue: true} }))
+    if (this.shadowRoot.querySelector('label#radio-block-label') != null) {
+      this.shadowRoot.querySelector('label#radio-block-label').addEventListener('click', (e) => {
+        this.dispatchEvent(new CustomEvent('input-sound-triggered', { detail: {sound: this.sound, id: this.name, stopAndClearQueue: true} }))
       })
     }
 
