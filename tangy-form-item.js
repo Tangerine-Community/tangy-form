@@ -988,10 +988,8 @@ export class TangyFormItem extends PolymerElement {
 
   back() {
     this.sectionPromptQueue.stopAndClearQueue();
-    if (this.validate()) {
-      this.submit()
-      this.dispatchEvent(new CustomEvent('ITEM_BACK'))
-    }
+    this.submit()
+    this.dispatchEvent(new CustomEvent('ITEM_BACK'))
   }
 
   goTo(itemId, skipValidation = false) {
