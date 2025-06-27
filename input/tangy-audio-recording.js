@@ -57,7 +57,6 @@ export class TangyAudioRecording extends TangyInputBase {
       <div id="qnum-content">
         <label id="label"></label>
         <label id="hintText" class="hint-text"></label>
-        <label id="error-text"></label>
         <div>
           <paper-button id="startRecording" on-click="startRecording"
             ><iron-icon icon="settings-voice"></iron-icon> [[t.record]]
@@ -85,7 +84,9 @@ export class TangyAudioRecording extends TangyInputBase {
         </div>
          <!-- this element is hidden, and used for playback only -->
         <audio id="audioPlayback" src="[[value]]"></audio>
-
+        <div id="error-text"></div>
+        <div id="warn-text"></div>
+        <div id="discrepancy-text"></div>
       </div>
     `;
   }
@@ -198,13 +199,25 @@ export class TangyAudioRecording extends TangyInputBase {
     this.shadowRoot.querySelector("#audio-motion-container").style.display = "none";
   }
 
+  disconnectedCallback() {
+    if (this.isRecording && this.mediaRecorder) {
+      this.isRecording = false;
+      this.mediaRecorder.stop();
+      clearInterval(this.recordingInterval);
+    }
+    if (this.$.audioPlayback) {
+          this.$.audioPlayback.pause();
+    }
+    super.disconnectedCallback();
+  }
+
   ready() {
     super.ready()
     this.t = {
       record: t("record"),
       stop: t("stop"),
       play: t("play"),
-      delete: t("delete"),
+      delete: t("delete")
     };
 
     this.shadowRoot.querySelector("#hintText").innerHTML = this.hintText;
@@ -312,7 +325,8 @@ export class TangyAudioRecording extends TangyInputBase {
   onInvalidChange(value) {
     if (this.shadowRoot.querySelector('#error-text')) {
       this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
-        ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
+        ? `<iron-icon icon="error"></iron-icon> 
+           <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : this.errorText } </div>`
         : ''
     }
   }
@@ -325,16 +339,28 @@ export class TangyAudioRecording extends TangyInputBase {
 
   validate() {
     if (this.isRecording) {
-      alert(t('Please stop the recording to continue.'))
+      this.errorText = t("Stop the recording before continuing"); // do this before setting invalid to true
+      this.invalid = true;
+      return false;
     }
-    this.pausePlayback();
     if (this.hasAttribute('required') && !this.value) {
+      this.errorText = t("Recording is required"); // do this before setting invalid to true
       this.invalid = true
       return false
     } else {
+      this.errorText = "";
       this.invalid = false
       return true
     }
+  }
+
+  validate_back() {
+    if (this.isRecording) {
+      this.errorText =  t("Stop the recording before continuing"); // do this before setting invalid to true
+      this.invalid = true;
+      return false;
+    }
+    return true;
   }
   
   startRecording() {
@@ -343,6 +369,18 @@ export class TangyAudioRecording extends TangyInputBase {
       .getUserMedia({ audio: true })
       .then((stream) => {
         this.mediaRecorder = new MediaRecorder(stream);
+        this.mediaRecorder.onstop = (() => {
+          this.audioBlob = new Blob(this.audioChunks, { type: "audio/wav" });
+          this.audioChunks = [];
+          const audioURL = URL.createObjectURL(this.audioBlob);
+          this.value = audioURL;
+          this.dispatchEvent(
+            new CustomEvent("TANGY_MEDIA_UPDATE", { detail: { value: this } })
+          );
+          this.audioMotion.disconnectInput( this.micStream );
+          this.audioMotion.volume = 1; // restore volume to normal
+        });
+
         this.mediaRecorder.start();
         this.audioBlob = null;
         this.shadowRoot.querySelector("#startRecording").style.display = "none";
@@ -385,18 +423,6 @@ export class TangyAudioRecording extends TangyInputBase {
     this.shadowRoot.querySelector("#playRecording").style.display = "inline-flex";
     this.shadowRoot.querySelector("#deleteRecording").style.display = "inline-flex";
     this.shadowRoot.querySelector("#recording-time").style.display = "inline-flex";
-
-    this.mediaRecorder.onstop = () => {
-      this.audioBlob = new Blob(this.audioChunks, { type: "audio/wav" });
-      this.audioChunks = [];
-      const audioURL = URL.createObjectURL(this.audioBlob);
-      this.value = audioURL;
-      this.dispatchEvent(
-        new CustomEvent("TANGY_MEDIA_UPDATE", { detail: { value: this } })
-      );
-      this.audioMotion.disconnectInput( this.micStream );
-      this.audioMotion.volume = 1; // restore volume to normal
-    };
   }
 
   playRecording() {
@@ -432,7 +458,8 @@ export class TangyAudioRecording extends TangyInputBase {
     this.isPlaying = false;
     this.audioBlob = null;
     this.recordingTime = "00:00";
-    this.$.audioPlayback.src = "";
+ 
+    this.$.audioPlayback.removeAttribute("src");
     this.value = "";
 
     this.shadowRoot.querySelector("#startRecording").style.display = "inline-flex";

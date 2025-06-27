@@ -967,6 +967,88 @@ export class TangyFormItem extends PolymerElement {
     }
   }
 
+  validate_back() {
+    // Check if tangy-input-groups and tangy-input-group have 'skipped' attribute
+    let inputEls = [...this.querySelectorAll('[name]')]
+      .filter(element => !element.parentElement.hasAttribute('skipped'))
+        .filter(element => !element.parentElement.parentElement.hasAttribute('skipped'))
+    const inputs = inputEls.reduce((inputsKeyedByName, input) => {
+      return { [input.name]: input, ...inputsKeyedByName }
+    }, {})
+
+    let hasWarnings = []
+    let hasDiscrepancies = []
+    let invalidInputNames = []
+    let validInputNames = []
+    let firstInputWithIssue = ''
+    for (let input of inputEls) {
+      if (!input.hidden && !input.skipped) {
+        let {getValue, getValueAsMoment, inputHide, inputShow, skip, unskip, inputDisable, inputEnable, itemHide, itemShow, itemDisable, itemEnable, isChecked, notChecked, itemsPerMinute, numberOfItemsAttempted, numberOfCorrectItems, numberOfIncorrectItems, gridAutoStopped, hideInputsUponThreshhold} = this.exposeHelperFunctions();
+        if ((input.validate_back && !input.validate_back()) || (input.hasAttribute('valid-if') && !eval(input.getAttribute('valid-if')))) {
+          input.invalid = true
+          if (!firstInputWithIssue) firstInputWithIssue = input.name
+          invalidInputNames.push(input.name)
+        } else {
+          input.invalid = false
+          validInputNames.push(input.name)
+        }
+        if (input.hasAttribute('warn-if') && eval(input.getAttribute('warn-if'))) {
+          input.hasWarning = true
+          if (!firstInputWithIssue) firstInputWithIssue = input.name
+          hasWarnings.push({ name: input.name, value: input.value})
+        } else {
+          input.hasWarning = false
+        }
+        if (input.hasAttribute('discrepancy-if') && eval(input.getAttribute('discrepancy-if'))) {
+          input.hasDiscrepancy = true
+          if (!firstInputWithIssue) firstInputWithIssue = input.name
+          hasDiscrepancies.push({ name: input.name, value: input.value})
+        } else {
+          input.hasDiscrepancy = false
+        }
+      } else {
+        input.invalid = false
+        validInputNames.push(input.name)
+      }
+    }
+    const hasNewOrChangedDiscrepancies = hasDiscrepancies
+      .reduce((foundNewOrChanged, input) => {
+        return foundNewOrChanged || 
+          (
+            !this.hadDiscrepancies.find(had => had.name === input.name) ||
+            JSON.stringify(this.hadDiscrepancies.find(had => had.name === input.name).value) !== JSON.stringify(input.value)
+          ) 
+          ? true
+          : false
+      }, false)
+    const hasNewOrChangedWarnings = hasWarnings
+      .reduce((foundNewOrChanged, input) => {
+        return foundNewOrChanged || 
+          (
+            !this.hadWarnings.find(had => had.name === input.name) ||
+            JSON.stringify(this.hadWarnings.find(had => had.name === input.name).value) !== JSON.stringify(input.value)
+          ) 
+          ? true
+          : false
+      }, false)
+    this.hadDiscrepancies = JSON.parse(JSON.stringify(hasDiscrepancies))
+    this.hadWarnings = JSON.parse(JSON.stringify(hasWarnings))
+    if (invalidInputNames.length !== 0 || hasNewOrChangedDiscrepancies || hasNewOrChangedWarnings) {
+      this
+        .querySelector(`[name="${firstInputWithIssue}"]`)
+        .scrollIntoView({ behavior: 'smooth', block: 'start' })
+      this.incomplete = true
+      this.fireHook('on-change')
+      this.fireHook('custom-scoring-logic')
+      return false
+    } else {
+      this.incomplete = false
+      this.fireHook('on-change')
+      this.fireHook('custom-scoring-logic')
+      return true
+    }
+  }
+
   onExitFullscreenClick() {
     this._exitClicks = isNaN(this._exitClicks) ? 1 : this._exitClicks + 1
     if ((!this.hasAttribute('exit-clicks')) || (this.hasAttribute('exit-clicks') && this._exitClicks >= parseInt(this.getAttribute('exit-clicks')))) {
@@ -988,8 +1070,10 @@ export class TangyFormItem extends PolymerElement {
 
   back() {
     this.sectionPromptQueue.stopAndClearQueue();
-    this.submit()
-    this.dispatchEvent(new CustomEvent('ITEM_BACK'))
+    if (this.validate_back()) {
+      this.submit()
+      this.dispatchEvent(new CustomEvent('ITEM_BACK'))
+    }
   }
 
   goTo(itemId, skipValidation = false) {
