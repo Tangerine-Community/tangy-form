@@ -1146,7 +1146,7 @@ export class TangyFormItem extends PolymerElement {
       }
     }
 
-    if (this.sectionPromptQueue.prompts.length > 0) {
+    if (event.detail.sound && this.sectionPromptQueue.prompts.length > 0) {
       this.sectionPromptQueue.play(this.sectionPromptQueue.prompts.length);
     }
   }
