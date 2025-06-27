@@ -879,9 +879,6 @@ export class TangyFormItem extends PolymerElement {
         this.inputs = [...this.inputs, percentEl.getModProps && window.useShrinker ? percentEl.getModProps() : percentEl.getProps()]
       }
     }
-    if (window.devtools && window.devtools.open) {
-      console.table(this.inputs.map(input => { return {name: input.name, value: input.value} }))
-    }
     return true
   }
 
