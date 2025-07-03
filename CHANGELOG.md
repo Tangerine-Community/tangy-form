@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## v4.49.4
+
+__Enable custom styling of tangy-radio-block background color__
+
+Use `--tangy-radio-block-label-bg` to set the background color for global or specific `tangy-radio-block` elements.
+
+Set the default background color of the tangy-radio-block elements with this code in custom-style:
+```css
+  :tangy-radio-block {
+  --tangy-radio-block-label-bg: #ffe082;
+  }
+``` 
+
+Or set ="--tangy-radio-block-label-bg: transparent;" to make the tangy-prompt-box radio-blocks transparent:
+```html
+<tangy-prompt-box name="tangerineMan" question-number="" label="" hint-text="" error-text="" warn-text="" class="" style="--tangy-radio-block-label-bg: transparent;" flex-start="">
+```
+
 ## v4.49.3
 
 __Addition of validate_back() function to enable separate validation checks when the back button is hit__

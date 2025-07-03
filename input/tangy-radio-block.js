@@ -139,6 +139,10 @@ export class TangyRadioBlock extends TangyInputBase {
           align-items: center;
           justify-content: var(--justify-content, center);
           margin: 0 0.25rem;
+          font-size: 2rem;
+        }
+        label#radio-block-label {
+          background: var(--tangy-radio-block-label-bg, var(--primary-color, #f0f0f0));
         }
         .btn {
           font-weight: 400;
@@ -146,10 +150,9 @@ export class TangyRadioBlock extends TangyInputBase {
           vertical-align: middle;
           user-select: none;
           padding: 0.375rem 0.75rem;
-          font-size: 1.3rem;
           line-height: 1.5;
           border-radius: 0.5rem;
-          border: 4px solid #2c3e50;
+          border: 4px solid transparent;
           text-decoration: none;
           transition-duration: 0.4s;
           position: relative;
