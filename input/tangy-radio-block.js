@@ -142,7 +142,7 @@ export class TangyRadioBlock extends TangyInputBase {
           font-size: 2rem;
         }
         label#radio-block-label {
-          background: var(--tangy-radio-block-label-bg, var(--primary-color, #f0f0f0));
+          background: var(--tangy-radio-block-label-bg, var(--tangy-form-item--background-color, #FFF));
         }
         .btn {
           font-weight: 400;
