@@ -1,10 +1,11 @@
 # CHANGELOG
 
-## v4.49.4
+## v4.49.4, v4.49.5
 
 __Enable custom styling of tangy-radio-block background color__
 
 Use `--tangy-radio-block-label-bg` to set the background color for global or specific `tangy-radio-block` elements.
+Use tangy-form-item background color for tangy-radio-block label
 
 Set the default background color of the tangy-radio-block elements with this code in custom-style:
 ```css
