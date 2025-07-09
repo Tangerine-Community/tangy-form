@@ -86,6 +86,14 @@
                         event.preventDefault()
                         // 3 ways to inspect the user's response to the form. Ordered by level of detail.
                         console.log("Caught TANGY_MEDIA_UPDATE event at: " + event.target.name)
+
+                        // create an a element to download the audio file
+                        const audioElement = document.createElement('a');
+                        audioElement.href = event.target.value;
+                        audioElement.download = 'recorded-audio.wav';
+                        audioElement.textContent = 'Download Recorded Audio';
+                        // audioElement.click();
+
                     }, true)
                 </script>
             </template>

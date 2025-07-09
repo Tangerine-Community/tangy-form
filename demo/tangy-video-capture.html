@@ -99,6 +99,14 @@
                         event.preventDefault()
                         // 3 ways to inspect the user's response to the form. Ordered by level of detail.
                         console.log("Caught TANGY_MEDIA_UPDATE event at: " + event.target.name)
+
+                        // download the video file
+                        const videoElement = document.createElement('a');
+                        videoElement.href = event.target.value;
+                        videoElement.download = 'recorded-video.webm';
+                        videoElement.textContent = 'Download Recorded Video';
+                        // videoElement.click();
+
                     }, true)
                 </script>
             </template>

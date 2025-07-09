@@ -8,7 +8,7 @@ import '@polymer/iron-icons/editor-icons.js';
 import '@polymer/iron-icon/iron-icon.js';
 import "@polymer/paper-button/paper-button.js";
 import { TangyInputBase } from "../tangy-input-base.js";
-
+import { getWaveBlob } from "../util/webmToWavConverter.js";
 import AudioMotionAnalyzer from 'audiomotion-analyzer';
 
 export class TangyAudioRecording extends TangyInputBase {
@@ -369,14 +369,21 @@ export class TangyAudioRecording extends TangyInputBase {
       .getUserMedia({ audio: true })
       .then((stream) => {
         this.mediaRecorder = new MediaRecorder(stream);
-        this.mediaRecorder.onstop = (() => {
-          this.audioBlob = new Blob(this.audioChunks, { type: "audio/wav" });
+        this.mediaRecorder.onstop = (async () => {
+          const webmBlob = new Blob(this.audioChunks);
           this.audioChunks = [];
+          const webmURL = URL.createObjectURL(webmBlob);
+          const response = await fetch(webmURL);
+          const arrayBuffer = await response.arrayBuffer()
+          const audioContext = this.audioMotion.audioCtx;
+          const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
+          this.audioBlob = getWaveBlob(audioBuffer, false)
           const audioURL = URL.createObjectURL(this.audioBlob);
           this.value = audioURL;
           this.dispatchEvent(
             new CustomEvent("TANGY_MEDIA_UPDATE", { detail: { value: this } })
           );
+          this.invalid = false;
           this.audioMotion.disconnectInput( this.micStream );
           this.audioMotion.volume = 1; // restore volume to normal
         });
