@@ -208,6 +208,21 @@ export class TangyAudioRecording extends TangyInputBase {
     if (this.$.audioPlayback) {
           this.$.audioPlayback.pause();
     }
+    this.audioChunks = [];
+    this.audioBlob = null;
+    this.audioMotion.disconnectInput(this.micStream);
+    this.audioMotion.volume = 1;
+    this.audioMotion = null;
+    this.mediaRecorder = null;
+    if (this.mediaStream) {
+      this.mediaStream.getTracks().forEach(track => track.stop());
+    }
+    this.mediaStream = null;
+    if (this.micStream) {
+      this.micStream.disconnect();
+    }
+    this.micStream = null;
+
     super.disconnectedCallback();
   }
 
@@ -368,6 +383,7 @@ export class TangyAudioRecording extends TangyInputBase {
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
+        this.mediaStream = stream;
         this.mediaRecorder = new MediaRecorder(stream);
         this.mediaRecorder.onstop = (async () => {
           const webmBlob = new Blob(this.audioChunks);
