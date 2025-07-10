@@ -1,12 +1,20 @@
 # CHANGELOG
 
-## v4.49.4, v4.49.5, v4.49.6
+## v4.49.7
+
+`tangy-audio-recording`: Disconnect and nullify all audio stream objects to stop resource leaks
+
+## v4.49.6
+
+Convert webm audio files to wav in tangy-audio-recording
+
+## v4.49.4, v4.49.5
 
 __Enable custom styling of tangy-radio-block background color__
 
 Use `--tangy-radio-block-label-bg` to set the background color for global or specific `tangy-radio-block` elements.
 Use tangy-form-item background color for tangy-radio-block label
-Convert webm audio files to wav in tangy-audio-recording
+
 
 Set the default background color of the tangy-radio-block elements with this code in custom-style:
 ```css
