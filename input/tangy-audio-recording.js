@@ -59,6 +59,7 @@ export class TangyAudioRecording extends TangyInputBase {
         <label id="hintText" class="hint-text"></label>
         <div>
           <paper-button id="startRecording" on-click="startRecording"
+            disabled="[[isRecording]]"
             ><iron-icon icon="settings-voice"></iron-icon> [[t.record]]
           </paper-button>
         <div class="audio-row">
@@ -202,7 +203,9 @@ export class TangyAudioRecording extends TangyInputBase {
   disconnectedCallback() {
     if (this.isRecording && this.mediaRecorder) {
       this.isRecording = false;
-      this.mediaRecorder.stop();
+      if (this.mediaRecorder.state == "active") {
+        this.mediaRecorder.stop();
+      }
       clearInterval(this.recordingInterval);
     }
     if (this.$.audioPlayback) {
@@ -379,12 +382,13 @@ export class TangyAudioRecording extends TangyInputBase {
   }
   
   startRecording() {
+    if (this.isRecording) return;
     this.isRecording = true;
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
         this.mediaStream = stream;
-        this.mediaRecorder = new MediaRecorder(stream);
+        this.mediaRecorder = new MediaRecorder(this.mediaStream);
         this.mediaRecorder.onstop = (async () => {
           const webmBlob = new Blob(this.audioChunks);
           this.audioChunks = [];
@@ -402,6 +406,8 @@ export class TangyAudioRecording extends TangyInputBase {
           this.invalid = false;
           this.audioMotion.disconnectInput( this.micStream );
           this.audioMotion.volume = 1; // restore volume to normal
+          this.micStream.disconnect();
+          this.mediaStream.getTracks().forEach(track => track.stop());
         });
 
         this.mediaRecorder.start();
@@ -412,7 +418,7 @@ export class TangyAudioRecording extends TangyInputBase {
         this.shadowRoot.querySelector("#recording-time").style.display = "inline-flex";
 
         // create stream using audioMotion audio context
-        this.micStream = this.audioMotion.audioCtx.createMediaStreamSource( stream );
+        this.micStream = this.audioMotion.audioCtx.createMediaStreamSource(this.mediaStream);
         // connect microphone stream to analyzer
         this.audioMotion.connectInput( this.micStream );
         // mute output to prevent feedback loops from the speakers
@@ -433,13 +439,17 @@ export class TangyAudioRecording extends TangyInputBase {
         };
       })
       .catch((error) => {
+        this.isRecording = false;
         console.error("Error accessing microphone", error);
       });
   }
 
   stopRecording() {
     this.isRecording = false;
-    this.mediaRecorder.stop();
+
+    if (this.mediaRecorder.state == "recording") {
+      this.mediaRecorder.stop();
+    }
     clearInterval(this.recordingInterval);
     this.shadowRoot.querySelector("#stopRecording").style.display = "none";
     this.shadowRoot.querySelector("#startRecording").style.display = "none";
@@ -449,6 +459,7 @@ export class TangyAudioRecording extends TangyInputBase {
   }
 
   playRecording() {
+    if (this.isRecording || this.isPlaying) return;
     if (this.audioBlob) {
       this.shadowRoot.querySelector("#playRecording").style.display = "none";
       this.shadowRoot.querySelector("#pausePlayback").style.display = "inline-flex";
@@ -468,16 +479,17 @@ export class TangyAudioRecording extends TangyInputBase {
   }
 
   pausePlayback() {
+    if (this.isRecording || !this.isPlaying) return;
     if (this.$.audioPlayback) {
       this.$.audioPlayback.pause();
       this.isPlaying = false;
       this.shadowRoot.querySelector("#playRecording").style.display = "inline-flex";
       this.shadowRoot.querySelector("#pausePlayback").style.display = "none";
-
     }
   }
 
   deleteRecording() {
+    if (this.isRecording) return;
     this.isPlaying = false;
     this.audioBlob = null;
     this.recordingTime = "00:00";

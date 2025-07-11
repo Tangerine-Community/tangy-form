@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.49.8
+
+`tangy-audio-recording`: Disconnect and nullify all audio stream objects to stop resource leaks
+
 ## v4.49.7
 
 `tangy-audio-recording`: Disconnect and nullify all audio stream objects to stop resource leaks
