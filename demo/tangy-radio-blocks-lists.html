@@ -41,7 +41,9 @@
                 --error-color: var(--paper-red-500);
                 --disabled-color: #BBB;
             }
-
+            :root {
+            --tangy-radio-block-label-bg: #ffe082;
+            }
             h1,
             h2,
             h3,
@@ -79,10 +81,6 @@
     <script type="module" src="../input/tangy-keyboard-input.js"></script>
     <script type="module" src="../input/tangy-prompt-box.js"></script>
 
-    <custom-style>
-        <style is="custom-style" include="demo-pages-shared-styles">
-        </style>
-    </custom-style>
 </head>
 
 <body>
@@ -103,7 +101,32 @@
                                 Click Next
                             </tangy-box>
                         </template>
-                </tangy-form-item>                
+                </tangy-form-item>
+                <tangy-form-item id="sec_num_comp9" 
+                title="Number Comparison 9"
+                hide-back-button
+                scoring-fields=""
+                custom-scoring-logic=""
+                on-open="
+                "
+                on-change="
+                "
+                category="null"
+            >
+                <template>
+                    <tangy-radio-blocks name="num_comp_9" required="" question-number="" label="" hint-text="" error-text="" warn-text="" class="" style="" orientation="columns">
+                        <option value="632" correct="" sound="">632</option>
+                        <option value="623" sound="">623</option>
+                        <option value="626" sound="">626</option>
+                    </tangy-radio-blocks>
+                    <tangy-prompt-box name="tangerineMan" question-number="" label="" hint-text="" error-text="" warn-text="" class="" style="--tangy-radio-block-label-bg: transparent;" flex-start="">
+                        <option id="0" value="0" image="./assets/images/instructions.png" sound="./assets/media/Num_comp_help.mp3">
+                        </option>
+                        <option id="1" value="1" image="./assets/images/ms-talk2.png" sound="./assets/media/Num_comp_prompt.mp3">
+                        </option>
+                    </tangy-prompt-box>
+                </template>
+            </tangy-form-item>
                 <tangy-form-item
                             id="item1"
                             title="Item 1"

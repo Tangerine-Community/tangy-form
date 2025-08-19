@@ -8,7 +8,7 @@ import '@polymer/iron-icons/editor-icons.js';
 import '@polymer/iron-icon/iron-icon.js';
 import "@polymer/paper-button/paper-button.js";
 import { TangyInputBase } from "../tangy-input-base.js";
-
+import { getWaveBlob } from "../util/webmToWavConverter.js";
 import AudioMotionAnalyzer from 'audiomotion-analyzer';
 
 export class TangyAudioRecording extends TangyInputBase {
@@ -57,9 +57,9 @@ export class TangyAudioRecording extends TangyInputBase {
       <div id="qnum-content">
         <label id="label"></label>
         <label id="hintText" class="hint-text"></label>
-        <label id="error-text"></label>
         <div>
           <paper-button id="startRecording" on-click="startRecording"
+            disabled="[[isRecording]]"
             ><iron-icon icon="settings-voice"></iron-icon> [[t.record]]
           </paper-button>
         <div class="audio-row">
@@ -85,7 +85,9 @@ export class TangyAudioRecording extends TangyInputBase {
         </div>
          <!-- this element is hidden, and used for playback only -->
         <audio id="audioPlayback" src="[[value]]"></audio>
-
+        <div id="error-text"></div>
+        <div id="warn-text"></div>
+        <div id="discrepancy-text"></div>
       </div>
     `;
   }
@@ -198,13 +200,42 @@ export class TangyAudioRecording extends TangyInputBase {
     this.shadowRoot.querySelector("#audio-motion-container").style.display = "none";
   }
 
+  disconnectedCallback() {
+    if (this.isRecording && this.mediaRecorder) {
+      this.isRecording = false;
+      if (this.mediaRecorder.state == "active") {
+        this.mediaRecorder.stop();
+      }
+      clearInterval(this.recordingInterval);
+    }
+    if (this.$.audioPlayback) {
+          this.$.audioPlayback.pause();
+    }
+    this.audioChunks = [];
+    this.audioBlob = null;
+    this.audioMotion.disconnectInput(this.micStream);
+    this.audioMotion.volume = 1;
+    this.audioMotion = null;
+    this.mediaRecorder = null;
+    if (this.mediaStream) {
+      this.mediaStream.getTracks().forEach(track => track.stop());
+    }
+    this.mediaStream = null;
+    if (this.micStream) {
+      this.micStream.disconnect();
+    }
+    this.micStream = null;
+
+    super.disconnectedCallback();
+  }
+
   ready() {
     super.ready()
     this.t = {
       record: t("record"),
       stop: t("stop"),
       play: t("play"),
-      delete: t("delete"),
+      delete: t("delete")
     };
 
     this.shadowRoot.querySelector("#hintText").innerHTML = this.hintText;
@@ -312,7 +343,8 @@ export class TangyAudioRecording extends TangyInputBase {
   onInvalidChange(value) {
     if (this.shadowRoot.querySelector('#error-text')) {
       this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
-        ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
+        ? `<iron-icon icon="error"></iron-icon> 
+           <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : this.errorText } </div>`
         : ''
     }
   }
@@ -325,24 +357,59 @@ export class TangyAudioRecording extends TangyInputBase {
 
   validate() {
     if (this.isRecording) {
-      alert(t('Please stop the recording to continue.'))
+      this.errorText = t("Stop the recording before continuing"); // do this before setting invalid to true
+      this.invalid = true;
+      return false;
     }
-    this.pausePlayback();
     if (this.hasAttribute('required') && !this.value) {
+      this.errorText = t("Recording is required"); // do this before setting invalid to true
       this.invalid = true
       return false
     } else {
+      this.errorText = "";
       this.invalid = false
       return true
     }
   }
+
+  validate_back() {
+    if (this.isRecording) {
+      this.errorText =  t("Stop the recording before continuing"); // do this before setting invalid to true
+      this.invalid = true;
+      return false;
+    }
+    return true;
+  }
   
   startRecording() {
+    if (this.isRecording) return;
     this.isRecording = true;
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
-        this.mediaRecorder = new MediaRecorder(stream);
+        this.mediaStream = stream;
+        this.mediaRecorder = new MediaRecorder(this.mediaStream);
+        this.mediaRecorder.onstop = (async () => {
+          const webmBlob = new Blob(this.audioChunks);
+          this.audioChunks = [];
+          const webmURL = URL.createObjectURL(webmBlob);
+          const response = await fetch(webmURL);
+          const arrayBuffer = await response.arrayBuffer()
+          const audioContext = this.audioMotion.audioCtx;
+          const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
+          this.audioBlob = getWaveBlob(audioBuffer, false)
+          const audioURL = URL.createObjectURL(this.audioBlob);
+          this.value = audioURL;
+          this.dispatchEvent(
+            new CustomEvent("TANGY_MEDIA_UPDATE", { detail: { value: this } })
+          );
+          this.invalid = false;
+          this.audioMotion.disconnectInput( this.micStream );
+          this.audioMotion.volume = 1; // restore volume to normal
+          this.micStream.disconnect();
+          this.mediaStream.getTracks().forEach(track => track.stop());
+        });
+
         this.mediaRecorder.start();
         this.audioBlob = null;
         this.shadowRoot.querySelector("#startRecording").style.display = "none";
@@ -351,7 +418,7 @@ export class TangyAudioRecording extends TangyInputBase {
         this.shadowRoot.querySelector("#recording-time").style.display = "inline-flex";
 
         // create stream using audioMotion audio context
-        this.micStream = this.audioMotion.audioCtx.createMediaStreamSource( stream );
+        this.micStream = this.audioMotion.audioCtx.createMediaStreamSource(this.mediaStream);
         // connect microphone stream to analyzer
         this.audioMotion.connectInput( this.micStream );
         // mute output to prevent feedback loops from the speakers
@@ -372,34 +439,27 @@ export class TangyAudioRecording extends TangyInputBase {
         };
       })
       .catch((error) => {
+        this.isRecording = false;
         console.error("Error accessing microphone", error);
       });
   }
 
   stopRecording() {
     this.isRecording = false;
-    this.mediaRecorder.stop();
+
+    if (this.mediaRecorder.state == "recording") {
+      this.mediaRecorder.stop();
+    }
     clearInterval(this.recordingInterval);
     this.shadowRoot.querySelector("#stopRecording").style.display = "none";
     this.shadowRoot.querySelector("#startRecording").style.display = "none";
     this.shadowRoot.querySelector("#playRecording").style.display = "inline-flex";
     this.shadowRoot.querySelector("#deleteRecording").style.display = "inline-flex";
     this.shadowRoot.querySelector("#recording-time").style.display = "inline-flex";
-
-    this.mediaRecorder.onstop = () => {
-      this.audioBlob = new Blob(this.audioChunks, { type: "audio/wav" });
-      this.audioChunks = [];
-      const audioURL = URL.createObjectURL(this.audioBlob);
-      this.value = audioURL;
-      this.dispatchEvent(
-        new CustomEvent("TANGY_MEDIA_UPDATE", { detail: { value: this } })
-      );
-      this.audioMotion.disconnectInput( this.micStream );
-      this.audioMotion.volume = 1; // restore volume to normal
-    };
   }
 
   playRecording() {
+    if (this.isRecording || this.isPlaying) return;
     if (this.audioBlob) {
       this.shadowRoot.querySelector("#playRecording").style.display = "none";
       this.shadowRoot.querySelector("#pausePlayback").style.display = "inline-flex";
@@ -419,20 +479,22 @@ export class TangyAudioRecording extends TangyInputBase {
   }
 
   pausePlayback() {
+    if (this.isRecording || !this.isPlaying) return;
     if (this.$.audioPlayback) {
       this.$.audioPlayback.pause();
       this.isPlaying = false;
       this.shadowRoot.querySelector("#playRecording").style.display = "inline-flex";
       this.shadowRoot.querySelector("#pausePlayback").style.display = "none";
-
     }
   }
 
   deleteRecording() {
+    if (this.isRecording) return;
     this.isPlaying = false;
     this.audioBlob = null;
     this.recordingTime = "00:00";
-    this.$.audioPlayback.src = "";
+ 
+    this.$.audioPlayback.removeAttribute("src");
     this.value = "";
 
     this.shadowRoot.querySelector("#startRecording").style.display = "inline-flex";

@@ -41,6 +41,7 @@
     </custom-style>
     <script type="module" src="../tangy-form.js"></script>
     <script type="module" src="../input/tangy-input.js"></script>
+    <script type="module" src="../input/tangy-gate.js"></script>
     <script type="module" src="../input/tangy-audio-recording.js"></script>
     <script type="module" src="../input/tangy-audio-playback.js"></script>
 
@@ -56,15 +57,153 @@
         <demo-snippet>
             <template>
                 <tangy-form id="my-form" title="My Form">
-                    <tangy-form-item id="item1">
+                    <tangy-form-item id="item0">
+                        <tangy-input name="test-input" label="Input Text" placeholder="Type something here..."></tangy-input>
+                    </tangy-form-item>
+                    <tangy-form-item id="item1"
+                        on-open="if (!!inputs.item3gate.value) { inputs.item3gate.value = false; }"
+                        >
                         <tangy-html-container name="test-input" label="Input Text" placeholder="Type something here...">
                             <p>Click the 'Record' button. Then start reading the text.</p>
                         </tangy-html-container>
-                        <tangy-audio-recording name="test-audio" required="" label="Charlie had a big dog. The dog liked to go on walks. Charlie walks his dog every day."></tangy-audio-recording>
-                    </tangy-form-item>
-                    <tangy-form-item id="item2">
-                        <tangy-audio-playback name="test-audio-playback" label="Playback Audio"
-                            audio-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></tangy-audio-playback>
+                        <tangy-audio-recording name="test-audio" required="" label="Siku moja Furaha"></tangy-audio-recording>
+                        <tangy-gate invisible name="item3gate" label="Gate" required></tangy-gate>
+                        <tangy-input hidden type="text" name="aiResponse" label="AI Response" placeholder="AI Response"></tangy-input>
+                        <tangy-html-container name="feedback-display">
+                            
+                            <style>
+                                .feedback-container {
+                                    background-color: #f9f9f9;
+                                    border: 1px solid #ddd;
+                                    border-radius: 8px;
+                                    padding: 20px;
+                                    margin-top: 20px;
+                                }
+
+                                .feedback-container.visible {
+                                    display: block;
+                                }
+
+                                .feedback-header {
+                                    text-align: center;
+                                    margin-bottom: 20px;
+                                }
+
+                                .feedback-title {
+                                    color: #333;
+                                }
+
+                                .feedback-card {
+                                    margin-bottom: 15px;
+                                    padding: 10px;
+                                    border-radius: 5px;
+                                    background-color: #fff;
+                                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                                }
+
+                                .feedback-label {
+                                    font-weight: bold;
+                                    margin-bottom: 5px;
+                                }
+
+                                .reference-text,
+                                .hypothesis-text,
+                                .cer-score,
+                                .feedback-content {
+                                    color: #555;
+                                }
+
+                                .icon {
+                                    margin-right: 5px;
+                                }
+                            </style>
+
+                            <div id="feedback-container" class="feedback-container">
+                                <div class="feedback-header">
+                                    <h2 class="feedback-title">📚 Reading Assessment Feedback</h2>
+                                </div>
+                                
+                                <div id="feedback-content" class="loading-state">
+                                    Analyzing your reading...
+                                </div>
+                            </div>
+                            
+                            <script>
+                                // Function to update feedback display
+                                function updateFeedbackDisplay() {
+                                    const aiResponseInput = document.querySelector('tangy-input[name="aiResponse"]');
+                                    const feedbackContainer = document.getElementById('feedback-container');
+                                    const feedbackContent = document.getElementById('feedback-content');
+                                    
+                                    if (aiResponseInput && aiResponseInput.value && feedbackContainer && feedbackContent) {
+                                        try {
+                                            const response = JSON.parse(aiResponseInput.value);
+                                            
+                                            // Show the feedback container
+                                            feedbackContainer.classList.add('visible');
+                                            
+                                            feedbackContent.innerHTML = `
+                                                <div class="feedback-card">
+                                                    <div class="feedback-label">
+                                                        <span class="icon">📖</span>Reference Text:
+                                                    </div>
+                                                    <div class="reference-text">${response.reference || 'N/A'}</div>
+                                                </div>
+                                                
+                                                <div class="feedback-card">
+                                                    <div class="feedback-label">
+                                                        <span class="icon">🗣️</span>Student Reading:
+                                                    </div>
+                                                    <div class="hypothesis-text">${response.hypothesis || 'N/A'}</div>
+                                                </div>
+                                                
+                                                <div class="feedback-card">
+                                                    <div class="feedback-label">
+                                                        <span class="icon">📊</span>Character Error Rate:
+                                                    </div>
+                                                    <div class="cer-score">${response.cer || 'N/A'}</div>
+                                                </div>
+                                                
+                                                <div class="feedback-card">
+                                                    <div class="feedback-label">
+                                                        <span class="icon">🔍</span>Analysis:
+                                                    </div>
+                                                    <div class="feedback-content">${response.analysis || 'No analysis available'}</div>
+                                                </div>
+                                                
+                                                <div class="feedback-card">
+                                                    <div class="feedback-label">
+                                                        <span class="icon">📚</span>Teaching Recommendation:
+                                                    </div>
+                                                    <div class="feedback-content">${response.recommendation || 'No recommendation available'}</div>
+                                                </div>
+                                                
+                                                <div class="feedback-card">
+                                                    <div class="feedback-label">
+                                                        <span class="icon">💡</span>Teaching Tip:
+                                                    </div>
+                                                    <div class="feedback-content">${response.tip || 'No tip available'}</div>
+                                                </div>
+                                            `;
+                                        } catch (error) {
+                                            // Show the feedback container even for errors
+                                            feedbackContainer.classList.add('visible');
+                                            feedbackContent.innerHTML = `
+                                                <div class="feedback-card">
+                                                    <div style="color: #e74c3c; text-align: center;">
+                                                        ⚠️ Error displaying feedback: ${error.message}
+                                                    </div>
+                                                </div>
+                                            `;
+                                        }
+                                    }
+                                }
+                                
+                                // Make the function globally available
+                                window.updateFeedbackDisplay = updateFeedbackDisplay;
+                                
+                            </script>
+                        </tangy-html-container>
                     </tangy-form-item>
                 </tangy-form>
                 <script>
@@ -77,13 +216,83 @@
                         console.log(event.target.inputs)
                         console.log(event.target.values)
                     })
-                    document.querySelector('#my-form').addEventListener('TANGY_MEDIA_UPDATE', event => {
-                        // By default, the form response is locked and the user can browse it. Use event.preventDefault()
-                        // to do something else.
-                        event.preventDefault()
+                    /*document.querySelector('#my-form').addEventListener('TANGY_MEDIA_UPDATE', event => {
                         // 3 ways to inspect the user's response to the form. Ordered by level of detail.
                         console.log("Caught TANGY_MEDIA_UPDATE event at: " + event.target.name)
-                    }, true)
+
+                        // create an a element to download the audio file
+                        // const audioElement = document.createElement('a');
+                        // audioElement.href = event.target.value;
+                        // audioElement.download = 'recorded-audio.wav';
+                        // audioElement.textContent = 'Download Recorded Audio';
+                        // audioElement.click();
+
+                    }, true)*/
+                    document.querySelector('#my-form').addEventListener('TANGY_MEDIA_UPDATE', event => {
+                        if (navigator.onLine) {
+                            console.log("We are online");
+                        } else {
+                            console.log("We are offline");
+                            document.querySelector('tangy-gate[name="item3gate"]').value = true;
+                            return;
+                        }
+
+                        if (event.target.tagName !== 'TANGY-AUDIO-RECORDING') {
+                            console.error('Event target is not a tangy-audio-recording element');
+                            return;
+                        }
+
+                       // send an http request to the server mimicking the curl command above
+                        const formData = new FormData();
+                        const audioBlob = event.target.audioBlob;
+                        if (audioBlob) {
+                            formData.append('audio', audioBlob, 'recording.wav');
+                        } else {
+                            console.error('No audio blob found');
+                            return;
+                        }
+                        formData.append('stimuli', 'Siku moja Furaha');
+
+                        fetch('https://ai.tangerinecentral.org/invocations', {
+                            method: 'POST',
+                            body: formData,
+                        })
+                        .then(
+                            response => {
+                                try {
+                                    return response.json(); // Add 'return' here!
+                                } catch (error) {
+                                    console.error('Error parsing JSON:', error);
+                                    throw error;
+                                }
+                            }
+                        )
+                        .then(data => {
+                            debugger;
+                            console.log('Success:', data);
+                            // set the gate value to true if the response is successful
+                            document.querySelector('tangy-gate[name="item3gate"]').value = true;
+                            // set the aiResponse value to the response text (stringify if it's an object)
+                            const aiResponseInput = document.querySelector('tangy-input[name="aiResponse"]');
+                            if (aiResponseInput) {
+                                aiResponseInput.value = typeof data === 'object' ? JSON.stringify(data) : data;
+                                // Call the feedback update function directly
+                                if (window.updateFeedbackDisplay) {
+                                    window.updateFeedbackDisplay();
+                                }
+                                // Also trigger a change event as backup
+                                aiResponseInput.dispatchEvent(new Event('change', { bubbles: true }));
+                            }
+                        })
+                    }, true);
+                    
+                    // Add event listener for feedback updates (backup approach)
+                    document.querySelector('#my-form').addEventListener('change', (event) => {
+                        // Check if the change is from the aiResponse input
+                        if (event.target.name === 'aiResponse' && window.updateFeedbackDisplay) {
+                            window.updateFeedbackDisplay();
+                        }
+                    });
                 </script>
             </template>
         </demo-snippet>

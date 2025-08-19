@@ -139,6 +139,10 @@ export class TangyRadioBlock extends TangyInputBase {
           align-items: center;
           justify-content: var(--justify-content, center);
           margin: 0 0.25rem;
+          font-size: 2rem;
+        }
+        label#radio-block-label {
+          background: var(--tangy-radio-block-label-bg, var(--tangy-form-item--background-color, #FFF));
         }
         .btn {
           font-weight: 400;
@@ -146,12 +150,10 @@ export class TangyRadioBlock extends TangyInputBase {
           vertical-align: middle;
           user-select: none;
           padding: 0.375rem 0.75rem;
-          font-size: 1.3rem;
           line-height: 1.5;
           border-radius: 0.5rem;
-          border: 4px solid #2c3e50;
+          border: 4px solid transparent;
           text-decoration: none;
-          background-color: #ffff;
           transition-duration: 0.4s;
           position: relative;
           box-sizing: border-box;
@@ -169,7 +171,7 @@ export class TangyRadioBlock extends TangyInputBase {
         name="answer"
       >
       </input>
-        <label for="a1" class="btn btn-lg">
+        <label id="radio-block-label" for="a1" class="btn btn-lg">
           ${this.label ? this.label : this.innerHTML}
           ${this.hasAttribute('image') && this.getAttribute('image') != '' ? `
           <img id="blockImage" src="${this.image}" style="margin-left: auto; max-width: 50px; max-height: 50px;">
@@ -199,9 +201,9 @@ export class TangyRadioBlock extends TangyInputBase {
       }))
     })
     
-    if (this.shadowRoot.querySelector('img') != null) {
-      this.shadowRoot.querySelector('img').addEventListener('click', (e) => {
-          this.dispatchEvent(new CustomEvent('input-sound-triggered', { detail: {sound: this.sound, id: this.name, stopAndClearQueue: true} }))
+    if (this.shadowRoot.querySelector('label#radio-block-label') != null) {
+      this.shadowRoot.querySelector('label#radio-block-label').addEventListener('click', (e) => {
+        this.dispatchEvent(new CustomEvent('input-sound-triggered', { detail: {sound: this.sound, id: this.name, stopAndClearQueue: true} }))
       })
     }
 
