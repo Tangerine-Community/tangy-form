@@ -1,4 +1,4 @@
-import { PolymerElement, html } from "@polymer/polymer/polymer-element.js";
+import { html } from "@polymer/polymer/polymer-element.js";
 import { t } from "../util/t.js";
 import "../style/tangy-common-styles.js";
 import "../style/tangy-element-styles.js";
@@ -9,9 +9,10 @@ import '@polymer/iron-icon/iron-icon.js';
 import "@polymer/paper-button/paper-button.js";
 import "@polymer/paper-item/paper-item.js";
 import "@polymer/paper-progress/paper-progress.js";
-import { TangyAudioRecording } from "./tangy-audio-recording.js";
+import { TangyInputBase } from "../tangy-input-base.js";
+import "./tangy-audio-playback.js";
 
-export class TangyAudioRecordingNlp extends TangyAudioRecording {
+export class TangyAudioRecordingNlp extends TangyInputBase {
   static get template() {
     return html`
       <style include="tangy-common-styles"></style>
@@ -40,7 +41,6 @@ export class TangyAudioRecordingNlp extends TangyAudioRecording {
         .nlp-results {
           margin-top: 10px;
           padding: 10px;
-          background-color: white;
           border-radius: 4px;
         }
         .nlp-error {
@@ -112,42 +112,12 @@ export class TangyAudioRecordingNlp extends TangyAudioRecording {
       
       <div id="qnum-number"></div>
       <div id="qnum-content">
-        <label id="label"></label>
-        <label id="hintText" class="hint-text"></label>
-        <label id="error-text"></label>
-        <div>
-          <paper-button id="startRecording" on-click="startRecording"
-            ><iron-icon icon="settings-voice"></iron-icon> [[t.record]]
-          </paper-button>
-        <div class="audio-row">
-          <paper-button id="stopRecording" on-click="stopRecording"
-            ><iron-icon icon="av:stop"></iron-icon>
-          </paper-button>
-          <paper-button id="playRecording"
-              on-click="playRecording"
-              disabled="[[!audioBlob]]"
-              ><iron-icon icon="av:play-arrow"></iron-icon>
-          </paper-button>
-          <paper-button id="pausePlayback" on-click="pausePlayback"
-            ><iron-icon icon="av:pause"></iron-icon>
-          </paper-button>
-          <paper-button
-            id="deleteRecording"
-            on-click="deleteRecording"
-            disabled="[[!audioBlob]]"
-            ><iron-icon icon="delete"></iron-icon>
-          </paper-button>
-          <span id="audio-motion-container"></span>
-          <span id="recording-time">[[recordingTime]]</span>
-        </div>
-         
-        <audio id="audioPlayback" src="[[value]]"></audio>
-
-        
         <div class="nlp-section" id="nlpSection">
           <div class="nlp-header">
-            <h4>Results</h4>
+            <h2 class="feedback-title">[[label]]</h2>
           </div>
+
+          <tangy-audio-playback label="Recorded Audio" id="audioPlayback"></tangy-audio-playback>
           
           <!-- Processing Indicator -->
           <div class="processing-indicator" id="processingIndicator">
@@ -163,7 +133,7 @@ export class TangyAudioRecordingNlp extends TangyAudioRecording {
               id="processButton"
               on-click="processAudioWithNlp"
               disabled="[[processing]]"
-              style="display:none;">
+              hidden>
               <iron-icon icon="arrow-forward"></iron-icon>
               Process
             </paper-button>
@@ -172,7 +142,7 @@ export class TangyAudioRecordingNlp extends TangyAudioRecording {
               id="reprocessButton"
               on-click="reprocessAudio"
               disabled="[[processing]]"
-              style="display:none;">
+              hidden>
               <iron-icon icon="refresh"></iron-icon>
               [[t.reprocess]]
             </paper-button>
@@ -188,7 +158,10 @@ export class TangyAudioRecordingNlp extends TangyAudioRecording {
 
   static get properties() {
     return {
-      ...super.properties,
+      label: {
+        type: String,
+        value: "",
+      },
       nlpModelUrl: {
         type: String,
         value: "",
@@ -204,6 +177,10 @@ export class TangyAudioRecordingNlp extends TangyAudioRecording {
         value: "en",
         reflectToAttribute: true
       },
+      languageList: {
+        type: Array,
+        value: () => []
+      },
       processing: {
         type: Boolean,
         value: false
@@ -215,15 +192,19 @@ export class TangyAudioRecordingNlp extends TangyAudioRecording {
       nlpError: {
         type: String,
         value: ""
+      },
+      audioRecording: {
+        type: String,
+        value: ''
       }
     };
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.shadowRoot.querySelector("#nlpSection").style.display = "none";
+    // this.shadowRoot.querySelector("#nlpSection").style.display = "none";
     this.shadowRoot.querySelector("#processingIndicator").style.display = "none";
-    this.shadowRoot.querySelector("#nlpResults").style.display = "none";
+    // this.shadowRoot.querySelector("#nlpResults").style.display = "none";
   }
 
   ready() {
@@ -233,68 +214,54 @@ export class TangyAudioRecordingNlp extends TangyAudioRecording {
       ...this.t,
       language: t("language"),
       selectLanguage: t("selectLanguage"),
-      processingAudio: t("processingAudio"),
+      processingAudio: t("Processing Audio"),
       reprocess: t("reprocess"),
       detectedLanguage: t("detectedLanguage"),
       processingError: t("processingError"),
       noResults: t("noResults")
     };
-  }
-
-  stopRecording() {
-    this.isRecording = false;
-    this.mediaRecorder.stop();
-    clearInterval(this.recordingInterval);
-    this.shadowRoot.querySelector("#stopRecording").style.display = "none";
-    this.shadowRoot.querySelector("#startRecording").style.display = "none";
-    this.shadowRoot.querySelector("#playRecording").style.display = "inline-flex";
-    this.shadowRoot.querySelector("#deleteRecording").style.display = "inline-flex";
-    this.shadowRoot.querySelector("#recording-time").style.display = "inline-flex";
-
-    this.mediaRecorder.onstop = () => {
-      this.audioBlob = new Blob(this.audioChunks, { type: "audio/wav" });
-      this.audioChunks = [];
-      const audioURL = URL.createObjectURL(this.audioBlob);
-      this.value = audioURL;
-      this.dispatchEvent(
-        new CustomEvent("TANGY_MEDIA_UPDATE", { detail: { value: this } })
-      );
-      this.audioMotion.disconnectInput(this.micStream);
-      this.audioMotion.volume = 1; 
-      this.shadowRoot.querySelector("#nlpSection").style.display = "block";
-      this.showProcessButton();
-    };
+  
+    if (this.audioRecording.value != '') {
+      const tangyForm = document.querySelector("tangy-form");
+      const audioRecordingInput = tangyForm.inputs.find(input => input.name === this.audioRecording);
+      if (audioRecordingInput && audioRecordingInput.value) {
+        this.shadowRoot.querySelector("#audioPlayback").setAttribute("src", audioRecordingInput.value);
+        this.showProcessButton();
+      }
+    }
   }
 
   showProcessButton() {
     const nlpResults = this.shadowRoot.querySelector("#nlpResults");
     const processBtn = this.shadowRoot.querySelector("#processButton");
     const reprocessBtn = this.shadowRoot.querySelector("#reprocessButton");
+
     if (nlpResults) nlpResults.style.display = "block";
-    if (processBtn) processBtn.style.display = "inline-flex";
-    if (reprocessBtn) reprocessBtn.style.display = "none";
+    if (processBtn) {
+      processBtn.removeAttribute('hidden');
+    }
+    if (reprocessBtn) {
+      reprocessBtn.setAttribute('hidden', '');
+    }
   }
 
   showReprocessButton() { 
     const processBtn = this.shadowRoot.querySelector("#processButton");
     const reprocessBtn = this.shadowRoot.querySelector("#reprocessButton");
-    if (processBtn) processBtn.style.display = "none";
-    if (reprocessBtn) reprocessBtn.style.display = "inline-flex";
-  }
-
-  deleteRecording() {
-    super.deleteRecording();
-    this.shadowRoot.querySelector("#nlpSection").style.display = "none";
-    this.nlpResults = null;
-    this.nlpError = "";
-    const processBtn = this.shadowRoot.querySelector("#processButton");
-    const reprocessBtn = this.shadowRoot.querySelector("#reprocessButton");
-    if (processBtn) processBtn.style.display = "none";
-    if (reprocessBtn) reprocessBtn.style.display = "none";
+    
+    if (processBtn) {
+      processBtn.setAttribute('hidden', '');
+    }
+    if (reprocessBtn) {
+      reprocessBtn.removeAttribute('hidden');
+    }
   }
 
   async processAudioWithNlp() {
-    if (!this.audioBlob || !this.nlpModelUrl) {
+    const tangyForm = document.querySelector("tangy-form");
+    const audioRecordingInput = tangyForm.inputs.find(input => input.name === this.audioRecording);
+    const audioBlob = audioRecordingInput.audioBlob;
+    if (!audioBlob || !this.nlpModelUrl) {
       console.warn("No audio blob or NLP model URL provided");
       return;
     }
@@ -304,31 +271,21 @@ export class TangyAudioRecordingNlp extends TangyAudioRecording {
     this.nlpError = "";
     try {
       const formData = new FormData();
-      formData.append('audio', this.audioBlob, 'recording.wav');
-      formData.append('language', this.language);
+      if (audioBlob) {
+          formData.append('audio', audioBlob, 'recording.wav');
+      } else {
+          console.error('No audio blob found');
+          return;
+      }
       if (this.stimuliText && this.stimuliText.trim()) {
         formData.append('stimuli', this.stimuliText.trim());
       }
-
       const response = await fetch(this.nlpModelUrl, {
         method: 'POST',
         body: formData
       });
 
       let result = await response.json();
-      if (typeof result === 'string') {
-        result = result.trim();
-        if (result.startsWith('```json')) {
-          result = result.replace(/^```json/, '').replace(/```$/, '').trim();
-        } else if (result.startsWith('```')) {
-          result = result.replace(/^```/, '').replace(/```$/, '').trim();
-        }
-        try {
-          result = JSON.parse(result);
-        } catch (e) {
-          console.error('Failed to parse NLP result string:', result);
-        }
-      }
       console.log('NLP API cleaned result:', result);
       this.nlpResults = result;
       this.displayNlpResults();
@@ -353,7 +310,7 @@ export class TangyAudioRecordingNlp extends TangyAudioRecording {
       
       const html = `
         <div class="cer-score">
-          Character Error Rate: ${cer || 'N/A'}%
+          Character Error Rate: ${cer || 'N/A'}
         </div>
         <div class="csr-score">
           Character Success Rate: ${csr}%
@@ -365,7 +322,7 @@ export class TangyAudioRecordingNlp extends TangyAudioRecording {
         </div>
         
         <div class="result-section">
-          <h5>Child's Reading (Hypothesis)</h5>
+          <h5>Child's Reading</h5>
           <div class="hypothesis-text">${this.nlpResults.hypothesis || 'No hypothesis provided'}</div>
         </div>
         
@@ -411,8 +368,6 @@ export class TangyAudioRecordingNlp extends TangyAudioRecording {
   }
 
   validate() {
-    const baseValidation = super.validate();
-    
     if (this.hasAttribute('required') && !this.nlpResults) {
       this.invalid = true;
       return false;

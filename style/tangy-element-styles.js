@@ -156,7 +156,6 @@ $_documentStyleContainer.innerHTML = `<dom-module id="tangy-element-styles">
       }
    
       audio {
-        background-color: var(--accent-color, #ccc);
         color: var(--accent-text-color, #fff);
         border-radius: 4px;
         padding: 4px 8px;
