@@ -217,6 +217,7 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
       processingAudio: t("Processing Audio"),
       reprocess: t("reprocess"),
       detectedLanguage: t("detectedLanguage"),
+      offlineError: t("offlineError"),
       processingError: t("processingError"),
       noResults: t("noResults")
     };
@@ -258,6 +259,13 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
   }
 
   async processAudioWithNlp() {
+
+    if (!navigator.onLine) {
+      this.nlpError = this.t.offlineError;
+      this.displayNlpError();
+      return;
+    }
+
     const tangyForm = document.querySelector("tangy-form");
     const audioRecordingInput = tangyForm.inputs.find(input => input.name === this.audioRecording);
     const audioBlob = audioRecordingInput.audioBlob;
