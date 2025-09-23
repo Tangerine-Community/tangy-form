@@ -232,17 +232,6 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
     }
   }
 
-  getAudioRecordingDuration() {
-    let duration = 0;
-    const tangyForm = document.querySelector("tangy-form");
-    const audioRecordingInput = tangyForm.inputs.find(input => input.name === this.audioRecording);
-    if (audioRecordingInput && audioRecordingInput.audioBlob) {
-      const audioParts = audioRecordingInput.recordingTime.split(":");
-      duration = parseInt(audioParts[0], 10) * 60 + parseInt(audioParts[1], 10);
-    }
-    return duration;
-  }
-
   showProcessButton() {
     const nlpResults = this.shadowRoot.querySelector("#nlpResults");
     const processBtn = this.shadowRoot.querySelector("#processButton");
@@ -284,13 +273,6 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
       console.warn("No audio blob or NLP model URL provided");
       return;
     }
-    const audioDuration = this.getAudioRecordingDuration();
-    if (audioDuration < 1) {
-      this.nlpError = "Audio recording is too short to process.";
-      this.displayNlpError();
-      return;
-    }
-
     this.processing = true;
     this.shadowRoot.querySelector("#processingIndicator").style.display = "flex";
     this.shadowRoot.querySelector("#nlpResults").style.display = "none";
@@ -303,33 +285,22 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
           console.error('No audio blob found');
           return;
       }
-      const stimuliWithoutPunctuation = this.stimuliText.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
-      if (stimuliWithoutPunctuation && stimuliWithoutPunctuation.trim()) {
-        formData.append('stimuli', stimuliWithoutPunctuation.trim().toLowerCase());
+      if (this.stimuliText && this.stimuliText.trim()) {
+        formData.append('stimuli', this.stimuliText.trim());
       }
       const response = await fetch(this.nlpModelUrl, {
         method: 'POST',
         body: formData
       });
 
-      if (response.status !== 200) {
-        const errorMsg = `${response.status}: Network Error`;
-        throw new Error(errorMsg);
-      }
       let result = await response.json();
-      if (result.error) {
-        throw new Error(result.error);
-      }
-      if (!result || Object.keys(result).length === 0) {
-        throw new Error(this.t.noResults);
-      }
-
+      console.log('NLP API cleaned result:', result);
       this.nlpResults = result;
       this.displayNlpResults();
       this.showReprocessButton();
       
     } catch (error) {
-      console.error("Processing error:", error);
+      console.error("NLP processing error:", error);
       this.nlpError = error.message;
       this.displayNlpError();
     } finally {
@@ -338,124 +309,21 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
     }
   }
 
-  replaceErrorAstricksFromLabel(label) {
-    // replace the label that looks like **this** with <mark>this</mark>
-    return label.replace(/\*\*(.*?)\*\*/g, '<mark style="background: #f8d7da;">$1</mark>');
-  }
-
-  replaceErrorTildaFromLabel(label) {
-    // replace the label that looks like ~~this~~ with strikethrough
-    return label.replace(/~~(.*?)~~/g, '<mark style="text-decoration: line-through;">$1</mark>');
-  }
-
-
-  getWordDifference(reference, hypothesis) {
-    // split by space, remove punctuation
-    const refWords = reference.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").split(' ').map(word => word.toLowerCase());
-    const hypWords = hypothesis.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").split(' ').map(word => word.toLowerCase());
-
-    let difference = [];
-    // compare each work sequentially and create one output sentence that shows the reference words
-    // and highlights the words that are different in the hypothesis
-    // use a sliding window to compare words that are at most two positions away
-    let i = 0, j = 0;
-    while (i < refWords.length || j < hypWords.length) {
-      if (i < refWords.length && j < hypWords.length && refWords[i] === hypWords[j]) {
-        difference.push(refWords[i]);
-        i++;
-        j++;
-      } else if (i + 1 < refWords.length && j < hypWords.length && refWords[i + 1] === hypWords[j]) {
-        // word in reference is missing in hypothesis
-        difference.push(`<mark style="background: #f8d7da;">${refWords[i]}</mark>`);
-        i++;
-      } else {
-        // words are different
-        if (i < refWords.length) {
-          difference.push(`<mark style="background: #f8d7da;">${refWords[i]}</mark>`);
-          i++;
-        }
-      }
-    }
-
-    return difference.join(' ');
-  }
-
-  /*
-  * Measures definitions from python jiwer.WordOutput class:
-    The output of calculating the word-level levenshtein distance between one or more
-    reference and hypothesis sentence(s).
-
-    Attributes:
-        references: The reference sentences
-        hypotheses: The hypothesis sentences
-        alignments: The alignment between reference and hypothesis sentences
-        wer: The word error rate
-        mer: The match error rate
-        wil: The word information lost measure
-        wip: The word information preserved measure
-        hits: The number of correct words between reference and hypothesis sentences
-        substitutions: The number of substitutions required to transform hypothesis
-                       sentences to reference sentences
-        insertions: The number of insertions required to transform hypothesis
-                       sentences to reference sentences
-        deletions: The number of deletions required to transform hypothesis
-                       sentences to reference sentences
-*/
-
-  calculateItemPerMin(correctItems) {
-    /*
-    The formula is:
-    Subtask per min = (Correct Item responses/ (time given for subtask-time remaining) ) *60
-    
-    Where correct item responses are the correct words/letters/syllables
-    Time given – usually one minute/60 seconds
-    Subtask-time remaining – reading tasks are timed and the time remaining is the different from start time (60 seconds) – time spent on task
-    To calculate the above we also need the last item read by the child, so that we have the total items/words/letters. In other words the item at the 60th second or the last item, if they read quicker.  
-    */
-   const subtaskTime = 60; // seconds
-   const subtaskTimeRemaining = subtaskTime - this.getAudioRecordingDuration();
-
-   if (subtaskTimeRemaining > 0) {
-     return (correctItems / (subtaskTime - subtaskTimeRemaining)) * 60;
-   } else {
-     return 0;
-   }
-  }
-
   displayNlpResults() {
     const resultsContainer = this.shadowRoot.querySelector("#nlpResults");
     const contentDiv = this.shadowRoot.querySelector("#nlpContent");
     if (this.nlpResults) {
-      const wer = parseFloat(this.nlpResults.measures.word_output.wer).toFixed(2);
-      const cer = parseFloat(this.nlpResults.measures.char_output.cer).toFixed(2);
-      const correct_wpm = this.calculateItemPerMin(this.nlpResults.measures.word_output.hits);
-      const correct_cpm = this.calculateItemPerMin(this.nlpResults.measures.char_output.hits);
-
-      this.value = {
-        "wer": wer,
-        "cer": cer,
-        "wpm": correct_wpm,
-        "cpm": correct_cpm
-      }
-
-      let difference = '';
-      if (this.nlpResults.difference) {
-        const differenceWordSplit = this.nlpResults.difference.split(' ');
-        difference = differenceWordSplit.map(word => {
-          if (word.startsWith('**')) {
-            return this.replaceErrorAstricksFromLabel(word);
-          } else {
-            return word;
-          }
-        }).join(' ');
-      } else {
-        difference = this.getWordDifference(this.nlpResults.reference, this.nlpResults.hypothesis);
-      }
-
+      const cer = this.nlpResults.cer;
+      const csr = cer !== undefined && cer !== 'N/A' ? (100 - parseFloat(cer)).toFixed(2) : 'N/A';
+      
       const html = `
-
-        <div class="csr-score">Correct Words Per Minute (WPM): ${parseFloat(correct_wpm).toFixed(2)}</div>
-
+        <div class="cer-score">
+          Character Error Rate: ${cer || 'N/A'}
+        </div>
+        <div class="csr-score">
+          Character Success Rate: ${csr}%
+        </div>
+        
         <div class="result-section">
           <h5>Reference Text</h5>
           <div class="reference-text">${this.nlpResults.reference || 'No reference text provided'}</div>
@@ -467,8 +335,18 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
         </div>
         
         <div class="result-section">
-          <h5>Difference</h5>
-          <p>${difference || 'No difference available'}</p>
+          <h5>Analysis</h5>
+          <p>${this.nlpResults.analysis || 'No analysis provided'}</p>
+        </div>
+        
+        <div class="result-section">
+          <h5>Recommendation</h5>
+          <p>${this.nlpResults.recommendation || 'No recommendation provided'}</p>
+        </div>
+        
+        <div class="result-section">
+          <h5>Teaching Tip</h5>
+          <p>${this.nlpResults.tip || 'No tip provided'}</p>
         </div>
       `;
       
