@@ -309,19 +309,36 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
     }
   }
 
+  annotateReferenceText() {
+    const sentence_split = this.nlpResults.annotated_reference.split(' ');
+
+    let annotatedHtml = '';
+
+    // if the word is correct, use normal text, if the word is surrounded by **, like **word**, then highlight it in red, if the word is surrounded by ~~, like ~~word~, then highlight it in grey with a strikethrough
+    sentence_split.forEach(chunk => {
+      if (chunk.startsWith('**') && chunk.endsWith('**')) {
+        const word = chunk.slice(2, -2);
+        annotatedHtml += `<span style="color: #f44336; background-color: #ffc8baff; font-weight: bold;">${word}</span> `;
+      } else if (chunk.startsWith('~~') && chunk.endsWith('~~')) {
+        const word = chunk.slice(2, -2);
+        annotatedHtml += `<span style="color: #6c757d; background-color: #e9ecef; text-decoration: line-through;">${word}</span> `;
+      } else {
+        annotatedHtml += `<span>${chunk} </span>`;
+      }
+    });
+
+    return annotatedHtml;
+  }
+
   displayNlpResults() {
     const resultsContainer = this.shadowRoot.querySelector("#nlpResults");
     const contentDiv = this.shadowRoot.querySelector("#nlpContent");
     if (this.nlpResults) {
-      const cer = this.nlpResults.cer;
-      const csr = cer !== undefined && cer !== 'N/A' ? (100 - parseFloat(cer)).toFixed(2) : 'N/A';
+      const correct_wpm = parseFloat(this.nlpResults.measures.correct_wpm).toFixed(2) || 0.0;
       
       const html = `
-        <div class="cer-score">
-          Character Error Rate: ${cer || 'N/A'}
-        </div>
         <div class="csr-score">
-          Character Success Rate: ${csr}%
+          Correct Words Per Minute: ${correct_wpm}
         </div>
         
         <div class="result-section">
@@ -332,6 +349,11 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
         <div class="result-section">
           <h5>Child's Reading</h5>
           <div class="hypothesis-text">${this.nlpResults.hypothesis || 'No hypothesis provided'}</div>
+        </div>
+
+        <div class="result-section">
+          <h5>Annotated Reference Text</h5>
+          <div class="hypothesis-text">${this.annotateReferenceText()}</div>
         </div>
         
         <div class="result-section">
