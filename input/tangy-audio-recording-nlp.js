@@ -177,10 +177,6 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
         value: "en",
         reflectToAttribute: true
       },
-      languageList: {
-        type: Array,
-        value: () => []
-      },
       processing: {
         type: Boolean,
         value: false
@@ -212,14 +208,11 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
     
     this.t = {
       ...this.t,
-      language: t("language"),
-      selectLanguage: t("selectLanguage"),
       processingAudio: t("Processing Audio"),
-      reprocess: t("reprocess"),
-      detectedLanguage: t("detectedLanguage"),
-      offlineError: t("offlineError"),
-      processingError: t("processingError"),
-      noResults: t("noResults")
+      reprocess: t("Reprocess"),
+      offlineError: t("Offline Error: You must be online to process the audio."),
+      processingError: t("Processing Error"),
+      noResults: t("No Results")
     };
   
     if (this.audioRecording.value != '') {
@@ -285,8 +278,9 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
           console.error('No audio blob found');
           return;
       }
-      if (this.stimuliText && this.stimuliText.trim()) {
-        formData.append('stimuli', this.stimuliText.trim());
+      if (this.stimuliText) {
+        const preparedStimuli = this.stimuliText.toLowerCase().replace(/[,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s{2,}/g," ");
+        formData.append('stimuli', preparedStimuli);
       }
       const response = await fetch(this.nlpModelUrl, {
         method: 'POST',
@@ -296,6 +290,8 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
       let result = await response.json();
       console.log('NLP API cleaned result:', result);
       this.nlpResults = result;
+      this.value = this.nlpResults;
+
       this.displayNlpResults();
       this.showReprocessButton();
       
@@ -398,25 +394,24 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
   }
 
   validate() {
+    if (!navigator.onLine) {
+      return true;
+    }
     if (this.hasAttribute('required') && !this.nlpResults) {
       this.invalid = true;
       return false;
     }
     
-    return baseValidation;
+    return true;
   }
 
   getModProps() {
     const baseProps = super.getModProps();
-    const cer = this.nlpResults && this.nlpResults.cer;
-    const csr = cer !== undefined && cer !== 'N/A' ? (100 - parseFloat(cer)).toFixed(2) : 'N/A';
     
     return {
       ...baseProps,
       nlpResults: this.nlpResults,
       stimuliText: this.stimuliText,
-      cer: cer,
-      csr: csr,
       reference: this.nlpResults && this.nlpResults.reference,
       hypothesis: this.nlpResults && this.nlpResults.hypothesis,
       analysis: this.nlpResults && this.nlpResults.analysis,
