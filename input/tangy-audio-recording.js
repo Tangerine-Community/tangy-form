@@ -313,7 +313,7 @@ export class TangyAudioRecording extends TangyInputBase {
   }
 
   reflect() {
-    if (this.$.audioPlayback && this.$.audioPlayback.src == '') return;
+    if (!this.$.audioPlayback || this.$.audioPlayback.src == '') return;
 
     this.value = this.$.audioPlayback.src
     if (this.value && this.value !== '') {
