@@ -120,7 +120,7 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
           <tangy-audio-playback label="Recorded Audio" id="audioPlayback"></tangy-audio-playback>
           
           <!-- Processing Indicator -->
-          <div class="processing-indicator" id="processingIndicator">
+          <div class="processing-indicator" id="processingIndicator" style="display: none;">
             <iron-icon icon="hourglass-empty"></iron-icon>
             <span>[[t.processingAudio]]</span>
             <paper-progress indeterminate></paper-progress>
@@ -158,6 +158,10 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
 
   static get properties() {
     return {
+      name: {
+        type: String,
+        value: ""
+      },
       label: {
         type: String,
         value: "",
@@ -189,18 +193,24 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
         type: String,
         value: ""
       },
-      audioRecording: {
+      audioRecordingInputName: {
         type: String,
         value: ''
+      },
+      value: {
+        type: Object,
+        reflectToAttribute: true
+      },
+      disabled: {
+        type: Boolean,
+        value: false,
+        observer: 'onDisabledChange',
       }
     };
   }
 
   connectedCallback() {
     super.connectedCallback();
-    // this.shadowRoot.querySelector("#nlpSection").style.display = "none";
-    this.shadowRoot.querySelector("#processingIndicator").style.display = "none";
-    // this.shadowRoot.querySelector("#nlpResults").style.display = "none";
   }
 
   ready() {
@@ -215,12 +225,38 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
       noResults: t("No Results")
     };
   
-    if (this.audioRecording.value != '') {
-      const tangyForm = document.querySelector("tangy-form");
-      const audioRecordingInput = tangyForm.inputs.find(input => input.name === this.audioRecording);
-      if (audioRecordingInput && audioRecordingInput.value) {
-        this.shadowRoot.querySelector("#audioPlayback").setAttribute("src", audioRecordingInput.value);
-        this.showProcessButton();
+    const tangyForm = document.querySelector("tangy-form");
+    if (tangyForm) {
+      let audioRecordingNlpInput = tangyForm.inputs.find(input => input.name === this.name);
+      if (audioRecordingNlpInput) {
+        this.value = audioRecordingNlpInput.value;
+        if (this.value) {
+          this.nlpResults = this.value;
+          this.displayNlpResults();
+          this.showReprocessButton();
+        }
+      }
+
+      let audioRecordingInput = tangyForm.inputs.find(input => input.name === this.audioRecordingInputName);
+      if (!audioRecordingInput) {
+        // if not found, try to find it in the DOM -- this will happen if the audio recording input is on the same page as this NLP input
+        audioRecordingInput = tangyForm.querySelector(`tangy-audio-recording[name="${this.audioRecordingInputName}"]`);
+
+        // subscribe to the TANGY_MEDIA_UPDATE event coming from the audio recording input
+        audioRecordingInput.addEventListener("TANGY_MEDIA_UPDATE", (event) => {
+          if (event.target && event.target.audioBlob) {
+            this.shadowRoot.querySelector("#audioPlayback").setAttribute("src", event.target.value);
+            this.showProcessButton();
+          }
+        });
+      }
+
+      if (audioRecordingInput) {
+        this.audioRecordingInput = audioRecordingInput;
+        if (this.audioRecordingInput.value) {
+          this.shadowRoot.querySelector("#audioPlayback").setAttribute("src", this.audioRecordingInput.value);
+          this.showProcessButton();
+        }
       }
     }
   }
@@ -259,9 +295,12 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
       return;
     }
 
-    const tangyForm = document.querySelector("tangy-form");
-    const audioRecordingInput = tangyForm.inputs.find(input => input.name === this.audioRecording);
-    const audioBlob = audioRecordingInput.audioBlob;
+    if (!this.audioRecordingInput) {
+      console.error('No audio recording input found');
+      return;
+    }
+
+    const audioBlob = this.audioRecordingInput.audioBlob;
     if (!audioBlob || !this.nlpModelUrl) {
       console.warn("No audio blob or NLP model URL provided");
       return;
@@ -405,20 +444,18 @@ export class TangyAudioRecordingNlp extends TangyInputBase {
     return true;
   }
 
-  getModProps() {
-    const baseProps = super.getModProps();
-    
-    return {
-      ...baseProps,
-      nlpResults: this.nlpResults,
-      stimuliText: this.stimuliText,
-      reference: this.nlpResults && this.nlpResults.reference,
-      hypothesis: this.nlpResults && this.nlpResults.hypothesis,
-      analysis: this.nlpResults && this.nlpResults.analysis,
-      recommendation: this.nlpResults && this.nlpResults.recommendation,
-      tip: this.nlpResults && this.nlpResults.tip
-    };
+  onDisabledChange() {
+    const processBtn = this.shadowRoot.querySelector("#processButton");
+    const reprocessBtn = this.shadowRoot.querySelector("#reprocessButton");
+    if (this.disabled) {
+      if (processBtn) processBtn.setAttribute('disabled', 'disabled');
+      if (reprocessBtn) reprocessBtn.setAttribute('disabled', 'disabled');
+    } else {
+      if (processBtn) processBtn.removeAttribute('disabled');
+      if (reprocessBtn) reprocessBtn.removeAttribute('disabled');
+    }
   }
+
 }
 
 window.customElements.define(TangyAudioRecordingNlp.is, TangyAudioRecordingNlp);

@@ -372,6 +372,22 @@ export class TangyAudioRecording extends TangyInputBase {
     }
   }
 
+  onDisabledChange() {
+    if (this.disabled) {
+      this.shadowRoot.querySelector("#startRecording").setAttribute("disabled", "disabled");
+      this.shadowRoot.querySelector("#stopRecording").setAttribute("disabled", "disabled");
+      this.shadowRoot.querySelector("#playRecording").setAttribute("disabled", "disabled");
+      this.shadowRoot.querySelector("#pausePlayback").setAttribute("disabled", "disabled");
+      this.shadowRoot.querySelector("#deleteRecording").setAttribute("disabled", "disabled");
+    } else {
+      this.shadowRoot.querySelector("#startRecording").removeAttribute("disabled");
+      this.shadowRoot.querySelector("#stopRecording").removeAttribute("disabled");
+      this.shadowRoot.querySelector("#playRecording").removeAttribute("disabled");
+      this.shadowRoot.querySelector("#pausePlayback").removeAttribute("disabled");
+      this.shadowRoot.querySelector("#deleteRecording").removeAttribute("disabled");
+    }
+  }
+
   validate_back() {
     if (this.isRecording) {
       this.errorText =  t("Stop the recording before continuing"); // do this before setting invalid to true
