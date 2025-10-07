@@ -22,3 +22,6 @@ import './input/tangy-gate.js';
 import './input/tangy-ethio-date.js';
 import './input/tangy-radio-blocks.js';
 import './input/tangy-prompt-box.js';
+import './input/tangy-audio-playback.js';
+import './input/tangy-audio-recording.js';
+import './input/tangy-audio-recording-nlp.js';
