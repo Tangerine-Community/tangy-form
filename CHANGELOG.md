@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v4.50.5
+## v4.50.5, v4.50.6
 
 Set dataType for tangy-audio-recording to audio/wav
 
