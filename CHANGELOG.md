@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v4.50.2
+## v4.50.0, v4.50.1, v4.50.2, v4.50.3, v4.50.4
 
 Add tangy-audio-recording-nlp input component with NLP processing and results display
 
