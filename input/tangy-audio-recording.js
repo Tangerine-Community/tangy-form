@@ -157,7 +157,6 @@ export class TangyAudioRecording extends TangyInputBase {
         value: false,
         reflectToAttribute: true,
       },
-      mediaRecorder: Object,
       audioChunks: {
         type: Array,
         value: () => [],
