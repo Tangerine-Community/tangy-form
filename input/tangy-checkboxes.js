@@ -252,7 +252,7 @@ class TangyCheckboxes extends TangyInputBase {
     } else if (currentlySelectedMutuallyExclusiveOptionNames.length === 1 && previouslySelectedMutuallyExclusiveOption) {
       const winningMutuallyExclusiveOptionName = currentlySelectedMutuallyExclusiveOptionNames[0]
       this.value = [...this.shadowRoot.querySelectorAll('tangy-checkbox')]
-        .map(el => { return {name: el.getAttribute('name'), value: el.getAttribute('name') === winningMutuallyExclusiveOptionName ? '' : el.getAttribute('value')} })
+        .map(el => { return {name: el.getAttribute('name'), value: el.getAttribute('name') === winningMutuallyExclusiveOptionName ? el.getAttribute('value') : ''} })
     } else if (currentlySelectedMutuallyExclusiveOptionNames.length > 1) {
       const winningMutuallyExclusiveOptionName = currentlySelectedMutuallyExclusiveOptionNames.find(name => name !== previouslySelectedMutuallyExclusiveOption.name)
       this.value = [...this.shadowRoot.querySelectorAll('tangy-checkbox')]
