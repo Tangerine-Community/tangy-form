@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.50.7
+
+Updates to the Audio Motion Visualizer and Fixes for Memory Issues in Audio Recording input
+
 ## v4.50.5, v4.50.6
 
 Set dataType for tangy-audio-recording to audio/wav
