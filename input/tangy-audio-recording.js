@@ -217,7 +217,7 @@ export class TangyAudioRecording extends TangyInputBase {
     this.audioBlob = null;
     this.audioMotion.disconnectInput(this.micStream);
     this.audioMotion.volume = 1;
-    this.audioMotion = null;
+    if (this.audioMotion) this.audioMotion.destroy();
     this.mediaRecorder = null;
     if (this.mediaStream) {
       this.mediaStream.getTracks().forEach(track => track.stop());
@@ -243,73 +243,34 @@ export class TangyAudioRecording extends TangyInputBase {
     this.shadowRoot.querySelector("#hintText").innerHTML = this.hintText;
     this.shadowRoot.querySelector("#label").innerHTML = this.label;
 
-    // Options pulled from https://audiomotion.dev/demo/fluid.html -- click the getOptions() button and see the console
-    const audioMotionContainer = this.shadowRoot.getElementById('audio-motion-container')
-    const options = {
-      "alphaBars": false,
-      "ansiBands": false,
-      "barSpace": 0.25,
-      "bgAlpha": 0.7,
-      "channelLayout": "single",
-      "colorMode": "bar-level",
-      "fadePeaks": false,
-      "fftSize": 8192,
-      "fillAlpha": 1,
-      "frequencyScale": "log",
-      //"gradient": "orangered", // defined below
-      "gravity": 3.8,
-      "ledBars": false,
-      "linearAmplitude": true,
-      "linearBoost": 1.6,
-      "lineWidth": 0,
-      "loRes": false,
-      "lumiBars": false,
-      "maxDecibels": -25,
-      "maxFPS": 0,
-      "maxFreq": 16000,
-      "minDecibels": -85,
-      "minFreq": 30,
-      "mirror": 0,
-      "mode": 2,
-      "noteLabels": false,
-      "outlineBars": false,
-      "overlay": false,
-      "peakFadeTime": 750,
-      "peakHoldTime": 500,
-      "peakLine": false,
-      "radial": false,
-      "radialInvert": false,
-      "radius": 0.3,
-      "reflexAlpha": 1,
-      "reflexBright": 1,
-      "reflexFit": true,
-      "reflexRatio": 0.5,
-      "roundBars": true,
-      "showBgColor": true,
-      "showFPS": false,
-      "showPeaks": false,
-      "showScaleX": false,
-      "showScaleY": false,
-      "smoothing": 0.7,
-      "spinSpeed": 0,
-      "splitGradient": false,
-      "trueLeds": false,
-      "useCanvas": true,
-      "volume": 1,
-      "weightingFilter": "D"
-    }
-    this.audioMotion = new AudioMotionAnalyzer(
-      audioMotionContainer, options
-    );
-    this.audioMotion.registerGradient( 'tangyGradient', {
-      bgColor: '#eee', // background color (optional) - defaults to '#111'
-      dir: 'h',           // add this property to create a horizontal gradient (optional)
-      colorStops: [       // list your gradient colors in this array (at least one color is required)
-          { color: 'orangered', pos: .6 }, // in an object, use `pos` to adjust the offset (0 to 1) of a colorStop
-          { color: 'orange', level: .5 }  // use `level` to set the max bar amplitude (0 to 1) to use this color
-      ]
+    this._initAudioMotion();
+  }
+
+  _initAudioMotion() {
+    const container = this.shadowRoot.getElementById('audio-motion-container');
+    this.audioMotion = new AudioMotionAnalyzer(container, {
+      mode: 10,
+      overlay: true, 
+      showBgColor: false,
+      bgAlpha: 0,
+      useCanvas: true,
+      showScaleX: false,
+      showScaleY: false,
+      fftSize: 2048,
+      maxFPS: 30,
+      lineWidth: 2,
+      fillAlpha: 0,
+      reflexRatio: 0,
+      lumiBars: false,
+      showPeaks: false,
+      minDecibels: -85,
+      maxDecibels: -25,
+      smoothing: 0.6
     });
-    this.audioMotion.gradient = 'tangyGradient';
+    
+    this.audioMotion.registerGradient('simpleOrange', { colorStops: [{ color: 'orangered' }] });
+    this.audioMotion.gradient = 'simpleOrange';
+    
     this.audioPlaybackSource = this.audioMotion.audioCtx.createMediaElementSource(this.$.audioPlayback);
     this.audioMotion.connectInput(this.audioPlaybackSource);
   }
@@ -407,25 +368,27 @@ export class TangyAudioRecording extends TangyInputBase {
       .then((stream) => {
         this.mediaStream = stream;
         this.mediaRecorder = new MediaRecorder(this.mediaStream);
+        this.mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) this.audioChunks.push(e.data); };
         this.mediaRecorder.onstop = (async () => {
-          const webmBlob = new Blob(this.audioChunks);
-          this.audioChunks = [];
-          const webmURL = URL.createObjectURL(webmBlob);
-          const response = await fetch(webmURL);
-          const arrayBuffer = await response.arrayBuffer()
-          const audioContext = this.audioMotion.audioCtx;
-          const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
-          this.audioBlob = getWaveBlob(audioBuffer, false)
-          const audioURL = URL.createObjectURL(this.audioBlob);
-          this.value = audioURL;
-          this.dispatchEvent(
-            new CustomEvent("TANGY_MEDIA_UPDATE", { detail: { value: this } })
-          );
-          this.invalid = false;
-          this.audioMotion.disconnectInput( this.micStream );
-          this.audioMotion.volume = 1; // restore volume to normal
-          this.micStream.disconnect();
-          this.mediaStream.getTracks().forEach(track => track.stop());
+          const webmBlob = new Blob(this.audioChunks, { type: this.mediaRecorder.mimeType });
+          if (webmBlob.size === 0) return;
+
+          try {
+            const buffer = await webmBlob.arrayBuffer();
+            const audioBuffer = await this.audioMotion.audioCtx.decodeAudioData(buffer);
+            this.audioBlob = getWaveBlob(audioBuffer, false);
+            this.value = URL.createObjectURL(this.audioBlob);
+            this.dispatchEvent(new CustomEvent("TANGY_MEDIA_UPDATE", { detail: { value: this } }));
+            this.validate(); // Run validation immediately after processing
+          } catch (err) {
+            console.error("Audio conversion failed", err);
+          } finally {
+            if (this.mediaStream) this.mediaStream.getTracks().forEach(track => track.stop());
+            if (this.micStream) {
+              this.audioMotion.disconnectInput(this.micStream);
+              this.audioMotion.volume = 1;
+            }
+          }
         });
 
         this.mediaRecorder.start();
@@ -452,9 +415,6 @@ export class TangyAudioRecording extends TangyInputBase {
           ).padStart(2, "0")}`;
         }, 1000);
         this.startTime = new Date().getTime();
-        this.mediaRecorder.ondataavailable = (event) => {
-          this.audioChunks.push(event.data);
-        };
       })
       .catch((error) => {
         this.isRecording = false;
@@ -489,7 +449,7 @@ export class TangyAudioRecording extends TangyInputBase {
         this.isPlaying = false;
         this.shadowRoot.querySelector("#playRecording").style.display = "inline-flex";
         this.shadowRoot.querySelector("#pausePlayback").style.display = "none";
-      });
+      }, { once: true });
 
     } else {
       console.warn("No audio recording available to play.");
