@@ -180,6 +180,15 @@ export class TangyAudioRecording extends TangyInputBase {
         value: 'audio/wav',
         reflectToAttribute: true
       },
+      durationSeconds: { 
+        type: Number, 
+        value: 0 
+      },
+      minDuration: { 
+        type: Number, 
+        value: 0, 
+        reflectToAttribute: true 
+      },
     };
   }
 
@@ -320,19 +329,26 @@ export class TangyAudioRecording extends TangyInputBase {
 
   validate() {
     if (this.isRecording) {
-      this.errorText = t("Stop the recording before continuing"); // do this before setting invalid to true
+      // do this before setting invalid to true
+      this.errorText = t("Stop the recording before continuing");
       this.invalid = true;
       return false;
     }
     if (this.hasAttribute('required') && !this.value) {
-      this.errorText = t("Recording is required"); // do this before setting invalid to true
+      // do this before setting invalid to true
+      this.errorText = t("Recording is required");
       this.invalid = true
       return false
-    } else {
-      this.errorText = "";
-      this.invalid = false
-      return true
     }
+    if (this.value && this.durationSeconds < this.minDuration) {
+      this.errorText = `${t("Recording must be at least")} ${this.minDuration} ${t("seconds long")}`;
+      this.invalid = true;
+      return false;
+    }
+    this.errorText = "";
+    this.invalid = false
+    return true
+
   }
 
   onDisabledChange() {
@@ -413,6 +429,7 @@ export class TangyAudioRecording extends TangyInputBase {
           this.recordingTime = `${String(minutes).padStart(2, "0")}:${String(
             seconds
           ).padStart(2, "0")}`;
+          this.durationSeconds = Math.floor(elapsedTime / 1000);
         }, 1000);
         this.startTime = new Date().getTime();
       })
@@ -471,6 +488,7 @@ export class TangyAudioRecording extends TangyInputBase {
     this.isPlaying = false;
     this.audioBlob = null;
     this.recordingTime = "00:00";
+    this.durationSeconds = 0;
  
     this.$.audioPlayback.removeAttribute("src");
     this.value = "";

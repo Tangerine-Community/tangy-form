@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.50.8
+
+Add minDuration and durationSeconds properties to Audio Recording Input
+
 ## v4.50.7
 
 Updates to the Audio Motion Visualizer and Fixes for Memory Issues in Audio Recording input
