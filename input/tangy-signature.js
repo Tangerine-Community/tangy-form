@@ -228,5 +228,11 @@ export class TangySignature extends TangyInputBase {
     }
   }
 
+  onDisabledChange(value) {
+    if (value) {
+      // @TODO Prevent interaction with UI, perhaps an overlay box.
+    }
+  }
+
 }
 window.customElements.define(TangySignature.is, TangySignature)
