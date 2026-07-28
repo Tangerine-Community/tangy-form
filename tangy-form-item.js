@@ -805,11 +805,14 @@ export class TangyFormItem extends PolymerElement {
                 let value = 0;
                 let score = 0;
                 let denominator = 0;
-                if (input.tagName === 'TANGY-TIMED') {
+                if (input.tagName === 'TANGY-TIMED' || input.tagName === 'TANGY-UNTIMED-GRID') {
                   //each grid present is scored as "number of correct items"/"number of total items" *100 aka a percent
+                  //correct items are the ones up to the last attempted item that were not marked
+                  //incorrect, so a grid stopped early scores against the whole grid rather than
+                  //against only what was attempted
                   const correct = numberOfCorrectItems(input);
                   const total = input.value.length
-                  value = Math.round((correct/total) * 100).toString();
+                  value = (total > 0) ? Math.round((Math.max(0, correct)/total) * 100).toString() : '0';
                   tangyTimedPercents.push(value);
                 } else if (input.tagName === 'TANGY-CHECKBOX') {
                   // if the input is a checkbox, the score is 1 if checked, 0 if not
