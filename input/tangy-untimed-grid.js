@@ -131,9 +131,19 @@ class TangyUntimedGrid extends TangyInputBase {
         padding-top: 70px;
       }
 
-      /* Highlight the bar while a required grid has not been marked complete yet. */
-      :host([required][incomplete]) #bar paper-button {
-        background-color: var(--paper-red-500, #f44336) !important;
+      /* The control for the mode you are in reads blue; the other one reads orange as the next
+         thing to tap. The active control is disabled so it cannot be re-pressed, so these have to
+         out-specify the disabled grey above — the #bar id selector does that. */
+      #bar paper-button {
+        background-color: var(--tangy-untimed-grid-pending-color, #F26F10) !important;
+        color: #ffffff !important;
+      }
+
+      #bar paper-button.pressed,
+      #bar paper-button.pressed[disabled] {
+        background-color: var(--tangy-untimed-grid-active-color, #1E4F96) !important;
+        color: #ffffff !important;
+        opacity: 1;
       }
     </style>
     <label class="hint-text">[[hintText]]</label>
