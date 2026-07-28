@@ -87,11 +87,16 @@ class TangyUntimedGrid extends TangyInputBase {
         display: none;
       }
 
+      /* Sticky rather than absolute: the controls have to stay reachable while a long grid is
+         scrolled, and an absolute bar scrolls away and rides over the app header on the way.
+         The offset keeps it clear of the header — override it per app if the header is taller. */
       #bar {
-        position: absolute;
-        right: 50px;
-        top: 0px;
-        z-index: 1000000;
+        position: sticky;
+        top: var(--tangy-untimed-grid-bar-offset, 64px);
+        z-index: 5;
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 50px;
       }
 
       #bar paper-button {
@@ -99,7 +104,6 @@ class TangyUntimedGrid extends TangyInputBase {
       }
 
       #touchPalette {
-        float: right;
         background: white;
         border: solid 1px #c5c5c5;
         border-radius: 10px;
@@ -127,8 +131,9 @@ class TangyUntimedGrid extends TangyInputBase {
         background-color: #1976d2;
       }
 
+      /* The bar used to be absolute, so this reserved space for it. It is in flow now. */
       #info {
-        padding-top: 70px;
+        padding-top: 0;
       }
 
       /* The control for the mode you are in reads blue; the other one reads orange as the next
