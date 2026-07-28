@@ -130,10 +130,22 @@ class TangyUntimedGrid extends TangyInputBase {
       #info {
         padding-top: 70px;
       }
+
+      /* Highlight the bar while a required grid has not been marked complete yet. */
+      :host([required][incomplete]) #bar paper-button {
+        background-color: var(--paper-red-500, #f44336) !important;
+      }
     </style>
     <label class="hint-text">[[hintText]]</label>
     <div id="container">
-      
+
+      <div id="bar">
+        <paper-button id="lastAttemptedButton" on-click="onLastAttemptedClick">
+          <iron-icon icon="av:stop"></iron-icon>
+          [[t.lastAttempted]]
+        </paper-button>
+      </div>
+
       <div id="info">
           <div id="statusMessage"> [[statusMessage]] </div>
       </div>
@@ -372,6 +384,7 @@ class TangyUntimedGrid extends TangyInputBase {
         break;
       case TANGY_UNTIMED_GRID_MODE_RUN:
         this.statusMessage = t('Tap items to mark them incorrect.')
+        this.incomplete = true
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
             highlighted: false,
@@ -381,6 +394,7 @@ class TangyUntimedGrid extends TangyInputBase {
         break
       case TANGY_UNTIMED_GRID_MODE_MARK:
         this.statusMessage = t('Tap any boxes that were incorrect during the test.')
+        this.incomplete = true
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
             disabled: false
@@ -388,6 +402,8 @@ class TangyUntimedGrid extends TangyInputBase {
         })
         break
       case TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED:
+        // The last attempted item has been marked, so the grid has been fully administered.
+        this.incomplete = false
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
             disabled: true
@@ -515,9 +531,32 @@ class TangyUntimedGrid extends TangyInputBase {
       this.value = this.value.map((element, i) => Object.assign({}, element, { highlighted: (this.value.length - 1 === i) ? true : false }))
     }
     this.mode = TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED
+    // A grid with no incorrect items never fires a change event from a toggle button, so
+    // announce the change here. Otherwise on-change logic never sees a completed grid.
+    this.dispatchEvent(new Event('change'))
+  }
+
+  // The bar button marks the last attempted item, which is what declares the grid complete.
+  // Pressing it again releases the grid so that marks can still be corrected.
+  onLastAttemptedClick() {
+    if (this.disabled) return
+    if (this.mode === TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED) {
+      this.mode = TANGY_UNTIMED_GRID_MODE_RUN
+      this.dispatchEvent(new Event('change'))
+    } else {
+      this.onStopClick()
+    }
   }
 
   validate() {
+    if (this.required === true &&
+        this.incomplete === true &&
+        this.disabled === false &&
+        this.hidden === false) {
+      this.invalid = true
+      return false
+    }
+    this.invalid = false
     return true
   }
 

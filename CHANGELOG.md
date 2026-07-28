@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## v4.51.0
+
+`tangy-untimed-grid`: Add an always visible LAST ATTEMPTED bar button that marks the last attempted
+item and declares the grid complete. Until it is pressed the grid reports `incomplete`, so a grid
+marked `required` now blocks the item from being submitted — previously `validate()` always returned
+`true` and `required` had no effect on this input. Marking the last attempted item also fires a
+`change` event, so `on-change` logic now runs for a grid in which no item was marked incorrect;
+previously a grid with zero incorrect items never dispatched `change` at all. Pressing the button a
+second time releases the grid so that marks can still be corrected.
+
 ## v4.50.8
 
 Add minDuration and durationSeconds properties to Audio Recording Input
