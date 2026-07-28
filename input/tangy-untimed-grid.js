@@ -89,14 +89,32 @@ class TangyUntimedGrid extends TangyInputBase {
 
       /* Sticky rather than absolute: the controls have to stay reachable while a long grid is
          scrolled, and an absolute bar scrolls away and rides over the app header on the way.
-         The offset keeps it clear of the header — override it per app if the header is taller. */
+         The offset matches the app header height (Tangerine's mat-toolbar measures 64px) — override
+         it per app if the header is taller.
+
+         The bar spans the full width and is opaque because a sticky element is scrolled UNDER: with
+         a transparent bar the grid items passed behind the buttons and the two collided, leaving a
+         half-covered item that still looked tappable. Full-width and opaque, it reads as a toolbar
+         and the row behind it is cleanly hidden rather than mangled. */
       #bar {
         position: sticky;
         top: var(--tangy-untimed-grid-bar-offset, 64px);
         z-index: 5;
         display: flex;
         justify-content: flex-end;
-        padding-right: 50px;
+        align-items: center;
+        padding: 4px 50px 4px 0;
+        background: var(--tangy-untimed-grid-bar-background, #ffffff);
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      /* The palette is the bar now, so it drops the floating-card treatment it needed when the bar
+         was transparent — otherwise it reads as a card sitting on a toolbar. */
+      #bar #touchPalette {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0;
       }
 
       #bar paper-button {
