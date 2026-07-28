@@ -141,6 +141,12 @@ class TangyUntimedGrid extends TangyInputBase {
 
       <div id="bar">
         <div id="touchPalette">
+          <paper-button id="markButton" mini on-click="onMarkClick">
+            <iron-icon icon="editor:mode-edit"></iron-icon>
+            <template is="dom-if" if="{{showLabels}}">
+              [[t.mark]]
+            </template>
+          </paper-button>
           <paper-button id="lastAttemptedButton" mini on-click="onLastAttemptedClick">
             <iron-icon icon="av:playlist-add-check"></iron-icon>
             <template is="dom-if" if="{{showLabels}}">
@@ -289,7 +295,11 @@ class TangyUntimedGrid extends TangyInputBase {
       this.render()
       this.reflect()
       // this.onStartClick()
-      this.mode = TANGY_UNTIMED_GRID_MODE_RUN
+      // RUN clears the last attempted marker, so an already administered grid resumes in MARK
+      // instead — reopening a saved response must not wipe its completion.
+      this.mode = this.value.some(buttonState => buttonState.highlighted)
+        ? TANGY_UNTIMED_GRID_MODE_MARK
+        : TANGY_UNTIMED_GRID_MODE_RUN
     }, 400)
   }
 
@@ -377,6 +387,7 @@ class TangyUntimedGrid extends TangyInputBase {
     switch (value) {
       case TANGY_UNTIMED_GRID_MODE_DISABLED:
         this.statusMessage = '';
+        this.$.markButton.hidden = true
         this.$.lastAttemptedButton.hidden = true
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
@@ -385,6 +396,8 @@ class TangyUntimedGrid extends TangyInputBase {
         })
       case TANGY_UNTIMED_GRID_MODE_UNTOUCHED:
         this.statusMessage = t('untouched')
+        this.$.markButton.disabled = true
+        this.$.lastAttemptedButton.disabled = true
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
             disabled: true
@@ -394,6 +407,8 @@ class TangyUntimedGrid extends TangyInputBase {
       case TANGY_UNTIMED_GRID_MODE_RUN:
         this.statusMessage = t('Tap items to mark them incorrect.')
         this.incomplete = true
+        this.$.markButton.classList.add('pressed')
+        this.$.markButton.disabled = true
         this.$.lastAttemptedButton.disabled = false
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
@@ -404,13 +419,16 @@ class TangyUntimedGrid extends TangyInputBase {
         break
       case TANGY_UNTIMED_GRID_MODE_MARK:
         this.statusMessage = t('Tap any boxes that were incorrect during the test.')
-        this.incomplete = true
+        this.$.markButton.classList.add('pressed')
+        this.$.markButton.disabled = true
         this.$.lastAttemptedButton.disabled = false
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
             disabled: false
           })
         })
+        // Corrections after completion keep the last attempted marker, so stay complete.
+        this.incomplete = !this.value.some(buttonState => buttonState.highlighted)
         break
       case TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED:
         // Same as the timed grid: the button only asks for the last attempted item. The grid is
@@ -418,6 +436,9 @@ class TangyUntimedGrid extends TangyInputBase {
         this.statusMessage = t('Tap the item last attempted.')
         this.$.lastAttemptedButton.classList.add('pressed')
         this.$.lastAttemptedButton.disabled = true
+        // MARK stays available so marks can still be corrected after completion.
+        this.$.markButton.disabled = false
+        this.incomplete = !this.value.some(buttonState => buttonState.highlighted)
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
             disabled: true
@@ -569,11 +590,24 @@ class TangyUntimedGrid extends TangyInputBase {
     this.dispatchEvent(new Event('change'))
   }
 
-  // Same contract as the timed grid: the button switches the grid into last-attempted mode and
-  // the teacher then taps the item that was last attempted.
+  // Switches the grid into last-attempted mode. Unlike the timed grid there is no stop event to
+  // infer a position from, so the marker defaults to the final item of the grid — the common case
+  // for an untimed grid that was read to the end. Tapping another item moves it.
   onLastAttemptedClick() {
     if (this.disabled) return
+    if (!this.value.some(buttonState => buttonState.highlighted)) {
+      this.value = this.value.map((buttonState, i) => Object.assign({}, buttonState, {
+        highlighted: (i === this.value.length - 1)
+      }))
+    }
     this.mode = TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED
+    this.dispatchEvent(new Event('change'))
+  }
+
+  // Back to correcting marks. The last attempted marker is kept, so the grid stays complete.
+  onMarkClick() {
+    if (this.disabled) return
+    this.mode = TANGY_UNTIMED_GRID_MODE_MARK
   }
 
   validate() {
