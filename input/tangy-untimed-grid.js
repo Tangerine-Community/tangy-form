@@ -140,10 +140,14 @@ class TangyUntimedGrid extends TangyInputBase {
     <div id="container">
 
       <div id="bar">
-        <paper-button id="lastAttemptedButton" on-click="onLastAttemptedClick">
-          <iron-icon icon="av:stop"></iron-icon>
-          [[t.lastAttempted]]
-        </paper-button>
+        <div id="touchPalette">
+          <paper-button id="lastAttemptedButton" mini on-click="onLastAttemptedClick">
+            <iron-icon icon="av:playlist-add-check"></iron-icon>
+            <template is="dom-if" if="{{showLabels}}">
+              [[t.lastAttempted]]
+            </template>
+          </paper-button>
+        </div>
       </div>
 
       <div id="info">
@@ -366,9 +370,14 @@ class TangyUntimedGrid extends TangyInputBase {
     let tangyToggleButtons = [].slice.call(this.shadowRoot.querySelectorAll('tangy-toggle-button'))
     let inputElements = [].slice.call(this.querySelectorAll('[name]'))
 
+    // reset pressed.
+    let controlElements = [].slice.call(this.shadowRoot.querySelectorAll('paper-button'))
+    controlElements.forEach(element => element.classList.remove('pressed'))
+
     switch (value) {
       case TANGY_UNTIMED_GRID_MODE_DISABLED:
         this.statusMessage = '';
+        this.$.lastAttemptedButton.hidden = true
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
             disabled: true
@@ -385,6 +394,7 @@ class TangyUntimedGrid extends TangyInputBase {
       case TANGY_UNTIMED_GRID_MODE_RUN:
         this.statusMessage = t('Tap items to mark them incorrect.')
         this.incomplete = true
+        this.$.lastAttemptedButton.disabled = false
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
             highlighted: false,
@@ -395,6 +405,7 @@ class TangyUntimedGrid extends TangyInputBase {
       case TANGY_UNTIMED_GRID_MODE_MARK:
         this.statusMessage = t('Tap any boxes that were incorrect during the test.')
         this.incomplete = true
+        this.$.lastAttemptedButton.disabled = false
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
             disabled: false
@@ -402,8 +413,11 @@ class TangyUntimedGrid extends TangyInputBase {
         })
         break
       case TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED:
-        // The last attempted item has been marked, so the grid has been fully administered.
-        this.incomplete = false
+        // Same as the timed grid: the button only asks for the last attempted item. The grid is
+        // not complete until one is actually tapped, which onTangyToggleButtonClick handles.
+        this.statusMessage = t('Tap the item last attempted.')
+        this.$.lastAttemptedButton.classList.add('pressed')
+        this.$.lastAttemptedButton.disabled = true
         this.value = this.value.map(buttonState => {
           return Object.assign({}, buttonState, {
             disabled: true
@@ -479,7 +493,24 @@ class TangyUntimedGrid extends TangyInputBase {
         this.dispatchEvent(new Event('change'))
         break
       case TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED:
-        // Ignore - not going to capture last_attempted once autostop has been triggered.
+        // Find the last marked and do not set last attempted if what is just clicked is <.
+        let lastMarkedIndex = 0
+        this.value.forEach((option, i) => lastMarkedIndex = (option.pressed) ? i : lastMarkedIndex)
+        newValue = this.value.map((option, i) => {
+          if (option.name === event.target.name && i >= lastMarkedIndex) {
+            option.highlighted = true
+          } else if (option.name === event.target.name && i < lastMarkedIndex) {
+            alert(t('Last attempted cannot be before an item marked.'))
+            option.highlighted = false
+          } else {
+            option.highlighted = false
+          }
+          return option
+        })
+        this.value = newValue
+        // Only a real last attempted item completes the grid.
+        this.incomplete = !this.value.some(option => option.highlighted)
+        this.dispatchEvent(new Event('change'))
         break
     }
     if (this.autoStop && this.shouldGridAutoStop()) {
@@ -531,32 +562,34 @@ class TangyUntimedGrid extends TangyInputBase {
       this.value = this.value.map((element, i) => Object.assign({}, element, { highlighted: (this.value.length - 1 === i) ? true : false }))
     }
     this.mode = TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED
+    // Auto-stop already picked the last attempted item, so the grid is administered.
+    this.incomplete = false
     // A grid with no incorrect items never fires a change event from a toggle button, so
     // announce the change here. Otherwise on-change logic never sees a completed grid.
     this.dispatchEvent(new Event('change'))
   }
 
-  // The bar button marks the last attempted item, which is what declares the grid complete.
-  // Pressing it again releases the grid so that marks can still be corrected.
+  // Same contract as the timed grid: the button switches the grid into last-attempted mode and
+  // the teacher then taps the item that was last attempted.
   onLastAttemptedClick() {
     if (this.disabled) return
-    if (this.mode === TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED) {
-      this.mode = TANGY_UNTIMED_GRID_MODE_RUN
-      this.dispatchEvent(new Event('change'))
-    } else {
-      this.onStopClick()
-    }
+    this.mode = TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED
   }
 
   validate() {
+    let lastAttempted = this.value.find(state => (state.highlighted) ? state : false)
+    // If this is required, it's not hidden, and there is no last attempted... Then this is invalid.
     if (this.required === true &&
-        this.incomplete === true &&
         this.disabled === false &&
-        this.hidden === false) {
+        this.hidden === false &&
+        !lastAttempted) {
       this.invalid = true
+      this.incomplete = true
+      alert(t('Tap the item last attempted.'))
       return false
     }
     this.invalid = false
+    this.incomplete = false
     return true
   }
 
