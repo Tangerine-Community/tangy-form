@@ -634,7 +634,10 @@ class TangyUntimedGrid extends TangyInputBase {
         !lastAttempted) {
       this.invalid = true
       this.incomplete = true
-      alert(t('Tap the item last attempted.'))
+      // Unlike the timed grid there is no stop button to reach this state from, so the alert has
+      // to say where the control is, otherwise the requirement looks like a dead end.
+      alert(t('Tap the item last attempted.') + ' '
+        + t('Tap the icon at the top right to mark the last item the child attempted.'))
       return false
     }
     this.invalid = false
