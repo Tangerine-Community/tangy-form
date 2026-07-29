@@ -335,9 +335,16 @@ class TangyUntimedGrid extends TangyInputBase {
         // Pinned below the app header rather than at the very top of the viewport, so the controls
         // do not ride over it. Override per app when the header is taller than Tangerine's 64px.
         bar.style.top = 'var(--tangy-untimed-grid-bar-offset, 64px)'
+        // The stylesheet's right: 50px answers to #container while absolute, but to the VIEWPORT
+        // once fixed — which threw the bar out to the window edge, hundreds of pixels clear of the
+        // grid it belongs to. Re-express the same 50px inset as a viewport offset so the bar holds
+        // its column either way. tangy-timed carries this same flaw; it is just rarely noticed,
+        // because its bar only goes fixed once the grid has scrolled past.
+        bar.style.right = Math.max(0, window.innerWidth - box.right + 50) + 'px'
       } else {
         bar.style.position = 'absolute'
         bar.style.top = '0px'
+        bar.style.right = ''
       }
       this.shadowRoot.querySelector('#info').style.paddingTop = this.offsetWidth > 645 ? '70px' : '150px'
     }, 1000)
