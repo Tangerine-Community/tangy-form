@@ -87,24 +87,18 @@ class TangyUntimedGrid extends TangyInputBase {
         display: none;
       }
 
-      /* Sticky rather than absolute: the controls have to stay reachable while a long grid is
-         scrolled, and an absolute bar scrolls away and rides over the app header on the way.
-         The offset matches the app header height (Tangerine's mat-toolbar measures 64px) — override
-         it per app if the header is taller.
-
-         The bar spans the full width and is opaque because a sticky element is scrolled UNDER: with
-         a transparent bar the grid items passed behind the buttons and the two collided, leaving a
-         half-covered item that still looked tappable. Full-width and opaque, it reads as a toolbar
-         and the row behind it is cleanly hidden rather than mangled. */
+      /* Same mechanism as tangy-timed: absolute at the top of the grid, switched to fixed by the
+         poll in ready() once the grid's top has scrolled past. position: sticky was tried first
+         and does not survive this component's surroundings — a scrolling or clipping ancestor
+         (tangy-form-item goes overflow: scroll when fullscreen, and the editor renders each item
+         in its own scroll box) confines a sticky element silently, with no way for the component
+         to detect it. The timed grid has worked this way for years; matching it is worth more than
+         the tidier CSS. */
       #bar {
-        position: sticky;
-        top: var(--tangy-untimed-grid-bar-offset, 64px);
-        z-index: 5;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        padding: 4px 50px 4px 0;
-        background: var(--tangy-untimed-grid-bar-background, #ffffff);
+        position: absolute;
+        right: 50px;
+        top: 0px;
+        z-index: 1000000;
       }
 
       #bar paper-button {
@@ -139,9 +133,11 @@ class TangyUntimedGrid extends TangyInputBase {
         background-color: #1976d2;
       }
 
-      /* The bar used to be absolute, so this reserved space for it. It is in flow now. */
+      /* The bar is out of flow, so #info reserves the space it occupies. The exact amount depends
+         on whether the controls wrap, which depends on width — the poll in ready() sets it, exactly
+         as tangy-timed does. */
       #info {
-        padding-top: 0;
+        padding-top: 70px;
       }
 
       /* The control for the mode you are in reads blue; the other one reads orange as the next
@@ -324,6 +320,24 @@ class TangyUntimedGrid extends TangyInputBase {
         ? TANGY_UNTIMED_GRID_MODE_MARK
         : TANGY_UNTIMED_GRID_MODE_RUN
     }, 400)
+    // Keep the controls on screen while a long grid is scrolled, copied from tangy-timed: while the
+    // grid's top is above the viewport and its bottom is still below it, the bar is fixed; otherwise
+    // it sits at the top of the grid. Polled rather than driven by a scroll listener because the
+    // scrolling ancestor differs by host — the form item, the editor's item box or the page itself.
+    setInterval(_ => {
+      const box = this.getBoundingClientRect()
+      const bar = this.shadowRoot.querySelector('#bar')
+      if (box.y < 0 && box.y + box.height > 0) {
+        bar.style.position = 'fixed'
+        // Pinned below the app header rather than at the very top of the viewport, so the controls
+        // do not ride over it. Override per app when the header is taller than Tangerine's 64px.
+        bar.style.top = 'var(--tangy-untimed-grid-bar-offset, 64px)'
+      } else {
+        bar.style.position = 'absolute'
+        bar.style.top = '0px'
+      }
+      this.shadowRoot.querySelector('#info').style.paddingTop = this.offsetWidth > 645 ? '70px' : '150px'
+    }, 1000)
   }
 
 
