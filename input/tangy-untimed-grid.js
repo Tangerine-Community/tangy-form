@@ -105,7 +105,6 @@ class TangyUntimedGrid extends TangyInputBase {
         align-items: center;
         padding: 4px 50px 4px 0;
         background: var(--tangy-untimed-grid-bar-background, #ffffff);
-        border-bottom: 1px solid #e0e0e0;
       }
 
       /* The palette is the bar now, so it drops the floating-card treatment it needed when the bar
