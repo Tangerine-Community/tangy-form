@@ -107,15 +107,6 @@ class TangyUntimedGrid extends TangyInputBase {
         background: var(--tangy-untimed-grid-bar-background, #ffffff);
       }
 
-      /* The palette is the bar now, so it drops the floating-card treatment it needed when the bar
-         was transparent — otherwise it reads as a card sitting on a toolbar. */
-      #bar #touchPalette {
-        background: transparent;
-        border: none;
-        box-shadow: none;
-        padding: 0;
-      }
-
       #bar paper-button {
         font-size: .6em;
       }
