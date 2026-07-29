@@ -105,7 +105,11 @@ class TangyUntimedGrid extends TangyInputBase {
         font-size: .6em;
       }
 
+      /* float: right is what keeps the card shrink-wrapped around the two buttons. Without it the
+         palette is a full-width block and its white background spreads across the status message
+         below. tangy-timed floats both of its cards for the same reason. */
       #touchPalette {
+        float: right;
         background: white;
         border: solid 1px #c5c5c5;
         border-radius: 10px;
@@ -158,25 +162,24 @@ class TangyUntimedGrid extends TangyInputBase {
     <label class="hint-text">[[hintText]]</label>
     <div id="container">
 
-      <div id="bar">
-        <div id="touchPalette">
-          <paper-button id="markButton" mini on-click="onMarkClick">
-            <iron-icon icon="editor:mode-edit"></iron-icon>
-            <template is="dom-if" if="{{showLabels}}">
-              [[t.mark]]
-            </template>
-          </paper-button>
-          <paper-button id="lastAttemptedButton" mini on-click="onLastAttemptedClick">
-            <iron-icon icon="av:playlist-add-check"></iron-icon>
-            <template is="dom-if" if="{{showLabels}}">
-              [[t.lastAttempted]]
-            </template>
-          </paper-button>
-        </div>
-      </div>
-
       <div id="info">
           <div id="statusMessage"> [[statusMessage]] </div>
+          <div id="bar">
+            <div id="touchPalette">
+              <paper-button id="markButton" mini on-click="onMarkClick">
+                <iron-icon icon="editor:mode-edit"></iron-icon>
+                <template is="dom-if" if="{{showLabels}}">
+                  [[t.mark]]
+                </template>
+              </paper-button>
+              <paper-button id="lastAttemptedButton" mini on-click="onLastAttemptedClick">
+                <iron-icon icon="av:playlist-add-check"></iron-icon>
+                <template is="dom-if" if="{{showLabels}}">
+                  [[t.lastAttempted]]
+                </template>
+              </paper-button>
+            </div>
+          </div>
       </div>
 
       <table id="grid">
