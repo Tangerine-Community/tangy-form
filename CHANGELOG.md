@@ -10,6 +10,38 @@ marked `required` now blocks the item from being submitted — previously `valid
 previously a grid with zero incorrect items never dispatched `change` at all. Pressing the button a
 second time releases the grid so that marks can still be corrected.
 
+`tangy-untimed-grid`: The LAST ATTEMPTED control now behaves exactly as it does on `tangy-timed` —
+the same mini button with the `av:playlist-add-check` icon in the touch palette, pressing it switches
+the grid into last-attempted mode and prompts for the item rather than silently marking the final one,
+and the tap that follows refuses to place the marker before an item already marked incorrect. The
+marker defaults to the final item of the grid, which is the common case for a grid read to the end,
+and tapping another item moves it. `validate()` keys off the marker itself rather than a mode flag.
+
+`tangy-untimed-grid`: MARK is shown alongside LAST ATTEMPTED, so marks can be corrected after the grid
+has been completed — MARK returns to marking without discarding the marker, keeping the grid complete
+while corrections are made. An already administered grid resumes in MARK rather than RUN, since RUN
+clears the marker and would otherwise wipe the completion of a reopened response.
+
+`tangy-untimed-grid`: The bar controls are coloured by mode instead of red. Both turned red while a
+required grid was incomplete, which read as an error rather than as guidance; the control for the
+current mode is now blue and the other orange, and the pair inverts once the last attempted item is
+set. The active control is disabled so it cannot be re-pressed.
+
+`tangy-untimed-grid`: The bar is sticky below the app header rather than absolutely positioned at the
+top of the grid, so MARK and LAST ATTEMPTED stay reachable wherever the teacher is in a long grid.
+Apps can override the offset with `--tangy-untimed-grid-bar-offset`. The bar no longer overlaps the
+grid items it scrolls over.
+
+`tangy-untimed-grid`: When `required` blocks submit, the alert now says where the last-attempted
+control is. Registered in the core translation set with a Swahili translation; other languages fall
+back to English as they do for any untranslated string.
+
+`tangy-form-item`: Score `TANGY-UNTIMED-GRID` natively. An untimed grid named in `scoring-fields` fell
+through to the generic array branch, which sums the toggle values and produces a meaningless score. It
+now takes the same percent path as the timed grid — correct items up to the last attempted item over
+the whole grid, averaged across grids in the section — so a scoring section holding a grid can use the
+built-in scoring toggles instead of hand-written `custom-scoring-logic`.
+
 ## v4.50.8
 
 Add minDuration and durationSeconds properties to Audio Recording Input
