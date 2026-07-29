@@ -137,11 +137,13 @@ class TangyUntimedGrid extends TangyInputBase {
         background-color: #1976d2;
       }
 
-      /* The bar is out of flow, so #info reserves the space it occupies. The exact amount depends
-         on whether the controls wrap, which depends on width — the poll in ready() sets it, exactly
-         as tangy-timed does. */
+      /* The bar is out of flow, so #info reserves the space it occupies. The poll in ready()
+         measures the bar and sets the exact amount; this is only the pre-measurement starting value.
+         Deliberately NOT tangy-timed's 70px/150px: that grid's bar is two rows (touch palette plus
+         stopwatch and RESET), where this one is a single row of two buttons, so copying its numbers
+         left an obvious gap between the buttons and the first grid row. */
       #info {
-        padding-top: 70px;
+        padding-top: 48px;
       }
 
       /* The control for the mode you are in reads blue; the other one reads orange as the next
@@ -346,7 +348,13 @@ class TangyUntimedGrid extends TangyInputBase {
         bar.style.top = '0px'
         bar.style.right = ''
       }
-      this.shadowRoot.querySelector('#info').style.paddingTop = this.offsetWidth > 645 ? '70px' : '150px'
+      // Reserve exactly the bar's own height plus a small gap, rather than tangy-timed's fixed
+      // 70px/150px-by-width guess. Measuring covers wrapping at any width for free, and keeps the
+      // single-row bar from leaving timed-sized dead space above the first grid row.
+      const barHeight = bar.offsetHeight
+      if (barHeight) {
+        this.shadowRoot.querySelector('#info').style.paddingTop = (barHeight + 6) + 'px'
+      }
     }, 1000)
   }
 
