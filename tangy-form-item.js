@@ -826,9 +826,23 @@ export class TangyFormItem extends PolymerElement {
                   denominator =  maxValue(input.value)
                 } else if (input.tagName === 'TANGY-INPUT' && input.type === 'number') {
                   // if the input is a number, the score is the value and the denominator is the max
-                  value = parseInt(input.value)
+                  //
+                  // An UNANSWERED number scores 0, not NaN. parseInt('') is NaN, and `score += NaN` makes
+                  // scoreSum NaN for the whole section, so one skipped question used to void every other
+                  // answer in it and emit NaN as the item's percent -- even when `max` was set correctly.
+                  const entered = parseInt(input.value)
+                  value = isNaN(entered) ? 0 : entered
                   score += value
-                  denominator = parseInt(input.max)
+                  // A number input with no `max` has no ceiling to score against, and parseInt(undefined)
+                  // is NaN -- which then poisons denominatorSum, so this item's _score_denominator AND
+                  // _score_percent are both NaN. NaN does not survive JSON either (JSON.stringify(NaN) is
+                  // null), so the record reads NaN on the device that collected it and null everywhere it
+                  // is pulled, and consumers that only guard against ''/null/undefined pass it straight
+                  // through into reports as a grade. Default to 100 so the number entered is scored as a
+                  // percentage outright -- the same denominator this function already pins for custom
+                  // scoring logic and for every grid.
+                  const declaredMax = parseInt(input.max)
+                  denominator = isNaN(declaredMax) ? 100 : declaredMax
                 } else {
                   // default to the input value and increment the denominator
                   value = getValue(input.name);
@@ -849,12 +863,18 @@ export class TangyFormItem extends PolymerElement {
           }
         }
         function maxValue(inputValues) {
+          // Math.max() of nothing is -Infinity, which would travel out as the denominator and make the
+          // percent -0. An input offering no options has no ceiling, so score it out of 1.
+          if (!Array.isArray(inputValues) || inputValues.length === 0) {
+            return 1;
+          }
           if (inputValues.some(value => isNaN(value.name))) {
             return inputValues.length;
           }
 
           const values = inputValues.map(value => { return parseInt(value.name) });
-          return Math.max(...values)
+          const highest = Math.max(...values)
+          return isFinite(highest) ? highest : inputValues.length
         }
         function sumScore(value) {
           let s = 0
