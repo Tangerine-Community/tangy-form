@@ -1,5 +1,30 @@
 # CHANGELOG
 
+## v4.51.1
+
+`tangy-timed` and `tangy-untimed-grid`: The grid status message now sizes off its own two
+variables, `--tangy-grid-message-size` (default `0.8em`) and `--tangy-grid-message-height`
+(default `1.2`), rather than inheriting the host's `1.5em`. Both grids read the same variable
+names, so one override in a form's CSS reaches both.
+
+`tangy-timed` and `tangy-untimed-grid`: The action bar's inset from the right edge of its own
+container drops from 50px to 30px, and `tangy-timed` now re-expresses that inset relative to the
+grid when the bar goes `fixed`. Previously the timed grid's fixed bar answered to the viewport and
+drifted to the window edge; the two grids now hold the same 30px gap from their container in both
+the absolute and the fixed state.
+
+`tangy-untimed-grid`: The fixed bar no longer pins itself below a 64px app header. It rides at the
+top of the viewport, which is what `tangy-timed` has always done, so a form carrying both inputs
+shows the bar in the same place either way. The `--tangy-untimed-grid-bar-offset` variable is no
+longer read by anything.
+
+Testing: web-component-tester no longer installs on a current Node, so nothing under `test/` had
+been runnable. Added a Karma + esbuild harness (`karma.conf.cjs`, `npm run test:karma`) and ported
+all 26 WCT pages to `test/*.spec.js` with their assertions unchanged. Added `test/tangy-grid-bar.spec.js`
+covering the two grids' shared bar, and `test/untested-components.spec.js` giving smoke coverage to
+the 13 components that had no test file at all. Baseline is 217 passing, 30 failing, 7 skipped; the
+30 failures are pre-existing and were left alone.
+
 ## v4.51.0
 
 `tangy-untimed-grid`: Add an always visible LAST ATTEMPTED bar button that marks the last attempted

@@ -96,7 +96,7 @@ class TangyUntimedGrid extends TangyInputBase {
          the tidier CSS. */
       #bar {
         position: absolute;
-        right: 50px;
+        right: 30px;
         top: 0px;
         z-index: 1000000;
       }
@@ -144,6 +144,13 @@ class TangyUntimedGrid extends TangyInputBase {
          left an obvious gap between the buttons and the first grid row. */
       #info {
         padding-top: 48px;
+      }
+
+      /* The status message sizes off its own variables so a form can shrink or grow it without
+         touching the grid. These are the defaults, not a fixed size. */
+      #statusMessage {
+        font-size: var(--tangy-grid-message-size, 0.8em);
+        line-height: var(--tangy-grid-message-height, 1.2);
       }
 
       /* The control for the mode you are in reads blue; the other one reads orange as the next
@@ -334,18 +341,16 @@ class TangyUntimedGrid extends TangyInputBase {
       const bar = this.shadowRoot.querySelector('#bar')
       if (box.y < 0 && box.y + box.height > 0) {
         bar.style.position = 'fixed'
-        // Pinned below the app header rather than at the very top of the viewport, so the controls
-        // do not ride over it. Override per app when the header is taller than Tangerine's 64px.
-        bar.style.top = 'var(--tangy-untimed-grid-bar-offset, 64px)'
-        // The stylesheet's right: 50px answers to #container while absolute, but to the VIEWPORT
-        // once fixed — which threw the bar out to the window edge, hundreds of pixels clear of the
-        // grid it belongs to. Re-express the same 50px inset as a viewport offset so the bar holds
-        // its column either way. tangy-timed carries this same flaw; it is just rarely noticed,
-        // because its bar only goes fixed once the grid has scrolled past.
-        bar.style.right = Math.max(0, window.innerWidth - box.right + 50) + 'px'
+        // No top offset: the stylesheet's top: 0px governs in both states, so the fixed bar rides
+        // at the very top of the viewport, over the app header. That is what tangy-timed has always
+        // done, and the two grids have to sit in the same place.
+        // The stylesheet's right: 30px answers to #container while absolute, but to the VIEWPORT
+        // once fixed, which threw the bar out to the window edge, clear of the grid it belongs to.
+        // Re-express the same 30px inset as a viewport offset so the bar keeps a 30px gap from its
+        // own container either way. tangy-timed does the same, so the two grids line up.
+        bar.style.right = Math.max(0, window.innerWidth - box.right + 30) + 'px'
       } else {
         bar.style.position = 'absolute'
-        bar.style.top = '0px'
         bar.style.right = ''
       }
       // Reserve exactly the bar's own height plus a small gap, rather than tangy-timed's fixed

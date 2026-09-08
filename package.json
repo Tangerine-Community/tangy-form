@@ -6,7 +6,8 @@
   "scripts": {
     "start": "polymer serve",
     "build": "webpack",
-    "test": "polymer test -l chrome"
+    "test": "polymer test -l chrome",
+    "test:karma": "karma start karma.conf.cjs"
   },
   "dependencies": {
     "@polymer/iron-icons": "^3.0.1",
@@ -38,6 +39,14 @@
   "devDependencies": {
     "@polymer/iron-demo-helpers": "^3.1.0",
     "@webcomponents/webcomponentsjs": "^2.7.0",
+    "chai": "^4.5.0",
+    "esbuild": "^0.28.2",
+    "karma": "^6.4.4",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-esbuild": "^2.3.0",
+    "karma-mocha": "^2.0.1",
+    "karma-mocha-reporter": "^2.2.5",
+    "mocha": "^12.0.0",
     "polymer-cli": "^1.9.11",
     "webpack": "4.46.0",
     "webpack-cli": "4.10.0"

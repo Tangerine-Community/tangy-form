@@ -99,7 +99,7 @@ class TangyTimed extends TangyInputBase {
 
       #bar {
         position: absolute;
-        right: 50px;
+        right: 30px;
         top: 0px;
         z-index: 1000000;
       }
@@ -166,6 +166,13 @@ class TangyTimed extends TangyInputBase {
 
       #info {
         padding-top: 70px;
+      }
+
+      /* The status message sizes off its own variables so a form can shrink or grow it without
+         touching the grid. These are the defaults, not a fixed size. */
+      #statusMessage {
+        font-size: var(--tangy-grid-message-size, 0.8em);
+        line-height: var(--tangy-grid-message-height, 1.2);
       }
 
       .blink-green-bg{
@@ -397,10 +404,18 @@ class TangyTimed extends TangyInputBase {
       this.reflect()
     }, 400)
     setInterval(_ => {
-      if (this.getBoundingClientRect().y < 0 && this.getBoundingClientRect().y + this.getBoundingClientRect().height > 0) {
-        this.shadowRoot.querySelector('#bar').style.position = 'fixed'
+      const box = this.getBoundingClientRect()
+      const bar = this.shadowRoot.querySelector('#bar')
+      if (box.y < 0 && box.y + box.height > 0) {
+        bar.style.position = 'fixed'
+        // The stylesheet's right: 30px answers to #container while absolute, but to the VIEWPORT
+        // once fixed, which threw the bar out to the window edge, clear of the grid it belongs to.
+        // Re-express the same 30px inset as a viewport offset so the bar keeps a 30px gap from its
+        // own container either way. Matches tangy-untimed-grid, so the two grids line up.
+        bar.style.right = Math.max(0, window.innerWidth - box.right + 30) + 'px'
       } else {
-        this.shadowRoot.querySelector('#bar').style.position = 'absolute'
+        bar.style.position = 'absolute'
+        bar.style.right = ''
       }
       if (this.offsetWidth > 645) {
         this.shadowRoot.querySelector('#info').style.paddingTop = '70px'
