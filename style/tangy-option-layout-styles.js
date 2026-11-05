@@ -7,14 +7,16 @@
  * No layout (or layout="list") keeps the stacked look these inputs have always had.
  *
  *   wrap     each option sized to its words, side by side, wrapping onto new rows
- *   squares  equal square tiles (--tangy-option-tile-size, default 6.5rem)
+ *   squares  equal square tiles, at least --tangy-option-tile-size (default 6.5rem) and grown to the
+ *            widest option so no label is cut off; never wider than the group
  *   fit      equal boxes, all on one row; util/option-layout.js shrinks one shared font size
  *            until the longest label fits. Only fit changes the text size.
  *
  * Variables: --tangy-option-gap, --tangy-option-border-color, --tangy-option-selected-border-color,
  * --tangy-option-selected-background, --tangy-option-radius. Image size is
  * --tangy-option-image-width / --tangy-option-image-height, read by each option.
- * A group with columns="n" keeps its table and ignores layout.
+ * A group with columns="n" keeps its table and ignores layout. Radio blocks keep their orientation in
+ * every layout: "columns" (default) side by side, "rows" one option per line.
  */
 
 const $_documentStyleContainer = document.createElement('div');
@@ -46,7 +48,7 @@ $_documentStyleContainer.innerHTML = `
     }
     :host([layout="squares"]) :is(.options, #blockContainer) {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(var(--tangy-option-tile-size, 6.5rem), 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, max(var(--tangy-option-tile-size, 6.5rem), var(--tangy-option-tile-need, 0px))), 1fr));
       --tangy-option-image-display: block;
       --width: 100%;
       --height: 100%;
@@ -66,6 +68,33 @@ $_documentStyleContainer.innerHTML = `
       grid-template-columns: repeat(var(--tangy-option-columns, 3), minmax(0, 1fr));
       --width: 100%;
       --tangy-option-image-display: block;
+    }
+
+    /* Radio blocks' orientation="rows" (class "columns") keeps one option per line in every layout;
+       the layout still shapes each tile: wrap sized to its words, squares one column of equal
+       squares, fit equal tiles across the full width. */
+    :host([layout="wrap"]) #blockContainer.columns {
+      align-items: flex-start;
+    }
+    :host([layout="squares"]) #blockContainer.columns {
+      grid-template-columns: min(100%, max(var(--tangy-option-tile-size, 6.5rem), var(--tangy-option-tile-need, 0px)));
+    }
+    :host([layout="fit"]) #blockContainer.columns {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    :host([layout="wrap"]) #blockContainer.columns > tangy-radio-block {
+      --width: auto;
+      --height: auto;
+    }
+    :host([layout="squares"]) #blockContainer.columns > tangy-radio-block {
+      --height: 100%;
+    }
+    :host([layout="wrap"]) #blockContainer.columns > tangy-radio-block,
+    :host([layout="squares"]) #blockContainer.columns > tangy-radio-block,
+    :host([layout="fit"]) #blockContainer.columns > tangy-radio-block {
+      --justify-content: center;
+      width: auto;
+      margin: 0;
     }
 
     /* Radio buttons and checkboxes become bordered boxes; radio blocks already are. */

@@ -40,8 +40,37 @@ export function fitOptions(container) {
   if (scale < 1) container.style.fontSize = `${Math.max(MIN_FONT_PX, Math.floor(base * scale * 2) / 2)}px`
 }
 
+// layout="squares": the width of the widest option laid out on one line, as --tangy-option-tile-need.
+// The stylesheet keeps the larger of that and --tangy-option-tile-size. A picture that fills its tile
+// sizes to the tile, so only options without one are measured.
+export function squareOptions(container) {
+  const host = container.getRootNode().host
+  const fill = host && host.getAttribute('image-display') === 'fill'
+  const options = [...container.children].filter((o) => !(fill && optionImage(o)))
+  const style = container.style
+  style.removeProperty('--tangy-option-tile-need')
+  if (!options.length || !container.isConnected) return
+  const saved = style.cssText
+  style.display = 'flex'
+  style.setProperty('--width', 'auto')
+  style.setProperty('--height', 'auto')
+  options.forEach((o) => { o.style.width = 'max-content' })
+  const need = Math.max(...options.map((o) => o.getBoundingClientRect().width))
+  options.forEach((o) => { o.style.width = '' })
+  style.cssText = saved
+  style.setProperty('--tangy-option-tile-need', `${Math.ceil(need)}px`)
+}
+
 // Call after a group (re)renders its options into `container`.
 export function applyOptionLayout(host, container) {
+  if (host.getAttribute('layout') === 'squares') {
+    // Pictures change an option's width once they load.
+    container.querySelectorAll('*').forEach((o) => o.shadowRoot && o.shadowRoot.querySelectorAll('img').forEach((img) => {
+      if (!img.complete) img.addEventListener('load', () => squareOptions(container), { once: true })
+    }))
+    requestAnimationFrame(() => squareOptions(container))
+    return
+  }
   if (host.getAttribute('layout') !== 'fit') return
   // Refit when the width changes (rotation, resize). Height changes are our own doing; ignore them.
   if (!container.__fitObserver) {
@@ -50,7 +79,8 @@ export function applyOptionLayout(host, container) {
       const width = Math.round(entry.contentRect.width)
       if (width === lastWidth) return
       lastWidth = width
-      fitOptions(container)
+      // Next frame: resizing inside the callback is a "ResizeObserver loop" error.
+      requestAnimationFrame(() => fitOptions(container))
     })
     container.__fitObserver.observe(container)
   }

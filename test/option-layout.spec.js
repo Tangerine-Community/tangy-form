@@ -63,6 +63,14 @@ blocks('BlocksLetters', '')
 blocks('BlocksLettersWrap', 'wrap')
 blocks('BlocksLettersSquares', 'squares')
 blocks('BlocksFitFive', 'fit')
+// Radio blocks' orientation: "columns" (default) side by side, "rows" one option per line.
+for (const layout of ['wrap', 'squares', 'fit']) for (const orientation of ['rows', 'columns']) registerFixture(`Blocks-${orientation}-${layout}`,
+  `<div style="width:800px"><tangy-radio-blocks name="l" orientation="${orientation}" layout="${layout}">${LETTERS}</tangy-radio-blocks></div>`)
+const WORDS = ['Sick at home', 'Travelled away', 'Left early'].map((x, i) => `<option value="w${i}">${x}</option>`).join('')
+for (const [tag, name] of [['tangy-radio-blocks', 'BlocksWordsSquares'], ['tangy-radio-buttons', 'RadioWordsSquares'], ['tangy-checkboxes', 'CheckboxesWordsSquares']]) {
+  registerFixture(name, `<div style="width:800px"><${tag} name="w" layout="squares">${WORDS}</${tag}></div>`)
+  registerFixture(name + 'Narrow', `<div style="width:150px"><${tag} name="w" layout="squares">${WORDS}</${tag}></div>`)
+}
 registerFixture('BlocksFitWide', `<div style="width:800px"><tangy-radio-blocks name="l" layout="fit">${LETTERS}</tangy-radio-blocks></div>`)
 
 // Line boxes the label's own text occupies inside a radio button.
@@ -180,6 +188,55 @@ suite('option layouts', () => {
     await Promise.all(blocks.map((b) => loaded(b.shadowRoot.querySelector('#blockImage'))))
     await frames(3)
     blocks.forEach((b) => assert.equal(labelLines(b), 1, `"${b.textContent.trim()}" wrapped`))
+  })
+
+  const SQUARE_GROUPS = [['BlocksWordsSquares', 'tangy-radio-block'], ['RadioWordsSquares', 'tangy-radio-button'], ['CheckboxesWordsSquares', 'tangy-checkbox']]
+  // The box that would clip a label: a radio block's inner label, otherwise the option itself.
+  const tileOf = (el) => (el.shadowRoot && el.shadowRoot.querySelector('#radio-block-label')) || el
+
+  test('squares grow every tile to the largest option, so no label is cut off', async () => {
+    for (const [name, tag] of SQUARE_GROUPS) {
+      const els = items(fixture(name).firstElementChild, tag)
+      await frames(3)
+      const boxes = els.map((el) => el.getBoundingClientRect())
+      boxes.forEach((r) => {
+        assert.approximately(r.width, boxes[0].width, 1, `${name}: tiles differ in width`)
+        assert.approximately(r.height, r.width, 1, `${name}: tile is not square`)
+      })
+      els.forEach((el) => assert.isAtMost(tileOf(el).scrollWidth, tileOf(el).clientWidth, `${name}: "${el.textContent.trim()}" is cut off`))
+    }
+  })
+
+  test('squares never grow a tile wider than the group', async () => {
+    for (const [name, tag] of SQUARE_GROUPS) {
+      const group = fixture(name + 'Narrow').firstElementChild
+      await frames(3)
+      const right = group.getBoundingClientRect().right
+      items(group, tag).forEach((el) => assert.isAtMost(el.getBoundingClientRect().right, right + 0.5, `${name}Narrow: tile sticks out`))
+    }
+  })
+
+  // Every layout keeps radio blocks' orientation: "columns" side by side, "rows" one option per line.
+  test('orientation still changes the listing in every layout: columns side by side, rows one per line', async () => {
+    const lines = (els) => new Set(els.map((b) => Math.round(b.getBoundingClientRect().top))).size
+    for (const layout of ['wrap', 'squares', 'fit']) {
+      const cols = items(fixture(`Blocks-columns-${layout}`).firstElementChild, 'tangy-radio-block')
+      const group = fixture(`Blocks-rows-${layout}`).firstElementChild
+      const rows = items(group, 'tangy-radio-block')
+      await frames(3)
+      assert.equal(lines(cols), 1, `${layout} columns: options are not side by side`)
+      assert.equal(lines(rows), rows.length, `${layout} rows: options are not one per line`)
+      const width = group.getBoundingClientRect().width
+      rows.forEach((b) => {
+        const tile = b.shadowRoot.querySelector('#radio-block-label').getBoundingClientRect()
+        const what = `${layout} rows "${b.textContent.trim()}"`
+        assert.approximately(centre(blockText(b)), centre(tile), 2, `${what}: text is not centred`)
+        if (layout === 'squares') assert.approximately(tile.height, tile.width, 1, `${what}: tile is not square`)
+        if (layout === 'squares') assert.isBelow(tile.width, width / 2, `${what}: square is the full width`)
+        if (layout === 'wrap') assert.isBelow(tile.width, width / 2, `${what}: tile is not sized to its words`)
+        if (layout === 'fit') assert.isAbove(tile.width, width * 0.9, `${what}: tile does not fill the line`)
+      })
+    }
   })
 
   test('fit keeps five options on one row', async () => {

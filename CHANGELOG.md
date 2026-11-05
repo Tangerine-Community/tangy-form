@@ -8,6 +8,10 @@
 
 `tangy-radio-buttons`, `tangy-radio-blocks`, `tangy-checkboxes`: fix: `layout="fit"` keeps every option on one row (five or more options used to drop to three columns); radio blocks keep their own 2rem text in `wrap` and `squares` (only `fit` shrinks text, and it starts from 2rem); `layout="wrap"` with `image-display="fill"` holds picture tiles to the squares tile size instead of the picture's own size.
 
+`tangy-radio-buttons`, `tangy-radio-blocks`, `tangy-checkboxes`: `layout="squares"` grows every tile to the widest option, so no label is cut off; `--tangy-option-tile-size` is now the smallest a tile gets, and a tile is never wider than the group (functional change: squares with long labels get bigger tiles).
+
+`tangy-radio-blocks`: fix: `orientation` keeps working in every `layout`: `columns` puts the options side by side, `rows` one per line, and the layout still shapes each tile (wrap sized to its words, squares stay square, fit fills the line). `orientation="rows"` used to turn every layout into full-width, left-aligned bars (squares came out flat). The fit refit after a resize runs on the next frame, so it no longer raises "ResizeObserver loop completed with undelivered notifications".
+
 ## v4.51.1
 
 `tangy-timed` and `tangy-untimed-grid`: The grid status message now sizes off its own two

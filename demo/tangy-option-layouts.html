@@ -246,6 +246,22 @@
                 </div>
             </template>
         </demo-snippet>
+
+        <h4>13 · Radio blocks orientation: Columns side by side, Rows one per line, in every layout</h4>
+        <demo-snippet>
+            <template>
+                <div id="orientation-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px">
+                    <tangy-radio-blocks name="o_list_c" label="List · Columns" orientation="columns"><option value="t">t</option><option value="g">g</option><option value="k">k</option><option value="ng">ng</option><option value="h">h</option></tangy-radio-blocks>
+                    <tangy-radio-blocks name="o_list_r" label="List · Rows" orientation="rows"><option value="t">t</option><option value="g">g</option><option value="k">k</option><option value="ng">ng</option><option value="h">h</option></tangy-radio-blocks>
+                    <tangy-radio-blocks name="o_wrap_c" label="Wrap · Columns" orientation="columns" layout="wrap"><option value="t">t</option><option value="g">g</option><option value="k">k</option><option value="ng">ng</option><option value="h">h</option></tangy-radio-blocks>
+                    <tangy-radio-blocks name="o_wrap_r" label="Wrap · Rows" orientation="rows" layout="wrap"><option value="t">t</option><option value="g">g</option><option value="k">k</option><option value="ng">ng</option><option value="h">h</option></tangy-radio-blocks>
+                    <tangy-radio-blocks name="o_squares_c" label="Squares · Columns" orientation="columns" layout="squares"><option value="t">t</option><option value="g">g</option><option value="k">k</option><option value="ng">ng</option><option value="h">h</option></tangy-radio-blocks>
+                    <tangy-radio-blocks name="o_squares_r" label="Squares · Rows" orientation="rows" layout="squares"><option value="t">t</option><option value="g">g</option><option value="k">k</option><option value="ng">ng</option><option value="h">h</option></tangy-radio-blocks>
+                    <tangy-radio-blocks name="o_fit_c" label="Fit · Columns" orientation="columns" layout="fit"><option value="t">t</option><option value="g">g</option><option value="k">k</option><option value="ng">ng</option><option value="h">h</option></tangy-radio-blocks>
+                    <tangy-radio-blocks name="o_fit_r" label="Fit · Rows" orientation="rows" layout="fit"><option value="t">t</option><option value="g">g</option><option value="k">k</option><option value="ng">ng</option><option value="h">h</option></tangy-radio-blocks>
+                </div>
+            </template>
+        </demo-snippet>
     </div>
 </body>
 
