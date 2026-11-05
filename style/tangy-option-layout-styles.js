@@ -8,8 +8,8 @@
  *
  *   wrap     each option sized to its words, side by side, wrapping onto new rows
  *   squares  equal square tiles (--tangy-option-tile-size, default 6.5rem)
- *   fit      equal boxes on one row; util/option-layout.js shrinks one shared font size
- *            until the longest label fits
+ *   fit      equal boxes, all on one row; util/option-layout.js shrinks one shared font size
+ *            until the longest label fits. Only fit changes the text size.
  *
  * Variables: --tangy-option-gap, --tangy-option-border-color, --tangy-option-selected-border-color,
  * --tangy-option-selected-background, --tangy-option-radius. Image size is
@@ -29,9 +29,6 @@ $_documentStyleContainer.innerHTML = `
     :host([layout="fit"]) :is(.options, #blockContainer) {
       gap: var(--tangy-option-gap, 8px);
       height: auto;
-      font-size: inherit;
-      font-weight: inherit;
-      --tangy-radio-block-font-size: 1em;
       /* The radio circle is hidden in a layout; drop the gap it leaves before the label. */
       --paper-radio-button-label-spacing: 0;
       --tangy-radio-block-border-color: var(--tangy-option-border-color, #C9D3E4);
@@ -53,6 +50,16 @@ $_documentStyleContainer.innerHTML = `
       --tangy-option-image-display: block;
       --width: 100%;
       --height: 100%;
+    }
+    :host([layout="fit"]) :is(.options, #blockContainer) {
+      font-size: inherit;
+      font-weight: inherit;
+      --tangy-radio-block-font-size: 1em;
+    }
+    /* Radio blocks start fit from their own 2rem and shrink only when a label needs it. */
+    :host([layout="fit"]) #blockContainer {
+      font-size: 2rem;
+      font-weight: 400;
     }
     :host([layout="fit"]) :is(.options, #blockContainer) {
       display: grid;
@@ -97,6 +104,13 @@ $_documentStyleContainer.innerHTML = `
        skips it and the green border alone marks the choice. */
     :host([layout]) .options > [image-display="fill"] {
       padding: 0;
+    }
+    /* In wrap a picture tile would take the picture's own size; hold it to the squares tile. */
+    :host([layout="wrap"][image-display="fill"]) :is(.options, #blockContainer) {
+      --width: var(--tangy-option-tile-size, 6.5rem);
+    }
+    :host([layout="wrap"][image-display="fill"]) :is(.options, #blockContainer) > * {
+      width: var(--tangy-option-tile-size, 6.5rem);
     }
     :host([image-display="fill"]) :is(.options, #blockContainer):has(> [value="on"]) > :not([value="on"]) {
       opacity: 0.7;

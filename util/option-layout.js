@@ -17,7 +17,7 @@ let canvas
 export function fitOptions(container) {
   const options = [...container.children]
   if (!options.length || !container.isConnected) return
-  container.style.setProperty('--tangy-option-columns', options.length <= 4 ? options.length : 3)
+  container.style.setProperty('--tangy-option-columns', options.length)
   container.style.fontSize = ''
   const style = getComputedStyle(container)
   const base = parseFloat(style.fontSize)

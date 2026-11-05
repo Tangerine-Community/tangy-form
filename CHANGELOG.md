@@ -6,6 +6,8 @@
 
 `tangy-radio-buttons`, `tangy-radio-blocks`, `tangy-checkboxes`: fix: a label, hint, error, warning, discrepancy or question-number text saved as the word "undefined" or "null" (left by an editor round trip) no longer shows on screen.
 
+`tangy-radio-buttons`, `tangy-radio-blocks`, `tangy-checkboxes`: fix: `layout="fit"` keeps every option on one row (five or more options used to drop to three columns); radio blocks keep their own 2rem text in `wrap` and `squares` (only `fit` shrinks text, and it starts from 2rem); `layout="wrap"` with `image-display="fill"` holds picture tiles to the squares tile size instead of the picture's own size.
+
 ## v4.51.1
 
 `tangy-timed` and `tangy-untimed-grid`: The grid status message now sizes off its own two

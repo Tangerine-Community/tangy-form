@@ -46,7 +46,8 @@ registerFixture('RadioSquares', `<div style="width:360px"><tangy-radio-buttons n
 registerFixture('RadioFit', `<div style="width:360px"><tangy-radio-buttons name="s" layout="fit">
   <option value="1">Present</option><option value="2">Absent</option><option value="3">Left early, called home</option>
 </tangy-radio-buttons></div>`)
-registerFixture('BlocksWrap', `<div style="width:360px"><tangy-radio-blocks name="p" layout="wrap">${PERMISSION}</tangy-radio-blocks></div>`)
+// Radio blocks keep their 2rem text, so long labels need a tablet-wide row to sit side by side.
+registerFixture('BlocksWrap', `<div style="width:800px"><tangy-radio-blocks name="p" layout="wrap">${PERMISSION}</tangy-radio-blocks></div>`)
 registerFixture('CheckboxesWrap', `<div style="width:360px"><tangy-checkboxes name="p" layout="wrap">${PERMISSION}</tangy-checkboxes></div>`)
 
 registerFixture('BlocksFitImages', `<div style="width:360px"><tangy-radio-blocks name="s" layout="fit"
@@ -54,6 +55,15 @@ registerFixture('BlocksFitImages', `<div style="width:360px"><tangy-radio-blocks
   <option value="1" image="${IMG}">Present</option><option value="2" image="${IMG}">Absent</option>
   <option value="3" image="${IMG}">Left early</option>
 </tangy-radio-blocks></div>`)
+
+const LETTERS = ['t', 'g', 'k', 'ng', 'h'].map((x) => `<option value="${x}">${x}</option>`).join('')
+const blocks = (name, layout) => registerFixture(name,
+  `<div style="width:360px"><tangy-radio-blocks name="l"${layout ? ` layout="${layout}"` : ''}>${LETTERS}</tangy-radio-blocks></div>`)
+blocks('BlocksLetters', '')
+blocks('BlocksLettersWrap', 'wrap')
+blocks('BlocksLettersSquares', 'squares')
+blocks('BlocksFitFive', 'fit')
+registerFixture('BlocksFitWide', `<div style="width:800px"><tangy-radio-blocks name="l" layout="fit">${LETTERS}</tangy-radio-blocks></div>`)
 
 // Line boxes the label's own text occupies inside a radio button.
 const labelLines = (block) => {
@@ -170,6 +180,22 @@ suite('option layouts', () => {
     await Promise.all(blocks.map((b) => loaded(b.shadowRoot.querySelector('#blockImage'))))
     await frames(3)
     blocks.forEach((b) => assert.equal(labelLines(b), 1, `"${b.textContent.trim()}" wrapped`))
+  })
+
+  test('fit keeps five options on one row', async () => {
+    const group = fixture('BlocksFitFive').firstElementChild
+    await frames(3)
+    const blocks = items(group, 'tangy-radio-block')
+    assert.equal(new Set(blocks.map((b) => Math.round(b.getBoundingClientRect().top))).size, 1, 'fit wrapped onto a second row')
+  })
+
+  test('radio blocks keep their own text size in wrap and squares', async () => {
+    const size = (name) => getComputedStyle(items(fixture(name).firstElementChild, 'tangy-radio-block')[0]
+      .shadowRoot.querySelector('#radio-block-label')).fontSize
+    const original = size('BlocksLetters')
+    assert.equal(size('BlocksLettersWrap'), original, 'wrap shrank the text')
+    assert.equal(size('BlocksLettersSquares'), original, 'squares shrank the text')
+    assert.equal(size('BlocksFitWide'), original, 'fit shrank text that had room')
   })
 
   test('radio blocks show their box in a layout before anything is selected', async () => {
@@ -295,6 +321,8 @@ imageDisplay('CheckboxesTop', 'tangy-checkboxes', 'squares', 'top')
 imageDisplay('BlocksFillSquares', 'tangy-radio-blocks', 'squares', 'fill')
 imageDisplay('BlocksFillFit', 'tangy-radio-blocks', 'fit', 'fill')
 imageDisplay('CheckboxesFill', 'tangy-checkboxes', 'squares', 'fill')
+imageDisplay('BlocksFillWrap', 'tangy-radio-blocks', 'wrap', 'fill')
+imageDisplay('CheckboxesFillWrap', 'tangy-checkboxes', 'wrap', 'fill')
 imageDisplay('BlocksFillMissingImage', 'tangy-radio-blocks', 'squares', 'fill',
   `<option value="walk" image="${IMG}">Walked</option><option value="other">Other</option>`)
 
@@ -359,6 +387,15 @@ suite('image display', () => {
     const blocks = await settled(fixture('BlocksFillFit').firstElementChild, 'tangy-radio-block')
     blocks.forEach((b) => assertFills(b.shadowRoot.querySelector('#radio-block-label'), imgOf(b), b.textContent.trim()))
     assert.equal(new Set(blocks.map((b) => Math.round(b.getBoundingClientRect().top))).size, 1)
+  })
+
+  test('fill in wrap: tiles are no bigger than squares tiles, side by side', async () => {
+    const tile = parseFloat(getComputedStyle(document.documentElement).fontSize) * 6.5
+    for (const [name, tag] of [['BlocksFillWrap', 'tangy-radio-block'], ['CheckboxesFillWrap', 'tangy-checkbox']]) {
+      const els = await settled(fixture(name).firstElementChild, tag)
+      els.forEach((el) => assert.isAtMost(el.getBoundingClientRect().width, tile + 1, `${name} "${el.textContent.trim()}" tile too big`))
+      assert.equal(new Set(els.map((el) => Math.round(el.getBoundingClientRect().top))).size, 1, `${name} not side by side`)
+    }
   })
 
   test('fill: a checkbox picture covers its whole tile, with no tick box and no text on screen', async () => {
