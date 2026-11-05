@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>Option layouts and option images demo</title>
+
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/redux/dist/redux.min.js"></script>
+    <!-- demo-snippet renders its code panel with a global marked. -->
+    <script src="../node_modules/marked/marked.min.js"></script>
+
+    <!-- Bundled by esbuild: see demo/tangy-option-layouts.js for the serve command. -->
+    <script type="module" src="./build/tangy-option-layouts.js"></script>
+    <custom-style>
+        <style>
+            html {
+                --document-background-color: #FAFAFA;
+                --primary-color-dark: #3c5b8d;
+                --primary-text-color: var(--light-theme-text-color);
+                --primary-color: #3c5b8d;
+                --accent-color: #f26f10;
+                --accent-text-color: #FFF;
+                --error-color: var(--paper-red-500);
+                --disabled-color: #BBB;
+            }
+            h3, h4 {
+                @apply --paper-font-common-base;
+                color: var(--primary-text-color);
+                margin: 25px 0px 5px 15px;
+            }
+            p.note {
+                @apply --paper-font-common-base;
+                margin: 0 15px 10px;
+                color: #6D6E71;
+                max-width: 760px;
+            }
+            .phone {
+                max-width: 360px;
+                border: 1px dashed #A7A9AC;
+                padding: 4px;
+            }
+        </style>
+    </custom-style>
+</head>
+
+<body>
+    <div class="vertical-section-container centered">
+        <h3>Option layouts and option images</h3>
+        <p class="note">
+            <code>layout="wrap|squares|fit"</code> works on <code>tangy-radio-buttons</code>,
+            <code>tangy-radio-blocks</code> and <code>tangy-checkboxes</code>. Leave it off for today's look.
+            <code>&lt;option image="..."&gt;</code> shows a picture on radio blocks and checkboxes (radio buttons take none); its size is
+            <code>--tangy-option-image-width</code> / <code>--tangy-option-image-height</code> (default 50px).
+            <code>image-display="top|fill"</code> on radio blocks and checkboxes puts the picture above the text, or
+            makes the picture fill the whole tile (sections 9-12). Leave it off for the image beside the text.
+            The dashed boxes are 360px wide, a phone screen.
+        </p>
+
+        <h4>1 · Attendance status: radio blocks, fit, with images</h4>
+        <p class="note">Equal boxes on one row. One shared font size shrinks until the longest label fits.</p>
+        <demo-snippet>
+            <template>
+                <div class="phone">
+                    <tangy-radio-blocks name="status_blocks" label="Status" layout="fit"
+                        style="--tangy-option-image-width:32px;--tangy-option-image-height:32px">
+                        <option value="1" image="./assets/option-icons/present.svg">Present</option>
+                        <option value="2" image="./assets/option-icons/absent.svg">Absent</option>
+                        <option value="3" image="./assets/option-icons/left-early.svg">Left early</option>
+                    </tangy-radio-blocks>
+                </div>
+            </template>
+        </demo-snippet>
+
+        <h4>2 · Attendance status: radio buttons, fit, text only</h4>
+        <p class="note">In a layout the radio circle is hidden; a green border shows the choice. Tap anywhere in a box.</p>
+        <demo-snippet>
+            <template>
+                <div class="phone">
+                    <tangy-radio-buttons name="status_buttons" label="Status" layout="fit">
+                        <option value="1">Present</option>
+                        <option value="2">Absent</option>
+                        <option value="3">Left early</option>
+                    </tangy-radio-buttons>
+                </div>
+            </template>
+        </demo-snippet>
+
+        <h4>3 · Permission given by: radio blocks, wrap</h4>
+        <p class="note">Each block is as wide as its words; rows wrap with an even gap.</p>
+        <demo-snippet>
+            <template>
+                <div class="phone">
+                    <tangy-radio-blocks name="permission_blocks" label="Permission given by" layout="wrap">
+                        <option value="1">Class teacher</option>
+                        <option value="2">Senior woman teacher</option>
+                        <option value="3">Deputy principal</option>
+                        <option value="4">Other teacher</option>
+                    </tangy-radio-blocks>
+                </div>
+            </template>
+        </demo-snippet>
+
+        <h4>4 · Permission given by: radio buttons, wrap</h4>
+        <demo-snippet>
+            <template>
+                <div class="phone">
+                    <tangy-radio-buttons name="permission_buttons" label="Permission given by" layout="wrap">
+                        <option value="1">Class teacher</option>
+                        <option value="2">Senior woman teacher</option>
+                        <option value="3">Deputy principal</option>
+                        <option value="4">Other teacher</option>
+                    </tangy-radio-buttons>
+                </div>
+            </template>
+        </demo-snippet>
+
+        <h4>5 · Status as radio-block squares, 40px images</h4>
+        <p class="note">Equal square tiles. Tile size is <code>--tangy-option-tile-size</code>.</p>
+        <demo-snippet>
+            <template>
+                <div class="phone">
+                    <tangy-radio-blocks name="status_squares" label="Status" layout="squares"
+                        style="--tangy-option-image-width:40px;--tangy-option-image-height:40px">
+                        <option value="1" image="./assets/option-icons/present.svg">Present</option>
+                        <option value="2" image="./assets/option-icons/absent.svg">Absent</option>
+                        <option value="3" image="./assets/option-icons/left-early.svg">Left early</option>
+                    </tangy-radio-blocks>
+                </div>
+            </template>
+        </demo-snippet>
+
+        <h4>6 · Reason: radio buttons, no layout (today's look)</h4>
+        <demo-snippet>
+            <template>
+                <div class="phone">
+                    <tangy-radio-buttons name="reason" label="Reason">
+                        <option value="sick">Sick · feeling unwell</option>
+                        <option value="period_no_pads">Period · no pads or products</option>
+                        <option value="period_pain">Period · pain or discomfort</option>
+                        <option value="period_leak">Period · leak or stained uniform</option>
+                        <option value="clinic">Clinic or medical appointment</option>
+                        <option value="family">Called home · family matter</option>
+                        <option value="fees">Sent home · school fees</option>
+                        <option value="discipline">Sent home · discipline</option>
+                        <option value="other">Other</option>
+                    </tangy-radio-buttons>
+                </div>
+            </template>
+        </demo-snippet>
+
+        <h4>7 · Checkboxes, wrap, with images</h4>
+        <demo-snippet>
+            <template>
+                <div class="phone">
+                    <tangy-checkboxes name="register" label="Recorded in" layout="wrap"
+                        style="--tangy-option-image-width:24px;--tangy-option-image-height:24px">
+                        <option value="register" image="./assets/option-icons/present.svg">School register</option>
+                        <option value="permission_book" image="./assets/option-icons/left-early.svg">Permission book</option>
+                        <option value="none" image="./assets/option-icons/absent.svg">Not recorded</option>
+                    </tangy-checkboxes>
+                </div>
+            </template>
+        </demo-snippet>
+
+        <h4>8 · Fit with one long label</h4>
+        <p class="note">All four shrink together so "Sent home for school fees" fits; never below 10px.</p>
+        <demo-snippet>
+            <template>
+                <div class="phone">
+                    <tangy-radio-buttons name="fit_long" label="Why?" layout="fit">
+                        <option value="1">Sick</option>
+                        <option value="2">Family</option>
+                        <option value="3">Clinic</option>
+                        <option value="4">Sent home for school fees</option>
+                    </tangy-radio-buttons>
+                </div>
+            </template>
+        </demo-snippet>
+
+        <h4>9 · Image on top: radio blocks, squares</h4>
+        <demo-snippet>
+            <template>
+                <div class="phone">
+                    <tangy-radio-blocks name="status_top_squares" label="Status" layout="squares" image-display="top"
+                        style="--tangy-option-image-width:40px;--tangy-option-image-height:40px">
+                        <option value="1" image="./assets/option-icons/present.svg">Present</option>
+                        <option value="2" image="./assets/option-icons/absent.svg">Absent</option>
+                        <option value="3" image="./assets/option-icons/left-early.svg">Left early</option>
+                    </tangy-radio-blocks>
+                </div>
+            </template>
+        </demo-snippet>
+
+        <h4>10 · Image on top: radio blocks, fit on one row</h4>
+        <demo-snippet>
+            <template>
+                <div class="phone">
+                    <tangy-radio-blocks name="status_top_fit" label="Status" layout="fit" image-display="top"
+                        style="--tangy-option-image-width:32px;--tangy-option-image-height:32px">
+                        <option value="1" image="./assets/option-icons/present.svg">Present</option>
+                        <option value="2" image="./assets/option-icons/absent.svg">Absent</option>
+                        <option value="3" image="./assets/option-icons/left-early.svg">Left early</option>
+                    </tangy-radio-blocks>
+                </div>
+            </template>
+        </demo-snippet>
+
+        <h4>11 · Picture-only answers: radio blocks, fill, squares and fit</h4>
+        <p class="note">The picture covers the tile (cropped, never letterboxed). The text is hidden on screen but
+            still saved and read by screen readers. Once one is chosen, the others fade a little. "Other" has no picture,
+            so it shows its text.</p>
+        <demo-snippet>
+            <template>
+                <div class="phone">
+                    <tangy-radio-blocks name="transport_squares" label="How did you come to school today?" layout="squares" image-display="fill">
+                        <option value="walk" image="./assets/option-pictures/walked.svg">Walked</option>
+                        <option value="bike" image="./assets/option-pictures/bicycle.svg">Bicycle</option>
+                        <option value="bus" image="./assets/option-pictures/bus.svg">Bus</option>
+                        <option value="moto" image="./assets/option-pictures/motorbike.svg">Motorbike</option>
+                        <option value="other">Other</option>
+                    </tangy-radio-blocks>
+                </div>
+                <div class="phone">
+                    <tangy-radio-blocks name="transport_fit" label="How did you come to school today?" layout="fit" image-display="fill">
+                        <option value="walk" image="./assets/option-pictures/walked.svg">Walked</option>
+                        <option value="bike" image="./assets/option-pictures/bicycle.svg">Bicycle</option>
+                        <option value="bus" image="./assets/option-pictures/bus.svg">Bus</option>
+                        <option value="moto" image="./assets/option-pictures/motorbike.svg">Motorbike</option>
+                    </tangy-radio-blocks>
+                </div>
+            </template>
+        </demo-snippet>
+
+        <h4>12 · Picture-only answers: checkboxes, fill, choose all</h4>
+        <demo-snippet>
+            <template>
+                <div class="phone">
+                    <tangy-checkboxes name="breakfast" label="What did you eat this morning?" layout="squares" image-display="fill">
+                        <option value="porridge" image="./assets/option-pictures/porridge.svg">Porridge</option>
+                        <option value="bread" image="./assets/option-pictures/bread.svg">Bread</option>
+                        <option value="tea" image="./assets/option-pictures/tea.svg">Tea</option>
+                    </tangy-checkboxes>
+                </div>
+            </template>
+        </demo-snippet>
+    </div>
+</body>
+
+</html>

@@ -4,6 +4,8 @@ import '../util/html-element-props.js'
 import './tangy-radio-button.js'
 import '../style/tangy-element-styles.js';
 import '../style/tangy-common-styles.js'
+import '../style/tangy-option-layout-styles.js'
+import { applyOptionLayout } from '../util/option-layout.js'
 import { TangyInputBase } from '../tangy-input-base.js'
 /**
  * `tangy-radio-buttons`
@@ -29,6 +31,7 @@ class TangyRadioButtons extends TangyInputBase {
     return html`
       <style include="tangy-element-styles"></style>
       <style include="tangy-common-styles"></style>
+      <style include="tangy-option-layout-styles"></style>
 
       <style>
         table {
@@ -73,7 +76,7 @@ class TangyRadioButtons extends TangyInputBase {
         <div id="qnum-content">
           <label id="label" for="group"></label>
           <label class="hint-text"></label>
-          <div id="container"></div>
+          <div id="container" class="options"></div>
           <label id="error-text"></label>
           <div id="warn-text"></div>
           <div id="discrepancy-text"></div>
@@ -235,7 +238,11 @@ class TangyRadioButtons extends TangyInputBase {
       if (option.hasAttribute('hint-text')) {
         button.setAttribute('hint-text', option.getAttribute('hint-text'))
       }
-      button.hideButton = this.hideButtons ? true : false
+      // In a layout the box border shows the selection, so the radio circle goes.
+      const layout = this.getAttribute('layout')
+      const boxed = !!(layout && layout !== 'list')
+      button.hideButton = (this.hideButtons || boxed) ? true : false
+      if (boxed) button.setAttribute('boxed', '')
       button.name = option.value
       button.innerHTML = option.innerHTML
       if (this.columns > 0) {
@@ -266,7 +273,7 @@ class TangyRadioButtons extends TangyInputBase {
     if (!this.value || (typeof this.value === 'object' && this.value.length < newValue.length)) {
       this.value = newValue
     }
-
+    applyOptionLayout(this, this.$.container)
   }
 
   onInvalidChange(value) {

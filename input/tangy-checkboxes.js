@@ -2,7 +2,9 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { t } from '../util/t.js'
 import '../util/html-element-props.js'
 import './tangy-checkbox.js'
-import '../style/tangy-element-styles.js';
+import '../style/tangy-element-styles.js'
+import '../style/tangy-option-layout-styles.js'
+import { applyOptionLayout, optionImage } from '../util/option-layout.js';
 import '../style/tangy-common-styles.js'
 import { TangyInputBase } from '../tangy-input-base.js'
 
@@ -29,6 +31,7 @@ class TangyCheckboxes extends TangyInputBase {
     return html`
       <style include="tangy-common-styles"></style>
       <style include="tangy-element-styles"></style>
+      <style include="tangy-option-layout-styles"></style>
       <style>
 
         :host {
@@ -52,7 +55,7 @@ class TangyCheckboxes extends TangyInputBase {
         <div id="qnum-content">
           <label id="label" for="group"></label>
           <label id="hint-text" class="hint-text"></label>
-          <div id="checkboxes"></div>
+          <div id="checkboxes" class="options"></div>
           <label id="error-text" class="error-text"></label>
           <div id="warn-text"></div>
           <div id="discrepancy-text"></div>
@@ -201,6 +204,13 @@ class TangyCheckboxes extends TangyInputBase {
       if (option.hasAttribute('hint-text')) {
         checkbox.setAttribute('hint-text', option.getAttribute('hint-text'))
       }
+      if (optionImage(option)) {
+        checkbox.setAttribute('image', optionImage(option))
+        // Only a checkbox with a picture takes image-display, so one without falls back to its text.
+        if (this.getAttribute('image-display')) checkbox.setAttribute('image-display', this.getAttribute('image-display'))
+      }
+      const layout = this.getAttribute('layout')
+      if (layout && layout !== 'list') checkbox.setAttribute('boxed', '')
       checkbox.name = option.value
       checkbox.innerHTML = option.innerHTML
       checkbox.hintText = option.getAttribute('hint-text')
@@ -218,6 +228,7 @@ class TangyCheckboxes extends TangyInputBase {
     if (!this.value || (typeof this.value === 'object' && this.value.length < newValue.length)) {
       this.value = newValue
     }
+    applyOptionLayout(this, this.$.checkboxes)
   }
 
   onSkippedChange(newValue, oldValue) {

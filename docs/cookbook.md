@@ -192,6 +192,37 @@ In the following example when you make a selection of a fruit and then choose on
 </tangy-form>
 ```
 
+## Lay out options as tiles, and answer with pictures
+`layout` arranges the options of `tangy-radio-buttons`, `tangy-radio-blocks` and `tangy-checkboxes`. Leave it off for the usual list.
+
+- `wrap`: each option is as wide as its words; rows wrap.
+- `squares`: equal square tiles (`--tangy-option-tile-size`, default `6.5rem`).
+- `fit`: all options on one row; the text shrinks together until the longest label fits (never below 10px).
+
+In a layout, radio buttons and checkboxes become bordered boxes: tap anywhere in a box to choose it, and the chosen box gets a green border (`--tangy-option-selected-border-color`).
+
+`<option image="...">` shows a picture on radio blocks and checkboxes. Its size is `--tangy-option-image-width` / `--tangy-option-image-height` (default `50px`). `image-display` places it:
+
+- not set: the picture sits beside the text.
+- `top`: the picture sits above the text.
+- `fill`: the picture covers the whole tile and the text is hidden on screen (it is still saved and read by screen readers). An option with no picture shows its text. Once one is chosen, the others fade a little.
+
+None of these settings changes the saved data. See `demo/tangy-option-layouts.html`.
+
+```
+<tangy-radio-blocks name="status" label="Status" layout="fit" image-display="top">
+  <option value="1" image="./assets/present.svg">Present</option>
+  <option value="2" image="./assets/absent.svg">Absent</option>
+  <option value="3" image="./assets/left-early.svg">Left early</option>
+</tangy-radio-blocks>
+
+<tangy-checkboxes name="breakfast" label="What did you eat this morning?" layout="squares" image-display="fill">
+  <option value="porridge" image="./assets/porridge.jpg">Porridge</option>
+  <option value="bread" image="./assets/bread.jpg">Bread</option>
+  <option value="tea" image="./assets/tea.jpg">Tea</option>
+</tangy-checkboxes>
+```
+
 ## Show a timer in an item
 Let's say you want to show a timer of how long someone has been on a single item. This calculates the time since item open and displays number of seconds since then in a tangy-box.
 

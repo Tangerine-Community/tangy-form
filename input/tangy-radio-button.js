@@ -96,7 +96,21 @@ export class TangyRadioButton extends TangyInputBase {
 
   connectedCallback() {
     super.connectedCallback()
+    this.listenForBoxTap()
     this.render()
+  }
+
+  // In a layout ("boxed") the whole box is the target: a tap on its empty space is passed to paper-radio-button.
+  listenForBoxTap() {
+    if (this.__boxTap) return
+    this.__boxTap = true
+    this.addEventListener('click', (event) => {
+      if (!this.hasAttribute('boxed')) return
+      // Match by tag: the option re-renders its shadow DOM while the tap is handled.
+      if (event.composedPath().some((node) => node.localName === 'paper-radio-button')) return
+      const control = this.shadowRoot.querySelector('paper-radio-button')
+      if (control) control.click()
+    })
   }
 
   render() {

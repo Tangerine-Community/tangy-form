@@ -4,6 +4,8 @@ import '../util/html-element-props.js'
 import './tangy-radio-block.js'
 import '../style/tangy-element-styles.js';
 import '../style/tangy-common-styles.js'
+import '../style/tangy-option-layout-styles.js'
+import { applyOptionLayout, optionImage } from '../util/option-layout.js'
 import { TangyInputBase } from '../tangy-input-base.js'
 import './tangy-radio-block.js'
 /**
@@ -30,6 +32,7 @@ export class TangyRadioBlocks extends TangyInputBase {
     return html`
       <style include="tangy-element-styles"></style>
       <style include="tangy-common-styles"></style>
+      <style include="tangy-option-layout-styles"></style>
 
       <style>
         #container {
@@ -76,7 +79,7 @@ export class TangyRadioBlocks extends TangyInputBase {
         <div id="qnum-content">
           <label id="label" for="group"></label>
           <label class="hint-text"></label>
-          <div id="blockContainer"></div>
+          <div id="blockContainer" class="options"></div>
           <label id="error-text"></label>
           <div id="warn-text"></div>
           <div id="discrepancy-text"></div>
@@ -220,7 +223,7 @@ export class TangyRadioBlocks extends TangyInputBase {
         ? this.getAttribute('label')
         : ''
     if (this.orientation === 'rows') {
-      this.shadowRoot.querySelector('#blockContainer').setAttribute('class', 'columns')
+      this.shadowRoot.querySelector('#blockContainer').classList.add('columns')
     }
   }
 
@@ -246,8 +249,10 @@ export class TangyRadioBlocks extends TangyInputBase {
       if (option.hasAttribute('hint-text')) {
         button.setAttribute('hint-text', option.getAttribute('hint-text'))
       }
-      if (option.hasAttribute('image')) {
-        button.setAttribute('image', option.getAttribute('image'))
+      if (optionImage(option)) {
+        button.setAttribute('image', optionImage(option))
+        // Only a block with a picture takes image-display, so one without falls back to its text.
+        if (this.getAttribute('image-display')) button.setAttribute('image-display', this.getAttribute('image-display'))
       }
       if (option.hasAttribute('sound')) {
         button.setAttribute('sound', option.getAttribute('sound'))
@@ -289,7 +294,7 @@ export class TangyRadioBlocks extends TangyInputBase {
     if (!this.value || (typeof this.value === 'object' && this.value.length < newValue.length)) {
       this.value = newValue
     }
-
+    applyOptionLayout(this, this.$.blockContainer)
   }
 
   onInvalidChange(value) {

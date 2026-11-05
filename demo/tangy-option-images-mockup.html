@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Option image mockups</title>
+<style>
+  :root {
+    --text: #1B1B1B; --muted: #6D6E71; --border: #C9D3E4; --sel: green;
+    --bg: #FAFAFA; --card: #FFFFFF; --code: #F1F1F1; --add: #E3F2D9;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.4 Roboto, "Helvetica Neue", Arial, sans-serif; }
+  main { max-width: 1100px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 1.4rem; margin: 8px 0 4px; }
+  h2 { font-size: 1.1rem; margin: 32px 0 4px; }
+  p.note { color: var(--muted); margin: 0 0 12px; max-width: 760px; }
+  code { background: var(--code); padding: 1px 4px; border-radius: 3px; font-size: .9em; }
+  pre { background: var(--code); padding: 10px; border-radius: 6px; overflow-x: auto; font-size: .85rem; line-height: 1.5; }
+  pre b { background: var(--add); font-weight: 600; }
+  .row { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+  .row > div { min-width: 0; max-width: 100%; }
+  .phone { width: 360px; max-width: 100%; background: var(--card); border: 1px dashed #A7A9AC; padding: 12px; }
+  .cap { font-size: .8rem; color: var(--muted); margin: 6px 0 0; }
+  .cap code { font-size: .75rem; }
+  .label { font-weight: 500; margin: 0 0 8px; }
+
+  /* layouts, as built on feature/option-layout */
+  .squares { display: grid; grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); gap: 8px; }
+  .fit     { display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 8px; }
+
+  .opt { border: 4px solid var(--border); border-radius: 8px; background: #fff; cursor: pointer; position: relative; overflow: hidden; }
+  .opt.on { border-color: var(--sel); }
+
+  /* image-display="top" */
+  .top { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 10px 6px; text-align: center; }
+  .top img { width: 40px; height: 40px; }
+  .squares .top { aspect-ratio: 1; }
+
+  /* image-display="fill": picture covers the tile (cropped, never letterboxed) */
+  .fill { padding: 0; aspect-ratio: 1; }
+  .fill img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  /* once something is chosen, the other pictures fade a little */
+  .chosen .fill:not(.on) img { opacity: .7; }
+
+  /* editor setting mock */
+  .setting { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0 0 12px; font-size: .9rem; }
+  .setting button { font: inherit; padding: 4px 10px; border: 1px solid var(--border); border-radius: 14px; background: #fff; cursor: pointer; }
+  .setting button[aria-pressed="true"] { border-color: var(--sel); background: var(--add); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Option images: image on top, image fills the block</h1>
+  <p class="note">Static mockup of the proposed <code>image-display="top|fill"</code> attribute. The live inputs are in tangy-option-layouts.html, sections 9-12. Tap any option to select it (green border, today's colour).
+    Dashed boxes are 360px wide, a phone screen. Pictures are placeholders.</p>
+
+  <h2>A · Image on top of the text</h2>
+  <p class="note">Picture above the label. The existing <code>layout</code> setting picks the arrangement:
+    <b>squares</b> (equal tiles, wrap to the next row) or <b>fit</b> (all on one row, shrink to fit). Try it:</p>
+  <div class="setting" data-for="a">Layout:
+    <button aria-pressed="true" data-layout="squares">squares</button>
+    <button aria-pressed="false" data-layout="fit">fit on one row</button>
+  </div>
+  <div class="row">
+    <div>
+      <div class="phone">
+        <p class="label">Status</p>
+        <div class="squares" data-single id="a"></div>
+      </div>
+      <p class="cap" id="a-cap"></p>
+    </div>
+  </div>
+
+  <h2>B · Picture-only answers: the image fills the whole block</h2>
+  <p class="note">No text and no ✓/✕ on screen: the picture is the answer. Selected = green border; once
+    something is chosen the other pictures fade a little. The option text is still saved, read by screen readers,
+    and shown in reports and CSV. Same <code>layout</code> setting as A:</p>
+  <div class="setting" data-for="b">Layout:
+    <button aria-pressed="true" data-layout="squares">squares</button>
+    <button aria-pressed="false" data-layout="fit">fit on one row</button>
+  </div>
+  <div class="row">
+    <div>
+      <div class="phone">
+        <p class="label">How did you come to school today?</p>
+        <div class="squares chosen" data-single id="b"></div>
+      </div>
+      <p class="cap" id="b-cap"></p>
+    </div>
+    <div>
+      <div class="phone">
+        <p class="label">What did you eat this morning? (choose all)</p>
+        <div class="squares chosen" id="b6"></div>
+      </div>
+      <p class="cap">Checkboxes, multi-select, no tick box. <code>layout="squares" image-display="fill"</code></p>
+    </div>
+  </div>
+
+  <h2>C · Pictures that are not square</h2>
+  <p class="note">The picture is centred and its edges are cropped, so every tile is filled. Keep the subject in
+    the middle of the photo.</p>
+
+  <h2>D · Markup: today's markup, plus one attribute</h2>
+  <p class="note">Everything except the <b>highlighted</b> part exists today. <code>layout</code> and checkbox
+    <code>&lt;option image&gt;</code> come from the <code>feature/option-layout</code> branch (built, uncommitted).
+    <code>image-display</code> is the only new thing. Leave it off and nothing changes: the image stays beside the text.</p>
+<pre>&lt;tangy-radio-blocks name="status" label="Status" layout="squares" <b>image-display="top"</b>&gt;
+  &lt;option value="1" image="./assets/present.svg"&gt;Present&lt;/option&gt;
+  &lt;option value="2" image="./assets/absent.svg"&gt;Absent&lt;/option&gt;
+  &lt;option value="3" image="./assets/left-early.svg"&gt;Left early&lt;/option&gt;
+&lt;/tangy-radio-blocks&gt;
+
+&lt;tangy-radio-blocks name="transport" label="How did you come to school today?" layout="fit" <b>image-display="fill"</b>&gt;
+  &lt;option value="walk" image="./assets/walk.jpg"&gt;Walked&lt;/option&gt;
+  ...
+&lt;/tangy-radio-blocks&gt;
+
+&lt;tangy-checkboxes name="breakfast" label="What did you eat this morning?" layout="squares" <b>image-display="fill"</b>&gt;
+  &lt;option value="porridge" image="./assets/porridge.jpg"&gt;Porridge&lt;/option&gt;
+  ...
+&lt;/tangy-checkboxes&gt;</pre>
+  <ul class="note">
+    <li><code>image-display</code> values: <code>top</code>, <code>fill</code>. Missing or empty = today's look.</li>
+    <li>On <code>tangy-radio-blocks</code> and <code>tangy-checkboxes</code> only (radio buttons take no image).</li>
+    <li>Saved data does not change: the value is still the option <code>value</code>.</li>
+    <li>In <code>fill</code>, an option with no image shows its text, so a tile is never blank.</li>
+  </ul>
+</main>
+
+<script>
+  const svg = body => 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" ${body}</svg>`)
+  // Status icons: colour-blind board colours, text colour #1B1B1B.
+  const icon = (fill, path) => svg(`viewBox="0 0 40 40"><circle cx="20" cy="20" r="19" fill="${fill}"/>` +
+    `<path d="${path}" fill="none" stroke="#1B1B1B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`)
+  const status = [
+    ['Present', icon('#4DCB97', 'M11 21l6 6 12-13')],
+    ['Absent', icon('#F25A5A', 'M13 13l14 14M27 13L13 27')],
+    ['Left early', icon('#D48011', 'M10 20h18M21 12l8 8-8 8')]]
+  // Placeholder "photos": 4:3 flat scenes, so the crop is visible.
+  const pic = (bg, emoji) => svg(`viewBox="0 0 160 120"><rect width="160" height="120" fill="${bg}"/>` +
+    `<rect y="88" width="160" height="32" fill="#00000018"/><text x="80" y="78" font-size="64" text-anchor="middle">${emoji}</text>`)
+  const transport = [
+    ['Walked', pic('#CDEBF7', '🚶')], ['Bicycle', pic('#E3F2D9', '🚲')],
+    ['Bus', pic('#FDEFC7', '🚌')], ['Motorbike', pic('#F6DCD6', '🏍️')]]
+  const food = [
+    ['Porridge', pic('#FDEFC7', '🥣')], ['Bread', pic('#F6E3CF', '🍞')],
+    ['Tea', pic('#E8E1F5', '🍵')], ['Nothing', pic('#EDEDED', '🚫')]]
+
+  function tiles(id, items, cls, selected) {
+    const box = document.getElementById(id)
+    box.style.setProperty('--cols', items.length)
+    items.forEach(([text, src], i) => {
+      const d = document.createElement('div')
+      d.className = `opt ${cls}` + (selected.includes(i) ? ' on' : '')
+      d.innerHTML = `<img src="${src}" alt=""><span class="${cls === 'fill' ? 'sr' : ''}">${text}</span>`
+      d.setAttribute('role', box.hasAttribute('data-single') ? 'radio' : 'checkbox')
+      d.setAttribute('aria-label', text)
+      box.appendChild(d)
+    })
+  }
+  tiles('a', status, 'top', [0])
+  tiles('b', transport, 'fill', [1])
+  tiles('b6', food, 'fill', [0, 2])
+
+  const caps = {
+    a: l => `<code>layout="${l}" image-display="top"</code>`,
+    b: l => `<code>layout="${l}" image-display="fill"</code>`}
+  function setLayout(id, layout) {
+    const box = document.getElementById(id)
+    box.classList.remove('squares', 'fit'); box.classList.add(layout)
+    document.getElementById(id + '-cap').innerHTML = caps[id](layout)
+    document.querySelectorAll(`.setting[data-for="${id}"] button`).forEach(b =>
+      b.setAttribute('aria-pressed', b.dataset.layout === layout))
+  }
+  setLayout('a', 'squares'); setLayout('b', 'squares')
+
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.setting button')
+    if (btn) return setLayout(btn.parentElement.dataset.for, btn.dataset.layout)
+    const opt = e.target.closest('.opt'); if (!opt) return
+    const group = opt.parentElement
+    if (group.hasAttribute('data-single')) group.querySelectorAll('.opt').forEach(o => o.classList.toggle('on', o === opt))
+    else opt.classList.toggle('on')
+    group.classList.toggle('chosen', !!group.querySelector('.on'))
+  })
+</script>
+</body>
+</html>

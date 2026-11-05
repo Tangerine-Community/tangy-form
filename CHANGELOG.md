@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+`tangy-radio-buttons`, `tangy-radio-blocks`, `tangy-checkboxes`: new `layout="wrap|squares|fit"` and, on radio blocks and checkboxes, `image-display="top|fill"` plus checkbox `<option image>` (functional change, attribute-only; off keeps today's look and saved data is unchanged; see `demo/tangy-option-layouts.html`).
+
 ## v4.51.1
 
 `tangy-timed` and `tangy-untimed-grid`: The grid status message now sizes off its own two

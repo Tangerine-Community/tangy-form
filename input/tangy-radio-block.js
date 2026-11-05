@@ -138,8 +138,8 @@ export class TangyRadioBlock extends TangyInputBase {
           display: flex;
           align-items: center;
           justify-content: var(--justify-content, center);
-          margin: 0 0.25rem;
-          font-size: 2rem;
+          margin: var(--tangy-radio-block-margin, 0 0.25rem);
+          font-size: var(--tangy-radio-block-font-size, 2rem);
         }
         label#radio-block-label {
           background: var(--tangy-radio-block-label-bg, var(--tangy-form-item--background-color, #FFF));
@@ -152,11 +152,41 @@ export class TangyRadioBlock extends TangyInputBase {
           padding: 0.375rem 0.75rem;
           line-height: 1.5;
           border-radius: 0.5rem;
-          border: 4px solid transparent;
+          border: 4px solid var(--tangy-radio-block-border-color, transparent);
           text-decoration: none;
           transition-duration: 0.4s;
           position: relative;
           box-sizing: border-box;
+      }
+      #blockImage {
+        margin-left: auto;
+        max-width: var(--tangy-option-image-width, 50px);
+        max-height: var(--tangy-option-image-height, 50px);
+      }
+      /* image-display="top": picture above the centred label. */
+      :host([image-display="top"]) .btn-lg {
+        flex-direction: column-reverse;
+        justify-content: center;
+      }
+      :host([image-display="top"]) #blockImage {
+        margin: 0 0 0.25em;
+      }
+      /* image-display="fill": the picture is the answer and covers the tile; the text stays for screen readers. */
+      :host([image-display="fill"]) .btn-lg {
+        padding: 0;
+        font-size: 0;
+        height: auto;
+        aspect-ratio: 1;
+        overflow: hidden;
+      }
+      :host([image-display="fill"]) #blockImage {
+        display: block;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        object-fit: cover;
       }
       </style>
       <input 
@@ -174,7 +204,7 @@ export class TangyRadioBlock extends TangyInputBase {
         <label id="radio-block-label" for="a1" class="btn btn-lg">
           ${this.label ? this.label : this.innerHTML}
           ${this.hasAttribute('image') && this.getAttribute('image') != '' ? `
-          <img id="blockImage" src="${this.image}" style="margin-left: auto; max-width: 50px; max-height: 50px;">
+          <img id="blockImage" src="${this.image}">
         ` : ''}
         </label>
       ${this.hasAttribute('hint-text') ? `
