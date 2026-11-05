@@ -8,6 +8,7 @@ import '../style/tangy-option-layout-styles.js'
 import { applyOptionLayout, optionImage } from '../util/option-layout.js'
 import { TangyInputBase } from '../tangy-input-base.js'
 import './tangy-radio-block.js'
+import { cleanText } from '../util/clean-text.js'
 /**
  * `tangy-radio-blocks`
  *
@@ -217,10 +218,10 @@ export class TangyRadioBlocks extends TangyInputBase {
     this.render()
     this.reflect()
     this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text')
-        ? this.getAttribute('hint-text')
+        ? cleanText(this.getAttribute('hint-text'))
         : ''
     this.shadowRoot.querySelector('#label').innerHTML = this.hasAttribute('label')
-        ? this.getAttribute('label')
+        ? cleanText(this.getAttribute('label'))
         : ''
     if (this.orientation === 'rows') {
       this.shadowRoot.querySelector('#blockContainer').classList.add('columns')
@@ -237,7 +238,7 @@ export class TangyRadioBlocks extends TangyInputBase {
   }
 
   render() {
-    this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
+    this.$['qnum-number'].innerHTML = `<label>${cleanText(this.questionNumber)}</label>`;
     this.$.blockContainer.innerHTML = ''
     // Populate options as tangy-radio-block elements
     let options = this.querySelectorAll('option')
@@ -299,7 +300,7 @@ export class TangyRadioBlocks extends TangyInputBase {
 
   onInvalidChange(value) {
     this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
-      ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
+      ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? cleanText(this.getAttribute('error-text')) : ''} </div>`
       : ''
   }
 
@@ -342,13 +343,13 @@ export class TangyRadioBlocks extends TangyInputBase {
   
   onDiscrepancyChange(value) {
     this.shadowRoot.querySelector('#discrepancy-text').innerHTML = this.hasDiscrepancy
-      ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? this.getAttribute('discrepancy-text') : ''} </div>`
+      ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? cleanText(this.getAttribute('discrepancy-text')) : ''} </div>`
       : ''
   }
 
   onWarnChange(value) {
     this.shadowRoot.querySelector('#warn-text').innerHTML = this.hasWarning
-      ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
+      ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? cleanText(this.getAttribute('warn-text')) : ''} </div>`
       : ''
   }
 

@@ -4,6 +4,8 @@
 
 `tangy-radio-buttons`, `tangy-radio-blocks`, `tangy-checkboxes`: new `layout="wrap|squares|fit"` and, on radio blocks and checkboxes, `image-display="top|fill"` plus checkbox `<option image>` (functional change, attribute-only; off keeps today's look and saved data is unchanged; see `demo/tangy-option-layouts.html`).
 
+`tangy-radio-buttons`, `tangy-radio-blocks`, `tangy-checkboxes`: fix: a label, hint, error, warning, discrepancy or question-number text saved as the word "undefined" or "null" (left by an editor round trip) no longer shows on screen.
+
 ## v4.51.1
 
 `tangy-timed` and `tangy-untimed-grid`: The grid status message now sizes off its own two

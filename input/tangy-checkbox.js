@@ -5,6 +5,7 @@ import '../style/tangy-common-styles.js'
 import '../style/tangy-element-styles.js'
 import { TangyInputBase } from '../tangy-input-base.js'
 import { optionImage } from '../util/option-layout.js'
+import { cleanText } from '../util/clean-text.js'
 
     /**
      * `tangy-checkbox`
@@ -230,9 +231,9 @@ export class TangyCheckbox extends TangyInputBase {
         this.shadowRoot.querySelector('paper-checkbox').dir = document.documentElement.langDirection;
       }
     });
-    this.$['hint-text'].innerHTML = this.hintText
+    this.$['hint-text'].innerHTML = cleanText(this.hintText)
     this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text') 
-      ? this.getAttribute('hint-text') 
+      ? cleanText(this.getAttribute('hint-text')) 
       : ''
     this.shadowRoot.querySelector('#qnum-number').innerHTML = this.hasAttribute('question-number') 
       ? `<label>${this.getAttribute('question-number')}</label>`
@@ -241,7 +242,7 @@ export class TangyCheckbox extends TangyInputBase {
   }
 
   onHintTextChanged() {
-    this.$['hint-text'].innerHTML = this.hintText
+    this.$['hint-text'].innerHTML = cleanText(this.hintText)
   }
 
   applyLabel(label) {
@@ -258,19 +259,19 @@ export class TangyCheckbox extends TangyInputBase {
 
   onInvalidChange(value) {
     this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
-      ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
+      ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? cleanText(this.getAttribute('error-text')) : ''} </div>`
       : ''
   }
 
   onDiscrepancyChange(value) {
     this.shadowRoot.querySelector('#discrepancy-text').innerHTML = this.hasDiscrepancy
-      ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? this.getAttribute('discrepancy-text') : ''} </div>`
+      ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? cleanText(this.getAttribute('discrepancy-text')) : ''} </div>`
       : ''
   }
 
   onWarnChange(value) {
     this.shadowRoot.querySelector('#warn-text').innerHTML = this.hasWarning
-      ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
+      ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? cleanText(this.getAttribute('warn-text')) : ''} </div>`
       : ''
   }
 

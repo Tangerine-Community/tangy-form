@@ -4,6 +4,7 @@ import '@polymer/paper-radio-button/paper-radio-button.js'
 import '../style/tangy-common-styles.js'
 import '../style/tangy-element-styles.js'
 import { TangyInputBase } from '../tangy-input-base.js'
+import { cleanText } from '../util/clean-text.js'
 
     /**
      * `tangy-radio-block`
@@ -209,7 +210,7 @@ export class TangyRadioBlock extends TangyInputBase {
         </label>
       ${this.hasAttribute('hint-text') ? `
         <label class="hint-text">
-          ${this.getAttribute('hint-text')}
+          ${cleanText(this.getAttribute('hint-text'))}
         </label>
       ` : ''}
     `

@@ -396,3 +396,36 @@ suite('image display', () => {
     assert.notMatch(JSON.stringify(group.value), /image-?display/i)
   })
 })
+
+// An editor round trip can write label="undefined", error-text="null" and so on. Those are not text
+// a form author wrote, so none of them may reach the screen.
+const shownText = (root) => [...root.querySelectorAll('*')].map((el) =>
+  (el.shadowRoot ? shownText(el.shadowRoot) : '') + [...el.childNodes].filter((n) => n.nodeType === Node.TEXT_NODE).map((n) => n.textContent).join(' ')).join(' ')
+;['undefined', 'null'].forEach((junk) => {
+  const attrs = ['label', 'hint-text', 'error-text', 'warn-text', 'discrepancy-text', 'question-number']
+    .map((a) => `${a}="${junk}"`).join(' ')
+  ;['tangy-radio-buttons', 'tangy-radio-blocks', 'tangy-checkboxes'].forEach((tag) => {
+    registerFixture(`Junk ${junk} ${tag}`, `<${tag} name="q" required ${attrs}>
+      <option value="1" hint-text="${junk}">One</option><option value="2">Two</option></${tag}>`)
+  })
+})
+
+suite('no "undefined" or "null" text from an editor round trip', () => {
+  installFixtureTeardown()
+  ;['undefined', 'null'].forEach((junk) => {
+    ;['tangy-radio-buttons', 'tangy-radio-blocks', 'tangy-checkboxes'].forEach((tag) => {
+      test(`${tag}: label, hint, error, warning, discrepancy and question number set to "${junk}" show nothing`, async () => {
+        const group = fixture(`Junk ${junk} ${tag}`)
+        await frames()
+        assert.isFalse(group.validate())
+        group.hasWarning = true
+        group.hasDiscrepancy = true
+        await frames()
+        const text = shownText(group.shadowRoot)
+        assert.include(text, 'One', 'the options themselves must still show')
+        const found = text.split(/\s+/).filter((word) => word === junk)
+        assert.isEmpty(found, `"${junk}" is on screen`)
+      })
+    })
+  })
+})

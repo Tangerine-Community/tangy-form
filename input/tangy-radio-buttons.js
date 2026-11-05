@@ -7,6 +7,7 @@ import '../style/tangy-common-styles.js'
 import '../style/tangy-option-layout-styles.js'
 import { applyOptionLayout } from '../util/option-layout.js'
 import { TangyInputBase } from '../tangy-input-base.js'
+import { cleanText } from '../util/clean-text.js'
 /**
  * `tangy-radio-buttons`
  *
@@ -218,12 +219,12 @@ class TangyRadioButtons extends TangyInputBase {
       el.hidden = this.hidden
     })
     this.shadowRoot.querySelector('.hint-text').innerHTML = this.hasAttribute('hint-text')
-    ? this.getAttribute('hint-text')
+    ? cleanText(this.getAttribute('hint-text'))
     : ''
     this.shadowRoot.querySelector('#label').innerHTML = this.hasAttribute('label')
-        ? this.getAttribute('label')
+        ? cleanText(this.getAttribute('label'))
         : ''
-    this.$['qnum-number'].innerHTML = `<label>${this.questionNumber}</label>`;
+    this.$['qnum-number'].innerHTML = `<label>${cleanText(this.questionNumber)}</label>`;
   }
 
   render() {
@@ -278,7 +279,7 @@ class TangyRadioButtons extends TangyInputBase {
 
   onInvalidChange(value) {
     this.shadowRoot.querySelector('#error-text').innerHTML = this.invalid
-      ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? this.getAttribute('error-text') : ''} </div>`
+      ? `<iron-icon icon="error"></iron-icon> <div> ${ this.hasAttribute('error-text') ? cleanText(this.getAttribute('error-text')) : ''} </div>`
       : ''
   }
 
@@ -321,13 +322,13 @@ class TangyRadioButtons extends TangyInputBase {
   
   onDiscrepancyChange(value) {
     this.shadowRoot.querySelector('#discrepancy-text').innerHTML = this.hasDiscrepancy
-      ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? this.getAttribute('discrepancy-text') : ''} </div>`
+      ? `<iron-icon icon="flag"></iron-icon> <div> ${ this.hasAttribute('discrepancy-text') ? cleanText(this.getAttribute('discrepancy-text')) : ''} </div>`
       : ''
   }
 
   onWarnChange(value) {
     this.shadowRoot.querySelector('#warn-text').innerHTML = this.hasWarning
-      ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? this.getAttribute('warn-text') : ''} </div>`
+      ? `<iron-icon icon="warning"></iron-icon> <div> ${ this.hasAttribute('warn-text') ? cleanText(this.getAttribute('warn-text')) : ''} </div>`
       : ''
   }
 
