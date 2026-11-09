@@ -152,8 +152,8 @@ export class TangyAcasi extends TangyInputBase {
     // Populate paper-radio-button elements by using image data
     // The radio-button value is taken from the imageArray src value.
     // Also create the image.
-    let images = this.getAttribute('images')
-    let imageArray = images.split(",")
+    // No images attribute = no options, not a crash (a later _prepareForm timer reads imgElements).
+    let imageArray = (this.getAttribute('images') || '').split(",").filter(Boolean)
     for (let src of imageArray) {
       let button = document.createElement('paper-radio-button')
       let srcArray = src.split('/')

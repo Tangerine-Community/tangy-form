@@ -149,11 +149,13 @@ suite('grid action bar', () => {
   });
 
   suite('modes', () => {
-    test('a fresh grid is UNTOUCHED and says what to do', async () => {
+    // The grid leaves UNTOUCHED by itself 400 ms after load (tangy-untimed-grid.js, the setTimeout
+    // in ready): RUN for a fresh grid, MARK for a reopened one. So a fresh grid is in RUN by now.
+    test('a fresh grid starts in RUN and says what to do', async () => {
       const element = fixture('UntimedGrid');
       await afterMs(500);
-      assert.equal(element.mode, 'TANGY_UNTIMED_GRID_MODE_UNTOUCHED');
-      assert.notEqual(element.statusMessage, '', 'no instruction shown on an untouched grid');
+      assert.equal(element.mode, 'TANGY_UNTIMED_GRID_MODE_RUN');
+      assert.notEqual(element.statusMessage, '', 'no instruction shown on a fresh grid');
     });
 
     test('MARK moves the grid into mark mode', async () => {

@@ -12,6 +12,8 @@
 
 `tangy-radio-blocks`: fix: `orientation` keeps working in every `layout`: `columns` puts the options side by side, `rows` one per line, and the layout still shapes each tile (wrap sized to its words, squares stay square, fit fills the line). `orientation="rows"` used to turn every layout into full-width, left-aligned bars (squares came out flat). The fit refit after a resize runs on the next frame, so it no longer raises "ResizeObserver loop completed with undelivered notifications".
 
+`tangy-acasi`: fix: a missing `images` attribute renders no options instead of throwing on connect (its delayed `_prepareForm` threw too). Tests: the untimed-grid test now expects RUN after load, and the bare `<tangy-form>` smoke test waits for its first render, so its error no longer lands in the next test (Karma failures 30 to 22).
+
 ## v4.51.1
 
 `tangy-timed` and `tangy-untimed-grid`: The grid status message now sizes off its own two
