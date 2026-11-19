@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+`tangy-consent`: fix: tapping No now ends the form exactly like Submit (fires `tangy-form-complete` and `after-submit`, or `after-resubmit` on an unlocked form), so an online survey uploads a No response and the Tangerine tablet saves it and leaves the form (functional change on the tablet: it used to stay on the response view).
+
 ## v4.52.0
 
 `tangy-radio-buttons`, `tangy-radio-blocks`, `tangy-checkboxes`: new `layout="wrap|squares|fit"` and, on radio blocks and checkboxes, `image-display="top|fill"` plus checkbox `<option image>` (functional change, attribute-only; off keeps today's look and saved data is unchanged; see `demo/tangy-option-layouts.html`).

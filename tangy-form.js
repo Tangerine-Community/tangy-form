@@ -570,23 +570,10 @@ export class TangyForm extends PolymerElement {
     }
   }
 
+  // No on tangy-consent ends the form exactly like Submit, so apps that save on
+  // after-submit / after-resubmit save a refused-consent response too.
   onFormResponseNoConsent(event) {
-    this.store.dispatch({
-      type: 'ITEM_SAVE',
-      item: event.target.getProps()
-    })
-    const cancelledSubmit = !this.dispatchEvent(new CustomEvent('submit', {cancelable: true}))
-    if (cancelledSubmit) return
-    this.store.dispatch({
-      type: 'FORM_RESPONSE_COMPLETE'
-    })
-    // const cancelledComplete = !this.dispatchEvent(new CustomEvent('tangy-form-complete', {cancelable: true}))
-    // if (cancelledComplete) return
-    if (this.hasSummary) {
-      this.store.dispatch({ type: "SHOW_SUMMARY" })
-    } else {
-      this.store.dispatch({ type: "SHOW_RESPONSE" })
-    }
+    this.onFormResponseComplete(event)
   }
 
   onItemChange(event) {
