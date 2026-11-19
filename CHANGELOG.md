@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## v4.52.1
 
 `tangy-consent`: fix: tapping No now ends the form exactly like Submit (fires `tangy-form-complete` and `after-submit`, or `after-resubmit` on an unlocked form), so an online survey uploads a No response and the Tangerine tablet saves it and leaves the form (functional change on the tablet: it used to stay on the response view).
 
